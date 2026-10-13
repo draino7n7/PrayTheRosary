@@ -5,6 +5,10 @@
 		{
 			"id": "godot",
 			"version": "4.7.2"
+		},
+		{
+			"id": "gimp",
+			"version": "3.2.4"
 		}
 	]
 }
