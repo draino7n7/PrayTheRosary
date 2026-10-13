@@ -1,6 +1,6 @@
 # Issue Resolution Workflow & Standards
 
-This document establishes the official standards, Git worktree workflow, and coding guidelines for anyone resolving issues in the **[Game Name]** repository—whether human contributor or autonomous agent.
+This document establishes the official standards, Git worktree workflow, and coding guidelines for anyone resolving issues in the **Pray The Rosary** repository—whether human contributor or autonomous agent.
 
 ---
 

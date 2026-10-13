@@ -1,6 +1,6 @@
 # Pull Request Review, Documentation & Merge Standards
 
-This document establishes the official standards and workflow for reviewing, documenting, and merging Pull Requests in the **[Game Name]** repository—whether handled by a human developer or an autonomous agent.
+This document establishes the official standards and workflow for reviewing, documenting, and merging Pull Requests in the **Pray The Rosary** repository—whether handled by a human developer or an autonomous agent.
 
 ---
 

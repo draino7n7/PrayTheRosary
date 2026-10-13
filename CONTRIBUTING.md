@@ -1,4 +1,4 @@
-# Contributing to [Game Name]
+# Contributing to Pray The Rosary
 
 Thank you for your interest in contributing to our game! Since this repository is driven by the **OpenGameStack (OGS)** standard and orchestrated by autonomous AI agents, our contribution workflow is highly structured.
 

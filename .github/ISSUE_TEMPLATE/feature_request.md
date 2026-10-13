@@ -1,4 +1,4 @@
-﻿---
+---
 name: Feature request
 about: Propose a new gameplay mechanic, UI enhancement, or improvement
 title: ''
@@ -9,7 +9,7 @@ assignees: ''
 <!-- Include if blocked by prior work: **Depends on #<issue_number>** -->
 
 ### 1. Problem & Context
-A concise explanation of the user story, design motivation, and why this enhancement improves [Game Name].
+A concise explanation of the user story, design motivation, and why this enhancement improves Pray The Rosary.
 
 ### 2. Technical Scope & Affected Files
 Direct references to files, scenes, or autoloads that need modification or creation:

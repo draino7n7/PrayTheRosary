@@ -1,13 +1,13 @@
 {
 	"folders": [
 		{
-			"name": "GameTemplate",
+			"name": "PrayTheRosary",
 			"path": "."
 		}
 	],
 	"settings": {
 		"godotTools.editorPath.godot4": "godot",
-		"GameTemplate.godotExecutable": "godot"
+		"PrayTheRosary.godotExecutable": "godot"
 	},
 	"tasks": {
 		"version": "2.0.0",
