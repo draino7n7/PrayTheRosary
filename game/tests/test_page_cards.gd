@@ -224,6 +224,23 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 		sec_body3.text.contains("(taken from the Douay-Rheims / Confraternity Edition of the Bible)"),
 		"Page 3 'How This Book Is Organized' must note the Douay-Rheims / Confraternity Edition of the Bible"
 	)
+	var sec1_title3: Label = fmc3.sections_container.get_child(1).get_node("SectionTitle") as Label
+	var sec1_body3: Label = fmc3.sections_container.get_child(1).get_node("SectionBody") as Label
+	assert_eq(sec1_title3.text, "Step-by-Step Guide to Praying the Rosary", "Page 3 Section 2 title must be 'Step-by-Step Guide to Praying the Rosary'")
+	assert_true(
+		sec1_body3.text.contains("2. The Decades (Tabs J, L, S, G):"),
+		"Page 3 Step-by-Step Guide must display updated '2. The Decades (Tabs J, L, S, G):' step heading"
+	)
+	assert_true(
+		sec1_body3.text.contains("five decades of the day's Mystery set"),
+		"Page 3 Step-by-Step Guide must explain praying the five decades of the day's Mystery set"
+	)
+	assert_true(
+		sec1_body3.text.contains("all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary."),
+		"Page 3 Step-by-Step Guide must explain praying all four Mystery sets (twenty decades) back-to-back in chronological order"
+	)
+	var req_h3: float = _calculate_page_content_required_height(fmc3, p3, loader)
+	assert_true(req_h3 <= 1080.0, "Page 3 content required height (%.1fpx) must stay strictly within 1080.0px" % req_h3)
 	_assert_no_visible_page_numbers(card3, 3)
 	card3.free()
 

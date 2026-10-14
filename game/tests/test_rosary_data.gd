@@ -454,4 +454,33 @@ func test_simplified_prayer_titles_and_front_matter_bible_version_note() -> void
 	)
 
 
+func test_page_3_step_by_step_guide_daily_vs_complete_rosary() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
 
+	var p3: Dictionary = loader.get_page(3)
+	var sections: Array = p3.get("sections", [])
+	assert_eq(sections.size(), 3, "Page 3 must have 3 instructional sections")
+
+	var sec1: Dictionary = sections[1] as Dictionary
+	assert_eq(
+		str(sec1.get("title", "")),
+		"Step-by-Step Guide to Praying the Rosary",
+		"Page 3 Section 2 title must be 'Step-by-Step Guide to Praying the Rosary'"
+	)
+
+	var expected_body: String = "1. Opening Prayers (Tab O): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Decades (Tabs J, L, S, G): For each decade, read the Scripture and meditation, pray one Our Father, ten Hail Marys while contemplating the artwork, one Glory Be, and the Fatima Prayer. Pray either the five decades of the day's Mystery set, or all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary.\n3. Closing Prayers (Tab C): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
+	var sec1_body: String = str(sec1.get("body", ""))
+	assert_eq(
+		sec1_body,
+		expected_body,
+		"Page 3 'Step-by-Step Guide to Praying the Rosary' body must match exact updated wording"
+	)
+	assert_true(
+		sec1_body.contains("five decades of the day's Mystery set"),
+		"Page 3 Step-by-Step Guide must explain praying the five decades of the day's Mystery set"
+	)
+	assert_true(
+		sec1_body.contains("all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary"),
+		"Page 3 Step-by-Step Guide must explain praying all four Mystery sets (twenty decades) back-to-back in chronological order"
+	)
