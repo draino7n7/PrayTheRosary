@@ -58,15 +58,24 @@ func _apply_page_data() -> void:
 			var art_vbox: VBoxContainer = VBoxContainer.new()
 			art_vbox.name = "Attribution_%s" % str(art.get("id", ""))
 			art_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-			art_vbox.add_theme_constant_override("separation", 1)
+			art_vbox.add_theme_constant_override("separation", 0)
 
 			var title_lbl: Label = Label.new()
 			title_lbl.name = "Title"
-			title_lbl.text = str(art.get("title", ""))
+			var section_label: String = str(art.get("section_label", "")).strip_edges()
+			var art_title: String = str(art.get("title", "")).strip_edges()
+			if section_label != "" and art_title != "":
+				title_lbl.text = "%s — %s" % [section_label, art_title]
+			elif section_label != "":
+				title_lbl.text = section_label
+			else:
+				title_lbl.text = art_title
 			if font_bold != null:
 				title_lbl.add_theme_font_override("font", font_bold)
-			title_lbl.add_theme_font_size_override("font_size", 17)
+			title_lbl.add_theme_font_size_override("font_size", 16)
 			title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
+			title_lbl.add_theme_constant_override("line_spacing", -1)
+			title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			art_vbox.add_child(title_lbl)
 
 			var details: String = "%s (%s), %s • %s • %s" % [
@@ -81,9 +90,9 @@ func _apply_page_data() -> void:
 			details_lbl.text = details
 			if font_reg != null:
 				details_lbl.add_theme_font_override("font", font_reg)
-			details_lbl.add_theme_font_size_override("font_size", 15)
+			details_lbl.add_theme_font_size_override("font_size", 14)
 			details_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
-			details_lbl.add_theme_constant_override("line_spacing", 2)
+			details_lbl.add_theme_constant_override("line_spacing", -1)
 			details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			art_vbox.add_child(details_lbl)
 
@@ -97,10 +106,12 @@ func _apply_page_data() -> void:
 			colophon_container.visible = true
 			if scripture_notice_label != null:
 				scripture_notice_label.text = str(colophon.get("scripture_notice", ""))
-				scripture_notice_label.add_theme_font_size_override("font_size", 14)
+				scripture_notice_label.add_theme_font_size_override("font_size", 13)
+				scripture_notice_label.add_theme_constant_override("line_spacing", -1)
 			if colophon_notice_label != null:
 				colophon_notice_label.text = str(colophon.get("artwork_notice", ""))
-				colophon_notice_label.add_theme_font_size_override("font_size", 14)
+				colophon_notice_label.add_theme_font_size_override("font_size", 13)
+				colophon_notice_label.add_theme_constant_override("line_spacing", -1)
 
 	configure_pass_through_mouse_filters(self)
 

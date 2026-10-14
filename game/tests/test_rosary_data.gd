@@ -113,10 +113,55 @@ func test_book_spread_sequence_and_page_numbering() -> void:
 	assert_eq(str(spread_24.get("id", "")), "credits_and_attributions", "Spread 24 must be credits_and_attributions")
 	assert_eq(int(spread_24.get("left_page", {}).get("page_number", 0)), 48, "Spread 24 left page must be page 48")
 	assert_eq(int(spread_24.get("right_page", {}).get("page_number", 0)), 49, "Spread 24 right page must be page 49")
+	assert_eq(
+		str(spread_24.get("left_page", {}).get("subheading", "")),
+		"Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries",
+		"Spread 24 left page subheading must list Front Cover, Opening Prayers, Joyful & Luminous Mysteries"
+	)
+	assert_eq(
+		str(spread_24.get("right_page", {}).get("subheading", "")),
+		"Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources",
+		"Spread 24 right page subheading must list Sorrowful, Glorious, Closing Prayers & Text Sources"
+	)
 
 	var left_credits: Array = spread_24.get("left_page", {}).get("attribution_ids", [])
 	var right_credits: Array = spread_24.get("right_page", {}).get("attribution_ids", [])
+	assert_eq(left_credits.size(), 12, "Page 48 must list 12 artwork attributions")
+	assert_eq(right_credits.size(), 11, "Page 49 must list 11 artwork attributions")
 	assert_eq(left_credits.size() + right_credits.size(), 23, "Spread 24 credits must list all 23 artworks")
+	assert_eq(str(right_credits[right_credits.size() - 1]), "closing_prayers", "Last attribution on Page 49 must be closing_prayers")
+
+	var expected_sequential_ids: Array[String] = [
+		"cover",
+		"opening_prayers",
+		"joyful_1_annunciation",
+		"joyful_2_visitation",
+		"joyful_3_nativity",
+		"joyful_4_presentation",
+		"joyful_5_finding_in_temple",
+		"luminous_1_baptism",
+		"luminous_2_wedding_at_cana",
+		"luminous_3_proclamation",
+		"luminous_4_transfiguration",
+		"luminous_5_eucharist",
+		"sorrowful_1_agony",
+		"sorrowful_2_scourging",
+		"sorrowful_3_crowning_with_thorns",
+		"sorrowful_4_carrying_cross",
+		"sorrowful_5_crucifixion",
+		"glorious_1_resurrection",
+		"glorious_2_ascension",
+		"glorious_3_pentecost",
+		"glorious_4_assumption",
+		"glorious_5_coronation",
+		"closing_prayers"
+	]
+	var combined_credits: Array[String] = []
+	for aid: Variant in left_credits:
+		combined_credits.append(str(aid))
+	for aid: Variant in right_credits:
+		combined_credits.append(str(aid))
+	assert_eq(combined_credits, expected_sequential_ids, "All 23 credits across Pages 48-49 must match exact sequential book appearance order")
 
 	# Back Cover: Page 50
 	var back: Dictionary = loader.get_back_cover()
@@ -282,10 +327,37 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 		"glorious_5_coronation": "P01168"
 	}
 
+	var expected_section_labels: Dictionary = {
+		"cover": "Front Cover",
+		"opening_prayers": "Opening Prayers",
+		"joyful_1_annunciation": "1st Joyful Mystery (The Annunciation)",
+		"joyful_2_visitation": "2nd Joyful Mystery (The Visitation)",
+		"joyful_3_nativity": "3rd Joyful Mystery (The Nativity of Our Lord)",
+		"joyful_4_presentation": "4th Joyful Mystery (The Presentation of Jesus in the Temple)",
+		"joyful_5_finding_in_temple": "5th Joyful Mystery (The Finding of Jesus in the Temple)",
+		"luminous_1_baptism": "1st Luminous Mystery (The Baptism of Jesus in the Jordan)",
+		"luminous_2_wedding_at_cana": "2nd Luminous Mystery (The Wedding Feast at Cana)",
+		"luminous_3_proclamation": "3rd Luminous Mystery (The Proclamation of the Kingdom of God)",
+		"luminous_4_transfiguration": "4th Luminous Mystery (The Transfiguration)",
+		"luminous_5_eucharist": "5th Luminous Mystery (The Institution of the Eucharist)",
+		"sorrowful_1_agony": "1st Sorrowful Mystery (The Agony in the Garden)",
+		"sorrowful_2_scourging": "2nd Sorrowful Mystery (The Scourging at the Pillar)",
+		"sorrowful_3_crowning_with_thorns": "3rd Sorrowful Mystery (The Crowning with Thorns)",
+		"sorrowful_4_carrying_cross": "4th Sorrowful Mystery (The Carrying of the Cross)",
+		"sorrowful_5_crucifixion": "5th Sorrowful Mystery (The Crucifixion and Death of Our Lord)",
+		"glorious_1_resurrection": "1st Glorious Mystery (The Resurrection of Our Lord)",
+		"glorious_2_ascension": "2nd Glorious Mystery (The Ascension of Our Lord into Heaven)",
+		"glorious_3_pentecost": "3rd Glorious Mystery (The Descent of the Holy Spirit)",
+		"glorious_4_assumption": "4th Glorious Mystery (The Assumption of the Blessed Virgin Mary)",
+		"glorious_5_coronation": "5th Glorious Mystery (The Coronation of the Blessed Virgin Mary)",
+		"closing_prayers": "Closing Prayers"
+	}
+
 	for art_id: String in expected_inventory.keys():
 		var art: Dictionary = loader.get_artwork(art_id)
 		assert_false(art.is_empty(), "Artwork '%s' must exist in RosaryDataLoader" % art_id)
 		assert_eq(str(art.get("inventory_number", "")), expected_inventory[art_id], "Artwork '%s' inventory_number must match museum catalog" % art_id)
+		assert_eq(str(art.get("section_label", "")), expected_section_labels[art_id], "Artwork '%s' section_label must match non-numbered book placement label" % art_id)
 
 	assert_eq(str(loader.get_artwork("luminous_2_wedding_at_cana").get("creation_date", "")), "c. 1712–1715")
 	assert_eq(str(loader.get_artwork("luminous_5_eucharist").get("creation_date", "")), "1631–1632")
@@ -306,6 +378,7 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 
 	var images: Array = (parsed as Dictionary).get("images", [])
 	assert_eq(images.size(), 23, "attributions.json must contain all 23 master artworks")
+	assert_eq(str((images[images.size() - 1] as Dictionary).get("id", "")), "closing_prayers", "attributions.json must order closing_prayers last to match book appearance")
 
 	var attr_by_id: Dictionary = {}
 	for img_val: Variant in images:
@@ -315,11 +388,13 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 			attr_by_id[id_str] = img
 			assert_ne(str(img.get("inventory_number", "")), "", "attributions.json '%s' must have non-empty inventory_number" % id_str)
 			assert_ne(str(img.get("original_dimensions", "")), "", "attributions.json '%s' must have non-empty original_dimensions" % id_str)
+			assert_ne(str(img.get("section_label", "")), "", "attributions.json '%s' must have non-empty section_label" % id_str)
 
 			var runtime_art: Dictionary = loader.get_artwork(id_str)
 			assert_eq(str(img.get("inventory_number", "")), str(runtime_art.get("inventory_number", "")), "Inventory number for '%s' must match between attributions.json and runtime data" % id_str)
 			assert_eq(str(img.get("creation_date", "")), str(runtime_art.get("creation_date", "")), "Creation date for '%s' must match between attributions.json and runtime data" % id_str)
 			assert_eq(str(img.get("current_location", "")), str(runtime_art.get("current_location", "")), "Location for '%s' must match between attributions.json and runtime data" % id_str)
+			assert_eq(str(img.get("section_label", "")), str(runtime_art.get("section_label", "")), "Section label for '%s' must match between attributions.json and runtime data" % id_str)
 
 	assert_eq(str(attr_by_id.get("joyful_2_visitation", {}).get("original_dimensions", "")), "114.5 cm × 88.5 cm")
 	assert_eq(str(attr_by_id.get("luminous_3_proclamation", {}).get("original_dimensions", "")), "104 cm × 92 cm")

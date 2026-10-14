@@ -564,11 +564,10 @@
 				"page_number": 48,
 				"position": "verso",
 				"heading": "Sacred Artwork Credits (Part I)",
-				"subheading": "Cover, Prayers, Joyful Mysteries & Luminous Mysteries",
+				"subheading": "Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries",
 				"attribution_ids": [
 					"cover",
 					"opening_prayers",
-					"closing_prayers",
 					"joyful_1_annunciation",
 					"joyful_2_visitation",
 					"joyful_3_nativity",
@@ -585,7 +584,7 @@
 				"page_number": 49,
 				"position": "inside_back_cover_recto",
 				"heading": "Sacred Artwork Credits (Part II) & Colophon",
-				"subheading": "Sorrowful Mysteries, Glorious Mysteries & Text Sources",
+				"subheading": "Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources",
 				"attribution_ids": [
 					"sorrowful_1_agony",
 					"sorrowful_2_scourging",
@@ -596,7 +595,8 @@
 					"glorious_2_ascension",
 					"glorious_3_pentecost",
 					"glorious_4_assumption",
-					"glorious_5_coronation"
+					"glorious_5_coronation",
+					"closing_prayers"
 				],
 				"colophon": {
 					"scripture_notice": "Scripture quotations are taken from the Douay-Rheims Bible (Challoner Revision), which is in the public domain.",
