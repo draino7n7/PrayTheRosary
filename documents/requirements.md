@@ -53,37 +53,50 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
 
 ## 3. Page Card Types in the 50-Page Vertical Scroll
 
-The 50 pages returned by `RosaryDataLoader.get_all_pages()` render using 6 distinct page card layouts inside the vertical scroll:
+The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the vertical scroll using a modular component architecture centered around a unified facade container and 7 specialized sub-card components:
 
-### 3.1 Type 1: Front Cover Card (`Page 1`, `page_type == "front_cover"`)
+### 3.0 Modular Component Architecture
+- **Root Facade Component (`res://scenes/ui/page_card.tscn` / `res://scripts/ui/page_card.gd`):**
+  - Inherits `AspectRatioContainer` with strict $2:3$ ratio (`ratio = 2.0 / 3.0`) and minimum design size `720×1080`.
+  - Automatically instantiates and hosts the appropriate specialized sub-card based on `page_data["page_type"]`.
+  - Exposes static factory method `PageCard.create_for_page(page_data, loader)` and `bind_page_data(page_data, loader)` for continuous scroll instantiation.
+- **Base Class (`res://scripts/ui/pages/base_page_card.gd`):**
+  - Defines `BasePageCard`, extending `Control`, establishing the common lifecycle method `bind_page_data(page_data, loader)` and standard inspector accessors (`get_heading_text()`, `get_subheading_text()`, `get_body_text()`).
+- **Data Hydration (`res://scripts/data/rosary_data_loader.gd`):**
+  - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`.
+  - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.
+
+### 3.1 Type 1: Front Cover Card (`Page 1`, `res://scenes/ui/pages/cover_page_card.tscn`, `res://scripts/ui/pages/cover_page_card.gd`)
 - Full-bleed portrait `TextureRect` displaying `res://assets/images/cover.webp` (Bartolomé Esteban Murillo, *The Virgin of the Rosary*).
-- Overlay title **"Pray the Rosary"** and subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* positioned over the upper crimson drapery in warm gold/ivory serif typography (`#D4AF37` / `#F7F2E7`).
+- Overlay title **"Pray the Rosary"** and subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* positioned over the upper crimson drapery in warm gold/ivory serif typography (`#D4AF37` / `#F7F2E7`), leaving Mary and the Christ Child unobstructed.
 
-### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `front_matter_spread_left` & `front_matter_spread_right`)
+### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `res://scenes/ui/pages/front_matter_page_card.tscn`, `res://scripts/ui/pages/front_matter_page_card.gd`)
 - **Page 2:** *The History of the Holy Rosary* (heading, subheading, and 3 historical sections).
 - **Page 3:** *Structure of the Book & How to Pray* (heading, subheading, and 3 instructional sections).
+- Rendered on warm ivory parchment panels (`#FAF6EE`) with crimson titles, umber subtitles, and dark charcoal body paragraphs.
 
-### 3.3 Type 3: Prayer Sequence Cards (`Pages 4 & 46`, `page_type == "prayer_sequence_page"`)
+### 3.3 Type 3: Prayer Sequence Cards (`Pages 4 & 46`, `res://scenes/ui/pages/prayer_sequence_page_card.tscn`, `res://scripts/ui/pages/prayer_sequence_page_card.gd`)
 - **Page 4 (*The Opening Prayers*):** Displays heading, subheading, and the 5 introductory prayer steps (Sign of the Cross, Apostles' Creed, Our Father, Three Hail Marys for Faith, Hope, and Charity, and Glory Be).
 - **Page 46 (*The Closing Prayers*):** Displays heading, subheading, and the 4 concluding prayer steps (Hail, Holy Queen / *Salve Regina*, Versicle & Response, Concluding Rosary Prayer, and Sign of the Cross).
+- Formatted with muted umber rubric tags (e.g. `[1×]`, `[10×]`, `[Sign of the Cross]`) and charcoal prayer text.
 
-### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `page_type == "mystery_prayer_page"`)
+### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `res://scenes/ui/pages/mystery_prayer_page_card.tscn`, `res://scripts/ui/pages/mystery_prayer_page_card.gd`)
 Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling:
-- **Header:** Ordinal subtitle (e.g., *The First Joyful Mystery*), Mystery Title (e.g., **The Annunciation**), and **Fruit of the Mystery** tag (e.g., *Fruit of the Mystery: Humility*).
+- **Header:** Ordinal subtitle (e.g., *The First Joyful Mystery*), Mystery Title (e.g., **The Annunciation**), and **Fruit of the Mystery** tag badge (e.g., *Fruit of the Mystery: Humility*).
 - **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** passage and citation.
 - **Contemplative Meditation:** 1–2 sentence reflection.
 - **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`).
 
-### 3.5 Type 5: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`, `page_type == "artwork_page"`)
+### 3.5 Type 5: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`, `res://scenes/ui/pages/artwork_page_card.tscn`, `res://scripts/ui/pages/artwork_page_card.gd`)
 Designed for distraction-free visual contemplation:
 - **Top Header Band:** Displays the `subheading` (e.g., *The First Joyful Mystery* or *The Opening Prayers*) and `heading` (e.g., **The Annunciation** or **The Most Holy Trinity**).
 - **Gold-Framed Artwork Container:** Thin antique-gold border (`#B89130`) enclosing the painting `TextureRect` (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`, preserving the complete uncropped painting).
-- **No Footer Caption or Page Number:** No artist name, museum credit, or page number is shown on the artwork card itself.
+- **No Footer Caption or Page Number:** Strictly no artist name, museum credit, or page number is shown on the artwork card itself.
 
-### 3.6 Type 6: Credits Cards (`Pages 48–49`) & Back Cover Card (`Page 50`)
+### 3.6 Type 6: Credits Cards (`Pages 48–49`, `res://scenes/ui/pages/credits_page_card.tscn`, `res://scripts/ui/pages/credits_page_card.gd`) & Back Cover Card (`Page 50`, `res://scenes/ui/pages/back_cover_page_card.tscn`, `res://scripts/ui/pages/back_cover_page_card.gd`)
 - **Page 48 (*Sacred Artwork Credits Part I*):** Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5).
 - **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5), plus the Douay-Rheims Scripture notice and museum open-access colophon.
-- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's quote on the daily Rosary.
+- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's Marian counsel.
 
 ---
 
