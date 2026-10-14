@@ -38,9 +38,16 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
   - Warm Gold Accent & Title Typography (`#D4AF37`)
   - Warm Ivory Body Text (`#F7F2E7`)
 
-### 2.2 Typography (`game/assets/fonts/`)
-- Bundle an open-source classical serif font family (SIL Open Font License, such as **Cormorant Garamond** or **EB Garamond**) in `game/assets/fonts/` with Regular, Bold, and Italic weights.
-- Configure a unified Godot `Theme` resource (`res://assets/themes/rosary_theme.tres`) applying these serif fonts across all `Label`, `RichTextLabel`, and `Button` controls.
+### 2.2 Typography & Theme (`game/assets/fonts/`, `game/resources/rosary_theme.tres`)
+- **Bundled Fonts:** **EB Garamond** (SIL Open Font License 1.1, license bundled at `game/assets/fonts/OFL.txt`) is bundled in `game/assets/fonts/` with all 4 core weights:
+  - `EBGaramond-Regular.ttf`
+  - `EBGaramond-Bold.ttf`
+  - `EBGaramond-Italic.ttf`
+  - `EBGaramond-BoldItalic.ttf`
+- **Application Theme:** The canonical Godot `Theme` resource is located at `res://resources/rosary_theme.tres` (mirrored at `res://assets/themes/rosary_theme.tres` and configured globally in `project.godot` via `[gui] theme/custom` and `theme/custom_font`). It defines:
+  - Default font: `EBGaramond-Regular.ttf` (size 20).
+  - Complete `RosaryPalette` color table (`parchment` `#FAF6EE`, `charcoal` `#1E1815`, `crimson` `#6B1D21`, `umber` `#5C4338`, `gold` `#B89130`, `ambient_espresso` `#141010`, `cover_crimson` `#4A1215`, `warm_gold` `#D4AF37`, `ivory_text` `#F7F2E7`).
+  - Styled controls for `Label`, `RichTextLabel` (normal, bold, italics fonts), `Button` (interactive flat styleboxes with gold accents across normal, hover, pressed, focus, and disabled states), `PanelContainer` (parchment background with 2px gold border), and `ScrollContainer` (transparent empty stylebox for seamless vertical scrolling).
 
 ---
 
@@ -134,7 +141,9 @@ Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, mont
 - Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
 
 ### 5.2 Runtime Game Textures (`game/assets/images/`)
-- Convert the 23 archival master images from `assets/2D/gimp/original_downloads/` into optimized runtime `.webp` textures in `game/assets/images/` matching the exact `runtime_texture_path` entries in `book_layout.json` and `mysteries.json` (e.g., `res://assets/images/cover.webp`, `res://assets/images/opening_prayers.webp`, `res://assets/images/joyful_1_annunciation.webp`, etc., scaled to a max height of ~1800px while preserving each painting's original aspect ratio).
+- All 23 runtime `.webp` textures have been generated in `game/assets/images/` from the archival master files in `assets/2D/gimp/original_downloads/` at quality 85, with maximum height constrained to 1800px and original aspect ratios strictly preserved.
+- These textures match the exact `runtime_texture_path` entries in `book_layout.json` and `mysteries.json` (e.g., `res://assets/images/cover.webp`, `res://assets/images/opening_prayers.webp`, `res://assets/images/closing_prayers.webp`, and the 20 mystery textures `res://assets/images/{set}_{num}_{name}.webp`).
+- Verified via automated unit tests in `game/tests/test_assets_and_theme.gd` to confirm non-zero dimensions, correct aspect ratios, and clean loading as `Texture2D`.
 
 ---
 

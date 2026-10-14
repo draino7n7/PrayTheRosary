@@ -1,0 +1,157 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Regular.ttf" id="1_67ew2"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_ixt17"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-BoldItalic.ttf" id="3_rtkd7"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="4_g2tjq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i5dsa"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.98039216, 0.9647059, 0.93333334, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72156864, 0.5686275, 0.1882353, 0.4)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_554pw"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83137256, 0.6862745, 0.21568628, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eow5l"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.99215686, 0.972549, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83137256, 0.6862745, 0.21568628, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cote"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.98039216, 0.9647059, 0.93333334, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72156864, 0.5686275, 0.1882353, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4whxp"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.9411765, 0.91764706, 0.8784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o1suk"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.98039216, 0.9647059, 0.93333334, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72156864, 0.5686275, 0.1882353, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cohrs"]
+
+[resource]
+default_font = ExtResource("1_67ew2")
+default_font_size = 20
+Button/colors/font_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
+Button/colors/font_disabled_color = Color(0.36078432, 0.2627451, 0.21960784, 0.5)
+Button/colors/font_focus_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
+Button/colors/font_hover_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
+Button/colors/font_pressed_color = Color(0.2901961, 0.07058824, 0.08235294, 1)
+Button/font_sizes/font_size = 18
+Button/fonts/font = ExtResource("1_67ew2")
+Button/styles/disabled = SubResource("StyleBoxFlat_i5dsa")
+Button/styles/focus = SubResource("StyleBoxFlat_554pw")
+Button/styles/hover = SubResource("StyleBoxFlat_eow5l")
+Button/styles/normal = SubResource("StyleBoxFlat_2cote")
+Button/styles/pressed = SubResource("StyleBoxFlat_4whxp")
+Label/colors/ambient_backdrop_color = Color(0.078431375, 0.0627451, 0.0627451, 1)
+Label/colors/antique_gold_color = Color(0.72156864, 0.5686275, 0.1882353, 1)
+Label/colors/charcoal_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
+Label/colors/cover_dark_color = Color(0.16470589, 0.03529412, 0.043137256, 1)
+Label/colors/cover_gold_accent = Color(0.83137256, 0.6862745, 0.21568628, 1)
+Label/colors/cover_ivory_text = Color(0.96862745, 0.9490196, 0.90588236, 1)
+Label/colors/cover_primary_color = Color(0.2901961, 0.07058824, 0.08235294, 1)
+Label/colors/crimson_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
+Label/colors/font_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/colors/gold_border_color = Color(0.72156864, 0.5686275, 0.1882353, 1)
+Label/colors/heading_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
+Label/colors/parchment_color = Color(0.98039216, 0.9647059, 0.93333334, 1)
+Label/colors/subheading_color = Color(0.36078432, 0.2627451, 0.21960784, 1)
+Label/colors/umber_color = Color(0.36078432, 0.2627451, 0.21960784, 1)
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("1_67ew2")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_o1suk")
+RichTextLabel/colors/default_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
+RichTextLabel/font_sizes/bold_font_size = 20
+RichTextLabel/font_sizes/italics_font_size = 20
+RichTextLabel/font_sizes/normal_font_size = 20
+RichTextLabel/fonts/bold_font = ExtResource("2_ixt17")
+RichTextLabel/fonts/bold_italics_font = ExtResource("3_rtkd7")
+RichTextLabel/fonts/italics_font = ExtResource("4_g2tjq")
+RichTextLabel/fonts/normal_font = ExtResource("1_67ew2")
+RosaryPalette/colors/ambient_espresso = Color(0.078431375, 0.0627451, 0.0627451, 1)
+RosaryPalette/colors/charcoal = Color(0.11764706, 0.09411765, 0.08235294, 1)
+RosaryPalette/colors/cover_crimson = Color(0.2901961, 0.07058824, 0.08235294, 1)
+RosaryPalette/colors/cover_dark = Color(0.16470589, 0.03529412, 0.043137256, 1)
+RosaryPalette/colors/crimson = Color(0.41960785, 0.11372549, 0.12941177, 1)
+RosaryPalette/colors/gold = Color(0.72156864, 0.5686275, 0.1882353, 1)
+RosaryPalette/colors/ivory_text = Color(0.96862745, 0.9490196, 0.90588236, 1)
+RosaryPalette/colors/parchment = Color(0.98039216, 0.9647059, 0.93333334, 1)
+RosaryPalette/colors/umber = Color(0.36078432, 0.2627451, 0.21960784, 1)
+RosaryPalette/colors/warm_gold = Color(0.83137256, 0.6862745, 0.21568628, 1)
+ScrollContainer/styles/panel = SubResource("StyleBoxEmpty_cohrs")
