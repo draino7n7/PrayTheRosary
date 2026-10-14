@@ -38,6 +38,9 @@ func test_all_canonical_prayers_present() -> void:
 		assert_ne(str(prayer.get("title", "")), "", "Prayer '%s' must have a title" % pid)
 		assert_ne(str(prayer.get("text", "")), "", "Prayer '%s' must have prayer text" % pid)
 
+	assert_eq(str(loader.get_prayer("our_father").get("title", "")), "The Our Father", "our_father title must be 'The Our Father'")
+	assert_eq(str(loader.get_prayer("glory_be").get("title", "")), "The Glory Be", "glory_be title must be 'The Glory Be'")
+
 
 func test_four_mystery_sets_and_twenty_mysteries() -> void:
 	var loader: RefCounted = RosaryDataLoaderScript.new()
@@ -60,7 +63,9 @@ func test_four_mystery_sets_and_twenty_mysteries() -> void:
 			assert_eq(int(dec.get("spread_number", 0)), expected_spread, "Mystery spread number must be sequential from 3 to 22")
 			assert_ne(str(dec.get("title", "")), "", "Mystery must have a title")
 			assert_ne(str(dec.get("fruit", "")), "", "Mystery must have a spiritual fruit")
-			assert_true(str(dec.get("scripture_reference", "")).contains("Douay-Rheims"), "Mystery scripture reference must cite Douay-Rheims")
+			var scrip_ref: String = str(dec.get("scripture_reference", ""))
+			assert_ne(scrip_ref, "", "Mystery must have a non-empty scripture_reference")
+			assert_false(scrip_ref.contains("(Douay-Rheims)"), "Mystery scripture_reference must not contain '(Douay-Rheims)' suffix")
 			assert_ne(str(dec.get("scripture_text", "")), "", "Mystery must have scripture text")
 			assert_ne(str(dec.get("meditation", "")), "", "Mystery must have a contemplative meditation")
 			expected_spread += 1
@@ -209,22 +214,22 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 
 	# Joyful 4: Luke 2:28 bracketed subject
 	var j4: Dictionary = loader.get_mystery_by_id("joyful_4_presentation")
-	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32 (Douay-Rheims)")
+	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32")
 	assert_true(str(j4.get("scripture_text", "")).contains("[Then Simeon] took him into his arms"), "Joyful 4 Luke 2:28 must use bracketed subject '[Then Simeon] took him into his arms'")
 
 	# Luminous 4: Luke 9:29-31, 35 and verbatim 'hear him.'
 	var l4: Dictionary = loader.get_mystery_by_id("luminous_4_transfiguration")
-	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35 (Douay-Rheims)")
+	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35")
 	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son; hear him."), "Luminous 4 Luke 9:35 must end with verbatim DRBO 'hear him.'")
 	assert_false(str(l4.get("scripture_text", "")).contains("hear ye him"), "Luminous 4 must not contain KJV 'hear ye him'")
 
 	# Sorrowful 2: Isaias (Isaiah) 53:5
 	var s2: Dictionary = loader.get_mystery_by_id("sorrowful_2_scourging")
-	assert_eq(str(s2.get("scripture_reference", "")), "John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)")
+	assert_eq(str(s2.get("scripture_reference", "")), "John 19:1; Isaias (Isaiah) 53:5")
 
 	# Sorrowful 4: Citation order matching passage order (John 19:17; Luke 23:26-27)
 	var s4: Dictionary = loader.get_mystery_by_id("sorrowful_4_carrying_cross")
-	assert_eq(str(s4.get("scripture_reference", "")), "John 19:17; Luke 23:26–27 (Douay-Rheims)")
+	assert_eq(str(s4.get("scripture_reference", "")), "John 19:17; Luke 23:26–27")
 
 	# Sorrowful 5: Luke 23:46 'crying out with a loud voice'
 	var s5: Dictionary = loader.get_mystery_by_id("sorrowful_5_crucifixion")
@@ -232,7 +237,7 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 
 	# Glorious 2: Separated Luke 24:50-52 and Acts 1:9 in canonical order with ellipses
 	var g2: Dictionary = loader.get_mystery_by_id("glorious_2_ascension")
-	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–52; Acts 1:9 (Douay-Rheims)")
+	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–52; Acts 1:9")
 	assert_eq(
 		str(g2.get("scripture_text", "")),
 		"And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight."
@@ -240,11 +245,11 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 
 	# Glorious 4: Citation order matching passage order (Judith 15:10; Psalm 44:14, 16)
 	var g4: Dictionary = loader.get_mystery_by_id("glorious_4_assumption")
-	assert_eq(str(g4.get("scripture_reference", "")), "Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)")
+	assert_eq(str(g4.get("scripture_reference", "")), "Judith 15:10; Psalm 44:14, 16")
 
 	# Glorious 5: Ecclesiasticus (Sirach) 24:7
 	var g5: Dictionary = loader.get_mystery_by_id("glorious_5_coronation")
-	assert_eq(str(g5.get("scripture_reference", "")), "Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)")
+	assert_eq(str(g5.get("scripture_reference", "")), "Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7")
 
 
 func test_museum_catalog_attributions_and_synchronization() -> void:
@@ -341,5 +346,37 @@ func test_historical_feast_note_and_marian_counsel_quote() -> void:
 		"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood.",
 		"Back cover Marian counsel quote must match St. Louis Marie de Montfort's full verbatim sentence"
 	)
+
+
+func test_simplified_prayer_titles_and_front_matter_bible_version_note() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	assert_eq(
+		str(loader.get_prayer("our_father").get("title", "")),
+		"The Our Father",
+		"prayers.our_father.title must be simplified to 'The Our Father'"
+	)
+	assert_eq(
+		str(loader.get_prayer("glory_be").get("title", "")),
+		"The Glory Be",
+		"prayers.glory_be.title must be simplified to 'The Glory Be'"
+	)
+
+	var p3: Dictionary = loader.get_page(3)
+	var sections: Array = p3.get("sections", [])
+	assert_eq(sections.size(), 3, "Page 3 must have 3 instructional sections")
+	var sec0: Dictionary = sections[0] as Dictionary
+	assert_eq(str(sec0.get("title", "")), "How This Book Is Organized", "Page 3 Section 1 title must be 'How This Book Is Organized'")
+	var sec0_body: String = str(sec0.get("body", ""))
+	assert_true(
+		sec0_body.contains("Douay-Rheims"),
+		"Page 3 'How This Book Is Organized' section body must cite the Douay-Rheims Bible translation"
+	)
+	assert_true(
+		sec0_body.contains("• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade."),
+		"Page 3 Left Page (Word & Prayer) bullet must include '(taken from the Douay-Rheims / Confraternity Edition of the Bible)'"
+	)
+
 
 

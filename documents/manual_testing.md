@@ -50,16 +50,17 @@ This document outlines the strict manual testing procedures required before any 
   - 22pt italic subheading, 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
   - Calibrated typography auto-fitting based on character density (`total_chars <= 1650`):
     - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
-    - Page 3 (1,704 chars): 23pt section headers and 20pt body paragraphs.
+    - Page 3 (1,770 chars): 23pt section headers and 20pt body paragraphs.
   - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) accurately documents: `"...and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
+  - Page 3 Section 1 (*How This Book Is Organized*) explicitly notes the Bible translation in the `"Left Page (Word & Prayer)"` bullet: `• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade.`
   - Section containers configure `SIZE_EXPAND_FILL` to evenly balance vertical space across the full 1080px canvas with zero text overflow or clipping.
 
 ### TC-PAGE-03: Prayer Sequence Cards (`Pages 4 & 46`)
 - **Step 1:** Inspect Page 4 (*The Opening Prayers*) and Page 46 (*The Closing Prayers*).
 - **Expected:**
   - Standardized 32px uniform margins, 22pt italic subheading, and 34pt bold heading.
-  - Page 4 displays exactly 5 introductory prayer steps formatted with 20pt prayer titles, 16pt rubrics, and 19pt body text.
-  - Page 46 displays exactly 4 concluding prayer steps formatted with 24pt prayer titles, 18pt rubrics, and 23pt body text.
+  - Page 4 displays exactly 5 introductory prayer steps formatted with 20pt prayer titles, 16pt rubrics, and 19pt body text, using the simplified titles `"The Our Father"` (Step 3) and `"The Glory Be"` (Step 5) without `"The Lord's Prayer"` or `"(Doxology)"`.
+  - Page 46 displays 4 concluding prayer steps formatted with 24pt prayer titles, 18pt rubrics, and 23pt body text.
   - Distinct muted umber rubric tags (e.g., `[1×]`, `[10×]`, `[Sign of the Cross]`) precede each prayer item.
   - Prayer step containers expand (`SIZE_EXPAND_FILL`) to balance card height with zero vertical overflow.
 
@@ -68,18 +69,18 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Standardized 32px uniform margins.
   - Header displays 22pt italic mystery ordinal (e.g., *The First Joyful Mystery*), 34pt bold title (e.g., **The Annunciation**), and 18pt italic fruit badge (*Fruit of the Mystery: Humility*) in antique gold pill box.
-  - Scripture citation renders at 17pt bold with a gold vertical accent bar, and scripture reading renders at 18–20pt italic.
+  - Scripture citation renders at 17pt bold with a gold vertical accent bar (displaying clean book, chapter, and verse citations without any trailing `" (Douay-Rheims)"` suffix), and scripture reading renders at 18–20pt italic.
   - Verify canonical Douay-Rheims (Challoner Revision) citations and verbatim scripture passages:
-    - **Joyful 4 (`Page 12`):** Luke 2:28 uses bracketed subject `"[Then Simeon] took him into his arms"`.
-    - **Luminous 4 (`Page 22`):** Citation reads `"Luke 9:29–31, 35 (Douay-Rheims)"` and verse 35 concludes with verbatim `"This is my beloved Son; hear him."`.
-    - **Sorrowful 2 (`Page 28`):** Citation reads `"John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)"`.
-    - **Sorrowful 4 (`Page 32`):** Citation order reads `"John 19:17; Luke 23:26–27 (Douay-Rheims)"`, matching the sequence of quoted verses.
-    - **Sorrowful 5 (`Page 34`):** Luke 23:46 reads verbatim `"And Jesus crying out with a loud voice, said:"`.
-    - **Glorious 2 (`Page 38`):** Citation `"Luke 24:50–52; Acts 1:9 (Douay-Rheims)"` separates Luke 24:50–52 and Acts 1:9 in canonical order with ellipses.
-    - **Glorious 4 (`Page 42`):** Citation order reads `"Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)"`, matching the sequence of quoted verses.
-    - **Glorious 5 (`Page 44`):** Citation reads `"Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)"`.
+    - **Joyful 4 (`Page 12`):** Citation reads `"Luke 2:22, 28–32"` and Luke 2:28 uses bracketed subject `"[Then Simeon] took him into his arms"`.
+    - **Luminous 4 (`Page 22`):** Citation reads `"Luke 9:29–31, 35"` and verse 35 concludes with verbatim `"This is my beloved Son; hear him."`.
+    - **Sorrowful 2 (`Page 28`):** Citation reads `"John 19:1; Isaias (Isaiah) 53:5"`.
+    - **Sorrowful 4 (`Page 32`):** Citation order reads `"John 19:17; Luke 23:26–27"`, matching the sequence of quoted verses.
+    - **Sorrowful 5 (`Page 34`):** Citation reads `"Luke 23:33–34, 46"` and Luke 23:46 reads verbatim `"And Jesus crying out with a loud voice, said:"`.
+    - **Glorious 2 (`Page 38`):** Citation `"Luke 24:50–52; Acts 1:9"` separates Luke 24:50–52 and Acts 1:9 in canonical order with ellipses.
+    - **Glorious 4 (`Page 42`):** Citation order reads `"Judith 15:10; Psalm 44:14, 16"`, matching the sequence of quoted verses.
+    - **Glorious 5 (`Page 44`):** Citation reads `"Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7"`.
   - Contemplative meditation renders at 20–22pt regular text.
-  - Decade prayers (*Our Father*, *Hail Mary*, *Glory Be*, *Fatima Prayer*) render with 17–18pt bold rubrics and 20–22pt regular text.
+  - Decade prayers (*The Our Father* with rubric `"1× The Our Father"`, *The Hail Mary* with rubric `"10× The Hail Mary"`, *The Glory Be* with rubric `"1× The Glory Be"`, and *The Fatima Prayer* with rubric `"1× The Fatima Prayer"`) render with 17–18pt bold rubrics and 20–22pt regular text.
   - High-density passages (e.g., Page 40 Pentecost with 1,326 chars) auto-fit cleanly to 20pt body / 18pt scripture / 17pt rubrics, guaranteeing zero internal scrolling and zero vertical overflow on the 720×1080 canvas.
 
 ### TC-PAGE-05: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`)

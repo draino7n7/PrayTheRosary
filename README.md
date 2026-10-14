@@ -33,9 +33,9 @@ The UI is built around a modular page card component architecture designed for t
 - **Standardized Margins & Maximized Typography:** Card scenes feature uniform 32px margins, enlarged headers (34–38pt headings, 22–24pt subheadings), and dynamic body text auto-fitting (19–23pt) configured to fill the 720×1080 canvas with zero text clipping or internal scrolling.
 - **Specialized Sub-Cards (`game/scenes/ui/pages/`):** Dynamically instantiates the appropriate sub-card component for each page type:
   - `CoverPageCard`: Dedicated top header band with framed Murillo painting below, ensuring text never overlaps the sacred artwork.
-  - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels.
+  - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels (including the front-matter note citing the Douay-Rheims / Confraternity Edition of the Bible).
   - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46) prayer sequences with rubrics.
-  - `MysteryPrayerPageCard`: Decade prayers, fruit badge, verbatim Douay-Rheims scripture passage, and meditation.
+  - `MysteryPrayerPageCard`: Decade prayers (*The Our Father*, *The Hail Mary*, *The Glory Be*, *The Fatima Prayer*), fruit badge, clean book/chapter/verse citation, verbatim Douay-Rheims scripture passage, and meditation.
   - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
   - `CreditsPageCard`: Comprehensive museum catalog artwork attributions across Pages 48 and 49.
   - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph, book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary*.

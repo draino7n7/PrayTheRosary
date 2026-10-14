@@ -76,7 +76,7 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
   - `SubheadingLabel`: Standardized to **22–24pt** (>= 22pt) in EB Garamond Italic (22pt on standard cards, 24pt on BackCover subtitle).
   - `HeadingLabel`: Standardized to **34–38pt** (>= 34pt) in EB Garamond Bold (34pt on standard cards, 38pt on Cover & BackCover titles).
 - **Body Typography Auto-Fitting & Vertical Space Distribution:**
-  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density (`total_chars <= 1650`). Page 2 (1,622 chars) renders at 22pt body / 25pt section headers; Page 3 (1,704 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
+  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density (`total_chars <= 1650`). Page 2 (1,622 chars) renders at 22pt body / 25pt section headers; Page 3 (1,770 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
   - **Prayer Sequences (`Pages 4 & 46`):** Calibrated scaling: Page 4 (5 prayer steps) renders at 19pt body / 16pt rubrics / 20pt titles; Page 46 (4 prayer steps) renders at 23pt body / 18pt rubrics / 24pt titles. Prayer step containers configure `SIZE_EXPAND_FILL`.
   - **Mystery Prayers (`Pages 6, 8, ..., 44 even`):**
     - Fruit badge standardized to 18pt in gold pill box.
@@ -97,20 +97,20 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
 
 ### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `res://scenes/ui/pages/front_matter_page_card.tscn`, `res://scripts/ui/pages/front_matter_page_card.gd`)
 - **Page 2:** *The History of the Holy Rosary* (22pt subheading, 34pt heading, 25pt section headers, 22pt body paragraphs), including the historical note that Pope St. Pius V in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573).
-- **Page 3:** *Structure of the Book & How to Pray* (22pt subheading, 34pt heading, 23pt section headers, 20pt body paragraphs).
+- **Page 3:** *Structure of the Book & How to Pray* (22pt subheading, 34pt heading, 23pt section headers, 20pt body paragraphs), noting in *"How This Book Is Organized"* under *"Left Page (Word & Prayer)"* that the passage from Sacred Scripture is `(taken from the Douay-Rheims / Confraternity Edition of the Bible)` so the Bible version is stated once in the front matter rather than repeated on every Mystery page.
 - Rendered on warm ivory parchment panels (`#FAF6EE`) with crimson titles, umber subtitles, and dark charcoal body paragraphs with 32px uniform margins and `SIZE_EXPAND_FILL` section distribution.
 
 ### 3.3 Type 3: Prayer Sequence Cards (`Pages 4 & 46`, `res://scenes/ui/pages/prayer_sequence_page_card.tscn`, `res://scripts/ui/pages/prayer_sequence_page_card.gd`)
-- **Page 4 (*The Opening Prayers*):** Displays 22pt subheading, 34pt heading, and the 5 introductory prayer steps (Sign of the Cross, Apostles' Creed, Our Father, Three Hail Marys for Faith, Hope, and Charity, and Glory Be) rendered at 20pt prayer titles, 16pt rubrics, and 19pt body text.
+- **Page 4 (*The Opening Prayers*):** Displays 22pt subheading, 34pt heading, and the 5 introductory prayer steps (*The Sign of the Cross*, *The Apostles' Creed*, *The Our Father*, *Three Hail Marys for Faith, Hope, and Charity*, and *The Glory Be*—using the simplified canonical titles `"The Our Father"` and `"The Glory Be"` without `"The Lord's Prayer"` or `"(Doxology)"`) rendered at 20pt prayer titles, 16pt rubrics, and 19pt body text.
 - **Page 46 (*The Closing Prayers*):** Displays 22pt subheading, 34pt heading, and the 4 concluding prayer steps (Hail, Holy Queen / *Salve Regina*, Versicle & Response, Concluding Rosary Prayer, and Sign of the Cross) rendered at 24pt prayer titles, 18pt rubrics, and 23pt body text.
 - Formatted with muted umber rubric tags (e.g. `[1×]`, `[10×]`, `[Sign of the Cross]`), charcoal prayer text, 32px margins, and `SIZE_EXPAND_FILL` step distribution.
 
 ### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `res://scenes/ui/pages/mystery_prayer_page_card.tscn`, `res://scripts/ui/pages/mystery_prayer_page_card.gd`)
 Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling and 32px uniform margins:
 - **Header:** Ordinal subtitle (22pt italic), Mystery Title (34pt bold), and **Fruit of the Mystery** tag badge in gold pill container (18pt italic).
-- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** citation (17pt bold with gold vertical border accent, using traditional DRBO book titles with modern equivalents where helpful—e.g., *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, *Apocalypse (Revelation) 12:1*—and ordered strictly to match the sequence of quoted verses) and verbatim passage (18–20pt italic).
+- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** citation (17pt bold with gold vertical border accent, displaying clean book, chapter, and verse citations without repeating a trailing `" (Douay-Rheims)"` suffix on each page, using traditional DRBO book titles with modern equivalents where helpful—e.g., *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, *Apocalypse (Revelation) 12:1*—and ordered strictly to match the sequence of quoted verses) and verbatim passage (18–20pt italic).
 - **Contemplative Meditation:** 1–2 sentence reflection (20–22pt regular).
-- **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`) (17–18pt bold rubric labels, 20–22pt regular prayer text).
+- **Decade Prayers:** Full text of *The Our Father* (`1× The Our Father`), *The Hail Mary* (`10× The Hail Mary`), *The Glory Be* (`1× The Glory Be`), and *The Fatima Prayer* (`1× The Fatima Prayer`) (17–18pt bold rubric labels, 20–22pt regular prayer text).
 
 ### 3.5 Type 5: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`, `res://scenes/ui/pages/artwork_page_card.tscn`, `res://scripts/ui/pages/artwork_page_card.gd`)
 Designed for distraction-free visual contemplation:

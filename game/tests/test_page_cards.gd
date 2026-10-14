@@ -220,6 +220,10 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	var sec_body3: Label = fmc3.sections_container.get_child(0).get_node("SectionBody") as Label
 	assert_true(sec_title3.get_theme_font_size("font_size") >= 23, "Page 3 section title font size must be >= 23pt (was 21pt)")
 	assert_true(sec_body3.get_theme_font_size("font_size") >= 20, "Page 3 section body font size must be >= 20pt (was 16pt)")
+	assert_true(
+		sec_body3.text.contains("(taken from the Douay-Rheims / Confraternity Edition of the Bible)"),
+		"Page 3 'How This Book Is Organized' must note the Douay-Rheims / Confraternity Edition of the Bible"
+	)
 	_assert_no_visible_page_numbers(card3, 3)
 	card3.free()
 
@@ -242,6 +246,10 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	assert_true(psc4.heading_label.get_theme_font_size("font_size") >= 34, "Page 4 heading font size must be >= 34pt")
 	var p4_text: Label = psc4.steps_container.get_child(0).get_node("PrayerText") as Label
 	assert_true(p4_text.get_theme_font_size("font_size") >= 18, "Page 4 PrayerText font size must be >= 18pt (was 14pt)")
+	var p4_our_father_title: Label = psc4.steps_container.get_child(2).get_node("PrayerTitle") as Label
+	var p4_glory_be_title: Label = psc4.steps_container.get_child(4).get_node("PrayerTitle") as Label
+	assert_eq(p4_our_father_title.text, "The Our Father", "Page 4 Step 3 title must be 'The Our Father'")
+	assert_eq(p4_glory_be_title.text, "The Glory Be", "Page 4 Step 5 title must be 'The Glory Be'")
 	_assert_no_visible_page_numbers(card4, 4)
 	card4.free()
 
@@ -297,15 +305,22 @@ func test_all_twenty_mystery_prayer_cards() -> void:
 		assert_true(mpc.heading_label.get_theme_font_size("font_size") >= 34, "Page %d heading font size must be >= 34pt" % p_num)
 		assert_true(mpc.fruit_label.get_theme_font_size("font_size") >= 17, "Page %d FruitLabel font size must be >= 17pt" % p_num)
 		assert_true(mpc.scripture_citation_label.get_theme_font_size("font_size") >= 16, "Page %d ScriptureCitationLabel font size must be >= 16pt" % p_num)
+		assert_ne(mpc.scripture_citation_label.text, "", "Page %d ScriptureCitationLabel text must not be empty" % p_num)
+		assert_false(mpc.scripture_citation_label.text.contains("(Douay-Rheims)"), "Page %d ScriptureCitationLabel must not contain '(Douay-Rheims)'" % p_num)
 		assert_true(mpc.scripture_text_label.get_theme_font_size("font_size") >= 20, "Page %d ScriptureTextLabel font size must be >= 20pt (was 14pt)" % p_num)
 		assert_true(mpc.meditation_label.get_theme_font_size("font_size") >= 20, "Page %d MeditationLabel font size must be >= 20pt (was 14pt)" % p_num)
 
+		var rubric_texts: Array[String] = []
 		for child: Node in mpc.decade_prayers_container.get_children():
 			var p_vbox: VBoxContainer = child as VBoxContainer
 			var rubric_lbl: Label = p_vbox.get_node("DecadeRubric") as Label
 			var prayer_lbl: Label = p_vbox.get_node("PrayerText") as Label
 			assert_true(rubric_lbl.get_theme_font_size("font_size") >= 16, "Page %d DecadeRubric font size must be >= 16pt (was 14pt)" % p_num)
 			assert_true(prayer_lbl.get_theme_font_size("font_size") >= 20, "Page %d PrayerText font size must be >= 20pt (was 13pt)" % p_num)
+			rubric_texts.append(rubric_lbl.text)
+
+		assert_true(rubric_texts.has("1× The Our Father"), "Page %d must render '1× The Our Father' in decade rubrics" % p_num)
+		assert_true(rubric_texts.has("1× The Glory Be"), "Page %d must render '1× The Glory Be' in decade rubrics" % p_num)
 
 		_assert_no_visible_page_numbers(card, p_num)
 		card.free()
