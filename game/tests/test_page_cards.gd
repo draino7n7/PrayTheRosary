@@ -369,7 +369,35 @@ func test_all_twenty_two_artwork_cards() -> void:
 func test_pages_48_and_49_credits_cards() -> void:
 	var loader: RosaryDataLoader = _get_loaded_loader()
 
-	# Page 48: Part I (13 items)
+	var expected_page_48_ids: Array[String] = [
+		"cover",
+		"opening_prayers",
+		"joyful_1_annunciation",
+		"joyful_2_visitation",
+		"joyful_3_nativity",
+		"joyful_4_presentation",
+		"joyful_5_finding_in_temple",
+		"luminous_1_baptism",
+		"luminous_2_wedding_at_cana",
+		"luminous_3_proclamation",
+		"luminous_4_transfiguration",
+		"luminous_5_eucharist"
+	]
+	var expected_page_49_ids: Array[String] = [
+		"sorrowful_1_agony",
+		"sorrowful_2_scourging",
+		"sorrowful_3_crowning_with_thorns",
+		"sorrowful_4_carrying_cross",
+		"sorrowful_5_crucifixion",
+		"glorious_1_resurrection",
+		"glorious_2_ascension",
+		"glorious_3_pentecost",
+		"glorious_4_assumption",
+		"glorious_5_coronation",
+		"closing_prayers"
+	]
+
+	# Page 48: Part I (12 items)
 	var p48: Dictionary = loader.get_page(48)
 	var card48: PageCard = PageCardScene.instantiate() as PageCard
 	test_root_window.add_child(card48)
@@ -378,18 +406,31 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_eq(card48.page_number, 48, "Page number must be 48")
 	assert_true(card48.get_sub_card() is CreditsPageCard, "Sub card must be CreditsPageCard")
 	assert_eq(card48.get_heading_text(), "Sacred Artwork Credits (Part I)", "Page 48 heading must match")
+	assert_eq(card48.get_subheading_text(), "Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries", "Page 48 subheading must match")
 	var cpc48: CreditsPageCard = card48.get_sub_card() as CreditsPageCard
-	assert_eq(cpc48.get_attribution_count(), 13, "Page 48 must list 13 artwork attributions")
+	assert_eq(cpc48.get_attribution_count(), 12, "Page 48 must list 12 artwork attributions in sequential book order")
 	assert_true(cpc48.subheading_label.get_theme_font_size("font_size") >= 22, "Page 48 subheading font size must be >= 22pt")
 	assert_true(cpc48.heading_label.get_theme_font_size("font_size") >= 34, "Page 48 heading font size must be >= 34pt")
-	var title48: Label = cpc48.credits_container.get_child(0).get_node("Title") as Label
-	var details48: Label = cpc48.credits_container.get_child(0).get_node("Details") as Label
-	assert_true(title48.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
-	assert_true(details48.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
+	for i: int in range(expected_page_48_ids.size()):
+		var aid: String = expected_page_48_ids[i]
+		var art: Dictionary = loader.get_artwork(aid)
+		var sec_label: String = str(art.get("section_label", ""))
+		var art_title: String = str(art.get("title", ""))
+		assert_ne(sec_label, "", "Artwork '%s' must have a non-empty section_label" % aid)
+		var item_node: Node = cpc48.credits_container.get_child(i)
+		assert_eq(String(item_node.name), "Attribution_%s" % aid, "Page 48 item %d must be Attribution_%s" % [i, aid])
+		var title_lbl: Label = item_node.get_node("Title") as Label
+		var details_lbl: Label = item_node.get_node("Details") as Label
+		assert_eq(title_lbl.text, "%s — %s" % [sec_label, art_title], "Page 48 item %d Title must include section_label and painting title" % i)
+		assert_eq(title_lbl.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART, "Page 48 Title label must use AUTOWRAP_WORD_SMART")
+		assert_true(title_lbl.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
+		assert_true(details_lbl.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
 	_assert_no_visible_page_numbers(card48, 48)
 	card48.free()
 
-	# Page 49: Part II & Colophon (10 items)
+	# Page 49: Part II & Colophon (11 items, ending with closing_prayers)
 	var p49: Dictionary = loader.get_page(49)
 	var card49: PageCard = PageCardScene.instantiate() as PageCard
 	test_root_window.add_child(card49)
@@ -398,14 +439,30 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_eq(card49.page_number, 49, "Page number must be 49")
 	assert_true(card49.get_sub_card() is CreditsPageCard, "Sub card must be CreditsPageCard")
 	assert_eq(card49.get_heading_text(), "Sacred Artwork Credits (Part II) & Colophon", "Page 49 heading must match")
+	assert_eq(card49.get_subheading_text(), "Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources", "Page 49 subheading must match")
 	var cpc49: CreditsPageCard = card49.get_sub_card() as CreditsPageCard
-	assert_eq(cpc49.get_attribution_count(), 10, "Page 49 must list 10 artwork attributions")
+	assert_eq(cpc49.get_attribution_count(), 11, "Page 49 must list 11 artwork attributions in sequential book order")
 	assert_true(cpc49.subheading_label.get_theme_font_size("font_size") >= 22, "Page 49 subheading font size must be >= 22pt")
 	assert_true(cpc49.heading_label.get_theme_font_size("font_size") >= 34, "Page 49 heading font size must be >= 34pt")
-	var title49: Label = cpc49.credits_container.get_child(0).get_node("Title") as Label
-	var details49: Label = cpc49.credits_container.get_child(0).get_node("Details") as Label
-	assert_true(title49.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
-	assert_true(details49.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
+	for i: int in range(expected_page_49_ids.size()):
+		var aid: String = expected_page_49_ids[i]
+		var art: Dictionary = loader.get_artwork(aid)
+		var sec_label: String = str(art.get("section_label", ""))
+		var art_title: String = str(art.get("title", ""))
+		assert_ne(sec_label, "", "Artwork '%s' must have a non-empty section_label" % aid)
+		var item_node: Node = cpc49.credits_container.get_child(i)
+		assert_eq(String(item_node.name), "Attribution_%s" % aid, "Page 49 item %d must be Attribution_%s" % [i, aid])
+		var title_lbl: Label = item_node.get_node("Title") as Label
+		var details_lbl: Label = item_node.get_node("Details") as Label
+		assert_eq(title_lbl.text, "%s — %s" % [sec_label, art_title], "Page 49 item %d Title must include section_label and painting title" % i)
+		assert_eq(title_lbl.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART, "Page 49 Title label must use AUTOWRAP_WORD_SMART")
+		assert_true(title_lbl.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
+		assert_true(details_lbl.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
+	var last_item49: Node = cpc49.credits_container.get_child(cpc49.get_attribution_count() - 1)
+	assert_eq(String(last_item49.name), "Attribution_closing_prayers", "Final credit entry on Page 49 must be Attribution_closing_prayers")
+
 	assert_true(cpc49.scripture_notice_label.get_theme_font_size("font_size") >= 13, "Colophon scripture notice must be >= 13pt (was 12pt)")
 	assert_true(cpc49.colophon_notice_label.get_theme_font_size("font_size") >= 13, "Colophon artwork notice must be >= 13pt (was 11pt)")
 	_assert_no_visible_page_numbers(card49, 49)
@@ -545,9 +602,10 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			total_h += font_reg.get_multiline_string_size(str(p_dict.get("text", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
 			total_h += 8.0
 	elif sub is CreditsPageCard:
-		total_h += font_italic.get_height(22) + 4.0
-		total_h += font_bold.get_height(34) + 4.0
-		total_h += 2.0 + 10.0
+		total_h = 44.0 # 22 top + 22 bottom margins
+		total_h += font_italic.get_height(22) + 2.0
+		total_h += font_bold.get_height(34) + 2.0
+		total_h += 2.0 + 6.0
 		var artworks: Array = p_data.get("attributions", [])
 		if artworks.is_empty():
 			for aid: Variant in p_data.get("attribution_ids", []):
@@ -556,7 +614,10 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			if not (art_val is Dictionary):
 				continue
 			var art: Dictionary = art_val as Dictionary
-			total_h += font_bold.get_height(17) + 1.0
+			var sec_label: String = str(art.get("section_label", "")).strip_edges()
+			var art_title: String = str(art.get("title", "")).strip_edges()
+			var combined_title: String = "%s — %s" % [sec_label, art_title] if (sec_label != "" and art_title != "") else art_title
+			total_h += font_bold.get_multiline_string_size(combined_title, HORIZONTAL_ALIGNMENT_LEFT, width, 16).y
 			var details: String = "%s (%s), %s • %s • %s" % [
 				str(art.get("artist", "")),
 				str(art.get("artist_dates", "")),
@@ -564,12 +625,12 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 				str(art.get("medium", "")),
 				str(art.get("current_location", ""))
 			]
-			total_h += font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, width, 15).y + 6.0
+			total_h += font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, width, 14).y + 3.0
 		var colophon: Dictionary = p_data.get("colophon", {})
 		if not colophon.is_empty():
-			total_h += 10.0 + 1.0 + 6.0
-			total_h += font_italic.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 14).y + 6.0
-			total_h += font_reg.get_multiline_string_size(str(colophon.get("artwork_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 14).y
+			total_h += 6.0 + 1.0 + 3.0
+			total_h += font_italic.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 13).y + 3.0
+			total_h += font_reg.get_multiline_string_size(str(colophon.get("artwork_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 13).y
 	elif sub is BackCoverPageCard:
 		var inner_w: float = 720.0 - (12.0 + 22.0) * 2.0
 		total_h = (12.0 + 26.0) * 2.0

@@ -37,7 +37,7 @@ The UI is built around a modular page card component architecture designed for t
   - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46) prayer sequences with rubrics.
   - `MysteryPrayerPageCard`: Decade prayers (*The Our Father*, *The Hail Mary*, *The Glory Be*, *The Fatima Prayer*), fruit badge, clean book/chapter/verse citation, verbatim Douay-Rheims scripture passage, and meditation.
   - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
-  - `CreditsPageCard`: Comprehensive museum catalog artwork attributions across Pages 48 and 49.
+  - `CreditsPageCard`: Comprehensive museum catalog artwork attributions listed in exact sequential book appearance order across Pages 48 (12 items) and 49 (11 items + Colophon) with non-numbered section/Mystery placement labels (`section_label — title`).
   - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph, book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary*.
 - **Data-Driven Hydration:** Cards are hydrated directly from `RosaryDataLoader` via `PageCard.create_for_page(page_data, loader)` or `card.bind_page_data(page_data, loader)`.
 

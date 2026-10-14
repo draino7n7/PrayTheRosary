@@ -67,13 +67,13 @@ The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the ve
   - Defines `BasePageCard`, extending `AspectRatioContainer`, establishing `mouse_filter = Control.MOUSE_FILTER_PASS`, the common lifecycle method `bind_page_data(page_data, loader)`, standard inspector accessors (`get_heading_text()`, `get_subheading_text()`), and the recursive helper `BasePageCard.configure_pass_through_mouse_filters(node: Node)`.
   - **Pass-Through Mouse Filter Enforcement:** Every `Control` inside `PageCard`, `InStreamJumpBar`, and `NavigationDrawer/ContentContainer` is configured via `configure_pass_through_mouse_filters()` so that `BaseButton` descendants use `Control.MOUSE_FILTER_PASS` (allowing clicks/taps while passing drag/wheel input through), `Label` / `TextureRect` / `ColorRect` nodes use `Control.MOUSE_FILTER_IGNORE`, and layout containers use `Control.MOUSE_FILTER_PASS` (never `Control.MOUSE_FILTER_STOP`).
 - **Data Hydration (`res://scripts/data/rosary_data_loader.gd`):**
-  - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`.
+  - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`, attaching each painting's non-numbered placement `section_label` (`"Front Cover"`, `"Opening Prayers"`, `"1st Joyful Mystery (The Annunciation)"` .. `"5th Glorious Mystery (The Coronation of the Blessed Virgin Mary)"`, and `"Closing Prayers"`).
   - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.
 
 ### 3.0.1 Typography Sizing, Margin Standardization & Layout Calibration
 To maximize mobile readability, eliminate vacant vertical whitespace, and guarantee zero vertical text clipping or internal scrolling on the $720×1080$ ($2:3$) portrait card canvas:
 - **Standardized MarginContainers:**
-  - All page card scenes (`CoverPageCard`, `FrontMatterPageCard`, `PrayerSequencePageCard`, `MysteryPrayerPageCard`, `ArtworkPageCard`, `CreditsPageCard`) enforce a uniform **32px** margin on all four edges (`margin_left = 32`, `margin_right = 32`, `margin_top = 32`, `margin_bottom = 32`), yielding a consistent content width of 656px.
+  - Standard page card scenes (`CoverPageCard`, `FrontMatterPageCard`, `PrayerSequencePageCard`, `MysteryPrayerPageCard`, `ArtworkPageCard`) enforce a uniform **32px** margin on all four edges (`margin_left = 32`, `margin_right = 32`, `margin_top = 32`, `margin_bottom = 32`), yielding a consistent content width of 656px (`CreditsPageCard` uses 32px left/right margins and 22px top/bottom margins).
   - `BackCoverPageCard` aligns with 34–36px outer padding and 24px content block vertical separation.
 - **Header Typography Sizing:**
   - `SubheadingLabel`: Standardized to **22–24pt** (>= 22pt) in EB Garamond Italic (22pt on standard cards, 24pt on BackCover subtitle).
@@ -87,8 +87,8 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
     - Dynamic density scaling: Standard-density mysteries render at 22pt body / 20pt scripture / 18pt decade rubric; high-density mysteries (such as Page 40 Pentecost, 1,326 chars) render at 20pt body / 18pt scripture / 17pt decade rubric.
     - Decade prayer step containers configure `SIZE_EXPAND_FILL` for vertical balance.
   - **Credits & Colophon (`Pages 48 & 49`):**
-    - Part I (Page 48, 13 attributions): 17pt title / 15pt details with `SIZE_EXPAND_FILL`.
-    - Part II (Page 49, 10 attributions + Colophon): 17pt title / 15pt details / 14pt colophon notice.
+    - Part I (Page 48, 12 attributions in sequential book order: Front Cover, Opening Prayers, Joyful Mysteries 1–5, and Luminous Mysteries 1–5): 16pt bold title (`"%s — %s" % [section_label, art_title]`) / 14pt regular details with `SIZE_EXPAND_FILL` and 22px top/bottom margins.
+    - Part II (Page 49, 11 attributions + Colophon in sequential book order: Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, and Closing Prayers last): 16pt bold title (`"%s — %s" % [section_label, art_title]`) / 14pt regular details / 13pt colophon notices.
   - **Back Cover (`Page 50`):** 38pt title / 22pt subtitle / 22pt epigraphs / 20pt synopsis / 17pt attributions with 24px vertical separation and `SIZE_EXPAND_FILL`.
 - **Zero Vertical Overflow Guarantee:**
   - Automated tests assert that all 50 hydrated pages have total required height $\le 1080.0\text{px}$, ensuring no text clipping or hidden lines across the entire 50-page stream.
@@ -122,8 +122,8 @@ Designed for distraction-free visual contemplation:
 - **No Footer Caption or Page Number:** Strictly no artist name, museum credit, or page number is shown on the artwork card itself.
 
 ### 3.6 Type 6: Credits Cards (`Pages 48–49`, `res://scenes/ui/pages/credits_page_card.tscn`, `res://scripts/ui/pages/credits_page_card.gd`) & Back Cover Card (`Page 50`, `res://scenes/ui/pages/back_cover_page_card.tscn`, `res://scripts/ui/pages/back_cover_page_card.gd`)
-- **Page 48 (*Sacred Artwork Credits Part I*):** 22pt subheading, 34pt heading, 32px margins. Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5) rendered at 17pt artwork title and 15pt details.
-- **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** 22pt subheading, 34pt heading, 32px margins. Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5) (17pt title / 15pt details), plus the Douay-Rheims Scripture notice (14pt italic) and museum open-access colophon (14pt regular).
+- **Page 48 (*Sacred Artwork Credits Part I*):** 22pt subheading (`"Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries"`), 34pt heading, 32px horizontal / 22px vertical margins. Lists 12 artwork attributions in exact sequential book appearance order (Front Cover, Opening Prayers, Joyful Mysteries 1–5, and Luminous Mysteries 1–5), displaying each credit entry's non-numbered placement `section_label` alongside the painting title (`"%s — %s" % [section_label, art_title]`, e.g., `"1st Joyful Mystery (The Annunciation) — The Annunciation (La Anunciación)"`) at 16pt bold title (`AUTOWRAP_WORD_SMART`) and full artist, life dates, creation date, medium, and museum location at 14pt regular details.
+- **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** 22pt subheading (`"Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources"`), 34pt heading, 32px horizontal / 22px vertical margins. Lists 11 artwork attributions in exact sequential book appearance order (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, and Closing Prayers last) at 16pt bold `section_label — title` (`AUTOWRAP_WORD_SMART`) and 14pt regular details, plus the Douay-Rheims Scripture notice (13pt italic) and museum open-access colophon (13pt regular).
 - **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying title in 38pt bold gold, subtitle in 22pt italic gold, Pope St. John Paul II's epigraph in 22pt italic with 17pt attribution, the book synopsis in 20pt body text, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary* (25th Rose) in 22pt italic with 17pt attribution, distributed cleanly with 24px block separation and zero overflow.
 
 ---
@@ -217,8 +217,8 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 ## 5. Asset Pipeline & Archival Protection
 
 ### 5.1 Immutable Original Downloads (`assets/2D/gimp/original_downloads/`)
-- All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json`) are unmodified, byte-for-byte archival downloads.
-- Every entry in `assets/2D/gimp/attributions.json` maintains non-empty museum catalog `inventory_number` and `original_dimensions` records, and its `inventory_number`, `creation_date`, and `current_location` fields are strictly synchronized with `game/data/mysteries.json` and `game/data/book_layout.json`.
+- All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json` in exact sequential order of appearance in the book, ending with `"closing_prayers"`) are unmodified, byte-for-byte archival downloads.
+- Every entry in `assets/2D/gimp/attributions.json` maintains non-empty museum catalog `inventory_number`, `original_dimensions`, and non-numbered placement `section_label` records, and its `inventory_number`, `creation_date`, `current_location`, and `section_label` fields are strictly synchronized with `game/data/mysteries.json`, `game/data/book_layout.json`, and `RosaryDataLoader`.
 - Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
 
 ### 5.2 Runtime Game Textures (`game/assets/images/`)

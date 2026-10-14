@@ -296,14 +296,22 @@ func _build_indexes() -> void:
 		if set_val is Dictionary:
 			var set_id: String = str(set_val.get("id", ""))
 			_mystery_sets_by_id[set_id] = set_val
+			var short_set_title: String = str(set_val.get("short_title", "")).strip_edges()
 			var decades: Array = set_val.get("decades", [])
 			for dec_val: Variant in decades:
 				if dec_val is Dictionary:
 					var dec_id: String = str(dec_val.get("id", ""))
-					_mysteries_by_id[dec_id] = dec_val
 					var dec_art: Dictionary = dec_val.get("artwork", {})
 					if not dec_art.is_empty():
+						var dec_num: int = int(dec_val.get("decade_number", 1))
+						var dec_title: String = str(dec_val.get("title", "")).strip_edges()
+						dec_art["section_label"] = "%s %s Mystery (%s)" % [
+							_ordinal_number_label(dec_num),
+							short_set_title,
+							dec_title
+						]
 						_artworks_by_id[str(dec_art.get("id", dec_id))] = dec_art
+					_mysteries_by_id[dec_id] = dec_val
 
 	var spreads: Array = book_layout_data.get("spreads", [])
 	for sp_val: Variant in spreads:
@@ -312,10 +320,18 @@ func _build_indexes() -> void:
 			_spreads_by_number[sp_num] = sp_val
 			var rp_art: Dictionary = sp_val.get("right_page", {}).get("artwork", {})
 			if not rp_art.is_empty():
-				_artworks_by_id[str(rp_art.get("id", ""))] = rp_art
+				var rp_art_id: String = str(rp_art.get("id", ""))
+				if rp_art_id == "opening_prayers":
+					rp_art["section_label"] = "Opening Prayers"
+				elif rp_art_id == "closing_prayers":
+					rp_art["section_label"] = "Closing Prayers"
+				elif not rp_art.has("section_label"):
+					rp_art["section_label"] = str(sp_val.get("title", "")).trim_prefix("The ")
+				_artworks_by_id[rp_art_id] = rp_art
 
 	var cover_art: Dictionary = get_front_cover().get("artwork", {})
 	if not cover_art.is_empty():
+		cover_art["section_label"] = "Front Cover"
 		_artworks_by_id[str(cover_art.get("id", "cover"))] = cover_art
 
 	# Build flat 1..50 pages index for continuous vertical scroll
@@ -372,6 +388,22 @@ func _build_indexes() -> void:
 	var back: Dictionary = get_back_cover().duplicate(true)
 	back["page_type"] = "back_cover"
 	_pages_by_number[50] = back
+
+
+func _ordinal_number_label(decade_num: int) -> String:
+	match decade_num:
+		1:
+			return "1st"
+		2:
+			return "2nd"
+		3:
+			return "3rd"
+		4:
+			return "4th"
+		5:
+			return "5th"
+		_:
+			return "%dth" % decade_num
 
 
 func _load_json_file(path: String) -> Dictionary:
