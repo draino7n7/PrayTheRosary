@@ -33,11 +33,21 @@ func _apply_page_data() -> void:
 		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
 		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
+		# Calibrate font size based on page text density (Page 2 vs Page 3)
+		var total_chars: int = 0
+		for sec_val: Variant in sections:
+			if sec_val is Dictionary:
+				total_chars += str((sec_val as Dictionary).get("body", "")).length()
+
+		var body_font_size: int = 22 if total_chars <= 1600 else 20
+		var title_font_size: int = body_font_size + 3
+
 		for sec_val: Variant in sections:
 			if not (sec_val is Dictionary):
 				continue
 			var sec: Dictionary = sec_val
 			var sec_vbox: VBoxContainer = VBoxContainer.new()
+			sec_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			sec_vbox.add_theme_constant_override("separation", 6)
 
 			var title_lbl: Label = Label.new()
@@ -45,7 +55,7 @@ func _apply_page_data() -> void:
 			title_lbl.text = str(sec.get("title", ""))
 			if font_bold != null:
 				title_lbl.add_theme_font_override("font", font_bold)
-			title_lbl.add_theme_font_size_override("font_size", 21)
+			title_lbl.add_theme_font_size_override("font_size", title_font_size)
 			title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 			title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			sec_vbox.add_child(title_lbl)
@@ -55,8 +65,9 @@ func _apply_page_data() -> void:
 			body_lbl.text = str(sec.get("body", ""))
 			if font_reg != null:
 				body_lbl.add_theme_font_override("font", font_reg)
-			body_lbl.add_theme_font_size_override("font_size", 16)
+			body_lbl.add_theme_font_size_override("font_size", body_font_size)
 			body_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			body_lbl.add_theme_constant_override("line_spacing", 3)
 			body_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			sec_vbox.add_child(body_lbl)
 

@@ -42,15 +42,18 @@ func _apply_page_data() -> void:
 	var epigraph: Dictionary = page_data.get("epigraph", {})
 	if epigraph_quote_label != null:
 		epigraph_quote_label.text = "“%s”" % str(epigraph.get("quote", ""))
+		epigraph_quote_label.add_theme_constant_override("line_spacing", 3)
 	if epigraph_attr_label != null:
 		epigraph_attr_label.text = "— %s" % str(epigraph.get("attribution", ""))
 
 	if synopsis_label != null:
 		synopsis_label.text = str(page_data.get("synopsis", ""))
+		synopsis_label.add_theme_constant_override("line_spacing", 3)
 
 	var counsel: Dictionary = page_data.get("marian_counsel", {})
 	if counsel_quote_label != null:
 		counsel_quote_label.text = "“%s”" % str(counsel.get("quote", ""))
+		counsel_quote_label.add_theme_constant_override("line_spacing", 3)
 	if counsel_attr_label != null:
 		counsel_attr_label.text = "— %s" % str(counsel.get("attribution", ""))
 

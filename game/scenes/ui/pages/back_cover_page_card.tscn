@@ -63,20 +63,21 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_inner_gold")
 
 [node name="InnerMargin" type="MarginContainer" parent="CardPanel/MarginContainer/InnerBorder"]
 layout_mode = 2
-theme_override_constants/margin_left = 35
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 35
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 26
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin"]
 layout_mode = 2
-theme_override_constants/separation = 18
+size_flags_vertical = 3
+theme_override_constants/separation = 24
 
 [node name="TitleLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
 theme_override_fonts/font = ExtResource("2_font_bold")
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 38
 text = "PRAY THE ROSARY"
 horizontal_alignment = 1
 
@@ -84,26 +85,27 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 text = "A Contemplative Visual Guide to the Twenty Mysteries"
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
-custom_minimum_size = Vector2(200, 2)
+custom_minimum_size = Vector2(240, 2)
 layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0.831373, 0.686275, 0.215686, 1)
 
 [node name="EpigraphContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 4
+size_flags_vertical = 3
+theme_override_constants/separation = 6
 
 [node name="EpigraphQuoteLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/EpigraphContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "“The Rosary, though clearly Marian in character, is at heart a Christocentric prayer...”"
 autowrap_mode = 2
 
@@ -111,27 +113,29 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "— Pope St. John Paul II, Rosarium Virginis Mariae (2002)"
 horizontal_alignment = 2
 
 [node name="SynopsisLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 20
 text = "Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers..."
 autowrap_mode = 2
 
 [node name="CounselContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 4
+size_flags_vertical = 3
+theme_override_constants/separation = 6
 
 [node name="CounselQuoteLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/CounselContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "“Never will anyone who says his Rosary every day be led astray...”"
 autowrap_mode = 2
 
@@ -139,6 +143,6 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "— St. Louis Marie de Montfort, The Secret of the Rosary"
 horizontal_alignment = 2

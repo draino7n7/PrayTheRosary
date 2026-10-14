@@ -34,12 +34,19 @@ func _apply_page_data() -> void:
 		var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
+		# Calibrate font size between Page 4 (5 steps with long Creed) and Page 46 (4 steps)
+		var is_five_step: bool = steps.size() >= 5
+		var body_font_size: int = 19 if is_five_step else 23
+		var rubric_font_size: int = 16 if is_five_step else 18
+		var title_font_size: int = 20 if is_five_step else 24
+
 		for step_val: Variant in steps:
 			if not (step_val is Dictionary):
 				continue
 			var step: Dictionary = step_val
 			var step_vbox: VBoxContainer = VBoxContainer.new()
 			step_vbox.name = "Step_%d" % int(step.get("step_number", 0))
+			step_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			step_vbox.add_theme_constant_override("separation", 3)
 
 			# Rubric row: bead label + rubric
@@ -57,7 +64,7 @@ func _apply_page_data() -> void:
 				rubric_lbl.text = rubric_text
 				if font_italic != null:
 					rubric_lbl.add_theme_font_override("font", font_italic)
-				rubric_lbl.add_theme_font_size_override("font_size", 14)
+				rubric_lbl.add_theme_font_size_override("font_size", rubric_font_size)
 				rubric_lbl.add_theme_color_override("font_color", COLOR_UMBER)
 				rubric_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(rubric_lbl)
@@ -74,7 +81,7 @@ func _apply_page_data() -> void:
 				title_lbl.text = title
 				if font_bold != null:
 					title_lbl.add_theme_font_override("font", font_bold)
-				title_lbl.add_theme_font_size_override("font_size", 16)
+				title_lbl.add_theme_font_size_override("font_size", title_font_size)
 				title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 				step_vbox.add_child(title_lbl)
 
@@ -85,8 +92,9 @@ func _apply_page_data() -> void:
 				text_lbl.text = text
 				if font_reg != null:
 					text_lbl.add_theme_font_override("font", font_reg)
-				text_lbl.add_theme_font_size_override("font_size", 14)
+				text_lbl.add_theme_font_size_override("font_size", body_font_size)
 				text_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+				text_lbl.add_theme_constant_override("line_spacing", 2)
 				text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(text_lbl)
 
