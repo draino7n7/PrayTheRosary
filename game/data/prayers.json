@@ -16,7 +16,7 @@
 		},
 		"our_father": {
 			"id": "our_father",
-			"title": "The Lord's Prayer (Our Father)",
+			"title": "The Our Father",
 			"latin_title": "Pater Noster",
 			"text": "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.",
 			"leader_text": "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven.",
@@ -53,7 +53,7 @@
 		},
 		"glory_be": {
 			"id": "glory_be",
-			"title": "The Glory Be (Doxology)",
+			"title": "The Glory Be",
 			"latin_title": "Gloria Patri",
 			"text": "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
 			"leader_text": "Glory be to the Father, and to the Son, and to the Holy Spirit.",
