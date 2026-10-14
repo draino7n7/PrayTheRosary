@@ -68,8 +68,9 @@ The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the ve
   - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.
 
 ### 3.1 Type 1: Front Cover Card (`Page 1`, `res://scenes/ui/pages/cover_page_card.tscn`, `res://scripts/ui/pages/cover_page_card.gd`)
-- Full-bleed portrait `TextureRect` displaying `res://assets/images/cover.webp` (Bartolomé Esteban Murillo, *The Virgin of the Rosary*).
-- Overlay title **"Pray the Rosary"** and subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* positioned over the upper crimson drapery in warm gold/ivory serif typography (`#D4AF37` / `#F7F2E7`), leaving Mary and the Christ Child unobstructed.
+- Structured vertical layout (`VBoxContainer`) featuring a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215`) with antique gold border (`#D4AF37`), housing **"PRAY THE ROSARY"** in warm gold (`#D4AF37`), the subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory (`#F7F2E7`), and an ornamental gold divider line.
+- Positioned strictly below the header is a framed artwork container enclosing Bartolomé Esteban Murillo's *The Virgin of the Rosary* (`res://assets/images/cover.webp`) (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`), guaranteeing that zero text elements overlap any portion of the sacred painting.
+- Displays no visible page number on the cover.
 
 ### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `res://scenes/ui/pages/front_matter_page_card.tscn`, `res://scripts/ui/pages/front_matter_page_card.gd`)
 - **Page 2:** *The History of the Holy Rosary* (heading, subheading, and 3 historical sections).
