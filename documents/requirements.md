@@ -67,38 +67,61 @@ The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the ve
   - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`.
   - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.
 
+### 3.0.1 Typography Sizing, Margin Standardization & Layout Calibration
+To maximize mobile readability, eliminate vacant vertical whitespace, and guarantee zero vertical text clipping or internal scrolling on the $720×1080$ ($2:3$) portrait card canvas:
+- **Standardized MarginContainers:**
+  - All page card scenes (`CoverPageCard`, `FrontMatterPageCard`, `PrayerSequencePageCard`, `MysteryPrayerPageCard`, `ArtworkPageCard`, `CreditsPageCard`) enforce a uniform **32px** margin on all four edges (`margin_left = 32`, `margin_right = 32`, `margin_top = 32`, `margin_bottom = 32`), yielding a consistent content width of 656px.
+  - `BackCoverPageCard` aligns with 34–36px outer padding and 24px content block vertical separation.
+- **Header Typography Sizing:**
+  - `SubheadingLabel`: Standardized to **22–24pt** (>= 22pt) in EB Garamond Italic (22pt on standard cards, 24pt on BackCover subtitle).
+  - `HeadingLabel`: Standardized to **34–38pt** (>= 34pt) in EB Garamond Bold (34pt on standard cards, 38pt on Cover & BackCover titles).
+- **Body Typography Auto-Fitting & Vertical Space Distribution:**
+  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density. Page 2 (1,571 chars) renders at 22pt body / 25pt section headers; Page 3 (1,704 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
+  - **Prayer Sequences (`Pages 4 & 46`):** Calibrated scaling: Page 4 (5 prayer steps) renders at 19pt body / 16pt rubrics / 20pt titles; Page 46 (4 prayer steps) renders at 23pt body / 18pt rubrics / 24pt titles. Prayer step containers configure `SIZE_EXPAND_FILL`.
+  - **Mystery Prayers (`Pages 6, 8, ..., 44 even`):**
+    - Fruit badge standardized to 18pt in gold pill box.
+    - Scripture citation standardized to 17pt bold with gold vertical border accent.
+    - Dynamic density scaling: Standard-density mysteries render at 22pt body / 20pt scripture / 18pt decade rubric; high-density mysteries (such as Page 40 Pentecost, 1,326 chars) render at 20pt body / 18pt scripture / 17pt decade rubric.
+    - Decade prayer step containers configure `SIZE_EXPAND_FILL` for vertical balance.
+  - **Credits & Colophon (`Pages 48 & 49`):**
+    - Part I (Page 48, 13 attributions): 17pt title / 15pt details with `SIZE_EXPAND_FILL`.
+    - Part II (Page 49, 10 attributions + Colophon): 17pt title / 15pt details / 14pt colophon notice.
+  - **Back Cover (`Page 50`):** 38pt title / 22pt subtitle / 22pt epigraphs / 20pt synopsis / 17pt attributions with 24px vertical separation and `SIZE_EXPAND_FILL`.
+- **Zero Vertical Overflow Guarantee:**
+  - Automated tests assert that all 50 hydrated pages have total required height $\le 1080.0\text{px}$, ensuring no text clipping or hidden lines across the entire 50-page stream.
+
 ### 3.1 Type 1: Front Cover Card (`Page 1`, `res://scenes/ui/pages/cover_page_card.tscn`, `res://scripts/ui/pages/cover_page_card.gd`)
-- Structured vertical layout (`VBoxContainer`) featuring a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215`) with antique gold border (`#D4AF37`), housing **"PRAY THE ROSARY"** in warm gold (`#D4AF37`), the subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory (`#F7F2E7`), and an ornamental gold divider line.
+- Structured vertical layout (`VBoxContainer`) featuring a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215`) with antique gold border (`#D4AF37`), housing **"PRAY THE ROSARY"** in warm gold 38pt bold (`#D4AF37`), the subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory 22pt italic (`#F7F2E7`), and an ornamental gold divider line.
 - Positioned strictly below the header is a framed artwork container enclosing Bartolomé Esteban Murillo's *The Virgin of the Rosary* (`res://assets/images/cover.webp`) (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`), guaranteeing that zero text elements overlap any portion of the sacred painting.
-- Displays no visible page number on the cover.
+- Displays no visible page number on the cover. Standard 32px outer margins.
 
 ### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `res://scenes/ui/pages/front_matter_page_card.tscn`, `res://scripts/ui/pages/front_matter_page_card.gd`)
-- **Page 2:** *The History of the Holy Rosary* (heading, subheading, and 3 historical sections).
-- **Page 3:** *Structure of the Book & How to Pray* (heading, subheading, and 3 instructional sections).
-- Rendered on warm ivory parchment panels (`#FAF6EE`) with crimson titles, umber subtitles, and dark charcoal body paragraphs.
+- **Page 2:** *The History of the Holy Rosary* (22pt subheading, 34pt heading, 25pt section headers, 22pt body paragraphs).
+- **Page 3:** *Structure of the Book & How to Pray* (22pt subheading, 34pt heading, 23pt section headers, 20pt body paragraphs).
+- Rendered on warm ivory parchment panels (`#FAF6EE`) with crimson titles, umber subtitles, and dark charcoal body paragraphs with 32px uniform margins and `SIZE_EXPAND_FILL` section distribution.
 
 ### 3.3 Type 3: Prayer Sequence Cards (`Pages 4 & 46`, `res://scenes/ui/pages/prayer_sequence_page_card.tscn`, `res://scripts/ui/pages/prayer_sequence_page_card.gd`)
-- **Page 4 (*The Opening Prayers*):** Displays heading, subheading, and the 5 introductory prayer steps (Sign of the Cross, Apostles' Creed, Our Father, Three Hail Marys for Faith, Hope, and Charity, and Glory Be).
-- **Page 46 (*The Closing Prayers*):** Displays heading, subheading, and the 4 concluding prayer steps (Hail, Holy Queen / *Salve Regina*, Versicle & Response, Concluding Rosary Prayer, and Sign of the Cross).
-- Formatted with muted umber rubric tags (e.g. `[1×]`, `[10×]`, `[Sign of the Cross]`) and charcoal prayer text.
+- **Page 4 (*The Opening Prayers*):** Displays 22pt subheading, 34pt heading, and the 5 introductory prayer steps (Sign of the Cross, Apostles' Creed, Our Father, Three Hail Marys for Faith, Hope, and Charity, and Glory Be) rendered at 20pt prayer titles, 16pt rubrics, and 19pt body text.
+- **Page 46 (*The Closing Prayers*):** Displays 22pt subheading, 34pt heading, and the 4 concluding prayer steps (Hail, Holy Queen / *Salve Regina*, Versicle & Response, Concluding Rosary Prayer, and Sign of the Cross) rendered at 24pt prayer titles, 18pt rubrics, and 23pt body text.
+- Formatted with muted umber rubric tags (e.g. `[1×]`, `[10×]`, `[Sign of the Cross]`), charcoal prayer text, 32px margins, and `SIZE_EXPAND_FILL` step distribution.
 
 ### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `res://scenes/ui/pages/mystery_prayer_page_card.tscn`, `res://scripts/ui/pages/mystery_prayer_page_card.gd`)
-Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling:
-- **Header:** Ordinal subtitle (e.g., *The First Joyful Mystery*), Mystery Title (e.g., **The Annunciation**), and **Fruit of the Mystery** tag badge (e.g., *Fruit of the Mystery: Humility*).
-- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** passage and citation.
-- **Contemplative Meditation:** 1–2 sentence reflection.
-- **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`).
+Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling and 32px uniform margins:
+- **Header:** Ordinal subtitle (22pt italic), Mystery Title (34pt bold), and **Fruit of the Mystery** tag badge in gold pill container (18pt italic).
+- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** citation (17pt bold with gold vertical border accent) and passage (18–20pt italic).
+- **Contemplative Meditation:** 1–2 sentence reflection (20–22pt regular).
+- **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`) (17–18pt bold rubric labels, 20–22pt regular prayer text).
 
 ### 3.5 Type 5: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`, `res://scenes/ui/pages/artwork_page_card.tscn`, `res://scripts/ui/pages/artwork_page_card.gd`)
 Designed for distraction-free visual contemplation:
-- **Top Header Band:** Displays the `subheading` (e.g., *The First Joyful Mystery* or *The Opening Prayers*) and `heading` (e.g., **The Annunciation** or **The Most Holy Trinity**).
-- **Gold-Framed Artwork Container:** Thin antique-gold border (`#B89130`) enclosing the painting `TextureRect` (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`, preserving the complete uncropped painting).
+- **Top Header Band:** Displays the `subheading` at 22pt italic (e.g., *The First Joyful Mystery* or *The Opening Prayers*) and `heading` at 34pt bold (e.g., **The Annunciation** or **The Most Holy Trinity**).
+- **Gold-Framed Artwork Container:** Thin antique-gold border (`#B89130`) enclosing the painting `TextureRect` (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`, preserving the complete uncropped painting) with 32px margins.
 - **No Footer Caption or Page Number:** Strictly no artist name, museum credit, or page number is shown on the artwork card itself.
 
 ### 3.6 Type 6: Credits Cards (`Pages 48–49`, `res://scenes/ui/pages/credits_page_card.tscn`, `res://scripts/ui/pages/credits_page_card.gd`) & Back Cover Card (`Page 50`, `res://scenes/ui/pages/back_cover_page_card.tscn`, `res://scripts/ui/pages/back_cover_page_card.gd`)
-- **Page 48 (*Sacred Artwork Credits Part I*):** Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5).
-- **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5), plus the Douay-Rheims Scripture notice and museum open-access colophon.
-- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's Marian counsel.
+- **Page 48 (*Sacred Artwork Credits Part I*):** 22pt subheading, 34pt heading, 32px margins. Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5) rendered at 17pt artwork title and 15pt details.
+- **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** 22pt subheading, 34pt heading, 32px margins. Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5) (17pt title / 15pt details), plus the Douay-Rheims Scripture notice (14pt italic) and museum open-access colophon (14pt regular).
+- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying title in 38pt bold gold, subtitle in 22pt italic gold, Pope St. John Paul II's epigraph in 22pt italic with 17pt attribution, the book synopsis in 20pt body text, and St. Louis Marie de Montfort's Marian counsel in 22pt italic with 17pt attribution, distributed cleanly with 24px block separation and zero overflow.
 
 ---
 
