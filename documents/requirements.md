@@ -212,3 +212,23 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
      godot --headless --path game -s res://tests/test_runner.gd
      ```
    - All data files, liturgical date calculations, save/load persistence, and UI scenes must have automated unit tests with 0 failures.
+---
+
+## 7. Platform & Export Specifications (App Icon, Adaptive Icons & Boot Splash)
+
+### 7.1 Application Launcher Icons
+- **Main App Icon (`config/icon`):**
+  - Path: `res://assets/icons/icon.png`
+  - Dimensions: 512×512 RGBA square PNG.
+  - Composition: Calibrated crop from Bartolomé Esteban Murillo's *The Virgin of the Rosary* (c. 1650–1655), focusing closely on the Virgin Mary and the Infant Jesus with their radiant halos, rosary beads, and crucifix. Balanced across square, circle, and squircle mask viewports on desktop window headers, taskbars, and launcher menus.
+- **Android Adaptive Launcher Icons (`export_presets.cfg`):**
+  - **Foreground Asset (`launcher_icons/adaptive_foreground_432x432`):** `res://assets/icons/icon_foreground.png` (432×432 RGBA PNG). Mary and Infant Jesus are framed strictly within the standard 72dp / 288px safe zone, with edges softly vignetted to accommodate parallax motion and custom OEM masking shapes (circle, squircle, rounded rectangle) without hard edge clipping.
+  - **Background Asset (`launcher_icons/adaptive_background_432x432`):** `res://assets/icons/icon_background.png` (432×432 RGB PNG). Solid canonical deep ambient espresso `#141010` (`Color(0.0784314, 0.0627451, 0.0627451, 1)`).
+
+### 7.2 Boot Splash Screen
+- **Splash Image (`boot_splash/image`):**
+  - Path: `res://assets/icons/boot_splash.png`
+  - Specifications: 1137×1800 uncropped high-resolution rendering of the full *The Virgin of the Rosary* cover masterpiece.
+  - Note: Godot's core startup initialization (`main/main.cpp`) strictly requires PNG format for `boot_splash/image` (WebP or other formats trigger startup engine fallback/errors).
+- **Splash Background Color (`boot_splash/bg_color`):**
+  - Value: `Color(0.0784314, 0.0627451, 0.0627451, 1)` (`#141010` deep ambient espresso), seamlessly matching the app's ambient canvas background during launch transitions.

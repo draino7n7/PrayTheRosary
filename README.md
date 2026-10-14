@@ -22,6 +22,7 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 - **Classical Typography (`game/assets/fonts/`):** Bundles **EB Garamond** (SIL Open Font License 1.1) across Regular, Bold, Italic, and BoldItalic weights.
 - **Runtime Sacred Art Textures (`game/assets/images/`):** Contains 23 optimized runtime `.webp` textures generated from archival public-domain masterpieces in `assets/2D/gimp/original_downloads/` (quality 85, max height 1800px, aspect ratio strictly preserved).
 - **Application Theme (`game/resources/rosary_theme.tres`):** Canonical Godot theme configured with an illuminated manuscript palette featuring warm ivory parchment (`#FAF6EE`), Marian crimson headers (`#6B1D21`), deep charcoal text (`#1E1815`), warm umber rubrics (`#5C4338`), and antique gold borders (`#B89130`).
+- **App Icon & Sacred Boot Splash (`game/assets/icons/`):** Custom 512×512 square icon cropped from Murillo's *The Virgin of the Rosary* focusing on Mary and the Infant Jesus, matching 432×432 Android adaptive launcher icons (`icon_foreground.png` and `#141010` `icon_background.png`), and full-resolution uncropped cover art boot splash (`boot_splash.png`) against deep ambient espresso (`#141010`).
 
 ---
 
