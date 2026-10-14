@@ -113,3 +113,66 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - The display does not dim or sleep during prayer contemplation (`DisplayServer.screen_set_keep_on(true)`).
 
+## Test 7.0: Top-Right Navigation Drawer & Table of Contents
+
+### TC-NAV-01: Floating Navigation Button & Drawer Toggling
+- **Step 1:** Launch the application and observe the top-right corner of the viewport.
+- **Expected:**
+  - A persistent, unobtrusive floating button labeled `☰` (48×48px) is visible in the top-right corner.
+- **Step 2:** Click or tap the floating button.
+- **Expected:**
+  - The navigation drawer smoothly slides into view from the right edge.
+  - A semi-transparent dimming scrim (`#00000080`) darkens the background content.
+  - Background scrolling is disabled (`ScrollContainer.mouse_filter = MOUSE_FILTER_IGNORE`).
+- **Step 3:** Click anywhere on the dimmed scrim backdrop or press the `Escape` key (`ui_cancel`).
+- **Expected:**
+  - The drawer smoothly closes and the dimming scrim disappears.
+  - Background scrolling is restored (`ScrollContainer.mouse_filter = MOUSE_FILTER_STOP`).
+
+### TC-NAV-02: Resume Last Page Action & Reading Progress Synchronization
+- **Step 1:** Scroll or jump to an interior mystery page (e.g., Page 16: *The Baptism of Jesus in the Jordan*).
+- **Step 2:** Open the navigation drawer.
+- **Expected:**
+  - The top "Resume" button dynamically displays: *"Resume Last Page: The Baptism of Jesus in the Jordan (Page 16)"*.
+- **Step 3:** Scroll to Page 1, open drawer, and click the Resume button.
+- **Expected:**
+  - The viewport scrolls smoothly to Page 16.
+  - The drawer automatically closes upon clicking.
+
+### TC-NAV-03: Top-Level Landmark Direct Jump Buttons
+- **Step 1:** Open the navigation drawer.
+- **Step 2:** Individually test clicking each landmark button:
+  - `Front Cover (Page 1)`
+  - `History of the Rosary (Page 2)`
+  - `Structure & How to Pray (Page 3)`
+  - `The Opening Prayers (Page 4)`
+  - `The Closing Prayers (Page 46)`
+  - `Sacred Artwork Credits (Page 48)`
+  - `Back Cover (Page 50)`
+- **Expected:**
+  - Clicking any landmark button scrolls the continuous stream directly to that target page.
+  - The navigation drawer automatically closes upon selection.
+
+### TC-NAV-04: Expandable Mystery Set Accordions & Daily Liturgical Badge
+- **Step 1:** Open the navigation drawer.
+- **Step 2:** Inspect the 4 Mystery Set rows (`Joyful`, `Luminous`, `Sorrowful`, `Glorious`).
+- **Expected:**
+  - The mystery set recommended for today (e.g. Glorious on Wednesday, Sorrowful on Tuesday/Friday, Joyful on Monday/Saturday, Luminous on Thursday) displays an antique gold `[★ Today]` badge.
+- **Step 3:** Click the left disclosure arrow (`▸`) on a collapsed mystery set (e.g. *The Sorrowful Mysteries*).
+- **Expected:**
+  - The arrow icon flips to `▾`.
+  - The indented list of 5 individual mysteries expands beneath the set.
+  - The drawer remains open and does not scroll the main view.
+- **Step 4:** Click the disclosure arrow (`▾`) again.
+- **Expected:**
+  - The list collapses and the arrow returns to `▸` without closing the drawer.
+- **Step 5:** Expand a mystery set (e.g. *The Glorious Mysteries*) and click an individual mystery button (e.g. *3. The Descent of the Holy Spirit*).
+- **Expected:**
+  - The continuous stream scrolls directly to Page 40.
+  - The drawer automatically closes.
+- **Step 6:** Re-open the drawer and click a mystery set title button directly (e.g. *The Joyful Mysteries*).
+- **Expected:**
+  - The continuous stream immediately navigates to the 1st Mystery of that set (Page 6).
+  - The drawer automatically closes.
+
+

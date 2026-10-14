@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://d4e5f6a1b2c3d"]
+
+[ext_resource type="Script" path="res://scripts/ui/navigation_drawer.gd" id="1_nav_drawer"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_font_bold"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_normal"]
+bg_color = Color(0.980392, 0.964706, 0.933333, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.721569, 0.568627, 0.188235, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_hover"]
+bg_color = Color(1, 0.992157, 0.972549, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.831373, 0.686275, 0.215686, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_pressed"]
+bg_color = Color(0.941176, 0.917647, 0.878431, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.419608, 0.113725, 0.129412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drawer_panel"]
+bg_color = Color(0.980392, 0.964706, 0.933333, 1)
+border_width_left = 2
+border_color = Color(0.721569, 0.568627, 0.188235, 1)
+corner_radius_top_left = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 8
+shadow_offset = Vector2(-4, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_scroll"]
+
+[node name="NavigationDrawer" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_nav_drawer")
+
+[node name="FloatingButton" type="Button" parent="."]
+custom_minimum_size = Vector2(52, 52)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -70.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 70.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
+theme_override_colors/font_hover_color = Color(0.419608, 0.113725, 0.129412, 1)
+theme_override_colors/font_pressed_color = Color(0.419608, 0.113725, 0.129412, 1)
+theme_override_fonts/font = ExtResource("2_font_bold")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_floating_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_floating_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_floating_btn_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "☰"
+
+[node name="DrawerOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Scrim" type="ColorRect" parent="DrawerOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.0392157, 0.0392157, 0.65)
+
+[node name="DrawerPanel" type="PanelContainer" parent="DrawerOverlay"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -400.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_drawer_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="DrawerOverlay/DrawerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 20
+
+[node name="MainVBox" type="VBoxContainer" parent="DrawerOverlay/DrawerPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderHBox" type="HBoxContainer" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.419608, 0.113725, 0.129412, 1)
+theme_override_fonts/font = ExtResource("2_font_bold")
+theme_override_font_sizes/font_size = 24
+text = "Table of Contents"
+
+[node name="CloseButton" type="Button" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
+theme_override_colors/font_hover_color = Color(0.419608, 0.113725, 0.129412, 1)
+theme_override_fonts/font = ExtResource("2_font_bold")
+theme_override_font_sizes/font_size = 22
+text = "✕"
+
+[node name="HeaderDivider" type="ColorRect" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.721569, 0.568627, 0.188235, 0.6)
+
+[node name="DrawerScroll" type="ScrollContainer" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_scroll")
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 1
+
+[node name="ContentContainer" type="VBoxContainer" parent="DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
