@@ -29,7 +29,15 @@ func _apply_page_data() -> void:
 	if heading_label != null:
 		heading_label.text = str(page_data.get("heading", ""))
 
+	load_artwork()
+
+
+func load_artwork() -> void:
+	if artwork_texture == null:
+		artwork_texture = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ArtFrame/ArtworkTexture") as TextureRect
 	if artwork_texture != null:
+		if artwork_texture.texture != null:
+			return
 		var art: Dictionary = page_data.get("artwork", {})
 		var tex_path: String = str(art.get("runtime_texture_path", ""))
 		if tex_path != "" and ResourceLoader.exists(tex_path):
@@ -38,9 +46,18 @@ func _apply_page_data() -> void:
 				artwork_texture.texture = tex
 
 
+func unload_artwork() -> void:
+	if artwork_texture == null:
+		artwork_texture = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ArtFrame/ArtworkTexture") as TextureRect
+	if artwork_texture != null:
+		artwork_texture.texture = null
+
+
 func get_artwork_texture() -> Texture2D:
 	if artwork_texture == null:
 		artwork_texture = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ArtFrame/ArtworkTexture") as TextureRect
+	if artwork_texture != null and artwork_texture.texture == null:
+		load_artwork()
 	if artwork_texture != null:
 		return artwork_texture.texture
 	return null

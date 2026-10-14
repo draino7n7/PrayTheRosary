@@ -41,6 +41,18 @@ The UI is built around a modular page card component architecture designed for t
 
 ---
 
+## Continuous Vertical Scroll View & Navigation
+
+The application connects all 50 sequential pages into a unified, distraction-free reading experience:
+- **Continuous 50-Page Stream (`game/scenes/main/main.tscn` / `game/scripts/main/main.gd`):** Presents all pages from Cover to Back Cover in a single vertical `ScrollContainer`. Page cards stay horizontally centered at a 2:3 aspect ratio against a deep ambient espresso backdrop (`#141010`).
+- **In-Stream Quick-Jump Separator Bars (`game/scenes/ui/in_stream_jump_bar.tscn`):**
+  - **Post-Opening Prayers (After Page 5):** Displays 4 mystery buttons with an antique gold border and *"★ Recommended Today"* badge on today's liturgically recommended mystery set.
+  - **Post-Mystery Set Jump Bars (After Pages 15, 25, 35, 45):** Displays a mystery set completion banner and a prominent *"Proceed to the Closing Prayers →"* action button jumping directly to Page 46.
+- **Reading Progress Persistence (`game/scripts/core/reading_progress_manager.gd`):** Automatically tracks and persists the current page to `user://reading_progress.cfg` (debounced at 600ms during scroll, immediate on jump) and restores the saved page on startup.
+- **VRAM Texture Virtualization & Screen Keep-Awake:** Employs a sliding active buffer window (`ARTWORK_BUFFER_PAGES = 4`) dynamically loading active artwork and unloading distant textures from VRAM for smooth 60 FPS scrolling. Calls `DisplayServer.screen_set_keep_on(true)` to prevent screen dimming during contemplative prayer.
+
+---
+
 ## OpenGameStack Integration
 
 This project is configured as an **OpenGameStack (OGS)** project. It includes `stack.json` and `ogs_config.json` files which define the exact environment (Godot 4.7.2) required to run and build the application.

@@ -93,5 +93,15 @@ func get_artwork_texture() -> Texture2D:
 	return null
 
 
+func load_artwork() -> void:
+	if current_sub_card != null and current_sub_card.has_method("load_artwork"):
+		current_sub_card.call("load_artwork")
+
+
+func unload_artwork() -> void:
+	if current_sub_card != null and current_sub_card.has_method("unload_artwork"):
+		current_sub_card.call("unload_artwork")
+
+
 func has_visible_page_number() -> bool:
 	return false

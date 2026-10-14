@@ -28,7 +28,15 @@ func _apply_page_data() -> void:
 		var raw_subtitle: String = str(page_data.get("subtitle", "A Contemplative Visual Guide to the Twenty Mysteries"))
 		subtitle_label.text = raw_subtitle
 
+	load_artwork()
+
+
+func load_artwork() -> void:
+	if cover_texture == null:
+		cover_texture = get_node_or_null("CardPanel/CoverTexture") as TextureRect
 	if cover_texture != null:
+		if cover_texture.texture != null:
+			return
 		var art: Dictionary = page_data.get("artwork", {})
 		var tex_path: String = str(art.get("runtime_texture_path", "res://assets/images/cover.webp"))
 		if ResourceLoader.exists(tex_path):
@@ -37,9 +45,18 @@ func _apply_page_data() -> void:
 				cover_texture.texture = tex
 
 
+func unload_artwork() -> void:
+	if cover_texture == null:
+		cover_texture = get_node_or_null("CardPanel/CoverTexture") as TextureRect
+	if cover_texture != null:
+		cover_texture.texture = null
+
+
 func get_artwork_texture() -> Texture2D:
 	if cover_texture == null:
 		cover_texture = get_node_or_null("CardPanel/CoverTexture") as TextureRect
+	if cover_texture != null and cover_texture.texture == null:
+		load_artwork()
 	if cover_texture != null:
 		return cover_texture.texture
 	return null
