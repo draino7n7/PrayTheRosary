@@ -14,6 +14,7 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
 1. **Continuous 50-Page Vertical Scroll:**
    - The application presents all **50 sequential portrait pages** (`Page 1` Front Cover at the very top through `Page 50` Back Cover at the bottom) in a single smooth vertical `ScrollContainer`.
    - Every page is rendered as a distinct **$2:3$ ($6:9$) portrait page card**. On portrait mobile screens, page cards fill the viewport width; on wider tablet/desktop windows, page cards remain centered horizontally at a $2:3$ aspect ratio against a deep ambient backdrop (`#141010`).
+   - Integrated with 5 in-stream quick-jump separator bars (`InStreamJumpBar`) placed after Page 5 and after each mystery set (Pages 15, 25, 35, 45), comprising exactly 55 elements in the continuous stream.
 2. **Distraction-Free Contemplation:**
    - **No Numerical Page Numbers:** Do not render visible numerical page numbers (`1..50`) on any page cards.
    - **No On-Page Artwork Captions:** Artwork pages (`Pages 5, 7, 9, ..., 47`) display **only** the Top Section/Mystery Header and the gold-framed painting so nothing distracts from using the sacred image as a prayer focus. All artist, title, date, and museum attributions appear exclusively on the **Sacred Artwork Credits pages (`Pages 48–49`)**.
@@ -103,16 +104,19 @@ Designed for distraction-free visual contemplation:
 ## 4. Navigation, Liturgical Calendar & State Persistence
 
 ### 4.1 In-Stream Quick-Jump Separator Bars
-Inserted between specific page cards in the vertical scroll (`RosaryDataLoader.get_in_stream_separators()`):
+Implemented via `res://scenes/ui/in_stream_jump_bar.tscn` (`res://scripts/ui/in_stream_jump_bar.gd`) and inserted between specific page cards in the continuous vertical scroll stream (`RosaryDataLoader.get_in_stream_separators()`), yielding exactly **55 total stream elements** (50 `PageCard` instances + 5 `InStreamJumpBar` instances):
 1. **After Page 5 (End of Opening Prayers):**
-   - A subtle separator panel prompting *"Select a Mystery Set to Continue Praying:"* with 4 buttons:
-     - **Joyful Mysteries** $\rightarrow$ scrolls smoothly/instantly to `Page 6`
+   - A separator panel prompting *"Select a Mystery Set to Continue Praying:"* with 4 buttons:
+     - **Joyful Mysteries** $\rightarrow$ scrolls to `Page 6`
      - **Luminous Mysteries** $\rightarrow$ scrolls to `Page 16`
      - **Sorrowful Mysteries** $\rightarrow$ scrolls to `Page 26`
      - **Glorious Mysteries** $\rightarrow$ scrolls to `Page 36`
-   - Highlights today's recommended Mystery set (e.g., with a gold *"Recommended Today"* badge).
+   - Highlights today's liturgically recommended Mystery set with an antique gold border (`#B89130`), gold tinted background, and a *"★ Recommended Today"* badge, determined dynamically via `RosaryDataLoader.get_recommended_mystery_set_for_today()`.
 2. **After Pages 15, 25, 35, and 45 (End of the 5th Mystery of Each Set):**
-   - A subtle separator panel with a **"Proceed to the Closing Prayers"** button that scrolls directly to `Page 46` (*The Closing Prayers*).
+   - A separator panel displaying a completion prompt (e.g., *"End of the Five Joyful Mysteries"*) and a prominent crimson-accented action button:
+     - **"Proceed to the Closing Prayers →"** $\rightarrow$ scrolls directly to `Page 46` (*The Closing Prayers*).
+3. **Signal Integration:**
+   - Each `InStreamJumpBar` emits `jump_requested(target_page: int)`, connected cleanly to `Main.scroll_to_page()`.
 
 ### 4.2 Top-Right Navigation & Bookmark Menu
 - A persistent, unobtrusive button in the **top-right corner** of the viewport opens/closes a slide-out or dropdown navigation drawer containing:
@@ -141,9 +145,21 @@ Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, mont
   - **Lenten Sundays** (from the First Sunday of Lent, 42 days before Easter, through Palm Sunday, 7 days before Easter): `"sorrowful"`
   - **Easter Season & Ordinary Time Sundays:** `"glorious"`
 
-### 4.4 Automatic "Resume Last Page" Persistence (`user://`)
-- As the user scrolls or jumps to a page, persist the current `page_number` (`1..50`) to `user://reading_progress.cfg` (or `.json`).
-- On application launch, automatically restore the scroll position to the last viewed page (defaulting to `Page 1` on first launch).
+### 4.4 Automatic "Resume Last Page" Persistence (`user://reading_progress.cfg`)
+Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_manager.gd`):
+- Tracks the currently viewed page number (`1..50`) calculated dynamically from the vertical scroll position in `Main` (`res://scripts/main/main.gd`).
+- Persists to `user://reading_progress.cfg` using Godot's `ConfigFile` under section `[progress]`, key `last_viewed_page`.
+- **Save Debouncing:** Debounces disk writes with a 600ms timer during active scrolling to prevent disk thrashing, while immediately saving on discrete jump bar activations.
+- **Launch Restoration:** On startup, loads the saved page (defaulting to `Page 1` on fresh launch) and restores the vertical scroll position cleanly.
+
+### 4.5 Texture Virtualization & Screen Keep-Awake
+1. **Sliding Buffer Window Virtualization (`ARTWORK_BUFFER_PAGES = 4`):**
+   - High-resolution sacred art `.webp` textures are memory-intensive. `Main` maintains an active buffer window of $\pm 4$ pages around the current viewport.
+   - Cards within the buffer window have their artwork loaded via `load_artwork()` on `ArtworkPageCard` and `CoverPageCard`.
+   - Cards outside the buffer window are unloaded via `unload_artwork()`, freeing VRAM and preventing memory bloat on mobile and web platforms while maintaining a consistent 60 FPS scroll.
+   - Transparent fallback: `PageCard.get_artwork_texture()` automatically reloads textures on demand if queried outside the active window.
+2. **Screen Keep-Awake:**
+   - `Main._ready()` calls `DisplayServer.screen_set_keep_on(true)` guarded by `DisplayServer.get_name() != "headless"` to prevent mobile displays from dimming or locking during contemplative prayer.
 
 ---
 

@@ -74,3 +74,42 @@ This document outlines the strict manual testing procedures required before any 
   - Page 49 lists 10 attributions (Sorrowful 1–5, Glorious 1–5), Douay-Rheims Scripture notice, and museum open-access colophon.
   - Page 50 displays deep Baroque crimson (`#4A1215`) card with warm gold typography, Pope St. John Paul II's epigraph, book synopsis, and St. Louis Marie de Montfort's Marian counsel.
 
+## Test 6.0: Continuous 50-Page Vertical Scroll, Jump Bars & Reading Progress
+
+### TC-SCROLL-01: Continuous 50-Page Scroll View & Viewport Centering
+- **Step 1:** Launch the application (`godot --path game`) on desktop (widescreen window) and resize or simulate mobile (portrait).
+- **Expected:**
+  - The application presents all 50 sequential page cards in a single vertical stream.
+  - In widescreen / desktop mode, page cards remain centered horizontally with strict 2:3 aspect ratio against the deep espresso `#141010` ambient backdrop.
+  - In portrait mode, page cards fill the screen width smoothly.
+
+### TC-SCROLL-02: In-Stream Mystery Set Jump Bar (After Page 5)
+- **Step 1:** Scroll past Page 5 (The Opening Prayers).
+- **Expected:**
+  - An in-stream jump bar appears prompting *"Select a Mystery Set to Continue Praying:"* with 4 buttons: Joyful (Page 6), Luminous (Page 16), Sorrowful (Page 26), and Glorious (Page 36).
+  - The liturgically recommended mystery set for today is visually accented with an antique gold border, gold tinted background, and a *"★ Recommended Today"* badge.
+- **Step 2:** Click each mystery set button.
+- **Expected:** The viewport smoothly scrolls directly to the targeted mystery set's opening page card.
+
+### TC-SCROLL-03: In-Stream Closing Prayers Jump Bar (After Pages 15, 25, 35, 45)
+- **Step 1:** Scroll to the conclusion of any mystery set (after Page 15 for Joyful, Page 25 for Luminous, Page 35 for Sorrowful, Page 45 for Glorious).
+- **Expected:**
+  - An in-stream separator bar appears indicating mystery set completion (e.g. *"End of the Five Joyful Mysteries"*).
+  - A prominent crimson-accented action button labeled *"Proceed to the Closing Prayers →"* is visible.
+- **Step 2:** Click *"Proceed to the Closing Prayers →"*.
+- **Expected:** The viewport scrolls directly to Page 46 (*The Closing Prayers*).
+
+### TC-SCROLL-04: Reading Progress Persistence Across App Restarts
+- **Step 1:** Scroll or jump to a specific interior page (e.g. Page 26: The Agony in the Garden).
+- **Step 2:** Close the application.
+- **Step 3:** Relaunch the application.
+- **Expected:**
+  - The scroll position is automatically restored to Page 26 without requiring manual re-navigation.
+  - Default on fresh installation (no `user://reading_progress.cfg`) starts at Page 1 (Front Cover).
+
+### TC-SCROLL-05: Screen Keep-Awake Verification
+- **Step 1:** Launch the application on a physical mobile device or display-enabled OS.
+- **Step 2:** Leave the application open on a mystery prayer card for longer than the device's default display timeout (e.g., > 5 minutes).
+- **Expected:**
+  - The display does not dim or sleep during prayer contemplation (`DisplayServer.screen_set_keep_on(true)`).
+
