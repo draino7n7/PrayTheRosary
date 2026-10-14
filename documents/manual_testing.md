@@ -178,3 +178,16 @@ This document outlines the strict manual testing procedures required before any 
   - The drawer automatically closes.
 
 
+## Test 8.0: Application Launcher Icon & Boot Splash Screen
+
+### TC-ICON-01: Desktop & Launcher App Icon
+- **Step 1:** Build or inspect the application executable/launcher on desktop (taskbar / window header) or deploy to an Android device.
+- **Expected:**
+  - The application icon displays the 512×512 square crop of Murillo's *The Virgin of the Rosary*.
+  - The faces of Mary and the Infant Jesus, their halos, and the rosary beads are clearly visible and well-composed without awkward clipping across circular, squircle, or rectangular launcher masks.
+
+### TC-SPLASH-01: Startup Boot Splash Screen
+- **Step 1:** Launch the application (`godot --path game` or run exported build).
+- **Expected:**
+  - During engine initialization, the full, uncropped cover painting (*The Virgin of the Rosary*) is displayed.
+  - The splash screen background color displays the deep ambient espresso `#141010` (`Color(0.0784314, 0.0627451, 0.0627451, 1)`), seamlessly transitioning into the continuous scroll view.
