@@ -100,6 +100,8 @@ func _apply_page_data() -> void:
 
 			steps_container.add_child(step_vbox)
 
+	configure_pass_through_mouse_filters(self)
+
 
 func get_step_count() -> int:
 	if steps_container != null:

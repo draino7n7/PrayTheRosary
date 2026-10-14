@@ -119,6 +119,8 @@ func _apply_page_data() -> void:
 
 			decade_prayers_container.add_child(p_vbox)
 
+	configure_pass_through_mouse_filters(self)
+
 
 func get_fruit_text() -> String:
 	if fruit_label != null:

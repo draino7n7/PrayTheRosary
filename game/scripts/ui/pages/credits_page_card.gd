@@ -102,6 +102,8 @@ func _apply_page_data() -> void:
 				colophon_notice_label.text = str(colophon.get("artwork_notice", ""))
 				colophon_notice_label.add_theme_font_size_override("font_size", 14)
 
+	configure_pass_through_mouse_filters(self)
+
 
 func get_attribution_count() -> int:
 	if credits_container != null:

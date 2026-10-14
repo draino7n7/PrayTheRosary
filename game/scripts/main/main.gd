@@ -8,6 +8,7 @@ signal page_changed(new_page_number: int)
 
 const TOTAL_PAGES: int = 50
 const ARTWORK_BUFFER_PAGES: int = 4
+const WHEEL_SCROLL_STEP: int = 80
 const COLOR_AMBIENT_ESPRESSO: Color = Color(0.0784314, 0.0627451, 0.0627451, 1.0) # #141010
 
 const PAGE_CARD_SCENE: PackedScene = preload("res://scenes/ui/page_card.tscn")
@@ -49,6 +50,59 @@ func _ready() -> void:
 		call_deferred("_restore_saved_page", saved_page)
 	else:
 		_update_virtualization(1)
+
+
+func _input(event: InputEvent) -> void:
+	if navigation_drawer == null or not navigation_drawer.is_open():
+		handle_scroll_input(event)
+
+
+func handle_scroll_input(event: InputEvent) -> void:
+	_ensure_initialized()
+	if event == null or scroll_container == null:
+		return
+	if navigation_drawer != null and navigation_drawer.is_open():
+		return
+
+	var delta_y: int = 0
+	if event is InputEventScreenDrag:
+		var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
+		delta_y = -int(round(drag_event.relative.y))
+	elif event is InputEventMouseMotion:
+		var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+		if (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+			delta_y = -int(round(motion_event.relative.y))
+	elif event is InputEventMouseButton:
+		var button_event: InputEventMouseButton = event as InputEventMouseButton
+		if button_event.pressed:
+			var factor: float = button_event.factor if button_event.factor > 0.0 else 1.0
+			if button_event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				delta_y = int(round(float(WHEEL_SCROLL_STEP) * factor))
+			elif button_event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				delta_y = -int(round(float(WHEEL_SCROLL_STEP) * factor))
+
+	if delta_y == 0:
+		return
+
+	if _scroll_tween != null and _scroll_tween.is_valid():
+		_scroll_tween.kill()
+
+	var max_scroll: int = _get_max_scroll_vertical()
+	scroll_container.scroll_vertical = clampi(scroll_container.scroll_vertical + delta_y, 0, max_scroll)
+
+
+func _get_max_scroll_vertical() -> int:
+	if scroll_container == null:
+		return 0
+	var fallback_max: int = get_target_scroll_for_page(TOTAL_PAGES)
+	var v_bar: VScrollBar = scroll_container.get_v_scroll_bar()
+	if v_bar != null:
+		var min_required_max: float = float(fallback_max) + maxf(scroll_container.size.y, 1280.0)
+		if v_bar.max_value < min_required_max:
+			v_bar.max_value = min_required_max
+		var bar_max: int = int(maxf(0.0, v_bar.max_value - v_bar.page))
+		return maxi(bar_max, fallback_max)
+	return fallback_max
 
 
 func _ensure_initialized() -> void:
@@ -101,6 +155,8 @@ func _setup_save_timer() -> void:
 func _setup_scroll_listening() -> void:
 	_ensure_initialized()
 	if scroll_container != null:
+		scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 		var v_bar: VScrollBar = scroll_container.get_v_scroll_bar()
 		if v_bar != null and not v_bar.value_changed.is_connected(_on_scroll_value_changed):
 			v_bar.value_changed.connect(_on_scroll_value_changed)
@@ -111,6 +167,8 @@ func build_scroll_stream() -> void:
 	if page_container == null:
 		push_error("Main: PageContainer node not found in scene tree")
 		return
+
+	page_container.mouse_filter = Control.MOUSE_FILTER_PASS
 
 	# Clear any existing elements
 	for child: Node in page_container.get_children():
@@ -154,6 +212,8 @@ func build_scroll_stream() -> void:
 			_jump_bars.append(jump_bar)
 			_stream_elements.append(jump_bar)
 
+	_get_max_scroll_vertical()
+
 
 func _restore_saved_page(saved_page: int) -> void:
 	_is_restoring_initial_page = false
@@ -175,6 +235,8 @@ func scroll_to_page(page_number: int, animate: bool = true) -> void:
 
 	if scroll_container == null:
 		return
+
+	_get_max_scroll_vertical()
 
 	if not animate or DisplayServer.get_name() == "headless":
 		scroll_container.scroll_vertical = target_y
@@ -208,7 +270,9 @@ func get_target_scroll_for_page(page_number: int) -> int:
 	for child: Node in page_container.get_children():
 		if child == card:
 			break
-		if child is Control:
+		if child is PageCard:
+			offset += BasePageCard.DESIGN_HEIGHT + separation
+		elif child is Control:
 			offset += (child as Control).get_combined_minimum_size().y + separation
 	return int(offset)
 

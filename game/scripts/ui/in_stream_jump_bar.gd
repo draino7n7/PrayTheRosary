@@ -30,9 +30,14 @@ var _is_recommended_flags: Array[bool] = []
 @onready var buttons_container: VBoxContainer = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer") as VBoxContainer
 
 
+func _init() -> void:
+	mouse_filter = Control.MOUSE_FILTER_PASS
+
+
 func _ready() -> void:
 	if not separator_data.is_empty() and _button_nodes.is_empty():
 		_apply_separator_data()
+	BasePageCard.configure_pass_through_mouse_filters(self)
 
 
 func bind_separator_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
@@ -60,6 +65,7 @@ func _apply_separator_data() -> void:
 		prompt_label.text = prompt_text
 
 	if buttons_container == null:
+		BasePageCard.configure_pass_through_mouse_filters(self)
 		return
 
 	# Clear previous buttons
@@ -73,6 +79,8 @@ func _apply_separator_data() -> void:
 		_build_mystery_set_buttons()
 	elif separator_type == "closing_prayers_jump":
 		_build_closing_prayers_button()
+
+	BasePageCard.configure_pass_through_mouse_filters(self)
 
 
 func _build_mystery_set_buttons() -> void:
@@ -89,6 +97,7 @@ func _build_mystery_set_buttons() -> void:
 		var btn: Button = Button.new()
 		btn.custom_minimum_size = Vector2(0, 48)
 		btn.focus_mode = Control.FOCUS_NONE
+		btn.mouse_filter = Control.MOUSE_FILTER_PASS
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 		if is_rec:
@@ -114,6 +123,7 @@ func _build_closing_prayers_button() -> void:
 	var btn: Button = Button.new()
 	btn.custom_minimum_size = Vector2(0, 52)
 	btn.focus_mode = Control.FOCUS_NONE
+	btn.mouse_filter = Control.MOUSE_FILTER_PASS
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn.text = "%s  →" % button_label_str
 

@@ -325,3 +325,125 @@ func test_screen_keep_on_guard() -> void:
 		# In headless runner, verify call does not crash
 		assert_eq(DisplayServer.get_name(), "headless", "Test runner should be running headlessly")
 
+
+func _assert_no_control_stops_mouse(node: Node, context: String) -> void:
+	if node is BaseButton:
+		var btn: BaseButton = node as BaseButton
+		assert_eq(
+			btn.mouse_filter,
+			Control.MOUSE_FILTER_PASS,
+			"%s BaseButton '%s' must use MOUSE_FILTER_PASS" % [context, btn.name]
+		)
+	elif node is Control:
+		var ctrl: Control = node as Control
+		assert_ne(
+			ctrl.mouse_filter,
+			Control.MOUSE_FILTER_STOP,
+			"%s Control '%s' must not use MOUSE_FILTER_STOP" % [context, ctrl.name]
+		)
+	for child: Node in node.get_children():
+		_assert_no_control_stops_mouse(child, context)
+
+
+func test_scrollbar_hidden_and_pass_through_mouse_filters() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	assert_not_null(main_node.scroll_container, "Main ScrollContainer must exist")
+	assert_eq(
+		main_node.scroll_container.vertical_scroll_mode,
+		ScrollContainer.SCROLL_MODE_SHOW_NEVER,
+		"Main ScrollContainer vertical_scroll_mode must be SCROLL_MODE_SHOW_NEVER (3)"
+	)
+	assert_eq(
+		main_node.scroll_container.horizontal_scroll_mode,
+		ScrollContainer.SCROLL_MODE_DISABLED,
+		"Main ScrollContainer horizontal_scroll_mode must be SCROLL_MODE_DISABLED (0)"
+	)
+
+	var nav_drawer: NavigationDrawer = main_node.get_navigation_drawer()
+	assert_not_null(nav_drawer, "NavigationDrawer must exist")
+	if nav_drawer != null:
+		nav_drawer._ready()
+		assert_not_null(nav_drawer.drawer_scroll, "NavigationDrawer DrawerScroll must exist")
+		assert_eq(
+			nav_drawer.drawer_scroll.vertical_scroll_mode,
+			ScrollContainer.SCROLL_MODE_SHOW_NEVER,
+			"DrawerScroll vertical_scroll_mode must be SCROLL_MODE_SHOW_NEVER (3)"
+		)
+		_assert_no_control_stops_mouse(nav_drawer.content_container, "NavigationDrawer/ContentContainer")
+
+	for p_num: int in range(1, 51):
+		var card: PageCard = main_node.get_page_card(p_num)
+		assert_not_null(card, "PageCard %d must exist" % p_num)
+		_assert_no_control_stops_mouse(card, "PageCard_%d" % p_num)
+
+	for jump_bar: InStreamJumpBar in main_node.get_jump_bars():
+		_assert_no_control_stops_mouse(jump_bar, "InStreamJumpBar_%s" % jump_bar.get_separator_id())
+
+	main_node.free()
+
+
+func test_touch_swipe_mouse_drag_and_wheel_scroll_input() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(1, false)
+	assert_eq(main_node.scroll_container.scroll_vertical, 0, "Initial scroll_vertical should be 0")
+
+	# 1. Touch swipe up (negative relative.y scrolls down the stream)
+	var swipe_up: InputEventScreenDrag = InputEventScreenDrag.new()
+	swipe_up.relative = Vector2(0.0, -240.0)
+	main_node.handle_scroll_input(swipe_up)
+	assert_eq(main_node.scroll_container.scroll_vertical, 240, "Touch swipe up (-240px) should increase scroll_vertical to 240")
+
+	# 2. Touch swipe down (positive relative.y scrolls up the stream)
+	var swipe_down: InputEventScreenDrag = InputEventScreenDrag.new()
+	swipe_down.relative = Vector2(0.0, 90.0)
+	main_node.handle_scroll_input(swipe_down)
+	assert_eq(main_node.scroll_container.scroll_vertical, 150, "Touch swipe down (+90px) should decrease scroll_vertical to 150")
+
+	# 3. Left-mouse-button drag up (negative relative.y scrolls down the stream)
+	var mouse_drag: InputEventMouseMotion = InputEventMouseMotion.new()
+	mouse_drag.button_mask = MOUSE_BUTTON_MASK_LEFT
+	mouse_drag.relative = Vector2(0.0, -150.0)
+	main_node.handle_scroll_input(mouse_drag)
+	assert_eq(main_node.scroll_container.scroll_vertical, 300, "Left mouse drag (-150px) should increase scroll_vertical to 300")
+
+	# 4. Unpressed mouse motion should not scroll
+	var hover_motion: InputEventMouseMotion = InputEventMouseMotion.new()
+	hover_motion.button_mask = 0
+	hover_motion.relative = Vector2(0.0, -200.0)
+	main_node.handle_scroll_input(hover_motion)
+	assert_eq(main_node.scroll_container.scroll_vertical, 300, "Hover motion without left button pressed must not change scroll_vertical")
+
+	# 5. Mouse wheel down scrolls down
+	var wheel_down: InputEventMouseButton = InputEventMouseButton.new()
+	wheel_down.pressed = true
+	wheel_down.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	wheel_down.factor = 1.0
+	main_node._input(wheel_down)
+	assert_true(main_node.scroll_container.scroll_vertical > 300, "Mouse wheel down must increase scroll_vertical")
+	var after_wheel_down: int = main_node.scroll_container.scroll_vertical
+
+	# 6. Mouse wheel up scrolls up
+	var wheel_up: InputEventMouseButton = InputEventMouseButton.new()
+	wheel_up.pressed = true
+	wheel_up.button_index = MOUSE_BUTTON_WHEEL_UP
+	wheel_up.factor = 1.0
+	main_node._input(wheel_up)
+	assert_eq(main_node.scroll_container.scroll_vertical, 300, "Mouse wheel up must decrease scroll_vertical back to 300 (was %d)" % after_wheel_down)
+
+	# 7. When NavigationDrawer is open, scroll input is ignored
+	if main_node.navigation_drawer != null:
+		main_node.navigation_drawer._ready()
+		main_node.navigation_drawer.open_drawer(false)
+		main_node._input(swipe_up)
+		assert_eq(main_node.scroll_container.scroll_vertical, 300, "Scroll input must be ignored while NavigationDrawer is open")
+		main_node.navigation_drawer.close_drawer(false)
+
+	main_node.free()
+
+
