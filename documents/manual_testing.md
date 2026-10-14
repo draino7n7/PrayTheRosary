@@ -34,9 +34,11 @@ This document outlines the strict manual testing procedures required before any 
 ### TC-PAGE-01: Front Cover Card (`Page 1`)
 - **Step 1:** Inspect the Front Cover card in the UI or test runner.
 - **Expected:**
-  - Murillo's *The Virgin of the Rosary* (`cover.webp`) fills the card in full bleed without distortion.
-  - Title "Pray the Rosary" and subtitle "A Contemplative Visual Guide to the Twenty Mysteries" are positioned over the upper crimson drapery in warm gold (`#D4AF37`) and ivory (`#F7F2E7`) serif typography.
-  - The Virgin and Christ Child remain fully unobstructed in the center/foreground.
+  - Front Cover card renders using a structured vertical layout (`VBoxContainer`).
+  - Title elements are housed in a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215` / `#2A090B`) with an antique gold border (`#D4AF37`).
+  - Title **"PRAY THE ROSARY"** displays in warm gold serif typography (`#D4AF37`), subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory (`#F7F2E7`), separated by an ornamental gold divider line.
+  - Bartolomé Esteban Murillo's *The Virgin of the Rosary* (`cover.webp`) renders centered in an antique gold framed artwork container strictly below the header band (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`).
+  - Zero text or typography elements overlap any portion of the painting (the Virgin Mary, the Christ Child, the rosary, and halo remain completely unobstructed).
   - Strictly no numerical page numbers appear.
 
 ### TC-PAGE-02: Front-Matter Text Cards (`Pages 2 & 3`)

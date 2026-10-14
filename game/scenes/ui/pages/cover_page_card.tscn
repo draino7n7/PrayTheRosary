@@ -5,8 +5,53 @@
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="3_font_bold"]
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="4_font_italic"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cover_bg"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cover_panel"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.164706, 0.035294, 0.043137, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.831373, 0.686275, 0.215686, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_band"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(0.290196, 0.070588, 0.082353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.831373, 0.686275, 0.215686, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_artwork_frame"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
 bg_color = Color(0.0784314, 0.0627451, 0.0627451, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.831373, 0.686275, 0.215686, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="CoverPageCard" type="AspectRatioContainer"]
 custom_minimum_size = Vector2(720, 1080)
@@ -27,52 +72,61 @@ custom_minimum_size = Vector2(720, 1080)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_cover_bg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_cover_panel")
 
-[node name="CoverTexture" type="TextureRect" parent="CardPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CardPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("2_tex")
-expand_mode = 1
-stretch_mode = 6
+theme_override_constants/separation = 14
 
-[node name="TitleOverlay" type="MarginContainer" parent="CardPanel"]
+[node name="HeaderBand" type="PanelContainer" parent="CardPanel/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 70
-theme_override_constants/margin_right = 40
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_band")
 
-[node name="TitleVBox" type="VBoxContainer" parent="CardPanel/TitleOverlay"]
+[node name="TitleVBox" type="VBoxContainer" parent="CardPanel/VBoxContainer/HeaderBand"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="CardPanel/TitleOverlay/TitleVBox"]
+[node name="TitleLabel" type="Label" parent="CardPanel/VBoxContainer/HeaderBand/TitleVBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
 theme_override_colors/font_shadow_color = Color(0.1, 0.02, 0.02, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("3_font_bold")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 38
 text = "PRAY THE ROSARY"
 horizontal_alignment = 1
 
-[node name="SubtitleLabel" type="Label" parent="CardPanel/TitleOverlay/TitleVBox"]
+[node name="SubtitleLabel" type="Label" parent="CardPanel/VBoxContainer/HeaderBand/TitleVBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_colors/font_shadow_color = Color(0.1, 0.02, 0.02, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("4_font_italic")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 20
 text = "A Contemplative Visual Guide to the Twenty Mysteries"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Divider" type="ColorRect" parent="CardPanel/TitleOverlay/TitleVBox"]
-custom_minimum_size = Vector2(180, 2)
+[node name="Divider" type="ColorRect" parent="CardPanel/VBoxContainer/HeaderBand/TitleVBox"]
+custom_minimum_size = Vector2(220, 2)
 layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0.831373, 0.686275, 0.215686, 1)
+
+[node name="ArtworkContainer" type="PanelContainer" parent="CardPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_artwork_frame")
+
+[node name="CoverTexture" type="TextureRect" parent="CardPanel/VBoxContainer/ArtworkContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("2_tex")
+expand_mode = 1
+stretch_mode = 5
