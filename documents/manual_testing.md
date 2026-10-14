@@ -48,9 +48,10 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Standardized 32px uniform margins (`margin_left`, `margin_right`, `margin_top`, `margin_bottom`).
   - 22pt italic subheading, 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
-  - Calibrated typography auto-fitting based on character density:
-    - Page 2: 25pt section headers and 22pt body paragraphs.
-    - Page 3: 23pt section headers and 20pt body paragraphs.
+  - Calibrated typography auto-fitting based on character density (`total_chars <= 1650`):
+    - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
+    - Page 3 (1,704 chars): 23pt section headers and 20pt body paragraphs.
+  - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) accurately documents: `"...and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
   - Section containers configure `SIZE_EXPAND_FILL` to evenly balance vertical space across the full 1080px canvas with zero text overflow or clipping.
 
 ### TC-PAGE-03: Prayer Sequence Cards (`Pages 4 & 46`)
@@ -68,6 +69,15 @@ This document outlines the strict manual testing procedures required before any 
   - Standardized 32px uniform margins.
   - Header displays 22pt italic mystery ordinal (e.g., *The First Joyful Mystery*), 34pt bold title (e.g., **The Annunciation**), and 18pt italic fruit badge (*Fruit of the Mystery: Humility*) in antique gold pill box.
   - Scripture citation renders at 17pt bold with a gold vertical accent bar, and scripture reading renders at 18–20pt italic.
+  - Verify canonical Douay-Rheims (Challoner Revision) citations and verbatim scripture passages:
+    - **Joyful 4 (`Page 12`):** Luke 2:28 uses bracketed subject `"[Then Simeon] took him into his arms"`.
+    - **Luminous 4 (`Page 22`):** Citation reads `"Luke 9:29–31, 35 (Douay-Rheims)"` and verse 35 concludes with verbatim `"This is my beloved Son; hear him."`.
+    - **Sorrowful 2 (`Page 28`):** Citation reads `"John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)"`.
+    - **Sorrowful 4 (`Page 32`):** Citation order reads `"John 19:17; Luke 23:26–27 (Douay-Rheims)"`, matching the sequence of quoted verses.
+    - **Sorrowful 5 (`Page 34`):** Luke 23:46 reads verbatim `"And Jesus crying out with a loud voice, said:"`.
+    - **Glorious 2 (`Page 38`):** Citation `"Luke 24:50–52; Acts 1:9 (Douay-Rheims)"` separates Luke 24:50–52 and Acts 1:9 in canonical order with ellipses.
+    - **Glorious 4 (`Page 42`):** Citation order reads `"Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)"`, matching the sequence of quoted verses.
+    - **Glorious 5 (`Page 44`):** Citation reads `"Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)"`.
   - Contemplative meditation renders at 20–22pt regular text.
   - Decade prayers (*Our Father*, *Hail Mary*, *Glory Be*, *Fatima Prayer*) render with 17–18pt bold rubrics and 20–22pt regular text.
   - High-density passages (e.g., Page 40 Pentecost with 1,326 chars) auto-fit cleanly to 20pt body / 18pt scripture / 17pt rubrics, guaranteeing zero internal scrolling and zero vertical overflow on the 720×1080 canvas.
@@ -84,9 +94,9 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect Pages 48 and 49 (*Sacred Artwork Credits Parts I & II*) and Page 50 (*Back Cover*).
 - **Expected:**
   - Standardized 32px uniform margins, 22pt italic subheading, and 34pt bold heading on Pages 48 and 49.
-  - Page 48 lists 13 attributions at 17pt title and 15pt details with `SIZE_EXPAND_FILL` spacing.
-  - Page 49 lists 10 attributions (17pt title / 15pt details), Douay-Rheims Scripture notice (14pt italic), and museum colophon (14pt regular) with zero clipping.
-  - Page 50 displays deep Baroque crimson (`#4A1215`) card with 38pt title in warm gold, 22pt italic subtitle, 22pt epigraphs with 17pt attributions, 20pt body synopsis, and 24px vertical block separation with zero vertical overflow.
+  - Page 48 lists 13 attributions at 17pt title and 15pt details with `SIZE_EXPAND_FILL` spacing, including updated creation dates for Ricci's *The Marriage at Cana* (`c. 1712–1715`) and Rubens's *The Last Supper* (`1631–1632`).
+  - Page 49 lists 10 attributions (17pt title / 15pt details)—including Maíno's *Pentecost* (`1612–1614`), Murillo's *The Assumption of the Virgin* at `State Hermitage Museum, St. Petersburg, Russia`, and Velázquez's *The Coronation of the Virgin* (`c. 1635–1636`)—plus the Douay-Rheims Scripture notice (14pt italic) and museum colophon (14pt regular) with zero clipping.
+  - Page 50 displays deep Baroque crimson (`#4A1215`) card with 38pt title in warm gold, 22pt italic subtitle, 22pt epigraphs with 17pt attributions (including St. Louis Marie de Montfort's full verbatim Marian counsel: *"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood."*), 20pt body synopsis, and 24px vertical block separation with zero vertical overflow.
 
 ## Test 6.0: Continuous 50-Page Vertical Scroll, Jump Bars & Reading Progress
 
