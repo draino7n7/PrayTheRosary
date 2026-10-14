@@ -119,20 +119,44 @@ Implemented via `res://scenes/ui/in_stream_jump_bar.tscn` (`res://scripts/ui/in_
    - Each `InStreamJumpBar` emits `jump_requested(target_page: int)`, connected cleanly to `Main.scroll_to_page()`.
 
 ### 4.2 Top-Right Navigation & Bookmark Menu
-- A persistent, unobtrusive button in the **top-right corner** of the viewport opens/closes a slide-out or dropdown navigation drawer containing:
-  - **Cover** *(jumps to Page 1)*
-  - **History of the Rosary** *(jumps to Page 2)*
-  - **How to Pray** *(jumps to Page 3)*
-  - **Opening Prayers** *(jumps to Page 4)*
-  - **Four Expandable Mystery Set Rows (`Joyful`, `Luminous`, `Sorrowful`, `Glorious`):**
-    - Each row has two distinct click targets:
-      1. **Left Disclosure Arrow Button (`▸` / `▾`):** Expands or collapses the list of 5 individual Mysteries beneath that Mystery set without closing the menu.
-      2. **Mystery Set Title Button:** Immediately jumps to the 1st Mystery of that set (`Pages 6, 16, 26, or 36`) and closes the menu.
-    - When expanded, clicking any of the 5 individual Mysteries (e.g., *1. The Annunciation* through *5. The Finding in the Temple*) jumps directly to that Mystery's prayer page (`Even Pages 6..44`) and closes the menu.
-    - Displays a *"Recommended Today"* indicator on the day's Mystery set.
-  - **Closing Prayers** *(jumps to Page 46)*
-  - **Artwork Credits** *(jumps to Page 48)*
-  - **Back Cover** *(jumps to Page 50)*
+Implemented via `res://scenes/ui/navigation_drawer.tscn` (`res://scripts/ui/navigation_drawer.gd`):
+- **Node Hierarchy & Visual Design:**
+  - `NavigationDrawer` (`CanvasLayer`, `layer = 15`): Overlays the continuous stream and main HUD cleanly.
+  - `FloatingNavButton` (`Button`): Unobtrusive 48×48px floating toggle button pinned in the top-right viewport corner displaying the `☰` navigation icon.
+  - `DrawerOverlay` (`Control`): Full-screen control (`ANCHORS_PRESET_FULL_RECT`) containing:
+    - `Scrim` (`ColorRect`): Semi-transparent dimming backdrop (`#00000080`, `mouse_filter = MOUSE_FILTER_STOP`). Clicking the scrim closes the drawer.
+    - `DrawerPanel` (`PanelContainer`): Right-aligned sliding drawer panel styled in warm ivory parchment (`#FAF6EE`) with an antique gold left border (`#B89130`), minimum width 320px (responsive on portrait displays).
+    - `DrawerScroll` (`ScrollContainer`): Smooth vertical scrolling container for drawer content.
+    - `ContentContainer` (`VBoxContainer`): Vertical list hosting all navigation entries and dividers.
+- **Background Touch Isolation & Dismissal:**
+  - When the drawer opens, `Main` sets `scroll_container.mouse_filter = MOUSE_FILTER_IGNORE` so background page cards cannot be accidentally scrolled during drawer navigation.
+  - Restores `scroll_container.mouse_filter = MOUSE_FILTER_STOP` when closed.
+  - Drawer can be dismissed via clicking the close button (`✕`), tapping the dimming `Scrim` backdrop, pressing `Escape` / `ui_cancel`, or selecting any navigation destination.
+- **"Resume Last Page" Action Button:**
+  - Positioned prominently at the top of the drawer content list.
+  - Integrated with `ReadingProgressManager` / `user://reading_progress.cfg`.
+  - Displays dynamic contextual label (e.g., *"Resume Last Page: The Baptism of Jesus in the Jordan (Page 16)"* or *"Resume: Front Cover (Page 1)"*).
+  - Clicking immediately jumps to the saved page and dismisses the drawer.
+- **Top-Level Landmark Section Buttons:**
+  - Styled navigation buttons for non-mystery landmark sections:
+    - `Front Cover (Page 1)`
+    - `History of the Rosary (Page 2)`
+    - `Structure & How to Pray (Page 3)`
+    - `The Opening Prayers (Page 4)`
+    - `The Closing Prayers (Page 46)`
+    - `Sacred Artwork Credits (Page 48)`
+    - `Back Cover (Page 50)`
+  - Each button emits `page_requested(page_number)` and closes the drawer.
+- **Expandable Mystery Set Accordions (Dual-Action Rows):**
+  - Covers all 4 Mystery Sets (`Joyful`, `Luminous`, `Sorrowful`, `Glorious`) in canonical order.
+  - **Dual-Action Click Targets:**
+    1. **Left Disclosure Arrow Button (`▸` / `▾`):** Expands or collapses the indented sub-list of 5 individual Mysteries beneath that set without closing the drawer and without emitting `page_requested`.
+    2. **Mystery Set Title Button:** Immediately navigates to the **1st Mystery** prayer page of that set (`Page 6`, `Page 16`, `Page 26`, or `Page 36`) and closes the drawer.
+  - **All 20 Individual Mystery Sub-Buttons:** Indented list under each set displaying mystery ordinal and canonical title (e.g., *1. The Annunciation* $\rightarrow$ `Page 6`, *2. The Visitation* $\rightarrow$ `Page 8`, through *5. The Coronation of Mary* $\rightarrow$ `Page 44`). Clicking any individual mystery button jumps directly to that mystery's left prayer page and closes the drawer.
+- **Dynamic Liturgical "Recommended Today" Badge:**
+  - Queries `RosaryDataLoader.get_recommended_mystery_set_for_today()` upon drawer initialization and opening.
+  - Displays a distinctive antique gold badge (`[★ Today]`) alongside today's liturgically recommended Mystery Set title (e.g. Joyful on Mon/Sat, Luminous on Thu, Sorrowful on Tue/Fri, Glorious on Wed/Sun).
+
 
 ### 4.3 Dynamic Liturgical Calendar for Daily Mystery Recommendation
 Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, month, day)`:

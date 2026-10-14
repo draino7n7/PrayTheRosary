@@ -45,11 +45,17 @@ The UI is built around a modular page card component architecture designed for t
 
 The application connects all 50 sequential pages into a unified, distraction-free reading experience:
 - **Continuous 50-Page Stream (`game/scenes/main/main.tscn` / `game/scripts/main/main.gd`):** Presents all pages from Cover to Back Cover in a single vertical `ScrollContainer`. Page cards stay horizontally centered at a 2:3 aspect ratio against a deep ambient espresso backdrop (`#141010`).
+- **Top-Right Navigation Drawer & Table of Contents (`game/scenes/ui/navigation_drawer.tscn`):** An unobtrusive floating button (`☰`) in the top-right corner slides open a full-featured navigation drawer with background touch isolation, featuring:
+  - **"Resume Last Page" Action:** Dynamically remembers and displays the last visited page with one-tap restoration.
+  - **Expandable Mystery Set Accordions:** Dual-action rows for all 4 Mystery sets with left disclosure arrows (`▸` / `▾`) expanding the 5 individual mysteries and title buttons navigating directly to each set's opening page.
+  - **Dynamic Liturgical Badge:** Highlights today's canonically recommended mystery set with an antique gold `[★ Today]` badge.
+  - **Direct Landmark Navigation:** Instant jump buttons for Cover, History, How to Pray, Opening Prayers, Closing Prayers, Sacred Art Credits, and Back Cover.
 - **In-Stream Quick-Jump Separator Bars (`game/scenes/ui/in_stream_jump_bar.tscn`):**
   - **Post-Opening Prayers (After Page 5):** Displays 4 mystery buttons with an antique gold border and *"★ Recommended Today"* badge on today's liturgically recommended mystery set.
   - **Post-Mystery Set Jump Bars (After Pages 15, 25, 35, 45):** Displays a mystery set completion banner and a prominent *"Proceed to the Closing Prayers →"* action button jumping directly to Page 46.
 - **Reading Progress Persistence (`game/scripts/core/reading_progress_manager.gd`):** Automatically tracks and persists the current page to `user://reading_progress.cfg` (debounced at 600ms during scroll, immediate on jump) and restores the saved page on startup.
 - **VRAM Texture Virtualization & Screen Keep-Awake:** Employs a sliding active buffer window (`ARTWORK_BUFFER_PAGES = 4`) dynamically loading active artwork and unloading distant textures from VRAM for smooth 60 FPS scrolling. Calls `DisplayServer.screen_set_keep_on(true)` to prevent screen dimming during contemplative prayer.
+
 
 ---
 
