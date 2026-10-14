@@ -119,7 +119,7 @@
 				"id": "after_joyful_mysteries_jump",
 				"type": "closing_prayers_jump",
 				"prompt": "End of the Five Joyful Mysteries",
-				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"button_label": "Proceed to the Closing Prayers",
 				"target_page": 46
 			},
 			{
@@ -127,7 +127,7 @@
 				"id": "after_luminous_mysteries_jump",
 				"type": "closing_prayers_jump",
 				"prompt": "End of the Five Luminous Mysteries",
-				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"button_label": "Proceed to the Closing Prayers",
 				"target_page": 46
 			},
 			{
@@ -135,7 +135,7 @@
 				"id": "after_sorrowful_mysteries_jump",
 				"type": "closing_prayers_jump",
 				"prompt": "End of the Five Sorrowful Mysteries",
-				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"button_label": "Proceed to the Closing Prayers",
 				"target_page": 46
 			},
 			{
@@ -143,7 +143,7 @@
 				"id": "after_glorious_mysteries_jump",
 				"type": "closing_prayers_jump",
 				"prompt": "End of the Five Glorious Mysteries",
-				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"button_label": "Proceed to the Closing Prayers",
 				"target_page": 46
 			}
 		]
@@ -153,7 +153,9 @@
 		"total_interior_spreads": 24,
 		"total_page_sides": 50,
 		"total_double_sided_leaves": 25,
-		"notes": "Front Cover (Page 1), 24 interior two-page spreads (Pages 2–49, where Page 2 is the Inside Front Cover opposite Page 3, and Page 49 is the Inside Back Cover opposite Page 48), and Outside Back Cover (Page 50)."
+		"display_page_numbers": false,
+		"display_artwork_page_captions": false,
+		"notes": "Front Cover (Page 1), 24 interior two-page spreads (Pages 2–49, where Page 2 is the Inside Front Cover opposite Page 3, and Page 49 is the Inside Back Cover opposite Page 48), and Outside Back Cover (Page 50). Numerical page numbers and on-page artist captions are intentionally omitted so pages remain distraction-free."
 	},
 	"front_cover": {
 		"view_index": 0,
@@ -211,15 +213,15 @@
 				"sections": [
 					{
 						"title": "How This Book Is Organized",
-						"body": "Every prayer section and Mystery in this book is designed as a single, self-contained two-page spread so you never need to flip back and forth while praying:\n• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture, a brief meditation, and the complete prayers for that decade.\n• Right Page (Visual Contemplation): Displays the Mystery header at the top and a full-page Renaissance or Baroque masterpiece to rest your eyes and heart upon as you pray the ten Hail Marys.\n• Six Index Tabs (O, J, L, S, G, C): Grab any tab on the right and flip it to the left to open directly to the Opening Prayers (O), Joyful (J), Luminous (L), Sorrowful (S), or Glorious (G) Mysteries, or the Closing Prayers (C)."
+						"body": "Every prayer section and Mystery in this book is designed as a single, self-contained two-page spread so you never need to flip back and forth while praying:\n• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture, a brief meditation, and the complete prayers for that decade.\n• Right Page (Visual Contemplation): Displays the Mystery header at the top and a framed Renaissance or Baroque masterpiece to rest your eyes and heart upon as you pray the ten Hail Marys.\n• Six Index Tabs (O, J, L, S, G, C): Grab any tab on the right and flip it to the left to open directly to the Opening Prayers (O), Joyful (J), Luminous (L), Sorrowful (S), or Glorious (G) Mysteries, or the Closing Prayers (C)."
 					},
 					{
 						"title": "Step-by-Step Guide to Praying the Rosary",
-						"body": "1. Opening Prayers (Tab O, Pages 4–5): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Five Decades (Tabs J, L, S, G, Pages 6–45): Flip the tab for the day's Mystery set to the left. Read the Scripture and meditation, pray one Our Father, ten Hail Marys while contemplating the Mystery and artwork, one Glory Be, and the Fatima Prayer. Proceed through all five decades of that Mystery set.\n3. Closing Prayers (Tab C, Pages 46–47): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
+						"body": "1. Opening Prayers (Tab O): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Five Decades (Tabs J, L, S, G): Flip the tab for the day's Mystery set to the left. Read the Scripture and meditation, pray one Our Father, ten Hail Marys while contemplating the Mystery and artwork, one Glory Be, and the Fatima Prayer. Proceed through all five decades of that Mystery set.\n3. Closing Prayers (Tab C): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
 					},
 					{
 						"title": "Weekly Schedule of the Mysteries",
-						"body": "• Joyful Mysteries (Tab J, Pages 6–15): Monday & Saturday (and Sundays of Advent & Christmas)\n• Luminous Mysteries (Tab L, Pages 16–25): Thursday\n• Sorrowful Mysteries (Tab S, Pages 26–35): Tuesday & Friday (and Sundays of Lent)\n• Glorious Mysteries (Tab G, Pages 36–45): Wednesday & Sunday"
+						"body": "• Joyful Mysteries (Tab J): Monday & Saturday (and Sundays of Advent & Christmas)\n• Luminous Mysteries (Tab L): Thursday\n• Sorrowful Mysteries (Tab S): Tuesday & Friday (and Sundays of Lent)\n• Glorious Mysteries (Tab G): Wednesday & Sunday (in Easter & Ordinary Time)"
 					}
 				]
 			}

@@ -185,6 +185,73 @@ func get_recommended_mystery_set_for_weekday(weekday: int) -> String:
 			return "joyful"
 
 
+func compute_easter_sunday(year: int) -> Dictionary:
+	## Anonymous Gregorian Computus (Meeus/Jones/Butcher algorithm)
+	var a: int = year % 19
+	var b: int = int(year / 100)
+	var c: int = year % 100
+	var d: int = int(b / 4)
+	var e: int = b % 4
+	var f: int = int((b + 8) / 25)
+	var g: int = int((b - f + 1) / 3)
+	var h: int = (19 * a + b - d - g + 15) % 30
+	var i: int = int(c / 4)
+	var k: int = c % 4
+	var l: int = (32 + 2 * e + 2 * i - h - k) % 7
+	var m: int = int((a + 11 * h + 22 * l) / 451)
+	var month: int = int((h + l - 7 * m + 114) / 31)
+	var day: int = ((h + l - 7 * m + 114) % 31) + 1
+	return {"year": year, "month": month, "day": day}
+
+
+func get_recommended_mystery_set_for_date(year: int, month: int, day: int) -> String:
+	var dt: Dictionary = {
+		"year": year,
+		"month": month,
+		"day": day,
+		"hour": 12,
+		"minute": 0,
+		"second": 0
+	}
+	var unix_ts: int = Time.get_unix_time_from_datetime_dict(dt)
+	var resolved_dt: Dictionary = Time.get_datetime_dict_from_unix_time(unix_ts)
+	var weekday: int = int(resolved_dt.get("weekday", Time.WEEKDAY_MONDAY))
+
+	if weekday != Time.WEEKDAY_SUNDAY:
+		return get_recommended_mystery_set_for_weekday(weekday)
+
+	# Sunday Liturgical Season Rules:
+	# 1. Advent & Christmas Sundays (Nov 27 through Jan 13 inclusive) -> Joyful
+	if (month == 11 and day >= 27) or month == 12 or (month == 1 and day <= 13):
+		return "joyful"
+
+	# 2. Sundays of Lent (1st Sunday of Lent = 42 days before Easter through Palm Sunday = 7 days before Easter) -> Sorrowful
+	var easter: Dictionary = compute_easter_sunday(year)
+	var easter_unix: int = Time.get_unix_time_from_datetime_dict({
+		"year": int(easter["year"]),
+		"month": int(easter["month"]),
+		"day": int(easter["day"]),
+		"hour": 12,
+		"minute": 0,
+		"second": 0
+	})
+	var days_before_easter: int = int(round(float(easter_unix - unix_ts) / 86400.0))
+	if days_before_easter >= 7 and days_before_easter <= 42:
+		return "sorrowful"
+
+	# 3. Easter Season & Ordinary Time Sundays -> Glorious
+	return "glorious"
+
+
+func get_recommended_mystery_set_for_today() -> String:
+	var now: Dictionary = Time.get_date_dict_from_system()
+	return get_recommended_mystery_set_for_date(
+		int(now.get("year", 2026)),
+		int(now.get("month", 1)),
+		int(now.get("day", 1))
+	)
+
+
 func _build_indexes() -> void:
 	_prayers_by_id.clear()
 	_mystery_sets_by_id.clear()

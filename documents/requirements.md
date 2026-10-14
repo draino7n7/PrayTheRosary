@@ -1,158 +1,151 @@
-# Project Requirements: Pray The Rosary
+# Application Requirements: Pray The Rosary (Godot 4.7.2 App)
 
-This document acts as the definitive source of truth for the application's features, architecture, UI layouts, and design constraints. When an autonomous subagent creates a feature, designs a scene, or refactors code, it MUST consult this document to ensure strict adherence to the project's vision.
+This document is the definitive source of truth for the **Pray The Rosary** digital application built with Godot 4.7.2 for the OpenGameStack ecosystem. Autonomous subagents (`issue_creator`, `issue_resolver`, and `pr_reviewer`) MUST consult this document when creating issues, implementing features, or reviewing Pull Requests.
 
----
-
-## 1. Project Overview & Vision
-
-**Pray The Rosary** is an interactive prayer companion and sacred art contemplation guide built with Godot 4.7.2 for the OpenGameStack ecosystem. 
-
-Beyond serving as a standalone digital devotional application, this project serves as the interactive digital prototype and single source of truth for a future high-quality, physical 6" x 9" spiral-bound prayer book.
-
-### Key Tenets
-1. **Spread-First Design:** The application mirrors a physical two-page book spread:
-   - **Left Page (Prayers & Scripture):** Distraction-free, complete prayer text for the decade, scripture passages, and meditative reflections. A user can pray an entire decade without scrolling.
-   - **Right Page (Visual Contemplation):** Full-page classical sacred art masterpiece depicting the mystery to aid in contemplation.
-2. **Data-Driven Separation:** All prayers, mysteries, scripture citations, reflections, and artwork metadata are stored in structured data formats (JSON / Godot Resources) completely independent of the UI code. This allows the exact same data to be exported to print publishing pipelines (Typst, Affinity Publisher, Scribus, HTML/CSS Paged Media).
-3. **Reverent, Accessible Aesthetic:** Clean, dignified typography and palette suitable for quiet meditation in both light and dark ambient environments.
+*(Note: Specifications specific to the physical 6" × 9" spiral-bound print edition are maintained separately in [`documents/book_requirements.md`](book_requirements.md).)*
 
 ---
 
-## 2. Rosary Book Structure & 24-Spread Pagination
-The digital application and physical 6" × 9" spiral-bound book share an identical **26-view / 50-page-side** pagination structure (**Front Cover**, **24 Interior Two-Page Spreads**, and **Back Cover**):
+## 1. Application Overview & Core Design Tenets
 
-### 2.1 Outside Front Cover (View 0 — Page 1)
-- **Artwork:** Bartolomé Esteban Murillo, *The Virgin of the Rosary* (c. 1650–1655, Museo del Prado).
-- **Typography:** Title **"Pray the Rosary"** and subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* set over the upper crimson drapery.
+**Pray The Rosary** is a distraction-free, contemplative Rosary prayer companion and sacred art guide.
 
-### 2.2 Spread 1: History of the Rosary & How to Use (Pages 2–3)
-- **Left Page (Page 2 / Inside Front Cover):** *The History of the Holy Rosary* (Monastic roots & the Marian Psalter, St. Dominic & preaching the Mysteries, Pope St. Pius V & Pope St. John Paul II's 20 Mysteries).
-- **Right Page (Page 3):** *Structure of the Book & How to Pray* (Organization of the two-page spreads, step-by-step Rosary guide, and Weekly Schedule of the Mysteries).
-
-### 2.3 Spread 2: The Opening Prayers (Pages 4–5)
-- **Left Page (Page 4):** Sign of the Cross, Apostles' Creed, Opening Our Father, Three Hail Marys (for Faith, Hope, and Charity), and Glory Be.
-- **Right Page (Page 5):** El Greco, *The Holy Trinity* (1577–1579, Museo del Prado).
-
-### 2.4 Spreads 3–22: The Four Mystery Sets (20 Spreads — Pages 6–45)
-Each Mystery is presented as a self-contained two-page spread:
-- **Left Page (Even Pages 6–44):**
-  - **Mystery Header:** Ordinal label (e.g., *The First Joyful Mystery*), Mystery title, and Spiritual Fruit.
-  - **Sacred Scripture:** Public-domain **Douay-Rheims (Challoner Revision)** passage grounding the Mystery.
-  - **Contemplative Meditation:** 1–2 sentence reflection connecting the Mystery, its fruit, and the artwork.
-  - **Prayers of the Decade:** Full text of the Our Father, Hail Mary (with 10-bead progress indicator), Glory Be, and Fatima Prayer.
-- **Right Page (Odd Pages 7–45):** Full-page sacred artwork with artist, title, date, and museum attribution.
-- **Mystery Sequence:**
-  1. **The Joyful Mysteries (Spreads 3–7, Pages 6–15 — Mondays & Saturdays):**
-     1. The Annunciation (*Luke 1:28, 38*) — Fruit: Humility — Art: Bartolomé Esteban Murillo
-     2. The Visitation (*Luke 1:41–42, 46–47*) — Fruit: Love of Neighbor — Art: Philippe de Champaigne
-     3. The Nativity of Our Lord (*Luke 2:6–7, 10–11*) — Fruit: Poverty of Spirit — Art: Guido Reni
-     4. The Presentation in the Temple (*Luke 2:22, 28–32*) — Fruit: Obedience & Purity — Art: Vittore Carpaccio
-     5. The Finding in the Temple (*Luke 2:46–47, 49, 51*) — Fruit: Joy in Finding Jesus — Art: Bernard van Orley
-  2. **The Luminous Mysteries (Spreads 8–12, Pages 16–25 — Thursdays):**
-     1. The Baptism in the Jordan (*Matthew 3:16–17*) — Fruit: Openness to the Holy Spirit — Art: Guido Reni
-     2. The Wedding Feast at Cana (*John 2:3–5, 11*) — Fruit: To Jesus through Mary — Art: Sebastiano Ricci
-     3. The Proclamation of the Kingdom (*Mark 1:14–15; Matthew 5:3, 8*) — Fruit: Repentance & Trust in God — Art: Carl Bloch
-     4. The Transfiguration (*Luke 9:29–30, 35*) — Fruit: Desire for Holiness — Art: Gerard David
-     5. The Institution of the Eucharist (*Matthew 26:26–28*) — Fruit: Eucharistic Adoration — Art: Peter Paul Rubens
-  3. **The Sorrowful Mysteries (Spreads 13–17, Pages 26–35 — Tuesdays & Fridays):**
-     1. The Agony in the Garden (*Luke 22:41–44*) — Fruit: Contrition & Conformity to God's Will — Art: Giovanni Battista Caracciolo
-     2. The Scourging at the Pillar (*John 19:1; Isaiah 53:5*) — Fruit: Purity & Mortification — Art: Peter Paul Rubens
-     3. The Crowning with Thorns (*Matthew 27:28–30*) — Fruit: Moral Courage — Art: Sir Anthony van Dyck
-     4. The Carrying of the Cross (*Luke 23:26–27; John 19:17*) — Fruit: Patience in Trials — Art: Raphael
-     5. The Crucifixion and Death of Our Lord (*Luke 23:33–34, 46*) — Fruit: Forgiveness & Perseverance — Art: Bartolomé Esteban Murillo
-  4. **The Glorious Mysteries (Spreads 18–22, Pages 36–45 — Wednesdays & Sundays):**
-     1. The Resurrection of Our Lord (*Mark 16:5–6*) — Fruit: Lively Faith — Art: Bartolomé Esteban Murillo
-     2. The Ascension of Our Lord (*Luke 24:50–52; Acts 1:9*) — Fruit: Christian Hope — Art: John Singleton Copley
-     3. The Descent of the Holy Spirit (*Acts 1:14; 2:1–4*) — Fruit: Love of God & Gifts of the Spirit — Art: Juan Bautista Maíno
-     4. The Assumption of the Blessed Virgin Mary (*Psalm 44:14–16; Judith 15:10*) — Fruit: Grace of a Happy Death — Art: Bartolomé Esteban Murillo
-     5. The Coronation of the Blessed Virgin Mary (*Apocalypse 12:1; Sirach 24:4*) — Fruit: Trust in Mary's Intercession — Art: Diego Velázquez
-
-### 2.5 Spread 23: The Closing Prayers (Pages 46–47)
-- **Left Page (Page 46):** Hail, Holy Queen (*Salve Regina*), Versicle & Response (*Pray for us, O holy Mother of God...*), Concluding Rosary Prayer (*O God, whose only begotten Son...*), and concluding Sign of the Cross.
-- **Right Page (Page 47):** Bartolomé Esteban Murillo, *The Immaculate Conception of Los Venerables* (c. 1678, Museo del Prado).
-
-### 2.6 Spread 24: Sacred Artwork Credits & Attributions (Pages 48–49)
-- **Left Page (Page 48):** Credits Part I (Cover, Opening/Closing Prayers, Joyful & Luminous Mysteries).
-- **Right Page (Page 49 / Inside Back Cover):** Credits Part II (Sorrowful & Glorious Mysteries, Douay-Rheims Scripture notice, and Museum Open-Access Colophon).
-
-### 2.7 Outside Back Cover (View 25 — Page 50)
-- Deep Baroque crimson (`#4A1215`) and warm gold (`#D4AF37`) layout harmonizing with the front cover drapery, featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, book synopsis, and St. Louis de Montfort's counsel on daily recitation of the Rosary.
+### Core Design Tenets
+1. **Continuous 50-Page Vertical Scroll:**
+   - The application presents all **50 sequential portrait pages** (`Page 1` Front Cover at the very top through `Page 50` Back Cover at the bottom) in a single smooth vertical `ScrollContainer`.
+   - Every page is rendered as a distinct **$2:3$ ($6:9$) portrait page card**. On portrait mobile screens, page cards fill the viewport width; on wider tablet/desktop windows, page cards remain centered horizontally at a $2:3$ aspect ratio against a deep ambient backdrop (`#141010`).
+2. **Distraction-Free Contemplation:**
+   - **No Numerical Page Numbers:** Do not render visible numerical page numbers (`1..50`) on any page cards.
+   - **No On-Page Artwork Captions:** Artwork pages (`Pages 5, 7, 9, ..., 47`) display **only** the Top Section/Mystery Header and the gold-framed painting so nothing distracts from using the sacred image as a prayer focus. All artist, title, date, and museum attributions appear exclusively on the **Sacred Artwork Credits pages (`Pages 48–49`)**.
+   - **No Interactive Bead-Clicking Mechanic (MVP):** Prayer pages display the complete text of the prayers with clear rubrics (e.g., *"10× Hail Mary"*), assuming the user prays with physical Rosary beads or their fingers.
+   - **Silent & Always-On:** The MVP application is completely silent (no background music or sound effects) and keeps the device screen awake (`DisplayServer.screen_set_keep_on(true)` when not running headlessly) so the screen never dims or locks during a 3–4 minute decade.
+3. **Data-Driven Architecture:**
+   - All prayers, mysteries, Douay-Rheims Scripture readings, meditations, artwork metadata, and page sequences are loaded dynamically via `RosaryDataLoader` (`res://scripts/data/rosary_data_loader.gd`) from `res://data/prayers.json`, `res://data/mysteries.json`, and `res://data/book_layout.json`.
 
 ---
 
-## 3. UI, Physical Index Tabs & Visual Layout Specifications
+## 2. Visual Theme, Color Palette & Typography
 
-### 3.1 App Layout: Continuous 50-Page Vertical Scroll
-- Rather than forcing a wide 12:9 two-page spread onto screens, the application presents all **50 individual portrait pages (`Page 1` Front Cover at the top through `Page 50` Back Cover at the bottom)** in a single, smooth **continuous vertical scroll**.
-- Each page card maintains a $2:3$ ($6" \times 9"$) portrait aspect ratio:
-  - **Even Pages (`Pages 4, 6, 8, ..., 46`):** Display the prayers, Scripture readings, spiritual fruit, and meditation text.
-  - **Odd Artwork Pages (`Pages 5, 7, 9, ..., 47`):**
-    - **Top Header Band:** Displays the section or Mystery ordinal subtitle (e.g., *The First Joyful Mystery*) and Mystery title (e.g., **The Annunciation**) at the top of the artwork page so that when the physical spiral-bound book is folded $360^\circ$ back (or when viewing the painting page in the continuous-scroll app), the reader always sees which Mystery they are contemplating.
-    - **Center Artwork Frame:** Displays the sacred masterwork (`TextureRect` with `expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`).
-    - **Bottom Attribution Footer:** Displays Artist, Title, Year, and Museum Collection.
+### 2.1 Color Palette
+- **App Ambient Backdrop (Outside Page Cards):** Deep Espresso Charcoal (`#141010`)
+- **Interior Page Card Background (`Pages 2–49`):** Warm Ivory / Parchment (`#FAF6EE`)
+- **Interior Page Primary Body Text:** Deep Charcoal / Espresso (`#1E1815`)
+- **Interior Page Headings & Mystery Titles:** Baroque Marian Crimson (`#6B1D21`)
+- **Subheadings, Rubrics & Scripture Citations:** Muted Warm Umber (`#5C4338`)
+- **Page Card Borders, Dividers & Artwork Frame Border:** Antique Gold (`#B89130`)
+- **Front Cover (`Page 1`) & Back Cover (`Page 50`) Palette:**
+  - Deep Baroque Crimson Background (`#4A1215` primary / `#2A090B` dark accent)
+  - Warm Gold Accent & Title Typography (`#D4AF37`)
+  - Warm Ivory Body Text (`#F7F2E7`)
 
-### 3.2 App Navigation: Top-Right Menu & In-Stream Separators
-1. **Top-Right Navigation & Bookmark Menu:**
-   - A floating button in the top-right corner opens a navigation and bookmark drawer:
-     - **Front Cover** *(Page 1)*
-     - **History of the Rosary** *(Page 2)*
-     - **How to Use This Book** *(Page 3)*
-     - **Opening Prayers** *(Page 4)*
-     - **`▸` The Joyful Mysteries** *(Clicking the title jumps directly to Page 6; clicking the left arrow `▸` expands all 5 individual Joyful Mysteries)*
-     - **`▸` The Luminous Mysteries** *(Clicking the title jumps directly to Page 16; clicking `▸` expands all 5 Luminous Mysteries)*
-     - **`▸` The Sorrowful Mysteries** *(Clicking the title jumps directly to Page 26; clicking `▸` expands all 5 Sorrowful Mysteries)*
-     - **`▸` The Glorious Mysteries** *(Clicking the title jumps directly to Page 36; clicking `▸` expands all 5 Glorious Mysteries)*
-     - **Closing Prayers** *(Page 46)*
-     - **Credits & Attributions** *(Page 48)*
-     - **Back Cover** *(Page 50)*
-   - Supports bookmarking the user's current page and highlights the day's recommended Mystery set.
-2. **Subtle In-Stream Quick-Jump Separators:**
-   - **After Page 5 (End of Opening Prayers):** A subtle separator bar allowing the user to jump directly to the 1st Joyful (Page 6), 1st Luminous (Page 16), 1st Sorrowful (Page 26), or 1st Glorious Mystery (Page 36).
-   - **After Pages 15, 25, 35, and 45 (End of each 5th Mystery):** A subtle separator bar with a *"Proceed to the Closing Prayers (Page 46)"* button so the user can jump directly to the Closing Prayers after completing any 5-decade set.
-
-### 3.3 Physical Book Specification: 6 Stepped Index Tabs (`O`, `J`, `L`, `S`, `G`, `C`)
-- **Trim & Tab Dimensions:**
-  - **Interior Body Page Size:** $6.0" \times 9.0"$.
-  - **Protruding Die-Cut Tab Extension:** $0.375"$ ($3/8"$) on the right fore-edge, giving tabbed sheets a total width of $6.375" \times 9.0"$.
-  - **Overhang Cover Width:** $6.375" \times 9.0"$ front and back covers so that when the book is closed, the covers protect the 6 protruding tabs.
-  - **Vertical Stepping:** 6 stepped tabs ($1.25"$ tall each along a $7.5"$ centered vertical track with $0.75"$ top/bottom margins).
-- **Flip-to-Left Mechanics:**
-  When the book is closed, grabbing any tab on the right and flipping that tabbed sheet to the left opens directly to that section's two-page spread:
-  1. **`O` (Sheet 2, Pages 3–4):** Flips to the left to reveal **Spread 2: Opening Prayers** (`Page 4` Left | `Page 5` Right).
-  2. **`J` (Sheet 3, Pages 5–6):** Flips to the left to reveal **Spread 3: 1st Joyful Mystery** (`Page 6` Left | `Page 7` Right).
-  3. **`L` (Sheet 8, Pages 15–16):** Flips to the left to reveal **Spread 8: 1st Luminous Mystery** (`Page 16` Left | `Page 17` Right).
-  4. **`S` (Sheet 13, Pages 25–26):** Flips to the left to reveal **Spread 13: 1st Sorrowful Mystery** (`Page 26` Left | `Page 27` Right).
-  5. **`G` (Sheet 18, Pages 35–36):** Flips to the left to reveal **Spread 18: 1st Glorious Mystery** (`Page 36` Left | `Page 37` Right).
-  6. **`C` (Sheet 23, Pages 45–46):** Flips to the left to reveal **Spread 23: Closing Prayers** (`Page 46` Left | `Page 47` Right).
+### 2.2 Typography (`game/assets/fonts/`)
+- Bundle an open-source classical serif font family (SIL Open Font License, such as **Cormorant Garamond** or **EB Garamond**) in `game/assets/fonts/` with Regular, Bold, and Italic weights.
+- Configure a unified Godot `Theme` resource (`res://assets/themes/rosary_theme.tres`) applying these serif fonts across all `Label`, `RichTextLabel`, and `Button` controls.
 
 ---
 
-## 4. Data Architecture & Asset Guidelines
+## 3. Page Card Types in the 50-Page Vertical Scroll
 
-### 4.1 Data Structure (`game/data/` & `game/scripts/data/`)
-All text, prayers, mysteries, and page pagination are stored in three modular JSON files loaded by `RosaryDataLoader` (`res://scripts/data/rosary_data_loader.gd`):
-- `res://data/prayers.json`: Dictionary of all 12 canonical Rosary prayers (`sign_of_the_cross`, `apostles_creed`, `our_father`, `hail_mary`, `hail_mary_faith`, `hail_mary_hope`, `hail_mary_charity`, `glory_be`, `fatima_prayer`, `hail_holy_queen`, `versicle_response`, `rosary_concluding_prayer`).
-- `res://data/mysteries.json`: Ordered array of the 4 Mystery Sets (`joyful`, `luminous`, `sorrowful`, `glorious`) and all 20 Mysteries (`spread_number` 3..22, `left_page_number`, `right_page_number`, `title`, `fruit`, Douay-Rheims `scripture_reference` & `scripture_text`, `meditation`, and `artwork` metadata).
-- `res://data/book_layout.json`: Complete 26-view / 50-page-side book manifest (`front_cover`, `spreads` 1..24, `back_cover`).
+The 50 pages returned by `RosaryDataLoader.get_all_pages()` render using 6 distinct page card layouts inside the vertical scroll:
 
-### 4.2 Sacred Art Standards & Archival Protection
-- Public Domain (CC0 / Open Access) from institutions like:
-  - Museo del Prado, National Gallery, Kunsthistorisches Museum, Metropolitan Museum of Art, National Gallery of Art, Art Institute of Chicago, and Wikimedia Commons.
-- **Immutable Original Downloads (`assets/2D/gimp/original_downloads/`):**
-  - All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json`) are unmodified, byte-for-byte archival downloads.
-  - Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
-- **Derived Assets:**
-  - Working GIMP project files (`.xcf`) and print-ready crops belong in `assets/2D/gimp/`.
-  - Compressed runtime textures (`.webp` / `.png` / `.jpg`) for the Godot application belong in `game/assets/`.
+### 3.1 Type 1: Front Cover Card (`Page 1`, `page_type == "front_cover"`)
+- Full-bleed portrait `TextureRect` displaying `res://assets/images/cover.webp` (Bartolomé Esteban Murillo, *The Virgin of the Rosary*).
+- Overlay title **"Pray the Rosary"** and subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* positioned over the upper crimson drapery in warm gold/ivory serif typography (`#D4AF37` / `#F7F2E7`).
+
+### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `front_matter_spread_left` & `front_matter_spread_right`)
+- **Page 2:** *The History of the Holy Rosary* (heading, subheading, and 3 historical sections).
+- **Page 3:** *Structure of the Book & How to Pray* (heading, subheading, and 3 instructional sections).
+
+### 3.3 Type 3: Prayer Sequence Cards (`Pages 4 & 46`, `page_type == "prayer_sequence_page"`)
+- **Page 4 (*The Opening Prayers*):** Displays heading, subheading, and the 5 introductory prayer steps (Sign of the Cross, Apostles' Creed, Our Father, Three Hail Marys for Faith, Hope, and Charity, and Glory Be).
+- **Page 46 (*The Closing Prayers*):** Displays heading, subheading, and the 4 concluding prayer steps (Hail, Holy Queen / *Salve Regina*, Versicle & Response, Concluding Rosary Prayer, and Sign of the Cross).
+
+### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `page_type == "mystery_prayer_page"`)
+Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling:
+- **Header:** Ordinal subtitle (e.g., *The First Joyful Mystery*), Mystery Title (e.g., **The Annunciation**), and **Fruit of the Mystery** tag (e.g., *Fruit of the Mystery: Humility*).
+- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** passage and citation.
+- **Contemplative Meditation:** 1–2 sentence reflection.
+- **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`).
+
+### 3.5 Type 5: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`, `page_type == "artwork_page"`)
+Designed for distraction-free visual contemplation:
+- **Top Header Band:** Displays the `subheading` (e.g., *The First Joyful Mystery* or *The Opening Prayers*) and `heading` (e.g., **The Annunciation** or **The Most Holy Trinity**).
+- **Gold-Framed Artwork Container:** Thin antique-gold border (`#B89130`) enclosing the painting `TextureRect` (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`, preserving the complete uncropped painting).
+- **No Footer Caption or Page Number:** No artist name, museum credit, or page number is shown on the artwork card itself.
+
+### 3.6 Type 6: Credits Cards (`Pages 48–49`) & Back Cover Card (`Page 50`)
+- **Page 48 (*Sacred Artwork Credits Part I*):** Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5).
+- **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5), plus the Douay-Rheims Scripture notice and museum open-access colophon.
+- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's quote on the daily Rosary.
 
 ---
 
-## 5. Technical Constraints & Testing
+## 4. Navigation, Liturgical Calendar & State Persistence
 
-1. **Godot Version:** 4.7.2.
-2. **Renderer:** `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0).
-3. **Automated Testing:** All data files and UI components must have unit tests in `game/tests/` runnable via:
-   `godot --headless --path game -s res://tests/test_runner.gd`
-4. **Static Typing:** GDScript static typing is strictly enforced (`-> void`, `var x: int = 0`).
-5. **No Broken Links or Missing Assets:** Unit tests must verify that all images and data files referenced in json/resources exist on disk.
+### 4.1 In-Stream Quick-Jump Separator Bars
+Inserted between specific page cards in the vertical scroll (`RosaryDataLoader.get_in_stream_separators()`):
+1. **After Page 5 (End of Opening Prayers):**
+   - A subtle separator panel prompting *"Select a Mystery Set to Continue Praying:"* with 4 buttons:
+     - **Joyful Mysteries** $\rightarrow$ scrolls smoothly/instantly to `Page 6`
+     - **Luminous Mysteries** $\rightarrow$ scrolls to `Page 16`
+     - **Sorrowful Mysteries** $\rightarrow$ scrolls to `Page 26`
+     - **Glorious Mysteries** $\rightarrow$ scrolls to `Page 36`
+   - Highlights today's recommended Mystery set (e.g., with a gold *"Recommended Today"* badge).
+2. **After Pages 15, 25, 35, and 45 (End of the 5th Mystery of Each Set):**
+   - A subtle separator panel with a **"Proceed to the Closing Prayers"** button that scrolls directly to `Page 46` (*The Closing Prayers*).
+
+### 4.2 Top-Right Navigation & Bookmark Menu
+- A persistent, unobtrusive button in the **top-right corner** of the viewport opens/closes a slide-out or dropdown navigation drawer containing:
+  - **Cover** *(jumps to Page 1)*
+  - **History of the Rosary** *(jumps to Page 2)*
+  - **How to Pray** *(jumps to Page 3)*
+  - **Opening Prayers** *(jumps to Page 4)*
+  - **Four Expandable Mystery Set Rows (`Joyful`, `Luminous`, `Sorrowful`, `Glorious`):**
+    - Each row has two distinct click targets:
+      1. **Left Disclosure Arrow Button (`▸` / `▾`):** Expands or collapses the list of 5 individual Mysteries beneath that Mystery set without closing the menu.
+      2. **Mystery Set Title Button:** Immediately jumps to the 1st Mystery of that set (`Pages 6, 16, 26, or 36`) and closes the menu.
+    - When expanded, clicking any of the 5 individual Mysteries (e.g., *1. The Annunciation* through *5. The Finding in the Temple*) jumps directly to that Mystery's prayer page (`Even Pages 6..44`) and closes the menu.
+    - Displays a *"Recommended Today"* indicator on the day's Mystery set.
+  - **Closing Prayers** *(jumps to Page 46)*
+  - **Artwork Credits** *(jumps to Page 48)*
+  - **Back Cover** *(jumps to Page 50)*
+
+### 4.3 Dynamic Liturgical Calendar for Daily Mystery Recommendation
+Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, month, day)`:
+- **Monday & Saturday:** `"joyful"`
+- **Thursday:** `"luminous"`
+- **Tuesday & Friday:** `"sorrowful"`
+- **Wednesday:** `"glorious"`
+- **Sunday (Dynamic by Liturgical Season via Gregorian Easter Computus):**
+  - **Advent & Christmas Season Sundays** (from the First Sunday of Advent, Nov 27–Dec 3, through the Baptism of the Lord, up to Jan 13): `"joyful"`
+  - **Lenten Sundays** (from the First Sunday of Lent, 42 days before Easter, through Palm Sunday, 7 days before Easter): `"sorrowful"`
+  - **Easter Season & Ordinary Time Sundays:** `"glorious"`
+
+### 4.4 Automatic "Resume Last Page" Persistence (`user://`)
+- As the user scrolls or jumps to a page, persist the current `page_number` (`1..50`) to `user://reading_progress.cfg` (or `.json`).
+- On application launch, automatically restore the scroll position to the last viewed page (defaulting to `Page 1` on first launch).
+
+---
+
+## 5. Asset Pipeline & Archival Protection
+
+### 5.1 Immutable Original Downloads (`assets/2D/gimp/original_downloads/`)
+- All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json`) are unmodified, byte-for-byte archival downloads.
+- Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
+
+### 5.2 Runtime Game Textures (`game/assets/images/`)
+- Convert the 23 archival master images from `assets/2D/gimp/original_downloads/` into optimized runtime `.webp` textures in `game/assets/images/` matching the exact `runtime_texture_path` entries in `book_layout.json` and `mysteries.json` (e.g., `res://assets/images/cover.webp`, `res://assets/images/opening_prayers.webp`, `res://assets/images/joyful_1_annunciation.webp`, etc., scaled to a max height of ~1800px while preserving each painting's original aspect ratio).
+
+---
+
+## 6. Technical Constraints & Testing Standards
+
+1. **Godot Version & Renderer:** Godot `4.7.2`, `gl_compatibility` renderer.
+2. **Static Typing:** GDScript static typing is strictly enforced across all production scripts and test suites.
+3. **Headless Unit Tests (`game/tests/`):**
+   - Run via:
+     ```powershell
+     godot --headless --editor --quit --path game
+     godot --headless --path game -s res://tests/test_runner.gd
+     ```
+   - All data files, liturgical date calculations, save/load persistence, and UI scenes must have automated unit tests with 0 failures.

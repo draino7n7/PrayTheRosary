@@ -183,3 +183,22 @@ func test_weekday_mystery_recommendations() -> void:
 	assert_eq(loader.get_starting_spread_for_mystery_set("luminous"), 8)
 	assert_eq(loader.get_starting_spread_for_mystery_set("sorrowful"), 13)
 	assert_eq(loader.get_starting_spread_for_mystery_set("glorious"), 18)
+
+	# 2026 Easter Sunday is April 5, 2026
+	var easter_2026: Dictionary = loader.compute_easter_sunday(2026)
+	assert_eq(int(easter_2026["month"]), 4)
+	assert_eq(int(easter_2026["day"]), 5)
+
+	# Lenten Sundays in 2026: Feb 22 (1st Sunday of Lent) through March 29 (Palm Sunday) -> Sorrowful
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 2, 22), "sorrowful", "1st Sunday of Lent 2026 must be sorrowful")
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 3, 29), "sorrowful", "Palm Sunday 2026 must be sorrowful")
+
+	# Easter Sunday (April 5, 2026) & Ordinary Time Sunday (July 12, 2026) -> Glorious
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 4, 5), "glorious", "Easter Sunday 2026 must be glorious")
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 7, 12), "glorious", "Ordinary Time Sunday must be glorious")
+
+	# Advent Sunday (Nov 29, 2026) & Christmas Season Sunday (Jan 11, 2026) -> Joyful
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 11, 29), "joyful", "1st Sunday of Advent 2026 must be joyful")
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 12, 27), "joyful", "Holy Family Sunday 2026 must be joyful")
+	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 1, 11), "joyful", "Baptism of the Lord Sunday 2026 must be joyful")
+
