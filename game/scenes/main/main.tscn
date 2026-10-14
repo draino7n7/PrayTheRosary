@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d1e2f3g4h5i6j"]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/ui/navigation_drawer.tscn" id="2_nav_drawer"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_scroll"]
 
@@ -38,3 +39,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
+
+[node name="NavigationDrawer" parent="." instance=ExtResource("2_nav_drawer")]
+

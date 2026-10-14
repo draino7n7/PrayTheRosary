@@ -28,6 +28,7 @@ var _is_initialized: bool = false
 @onready var background: ColorRect = get_node_or_null("Background") as ColorRect
 @onready var scroll_container: ScrollContainer = get_node_or_null("ScrollContainer") as ScrollContainer
 @onready var page_container: VBoxContainer = get_node_or_null("ScrollContainer/PageContainer") as VBoxContainer
+@onready var navigation_drawer: NavigationDrawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
 
 
 func _ready() -> void:
@@ -37,6 +38,7 @@ func _ready() -> void:
 	_ensure_initialized()
 	_setup_save_timer()
 	_setup_scroll_listening()
+	_setup_navigation_drawer()
 
 	if _page_cards.is_empty():
 		build_scroll_stream()
@@ -56,6 +58,8 @@ func _ensure_initialized() -> void:
 		page_container = get_node_or_null("ScrollContainer/PageContainer") as VBoxContainer
 	if background == null:
 		background = get_node_or_null("Background") as ColorRect
+	if navigation_drawer == null:
+		navigation_drawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
 
 	if progress_manager == null:
 		progress_manager = ReadingProgressManager.new()
@@ -67,6 +71,21 @@ func _ensure_initialized() -> void:
 		data_loader.load_all()
 
 	_is_initialized = true
+
+
+func _setup_navigation_drawer() -> void:
+	_ensure_initialized()
+	if scroll_container != null:
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
+	if navigation_drawer != null:
+		navigation_drawer.set_data_loader(data_loader)
+		navigation_drawer.set_progress_manager(progress_manager)
+		if not navigation_drawer.page_requested.is_connected(_on_navigation_drawer_page_requested):
+			navigation_drawer.page_requested.connect(_on_navigation_drawer_page_requested)
+		if not navigation_drawer.drawer_opened.is_connected(_on_drawer_opened):
+			navigation_drawer.drawer_opened.connect(_on_drawer_opened)
+		if not navigation_drawer.drawer_closed.is_connected(_on_drawer_closed):
+			navigation_drawer.drawer_closed.connect(_on_drawer_closed)
 
 
 func _setup_save_timer() -> void:
@@ -150,6 +169,8 @@ func scroll_to_page(page_number: int, animate: bool = true) -> void:
 	_update_virtualization(_current_page)
 	if progress_manager != null:
 		progress_manager.save_progress(_current_page)
+	if navigation_drawer != null:
+		navigation_drawer.set_saved_page(_current_page)
 	page_changed.emit(_current_page)
 
 	if scroll_container == null:
@@ -226,6 +247,8 @@ func _on_scroll_value_changed(_value: float) -> void:
 	if active_page != _current_page:
 		_current_page = active_page
 		_update_virtualization(_current_page)
+		if navigation_drawer != null:
+			navigation_drawer.set_saved_page(_current_page)
 		page_changed.emit(_current_page)
 
 		if _save_timer != null:
@@ -239,6 +262,20 @@ func _on_save_timer_timeout() -> void:
 
 func _on_jump_requested(target_page: int) -> void:
 	scroll_to_page(target_page, true)
+
+
+func _on_navigation_drawer_page_requested(target_page: int) -> void:
+	scroll_to_page(target_page, true)
+
+
+func _on_drawer_opened() -> void:
+	if scroll_container != null:
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _on_drawer_closed() -> void:
+	if scroll_container != null:
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 func _update_virtualization(active_page: int) -> void:
@@ -270,3 +307,8 @@ func get_stream_elements() -> Array[Node]:
 
 func get_current_page() -> int:
 	return _current_page
+
+
+func get_navigation_drawer() -> NavigationDrawer:
+	return navigation_drawer
+
