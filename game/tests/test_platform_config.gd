@@ -8,6 +8,7 @@ func test_android_and_web_export_presets() -> void:
 	
 	var content := file.get_as_text()
 	
+	assert_true("package/unique_name=\"games.audrain.praytherosary\"" in content, "Android package unique name should be games.audrain.praytherosary.")
 	assert_true("screen/immersive_mode=false" in content, "Immersive mode should be disabled (false) to avoid safe area cutoffs.")
 	assert_true("include_filter=" in content and "*.json" in content, "include_filter should contain '*.json'.")
 	assert_true("name=\"Web\"" in content, "Web export preset should exist.")
