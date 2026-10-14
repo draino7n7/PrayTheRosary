@@ -85,6 +85,8 @@ func test_page_1_front_cover_card() -> void:
 	assert_not_null(cover_tex_rect, "CoverTexture must exist")
 	assert_not_null(title_lbl, "TitleLabel must exist")
 	assert_not_null(subtitle_lbl, "SubtitleLabel must exist")
+	assert_true(title_lbl.get_theme_font_size("font_size") >= 34, "Cover title font size must be >= 34pt")
+	assert_true(subtitle_lbl.get_theme_font_size("font_size") >= 22, "Cover subtitle font size must be >= 22pt")
 
 	# Verify vertical layout hierarchy separation
 	assert_eq(header_c.get_parent(), artwork_c.get_parent(), "Header and Artwork containers must share the same vertical container parent")
@@ -152,6 +154,8 @@ func test_cover_page_card_dedicated_header_and_framed_artwork() -> void:
 	var subtitle_lbl: Label = cover.subtitle_label
 	assert_not_null(title_lbl, "Title label must exist")
 	assert_not_null(subtitle_lbl, "Subtitle label must exist")
+	assert_true(title_lbl.get_theme_font_size("font_size") >= 34, "Cover title font size must be >= 34pt")
+	assert_true(subtitle_lbl.get_theme_font_size("font_size") >= 22, "Cover subtitle font size must be >= 22pt")
 
 	var title_rect: Rect2 = title_lbl.get_global_rect()
 	var subtitle_rect: Rect2 = subtitle_lbl.get_global_rect()
@@ -187,6 +191,12 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_eq(card2.get_subheading_text(), "Origins of the Gospel Prayer of the Church", "Page 2 subheading must match")
 	var fmc2: FrontMatterPageCard = card2.get_sub_card() as FrontMatterPageCard
 	assert_eq(fmc2.get_section_count(), 3, "Page 2 must render 3 historical sections")
+	assert_true(fmc2.subheading_label.get_theme_font_size("font_size") >= 22, "Page 2 subheading font size must be >= 22pt")
+	assert_true(fmc2.heading_label.get_theme_font_size("font_size") >= 34, "Page 2 heading font size must be >= 34pt")
+	var sec_title2: Label = fmc2.sections_container.get_child(0).get_node("SectionTitle") as Label
+	var sec_body2: Label = fmc2.sections_container.get_child(0).get_node("SectionBody") as Label
+	assert_true(sec_title2.get_theme_font_size("font_size") >= 23, "Page 2 section title font size must be >= 23pt (was 21pt)")
+	assert_true(sec_body2.get_theme_font_size("font_size") >= 20, "Page 2 section body font size must be >= 20pt (was 16pt)")
 	_assert_no_visible_page_numbers(card2, 2)
 	card2.free()
 
@@ -202,6 +212,12 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_eq(card3.get_subheading_text(), "Praying with Scripture, Prayer, and Sacred Art", "Page 3 subheading must match")
 	var fmc3: FrontMatterPageCard = card3.get_sub_card() as FrontMatterPageCard
 	assert_eq(fmc3.get_section_count(), 3, "Page 3 must render 3 instructional sections")
+	assert_true(fmc3.subheading_label.get_theme_font_size("font_size") >= 22, "Page 3 subheading font size must be >= 22pt")
+	assert_true(fmc3.heading_label.get_theme_font_size("font_size") >= 34, "Page 3 heading font size must be >= 34pt")
+	var sec_title3: Label = fmc3.sections_container.get_child(0).get_node("SectionTitle") as Label
+	var sec_body3: Label = fmc3.sections_container.get_child(0).get_node("SectionBody") as Label
+	assert_true(sec_title3.get_theme_font_size("font_size") >= 23, "Page 3 section title font size must be >= 23pt (was 21pt)")
+	assert_true(sec_body3.get_theme_font_size("font_size") >= 20, "Page 3 section body font size must be >= 20pt (was 16pt)")
 	_assert_no_visible_page_numbers(card3, 3)
 	card3.free()
 
@@ -220,6 +236,10 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	assert_eq(card4.get_heading_text(), "The Opening Prayers", "Page 4 heading must match")
 	var psc4: PrayerSequencePageCard = card4.get_sub_card() as PrayerSequencePageCard
 	assert_eq(psc4.get_step_count(), 5, "Page 4 must render 5 introductory prayer steps")
+	assert_true(psc4.subheading_label.get_theme_font_size("font_size") >= 22, "Page 4 subheading font size must be >= 22pt")
+	assert_true(psc4.heading_label.get_theme_font_size("font_size") >= 34, "Page 4 heading font size must be >= 34pt")
+	var p4_text: Label = psc4.steps_container.get_child(0).get_node("PrayerText") as Label
+	assert_true(p4_text.get_theme_font_size("font_size") >= 18, "Page 4 PrayerText font size must be >= 18pt (was 14pt)")
 	_assert_no_visible_page_numbers(card4, 4)
 	card4.free()
 
@@ -234,6 +254,10 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	assert_eq(card46.get_heading_text(), "The Closing Prayers", "Page 46 heading must match")
 	var psc46: PrayerSequencePageCard = card46.get_sub_card() as PrayerSequencePageCard
 	assert_eq(psc46.get_step_count(), 4, "Page 46 must render 4 concluding prayer steps")
+	assert_true(psc46.subheading_label.get_theme_font_size("font_size") >= 22, "Page 46 subheading font size must be >= 22pt")
+	assert_true(psc46.heading_label.get_theme_font_size("font_size") >= 34, "Page 46 heading font size must be >= 34pt")
+	var p46_text: Label = psc46.steps_container.get_child(0).get_node("PrayerText") as Label
+	assert_true(p46_text.get_theme_font_size("font_size") >= 22, "Page 46 PrayerText font size must be >= 22pt (was 14pt)")
 	_assert_no_visible_page_numbers(card46, 46)
 	card46.free()
 
@@ -267,6 +291,19 @@ func test_all_twenty_mystery_prayer_cards() -> void:
 
 		var mpc: MysteryPrayerPageCard = card.get_sub_card() as MysteryPrayerPageCard
 		assert_true(mpc.get_fruit_text().begins_with("Fruit of the Mystery: "), "Page %d fruit must have callout prefix" % p_num)
+		assert_true(mpc.subheading_label.get_theme_font_size("font_size") >= 22, "Page %d subheading font size must be >= 22pt" % p_num)
+		assert_true(mpc.heading_label.get_theme_font_size("font_size") >= 34, "Page %d heading font size must be >= 34pt" % p_num)
+		assert_true(mpc.fruit_label.get_theme_font_size("font_size") >= 17, "Page %d FruitLabel font size must be >= 17pt" % p_num)
+		assert_true(mpc.scripture_citation_label.get_theme_font_size("font_size") >= 16, "Page %d ScriptureCitationLabel font size must be >= 16pt" % p_num)
+		assert_true(mpc.scripture_text_label.get_theme_font_size("font_size") >= 20, "Page %d ScriptureTextLabel font size must be >= 20pt (was 14pt)" % p_num)
+		assert_true(mpc.meditation_label.get_theme_font_size("font_size") >= 20, "Page %d MeditationLabel font size must be >= 20pt (was 14pt)" % p_num)
+
+		for child: Node in mpc.decade_prayers_container.get_children():
+			var p_vbox: VBoxContainer = child as VBoxContainer
+			var rubric_lbl: Label = p_vbox.get_node("DecadeRubric") as Label
+			var prayer_lbl: Label = p_vbox.get_node("PrayerText") as Label
+			assert_true(rubric_lbl.get_theme_font_size("font_size") >= 16, "Page %d DecadeRubric font size must be >= 16pt (was 14pt)" % p_num)
+			assert_true(prayer_lbl.get_theme_font_size("font_size") >= 20, "Page %d PrayerText font size must be >= 20pt (was 13pt)" % p_num)
 
 		_assert_no_visible_page_numbers(card, p_num)
 		card.free()
@@ -306,6 +343,8 @@ func test_all_twenty_two_artwork_cards() -> void:
 
 		var apc: ArtworkPageCard = card.get_sub_card() as ArtworkPageCard
 		assert_false(apc.has_caption(), "Artwork page %d must have strictly NO caption" % p_num)
+		assert_true(apc.subheading_label.get_theme_font_size("font_size") >= 22, "Artwork page %d subheading font size must be >= 22pt" % p_num)
+		assert_true(apc.heading_label.get_theme_font_size("font_size") >= 34, "Artwork page %d heading font size must be >= 34pt" % p_num)
 		_assert_no_visible_page_numbers(card, p_num)
 		card.free()
 
@@ -324,6 +363,12 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_eq(card48.get_heading_text(), "Sacred Artwork Credits (Part I)", "Page 48 heading must match")
 	var cpc48: CreditsPageCard = card48.get_sub_card() as CreditsPageCard
 	assert_eq(cpc48.get_attribution_count(), 13, "Page 48 must list 13 artwork attributions")
+	assert_true(cpc48.subheading_label.get_theme_font_size("font_size") >= 22, "Page 48 subheading font size must be >= 22pt")
+	assert_true(cpc48.heading_label.get_theme_font_size("font_size") >= 34, "Page 48 heading font size must be >= 34pt")
+	var title48: Label = cpc48.credits_container.get_child(0).get_node("Title") as Label
+	var details48: Label = cpc48.credits_container.get_child(0).get_node("Details") as Label
+	assert_true(title48.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
+	assert_true(details48.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
 	_assert_no_visible_page_numbers(card48, 48)
 	card48.free()
 
@@ -338,6 +383,14 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_eq(card49.get_heading_text(), "Sacred Artwork Credits (Part II) & Colophon", "Page 49 heading must match")
 	var cpc49: CreditsPageCard = card49.get_sub_card() as CreditsPageCard
 	assert_eq(cpc49.get_attribution_count(), 10, "Page 49 must list 10 artwork attributions")
+	assert_true(cpc49.subheading_label.get_theme_font_size("font_size") >= 22, "Page 49 subheading font size must be >= 22pt")
+	assert_true(cpc49.heading_label.get_theme_font_size("font_size") >= 34, "Page 49 heading font size must be >= 34pt")
+	var title49: Label = cpc49.credits_container.get_child(0).get_node("Title") as Label
+	var details49: Label = cpc49.credits_container.get_child(0).get_node("Details") as Label
+	assert_true(title49.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
+	assert_true(details49.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+	assert_true(cpc49.scripture_notice_label.get_theme_font_size("font_size") >= 13, "Colophon scripture notice must be >= 13pt (was 12pt)")
+	assert_true(cpc49.colophon_notice_label.get_theme_font_size("font_size") >= 13, "Colophon artwork notice must be >= 13pt (was 11pt)")
 	_assert_no_visible_page_numbers(card49, 49)
 	card49.free()
 
@@ -356,6 +409,13 @@ func test_page_50_back_cover_card() -> void:
 	assert_true(card.get_sub_card() is BackCoverPageCard, "Sub card must be BackCoverPageCard")
 	assert_eq(card.get_heading_text(), "PRAY THE ROSARY", "Back cover title must match")
 	assert_true(card.get_subheading_text().contains("Twenty Mysteries"), "Back cover subtitle must match")
+
+	var bcc: BackCoverPageCard = card.get_sub_card() as BackCoverPageCard
+	assert_true(bcc.title_label.get_theme_font_size("font_size") >= 34, "Back cover title font size must be >= 34pt")
+	assert_true(bcc.subtitle_label.get_theme_font_size("font_size") >= 22, "Back cover subtitle font size must be >= 22pt")
+	assert_true(bcc.epigraph_quote_label.get_theme_font_size("font_size") >= 20, "Back cover epigraph quote font size must be >= 20pt (was 16pt)")
+	assert_true(bcc.synopsis_label.get_theme_font_size("font_size") >= 18, "Back cover synopsis font size must be >= 18pt (was 15pt)")
+	assert_true(bcc.counsel_quote_label.get_theme_font_size("font_size") >= 20, "Back cover counsel quote font size must be >= 20pt (was 16pt)")
 
 	_assert_no_visible_page_numbers(card, 50)
 	card.free()
@@ -378,9 +438,137 @@ func test_all_fifty_pages_hydrate_cleanly() -> void:
 		assert_eq(card.page_number, expected_page_num, "Card %d page_number must match" % expected_page_num)
 		assert_not_null(card.get_sub_card(), "Card %d must instantiate a sub card" % expected_page_num)
 		assert_true(abs(card.ratio - (2.0 / 3.0)) < 0.001, "Card %d must have 2:3 ratio" % expected_page_num)
+
+		var req_h: float = _calculate_page_content_required_height(card.get_sub_card(), p_data, loader)
+		assert_true(req_h <= 1080.0, "Page %d content required height (%.1fpx) must not exceed 1080px (zero overflow)" % [expected_page_num, req_h])
+
 		_assert_no_visible_page_numbers(card, expected_page_num)
 
 		card.free()
+
+
+func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictionary, loader: RosaryDataLoader) -> float:
+	var font_bold: Font = load("res://assets/fonts/EBGaramond-Bold.ttf") as Font
+	var font_italic: Font = load("res://assets/fonts/EBGaramond-Italic.ttf") as Font
+	var font_reg: Font = load("res://assets/fonts/EBGaramond-Regular.ttf") as Font
+	var width: float = 656.0 # 720 - 64 margins
+	var total_h: float = 64.0 # 32 top + 32 bottom margins
+
+	if sub is FrontMatterPageCard:
+		total_h += font_italic.get_height(22) + 6.0
+		total_h += font_bold.get_height(34) + 6.0
+		total_h += 2.0 + 20.0
+		var sections: Array = p_data.get("sections", [])
+		var total_chars: int = 0
+		for s_val: Variant in sections:
+			if s_val is Dictionary:
+				total_chars += str((s_val as Dictionary).get("body", "")).length()
+		var body_sz: int = 22 if total_chars <= 1600 else 20
+		var title_sz: int = body_sz + 3
+		for s_val: Variant in sections:
+			if s_val is Dictionary:
+				var s: Dictionary = s_val as Dictionary
+				total_h += font_bold.get_height(title_sz) + 6.0
+				total_h += font_reg.get_multiline_string_size(str(s.get("body", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+				total_h += 16.0
+	elif sub is PrayerSequencePageCard:
+		total_h += font_italic.get_height(22) + 4.0
+		total_h += font_bold.get_height(34) + 4.0
+		total_h += 2.0 + 14.0
+		var steps: Array = p_data.get("prayer_steps", [])
+		var is_5: bool = steps.size() >= 5
+		var body_sz: int = 19 if is_5 else 23
+		var rubric_sz: int = 16 if is_5 else 18
+		var title_sz: int = 20 if is_5 else 24
+		for s_val: Variant in steps:
+			if not (s_val is Dictionary):
+				continue
+			var s: Dictionary = s_val as Dictionary
+			var bead: String = str(s.get("bead_label", ""))
+			var rubric: String = str(s.get("rubric", ""))
+			var rtext: String = "[%s] %s" % [bead, rubric] if bead != "" else rubric
+			if rtext != "":
+				total_h += font_italic.get_multiline_string_size(rtext, HORIZONTAL_ALIGNMENT_LEFT, width, rubric_sz).y + 3.0
+			var p: Dictionary = s.get("prayer", {})
+			if p.is_empty():
+				p = loader.get_prayer(str(s.get("prayer_id", "")))
+			if str(p.get("title", "")) != "":
+				total_h += font_bold.get_height(title_sz) + 3.0
+			if str(p.get("text", "")) != "":
+				total_h += font_reg.get_multiline_string_size(str(p.get("text", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			total_h += 10.0
+	elif sub is MysteryPrayerPageCard:
+		total_h += font_italic.get_height(22) + 4.0
+		total_h += font_bold.get_height(34) + 4.0
+		total_h += font_italic.get_height(18) + 8.0 + 4.0
+		total_h += 2.0 + 10.0
+		var mys: Dictionary = p_data.get("mystery", {})
+		var scrip_str: String = str(mys.get("scripture_text", ""))
+		var med_str: String = str(mys.get("meditation", ""))
+		var t_len: int = scrip_str.length() + med_str.length()
+		var body_sz: int = 24
+		if t_len > 580:
+			body_sz = 22
+		elif t_len > 480:
+			body_sz = 23
+		var rubric_sz: int = 17 if body_sz <= 22 else 18
+		total_h += font_bold.get_height(17) + 2.0
+		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
+		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 10.0
+		var dec: Array = p_data.get("decade_prayers", [])
+		for p_item_val: Variant in dec:
+			if not (p_item_val is Dictionary):
+				continue
+			var p_item: Dictionary = p_item_val as Dictionary
+			total_h += font_bold.get_height(rubric_sz) + 2.0
+			var p_dict: Dictionary = p_item.get("prayer", {})
+			if p_dict.is_empty():
+				p_dict = loader.get_prayer(str(p_item.get("prayer_id", "")))
+			total_h += font_reg.get_multiline_string_size(str(p_dict.get("text", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			total_h += 8.0
+	elif sub is CreditsPageCard:
+		total_h += font_italic.get_height(22) + 4.0
+		total_h += font_bold.get_height(34) + 4.0
+		total_h += 2.0 + 10.0
+		var artworks: Array = p_data.get("attributions", [])
+		if artworks.is_empty():
+			for aid: Variant in p_data.get("attribution_ids", []):
+				artworks.append(loader.get_artwork(str(aid)))
+		for art_val: Variant in artworks:
+			if not (art_val is Dictionary):
+				continue
+			var art: Dictionary = art_val as Dictionary
+			total_h += font_bold.get_height(17) + 1.0
+			var details: String = "%s (%s), %s • %s • %s" % [
+				str(art.get("artist", "")),
+				str(art.get("artist_dates", "")),
+				str(art.get("creation_date", "")),
+				str(art.get("medium", "")),
+				str(art.get("current_location", ""))
+			]
+			total_h += font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, width, 15).y + 6.0
+		var colophon: Dictionary = p_data.get("colophon", {})
+		if not colophon.is_empty():
+			total_h += 10.0 + 1.0 + 6.0
+			total_h += font_italic.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 14).y + 6.0
+			total_h += font_reg.get_multiline_string_size(str(colophon.get("artwork_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 14).y
+	elif sub is BackCoverPageCard:
+		var inner_w: float = 720.0 - (12.0 + 22.0) * 2.0
+		total_h = (12.0 + 26.0) * 2.0
+		total_h += font_bold.get_height(38) + 8.0
+		total_h += font_italic.get_multiline_string_size("A Contemplative Visual Guide to the Twenty Mysteries", HORIZONTAL_ALIGNMENT_CENTER, inner_w, 22).y + 8.0
+		total_h += 2.0 + 24.0
+		var epi: Dictionary = p_data.get("epigraph", {})
+		total_h += font_italic.get_multiline_string_size("“%s”" % str(epi.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 22).y + 6.0
+		total_h += font_reg.get_height(17) + 24.0
+		total_h += font_reg.get_multiline_string_size(str(p_data.get("synopsis", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 20).y + 24.0
+		var coun: Dictionary = p_data.get("marian_counsel", {})
+		total_h += font_italic.get_multiline_string_size("“%s”" % str(coun.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 22).y + 6.0
+		total_h += font_reg.get_height(17)
+	else:
+		total_h = 1080.0
+
+	return total_h
 
 
 func _assert_no_visible_page_numbers(node: Node, page_num: int) -> void:

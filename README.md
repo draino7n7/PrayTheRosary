@@ -30,6 +30,7 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 
 The UI is built around a modular page card component architecture designed for the continuous 50-page vertical scroll:
 - **Unified Root Facade (`game/scenes/ui/page_card.tscn` / `game/scripts/ui/page_card.gd`):** Uses Godot's `AspectRatioContainer` (`ratio = 2.0 / 3.0`) to enforce a clean 2:3 portrait card geometry across mobile, tablet, and desktop display viewports.
+- **Standardized Margins & Maximized Typography:** Card scenes feature uniform 32px margins, enlarged headers (34–38pt headings, 22–24pt subheadings), and dynamic body text auto-fitting (19–23pt) configured to fill the 720×1080 canvas with zero text clipping or internal scrolling.
 - **Specialized Sub-Cards (`game/scenes/ui/pages/`):** Dynamically instantiates the appropriate sub-card component for each page type:
   - `CoverPageCard`: Dedicated top header band with framed Murillo painting below, ensuring text never overlaps the sacred artwork.
   - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels.

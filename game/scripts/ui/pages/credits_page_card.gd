@@ -57,6 +57,7 @@ func _apply_page_data() -> void:
 			var art: Dictionary = art_val
 			var art_vbox: VBoxContainer = VBoxContainer.new()
 			art_vbox.name = "Attribution_%s" % str(art.get("id", ""))
+			art_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			art_vbox.add_theme_constant_override("separation", 1)
 
 			var title_lbl: Label = Label.new()
@@ -64,7 +65,7 @@ func _apply_page_data() -> void:
 			title_lbl.text = str(art.get("title", ""))
 			if font_bold != null:
 				title_lbl.add_theme_font_override("font", font_bold)
-			title_lbl.add_theme_font_size_override("font_size", 13)
+			title_lbl.add_theme_font_size_override("font_size", 17)
 			title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 			art_vbox.add_child(title_lbl)
 
@@ -80,8 +81,9 @@ func _apply_page_data() -> void:
 			details_lbl.text = details
 			if font_reg != null:
 				details_lbl.add_theme_font_override("font", font_reg)
-			details_lbl.add_theme_font_size_override("font_size", 11)
+			details_lbl.add_theme_font_size_override("font_size", 15)
 			details_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			details_lbl.add_theme_constant_override("line_spacing", 2)
 			details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			art_vbox.add_child(details_lbl)
 
@@ -95,8 +97,10 @@ func _apply_page_data() -> void:
 			colophon_container.visible = true
 			if scripture_notice_label != null:
 				scripture_notice_label.text = str(colophon.get("scripture_notice", ""))
+				scripture_notice_label.add_theme_font_size_override("font_size", 14)
 			if colophon_notice_label != null:
 				colophon_notice_label.text = str(colophon.get("artwork_notice", ""))
+				colophon_notice_label.add_theme_font_size_override("font_size", 14)
 
 
 func get_attribution_count() -> int:
