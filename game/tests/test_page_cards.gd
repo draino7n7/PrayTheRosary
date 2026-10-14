@@ -195,8 +195,10 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_true(fmc2.heading_label.get_theme_font_size("font_size") >= 34, "Page 2 heading font size must be >= 34pt")
 	var sec_title2: Label = fmc2.sections_container.get_child(0).get_node("SectionTitle") as Label
 	var sec_body2: Label = fmc2.sections_container.get_child(0).get_node("SectionBody") as Label
-	assert_true(sec_title2.get_theme_font_size("font_size") >= 23, "Page 2 section title font size must be >= 23pt (was 21pt)")
-	assert_true(sec_body2.get_theme_font_size("font_size") >= 20, "Page 2 section body font size must be >= 20pt (was 16pt)")
+	var sec3_body2: Label = fmc2.sections_container.get_child(2).get_node("SectionBody") as Label
+	assert_eq(sec_title2.get_theme_font_size("font_size"), 25, "Page 2 section title font size must be 25pt")
+	assert_eq(sec_body2.get_theme_font_size("font_size"), 22, "Page 2 section body font size must be 22pt")
+	assert_true(sec3_body2.text.contains("instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."), "Page 2 Section 3 must display updated 1571/1573 feast note")
 	_assert_no_visible_page_numbers(card2, 2)
 	card2.free()
 
@@ -416,6 +418,7 @@ func test_page_50_back_cover_card() -> void:
 	assert_true(bcc.epigraph_quote_label.get_theme_font_size("font_size") >= 20, "Back cover epigraph quote font size must be >= 20pt (was 16pt)")
 	assert_true(bcc.synopsis_label.get_theme_font_size("font_size") >= 18, "Back cover synopsis font size must be >= 18pt (was 15pt)")
 	assert_true(bcc.counsel_quote_label.get_theme_font_size("font_size") >= 20, "Back cover counsel quote font size must be >= 20pt (was 16pt)")
+	assert_true(bcc.counsel_quote_label.text.contains("become a formal heretic or be led astray by the devil."), "Back cover counsel quote must include full verbatim Montfort text")
 
 	_assert_no_visible_page_numbers(card, 50)
 	card.free()
@@ -463,7 +466,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 		for s_val: Variant in sections:
 			if s_val is Dictionary:
 				total_chars += str((s_val as Dictionary).get("body", "")).length()
-		var body_sz: int = 22 if total_chars <= 1600 else 20
+		var body_sz: int = 22 if total_chars <= 1650 else 20
 		var title_sz: int = body_sz + 3
 		for s_val: Variant in sections:
 			if s_val is Dictionary:

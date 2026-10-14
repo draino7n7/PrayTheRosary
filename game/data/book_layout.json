@@ -201,7 +201,7 @@
 					},
 					{
 						"title": "Pope St. Pius V & The Twenty Mysteries",
-						"body": "In 1569, Pope St. Pius V formally established the traditional form of the fifteen Joyful, Sorrowful, and Glorious Mysteries in his papal bull Consueverunt Romani Pontifices, and in 1571 instituted the Feast of Our Lady of the Rosary. More than four centuries later, in his 2002 Apostolic Letter Rosarium Virginis Mariae, Pope St. John Paul II enriched this heritage by introducing the five Luminous Mysteries (the Mysteries of Light), inviting Christians to contemplate the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."
+						"body": "In 1569, Pope St. Pius V formally established the traditional form of the fifteen Joyful, Sorrowful, and Glorious Mysteries in his papal bull Consueverunt Romani Pontifices, and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573). More than four centuries later, in his 2002 Apostolic Letter Rosarium Virginis Mariae, Pope St. John Paul II enriched this heritage by introducing the five Luminous Mysteries (the Mysteries of Light), inviting Christians to contemplate the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."
 					}
 				]
 			},
@@ -548,7 +548,7 @@
 					"creation_date": "c. 1678",
 					"medium": "Oil on canvas",
 					"current_location": "Museo del Prado, Madrid, Spain",
-					"inventory_number": "P00972",
+					"inventory_number": "P02809",
 					"master_file": "assets/2D/gimp/original_downloads/closing_master_murillo_immaculate_conception.jpg",
 					"runtime_texture_path": "res://assets/images/closing_prayers.webp"
 				}
@@ -625,7 +625,7 @@
 		},
 		"synopsis": "Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers, Sacred Scripture passages, and spiritual fruits of all twenty Mysteries on the left-hand page with twenty-three breathtaking Renaissance and Baroque masterworks on the right-hand page. Whether used for quiet personal contemplation, family prayer, or learning the Rosary for the first time, this volume invites you to gaze upon the face of Christ with the heart of His Blessed Mother.",
 		"marian_counsel": {
-			"quote": "Never will anyone who says his Rosary every day be led astray. This is a statement that I would gladly sign with my blood.",
+			"quote": "Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood.",
 			"attribution": "St. Louis Marie de Montfort, The Secret of the Rosary"
 		}
 	}

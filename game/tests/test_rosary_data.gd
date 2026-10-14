@@ -202,3 +202,144 @@ func test_weekday_mystery_recommendations() -> void:
 	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 12, 27), "joyful", "Holy Family Sunday 2026 must be joyful")
 	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 1, 11), "joyful", "Baptism of the Lord Sunday 2026 must be joyful")
 
+
+func test_douay_rheims_citations_and_verbatim_texts() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	# Joyful 4: Luke 2:28 bracketed subject
+	var j4: Dictionary = loader.get_mystery_by_id("joyful_4_presentation")
+	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32 (Douay-Rheims)")
+	assert_true(str(j4.get("scripture_text", "")).contains("[Then Simeon] took him into his arms"), "Joyful 4 Luke 2:28 must use bracketed subject '[Then Simeon] took him into his arms'")
+
+	# Luminous 4: Luke 9:29-31, 35 and verbatim 'hear him.'
+	var l4: Dictionary = loader.get_mystery_by_id("luminous_4_transfiguration")
+	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35 (Douay-Rheims)")
+	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son; hear him."), "Luminous 4 Luke 9:35 must end with verbatim DRBO 'hear him.'")
+	assert_false(str(l4.get("scripture_text", "")).contains("hear ye him"), "Luminous 4 must not contain KJV 'hear ye him'")
+
+	# Sorrowful 2: Isaias (Isaiah) 53:5
+	var s2: Dictionary = loader.get_mystery_by_id("sorrowful_2_scourging")
+	assert_eq(str(s2.get("scripture_reference", "")), "John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)")
+
+	# Sorrowful 4: Citation order matching passage order (John 19:17; Luke 23:26-27)
+	var s4: Dictionary = loader.get_mystery_by_id("sorrowful_4_carrying_cross")
+	assert_eq(str(s4.get("scripture_reference", "")), "John 19:17; Luke 23:26–27 (Douay-Rheims)")
+
+	# Sorrowful 5: Luke 23:46 'crying out with a loud voice'
+	var s5: Dictionary = loader.get_mystery_by_id("sorrowful_5_crucifixion")
+	assert_true(str(s5.get("scripture_text", "")).contains("And Jesus crying out with a loud voice, said:"), "Sorrowful 5 Luke 23:46 must include 'out' in 'crying out with a loud voice'")
+
+	# Glorious 2: Separated Luke 24:50-52 and Acts 1:9 in canonical order with ellipses
+	var g2: Dictionary = loader.get_mystery_by_id("glorious_2_ascension")
+	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–52; Acts 1:9 (Douay-Rheims)")
+	assert_eq(
+		str(g2.get("scripture_text", "")),
+		"And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight."
+	)
+
+	# Glorious 4: Citation order matching passage order (Judith 15:10; Psalm 44:14, 16)
+	var g4: Dictionary = loader.get_mystery_by_id("glorious_4_assumption")
+	assert_eq(str(g4.get("scripture_reference", "")), "Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)")
+
+	# Glorious 5: Ecclesiasticus (Sirach) 24:7
+	var g5: Dictionary = loader.get_mystery_by_id("glorious_5_coronation")
+	assert_eq(str(g5.get("scripture_reference", "")), "Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)")
+
+
+func test_museum_catalog_attributions_and_synchronization() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var expected_inventory: Dictionary = {
+		"cover": "P00975",
+		"opening_prayers": "P00824",
+		"closing_prayers": "P02809",
+		"joyful_1_annunciation": "P00970",
+		"joyful_2_visitation": "y1994-17",
+		"joyful_3_nativity": "NG6270",
+		"joyful_4_presentation": "Cat. 44",
+		"joyful_5_finding_in_temple": "1952.5.47.a (NGA 41661)",
+		"luminous_1_baptism": "GG 222",
+		"luminous_2_wedding_at_cana": "59-2",
+		"luminous_3_proclamation": "King's Oratory (Kongens Bedekammer)",
+		"luminous_4_transfiguration": "OLV.0003.I",
+		"luminous_5_eucharist": "97",
+		"sorrowful_1_agony": "GG F17",
+		"sorrowful_2_scourging": "70926",
+		"sorrowful_3_crowning_with_thorns": "P01474",
+		"sorrowful_4_carrying_cross": "P00298",
+		"sorrowful_5_crucifixion": "P00967",
+		"glorious_1_resurrection": "0641",
+		"glorious_2_ascension": "25.95",
+		"glorious_3_pentecost": "P03018",
+		"glorious_4_assumption": "ГЭ-387",
+		"glorious_5_coronation": "P01168"
+	}
+
+	for art_id: String in expected_inventory.keys():
+		var art: Dictionary = loader.get_artwork(art_id)
+		assert_false(art.is_empty(), "Artwork '%s' must exist in RosaryDataLoader" % art_id)
+		assert_eq(str(art.get("inventory_number", "")), expected_inventory[art_id], "Artwork '%s' inventory_number must match museum catalog" % art_id)
+
+	assert_eq(str(loader.get_artwork("luminous_2_wedding_at_cana").get("creation_date", "")), "c. 1712–1715")
+	assert_eq(str(loader.get_artwork("luminous_5_eucharist").get("creation_date", "")), "1631–1632")
+	assert_eq(str(loader.get_artwork("glorious_3_pentecost").get("creation_date", "")), "1612–1614")
+	assert_eq(str(loader.get_artwork("glorious_4_assumption").get("current_location", "")), "State Hermitage Museum, St. Petersburg, Russia")
+	assert_eq(str(loader.get_artwork("glorious_5_coronation").get("creation_date", "")), "c. 1635–1636")
+
+	# Verify synchronization with assets/2D/gimp/attributions.json
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var attr_path: String = repo_root.path_join("assets/2D/gimp/attributions.json")
+	assert_true(FileAccess.file_exists(attr_path), "attributions.json must exist at %s" % attr_path)
+
+	var file: FileAccess = FileAccess.open(attr_path, FileAccess.READ)
+	assert_not_null(file, "Must open attributions.json")
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	assert_true(parsed is Dictionary, "attributions.json root must be Dictionary")
+
+	var images: Array = (parsed as Dictionary).get("images", [])
+	assert_eq(images.size(), 23, "attributions.json must contain all 23 master artworks")
+
+	var attr_by_id: Dictionary = {}
+	for img_val: Variant in images:
+		if img_val is Dictionary:
+			var img: Dictionary = img_val
+			var id_str: String = str(img.get("id", ""))
+			attr_by_id[id_str] = img
+			assert_ne(str(img.get("inventory_number", "")), "", "attributions.json '%s' must have non-empty inventory_number" % id_str)
+			assert_ne(str(img.get("original_dimensions", "")), "", "attributions.json '%s' must have non-empty original_dimensions" % id_str)
+
+			var runtime_art: Dictionary = loader.get_artwork(id_str)
+			assert_eq(str(img.get("inventory_number", "")), str(runtime_art.get("inventory_number", "")), "Inventory number for '%s' must match between attributions.json and runtime data" % id_str)
+			assert_eq(str(img.get("creation_date", "")), str(runtime_art.get("creation_date", "")), "Creation date for '%s' must match between attributions.json and runtime data" % id_str)
+			assert_eq(str(img.get("current_location", "")), str(runtime_art.get("current_location", "")), "Location for '%s' must match between attributions.json and runtime data" % id_str)
+
+	assert_eq(str(attr_by_id.get("joyful_2_visitation", {}).get("original_dimensions", "")), "114.5 cm × 88.5 cm")
+	assert_eq(str(attr_by_id.get("luminous_3_proclamation", {}).get("original_dimensions", "")), "104 cm × 92 cm")
+	assert_eq(str(attr_by_id.get("glorious_5_coronation", {}).get("original_dimensions", "")), "178.5 cm × 134.5 cm")
+
+
+func test_historical_feast_note_and_marian_counsel_quote() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var p2: Dictionary = loader.get_page(2)
+	var sections: Array = p2.get("sections", [])
+	assert_eq(sections.size(), 3, "Page 2 must have 3 historical sections")
+	var sec3_body: String = str((sections[2] as Dictionary).get("body", ""))
+	assert_true(
+		sec3_body.contains("and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."),
+		"Page 2 Section 3 must document the 1571 Our Lady of Victory feast and 1573 renaming"
+	)
+
+	var back: Dictionary = loader.get_back_cover()
+	var counsel: Dictionary = back.get("marian_counsel", {})
+	assert_eq(
+		str(counsel.get("quote", "")),
+		"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood.",
+		"Back cover Marian counsel quote must match St. Louis Marie de Montfort's full verbatim sentence"
+	)
+
+

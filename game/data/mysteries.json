@@ -55,7 +55,7 @@
 						"creation_date": "c. 1660",
 						"medium": "Oil on canvas",
 						"current_location": "Museo del Prado, Madrid, Spain",
-						"inventory_number": "P00969",
+						"inventory_number": "P00970",
 						"master_file": "assets/2D/gimp/original_downloads/joyful_1_annunciation_master_murillo.jpg",
 						"runtime_texture_path": "res://assets/images/joyful_1_annunciation.webp"
 					}
@@ -123,7 +123,7 @@
 					"title": "The Presentation of Jesus in the Temple",
 					"fruit": "Obedience and Purity",
 					"scripture_reference": "Luke 2:22, 28–32 (Douay-Rheims)",
-					"scripture_text": "And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord... Then Simeon took him into his arms, and blessed God, and said: Now thou dost dismiss thy servant, O Lord, according to thy word in peace; Because my eyes have seen thy salvation, Which thou hast prepared before the face of all peoples: A light to the revelation of the Gentiles, and the glory of thy people Israel.",
+					"scripture_text": "And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord... [Then Simeon] took him into his arms, and blessed God, and said: Now thou dost dismiss thy servant, O Lord, according to thy word in peace; Because my eyes have seen thy salvation, Which thou hast prepared before the face of all peoples: A light to the revelation of the Gentiles, and the glory of thy people Israel.",
 					"meditation": "In loving obedience to the Law of the Lord, Mary and Joseph offer the Infant Jesus in the Temple, where righteous Simeon recognizes the promised Redeemer.",
 					"artwork": {
 						"id": "joyful_4_presentation",
@@ -220,10 +220,10 @@
 						"title": "The Marriage at Cana",
 						"artist": "Sebastiano Ricci",
 						"artist_dates": "1659–1734",
-						"creation_date": "c. 1726",
+						"creation_date": "c. 1712–1715",
 						"medium": "Oil on canvas",
 						"current_location": "Nelson-Atkins Museum of Art, Kansas City, Missouri",
-						"inventory_number": "",
+						"inventory_number": "59-2",
 						"master_file": "assets/2D/gimp/original_downloads/luminous_2_wedding_at_cana_master_ricci.jpg",
 						"runtime_texture_path": "res://assets/images/luminous_2_wedding_at_cana.webp"
 					}
@@ -249,7 +249,7 @@
 						"creation_date": "1877",
 						"medium": "Oil on copper",
 						"current_location": "Museum of National History, Frederiksborg Castle, Hillerød, Denmark",
-						"inventory_number": "",
+						"inventory_number": "King's Oratory (Kongens Bedekammer)",
 						"master_file": "assets/2D/gimp/original_downloads/luminous_3_proclamation_master_carl_bloch.jpg",
 						"runtime_texture_path": "res://assets/images/luminous_3_proclamation.webp"
 					}
@@ -264,8 +264,8 @@
 					"ordinal_label": "The Fourth Luminous Mystery",
 					"title": "The Transfiguration",
 					"fruit": "Desire for Holiness",
-					"scripture_reference": "Luke 9:29–30, 35 (Douay-Rheims)",
-					"scripture_text": "And whilst he prayed, the shape of his countenance was altered, and his raiment became white and glittering. And behold two men were talking with him. And they were Moses and Elias, appearing in majesty... And a voice came out of the cloud, saying: This is my beloved Son; hear ye him.",
+					"scripture_reference": "Luke 9:29–31, 35 (Douay-Rheims)",
+					"scripture_text": "And whilst he prayed, the shape of his countenance was altered, and his raiment became white and glittering. And behold two men were talking with him. And they were Moses and Elias, appearing in majesty... And a voice came out of the cloud, saying: This is my beloved Son; hear him.",
 					"meditation": "On Mount Tabor, the glory of the Godhead shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.",
 					"artwork": {
 						"id": "luminous_4_transfiguration",
@@ -275,7 +275,7 @@
 						"creation_date": "c. 1520",
 						"medium": "Oil on panel",
 						"current_location": "Church of Our Lady (Onze-Lieve-Vrouwekerk), Bruges, Belgium",
-						"inventory_number": "",
+						"inventory_number": "OLV.0003.I",
 						"master_file": "assets/2D/gimp/original_downloads/luminous_4_transfiguration_master_gerard_david.jpg",
 						"runtime_texture_path": "res://assets/images/luminous_4_transfiguration.webp"
 					}
@@ -298,10 +298,10 @@
 						"title": "The Last Supper",
 						"artist": "Peter Paul Rubens",
 						"artist_dates": "1577–1640",
-						"creation_date": "1630–1631",
+						"creation_date": "1631–1632",
 						"medium": "Oil on panel",
 						"current_location": "Pinacoteca di Brera, Milan, Italy",
-						"inventory_number": "",
+						"inventory_number": "97",
 						"master_file": "assets/2D/gimp/original_downloads/luminous_5_eucharist_master_rubens.jpg",
 						"runtime_texture_path": "res://assets/images/luminous_5_eucharist.webp"
 					}
@@ -339,7 +339,7 @@
 						"creation_date": "c. 1615–1617",
 						"medium": "Oil on canvas",
 						"current_location": "Kunsthistorisches Museum, Vienna, Austria",
-						"inventory_number": "GG 9127",
+						"inventory_number": "GG F17",
 						"master_file": "assets/2D/gimp/original_downloads/sorrowful_1_agony_master_caracciolo.jpg",
 						"runtime_texture_path": "res://assets/images/sorrowful_1_agony.webp"
 					}
@@ -354,7 +354,7 @@
 					"ordinal_label": "The Second Sorrowful Mystery",
 					"title": "The Scourging at the Pillar",
 					"fruit": "Purity and Mortification of the Senses",
-					"scripture_reference": "John 19:1; Isaiah 53:5 (Douay-Rheims)",
+					"scripture_reference": "John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)",
 					"scripture_text": "Then therefore Pilate took Jesus, and scourged him... But he was wounded for our iniquities, he was bruised for our sins: the chastisement of our peace was upon him, and by his bruises we are healed.",
 					"meditation": "Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for the sins of the flesh and to heal our wounded nature.",
 					"artwork": {
@@ -365,7 +365,7 @@
 						"creation_date": "c. 1617",
 						"medium": "Oil on panel",
 						"current_location": "St. Paul's Church (Sint-Pauluskerk), Antwerp, Belgium",
-						"inventory_number": "",
+						"inventory_number": "70926",
 						"master_file": "assets/2D/gimp/original_downloads/sorrowful_2_scourging_master_rubens.jpg",
 						"runtime_texture_path": "res://assets/images/sorrowful_2_scourging.webp"
 					}
@@ -406,7 +406,7 @@
 					"ordinal_label": "The Fourth Sorrowful Mystery",
 					"title": "The Carrying of the Cross",
 					"fruit": "Patience in Trials",
-					"scripture_reference": "Luke 23:26–27; John 19:17 (Douay-Rheims)",
+					"scripture_reference": "John 19:17; Luke 23:26–27 (Douay-Rheims)",
 					"scripture_text": "And bearing his own cross, he went forth to that place which is called Calvary... And as they led him away, they laid hold of one Simon of Cyrene, coming from the country; and they laid the cross on him to carry after Jesus. And there followed him a great multitude of people, and of women, who bewailed and lamented him.",
 					"meditation": "Falling beneath the heavy wood along the Via Dolorosa, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.",
 					"artwork": {
@@ -433,7 +433,7 @@
 					"title": "The Crucifixion and Death of Our Lord",
 					"fruit": "Forgiveness of Injuries and Perseverance in Faith",
 					"scripture_reference": "Luke 23:33–34, 46 (Douay-Rheims)",
-					"scripture_text": "And when they were come to the place which is called Calvary, they crucified him there... And Jesus said: Father, forgive them, for they know not what they do... And Jesus crying with a loud voice, said: Father, into thy hands I commend my spirit. And saying this, he gave up the ghost.",
+					"scripture_text": "And when they were come to the place which is called Calvary, they crucified him there... And Jesus said: Father, forgive them, for they know not what they do... And Jesus crying out with a loud voice, said: Father, into thy hands I commend my spirit. And saying this, he gave up the ghost.",
 					"meditation": "Raised upon the Cross of Calvary, Christ pardons His executioners, entrusts us to His Blessed Mother, and pours forth His last breath for the salvation of souls.",
 					"artwork": {
 						"id": "sorrowful_5_crucifixion",
@@ -481,7 +481,7 @@
 						"creation_date": "c. 1650–1660",
 						"medium": "Oil on canvas",
 						"current_location": "Real Academia de Bellas Artes de San Fernando, Madrid, Spain",
-						"inventory_number": "0651",
+						"inventory_number": "0641",
 						"master_file": "assets/2D/gimp/original_downloads/glorious_1_resurrection_master_murillo.jpg",
 						"runtime_texture_path": "res://assets/images/glorious_1_resurrection.webp"
 					}
@@ -497,7 +497,7 @@
 					"title": "The Ascension of Our Lord into Heaven",
 					"fruit": "Christian Hope and Desire for Heaven",
 					"scripture_reference": "Luke 24:50–52; Acts 1:9 (Douay-Rheims)",
-					"scripture_text": "And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven, and a cloud received him out of their sight. And they adoring went back into Jerusalem with great joy.",
+					"scripture_text": "And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight.",
 					"meditation": "Forty days after His Resurrection, Christ ascends from the Mount of Olives to the right hand of the Father, preparing a place for us in our heavenly homeland.",
 					"artwork": {
 						"id": "glorious_2_ascension",
@@ -507,7 +507,7 @@
 						"creation_date": "1775",
 						"medium": "Oil on canvas",
 						"current_location": "Museum of Fine Arts, Boston, Massachusetts",
-						"inventory_number": "42.556",
+						"inventory_number": "25.95",
 						"master_file": "assets/2D/gimp/original_downloads/glorious_2_ascension_master_copley.jpg",
 						"runtime_texture_path": "res://assets/images/glorious_2_ascension.webp"
 					}
@@ -530,7 +530,7 @@
 						"title": "Pentecost (Pentecostés)",
 						"artist": "Juan Bautista Maíno",
 						"artist_dates": "1581–1649",
-						"creation_date": "1615–1620",
+						"creation_date": "1612–1614",
 						"medium": "Oil on canvas",
 						"current_location": "Museo del Prado, Madrid, Spain",
 						"inventory_number": "P03018",
@@ -548,7 +548,7 @@
 					"ordinal_label": "The Fourth Glorious Mystery",
 					"title": "The Assumption of the Blessed Virgin Mary",
 					"fruit": "Grace of a Happy Death and True Devotion to Mary",
-					"scripture_reference": "Psalm 44:14–16; Judith 15:10 (Douay-Rheims)",
+					"scripture_reference": "Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)",
 					"scripture_text": "Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people... All the glory of the king's daughter is within in golden borders, clothed round about with varieties... They shall be brought with gladness and rejoicing: they shall be brought into the temple of the king.",
 					"meditation": "Having completed the course of her earthly life, the Immaculate Mother of God is taken up body and soul into heavenly glory by the power of her Divine Son.",
 					"artwork": {
@@ -558,8 +558,8 @@
 						"artist_dates": "1617–1682",
 						"creation_date": "c. 1670",
 						"medium": "Oil on canvas",
-						"current_location": "State Hermitage Museum, St. Petersburg",
-						"inventory_number": "ГЭ-341",
+						"current_location": "State Hermitage Museum, St. Petersburg, Russia",
+						"inventory_number": "ГЭ-387",
 						"master_file": "assets/2D/gimp/original_downloads/glorious_4_assumption_master_murillo.jpg",
 						"runtime_texture_path": "res://assets/images/glorious_4_assumption.webp"
 					}
@@ -574,7 +574,7 @@
 					"ordinal_label": "The Fifth Glorious Mystery",
 					"title": "The Coronation of the Blessed Virgin Mary",
 					"fruit": "Trust in Mary's Intercession and Final Perseverance",
-					"scripture_reference": "Apocalypse (Revelation) 12:1; Sirach 24:4 (Douay-Rheims)",
+					"scripture_reference": "Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)",
 					"scripture_text": "And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars... I dwelt in the highest places, and my throne is in a pillar of a cloud.",
 					"meditation": "Exalted above all choirs of angels, the Blessed Virgin Mary is crowned Queen of Heaven and Earth by the Most Holy Trinity, reigning forever as our Mother and Advocate.",
 					"artwork": {
@@ -582,7 +582,7 @@
 						"title": "The Coronation of the Virgin (La coronación de la Virgen)",
 						"artist": "Diego Velázquez",
 						"artist_dates": "1599–1660",
-						"creation_date": "c. 1641–1644",
+						"creation_date": "c. 1635–1636",
 						"medium": "Oil on canvas",
 						"current_location": "Museo del Prado, Madrid, Spain",
 						"inventory_number": "P01168",

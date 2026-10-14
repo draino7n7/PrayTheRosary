@@ -49,7 +49,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 - **Borders, Dividers & Artwork Frames:** Antique Gold (`#B89130`).
 - **Front & Back Covers:**
   - **Front Cover:** Full-bleed reproduction of Bartolomé Esteban Murillo's *The Virgin of the Rosary* with the title **"Pray the Rosary"** and subtitle set in warm gold/ivory serif typography over the upper crimson drapery.
-  - **Back Cover:** Deep Baroque Crimson (`#4A1215` / `#2A090B`) background with warm gold (`#D4AF37`) borders and ivory (`#F7F2E7`) typography featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's quote.
+  - **Back Cover:** Deep Baroque Crimson (`#4A1215` / `#2A090B`) background with warm gold (`#D4AF37`) borders and ivory (`#F7F2E7`) typography featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel quote from *The Secret of the Rosary* (25th Rose).
 
 ### 3.2 Typography
 - Classical serif typeface family (**Cormorant Garamond** or **EB Garamond**, Regular, Bold, and Italic weights) used consistently across all headings, Douay-Rheims Scripture readings, meditations, and prayers.
@@ -64,7 +64,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 3. **Left-Hand Mystery Prayer Pages (`Even Page Sides 6, 8, 10, ..., 44`):**
    - Self-contained on a single $6" \times 9"$ page so the reader never turns a page mid-decade:
      - Mystery Ordinal Subtitle, Title, and **Fruit of the Mystery**
-     - Public-domain **Douay-Rheims (Challoner Revision)** Scripture passage
+     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and ordered citation (including traditional DRBO book names with modern equivalents where helpful, such as *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*)
      - 1–2 sentence Contemplative Meditation
      - Full text of the Decade Prayers (*Our Father*, *Hail Mary* with `10×` rubric, *Glory Be*, and *Fatima Prayer*)
 
@@ -72,5 +72,5 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 ## 4. Archival Master Artworks (`assets/2D/gimp/`)
 
-- **Immutable Original Downloads:** All 23 high-resolution archival master files are stored in `assets/2D/gimp/original_downloads/` and cataloged in `assets/2D/gimp/attributions.json`.
+- **Immutable Original Downloads:** All 23 high-resolution archival master files are stored in `assets/2D/gimp/original_downloads/` and cataloged in `assets/2D/gimp/attributions.json` with complete museum `inventory_number`, `original_dimensions`, `creation_date`, and `current_location` records synchronized with `game/data/mysteries.json` and `game/data/book_layout.json`.
 - **Print Prep Guidelines:** Any print-ready CMYK/300-DPI exports or GIMP `.xcf` working files must be saved in `assets/2D/gimp/` (outside `original_downloads/`), leaving the 23 files in `assets/2D/gimp/original_downloads/` untouched.

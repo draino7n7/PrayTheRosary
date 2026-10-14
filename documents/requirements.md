@@ -76,7 +76,7 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
   - `SubheadingLabel`: Standardized to **22–24pt** (>= 22pt) in EB Garamond Italic (22pt on standard cards, 24pt on BackCover subtitle).
   - `HeadingLabel`: Standardized to **34–38pt** (>= 34pt) in EB Garamond Bold (34pt on standard cards, 38pt on Cover & BackCover titles).
 - **Body Typography Auto-Fitting & Vertical Space Distribution:**
-  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density. Page 2 (1,571 chars) renders at 22pt body / 25pt section headers; Page 3 (1,704 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
+  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density (`total_chars <= 1650`). Page 2 (1,622 chars) renders at 22pt body / 25pt section headers; Page 3 (1,704 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
   - **Prayer Sequences (`Pages 4 & 46`):** Calibrated scaling: Page 4 (5 prayer steps) renders at 19pt body / 16pt rubrics / 20pt titles; Page 46 (4 prayer steps) renders at 23pt body / 18pt rubrics / 24pt titles. Prayer step containers configure `SIZE_EXPAND_FILL`.
   - **Mystery Prayers (`Pages 6, 8, ..., 44 even`):**
     - Fruit badge standardized to 18pt in gold pill box.
@@ -96,7 +96,7 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
 - Displays no visible page number on the cover. Standard 32px outer margins.
 
 ### 3.2 Type 2: Front-Matter Text Cards (`Pages 2–3`, `res://scenes/ui/pages/front_matter_page_card.tscn`, `res://scripts/ui/pages/front_matter_page_card.gd`)
-- **Page 2:** *The History of the Holy Rosary* (22pt subheading, 34pt heading, 25pt section headers, 22pt body paragraphs).
+- **Page 2:** *The History of the Holy Rosary* (22pt subheading, 34pt heading, 25pt section headers, 22pt body paragraphs), including the historical note that Pope St. Pius V in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573).
 - **Page 3:** *Structure of the Book & How to Pray* (22pt subheading, 34pt heading, 23pt section headers, 20pt body paragraphs).
 - Rendered on warm ivory parchment panels (`#FAF6EE`) with crimson titles, umber subtitles, and dark charcoal body paragraphs with 32px uniform margins and `SIZE_EXPAND_FILL` section distribution.
 
@@ -108,7 +108,7 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
 ### 3.4 Type 4: Mystery Prayer Cards (`Even Pages 6, 8, 10, ..., 44`, `res://scenes/ui/pages/mystery_prayer_page_card.tscn`, `res://scripts/ui/pages/mystery_prayer_page_card.gd`)
 Each of the 20 Mystery Prayer Cards fits comfortably on its $2:3$ portrait card with zero internal scrolling and 32px uniform margins:
 - **Header:** Ordinal subtitle (22pt italic), Mystery Title (34pt bold), and **Fruit of the Mystery** tag badge in gold pill container (18pt italic).
-- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** citation (17pt bold with gold vertical border accent) and passage (18–20pt italic).
+- **Scripture Reading:** Public-domain **Douay-Rheims (Challoner Revision)** citation (17pt bold with gold vertical border accent, using traditional DRBO book titles with modern equivalents where helpful—e.g., *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, *Apocalypse (Revelation) 12:1*—and ordered strictly to match the sequence of quoted verses) and verbatim passage (18–20pt italic).
 - **Contemplative Meditation:** 1–2 sentence reflection (20–22pt regular).
 - **Decade Prayers:** Full text of the *Our Father* (`1×`), *Hail Mary* (`10×`), *Glory Be* (`1×`), and *Fatima Prayer* (`1×`) (17–18pt bold rubric labels, 20–22pt regular prayer text).
 
@@ -121,7 +121,7 @@ Designed for distraction-free visual contemplation:
 ### 3.6 Type 6: Credits Cards (`Pages 48–49`, `res://scenes/ui/pages/credits_page_card.tscn`, `res://scripts/ui/pages/credits_page_card.gd`) & Back Cover Card (`Page 50`, `res://scenes/ui/pages/back_cover_page_card.tscn`, `res://scripts/ui/pages/back_cover_page_card.gd`)
 - **Page 48 (*Sacred Artwork Credits Part I*):** 22pt subheading, 34pt heading, 32px margins. Lists full artist, life dates, painting title, creation date, medium, and museum location for the Cover, Opening/Closing Prayers, Joyful Mysteries (1–5), and Luminous Mysteries (1–5) rendered at 17pt artwork title and 15pt details.
 - **Page 49 (*Sacred Artwork Credits Part II & Colophon*):** 22pt subheading, 34pt heading, 32px margins. Lists full credits for the Sorrowful Mysteries (1–5) and Glorious Mysteries (1–5) (17pt title / 15pt details), plus the Douay-Rheims Scripture notice (14pt italic) and museum open-access colophon (14pt regular).
-- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying title in 38pt bold gold, subtitle in 22pt italic gold, Pope St. John Paul II's epigraph in 22pt italic with 17pt attribution, the book synopsis in 20pt body text, and St. Louis Marie de Montfort's Marian counsel in 22pt italic with 17pt attribution, distributed cleanly with 24px block separation and zero overflow.
+- **Page 50 (*Back Cover*):** Deep Baroque crimson (`#4A1215`) card with antique gold border (`#D4AF37`), displaying title in 38pt bold gold, subtitle in 22pt italic gold, Pope St. John Paul II's epigraph in 22pt italic with 17pt attribution, the book synopsis in 20pt body text, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary* (25th Rose) in 22pt italic with 17pt attribution, distributed cleanly with 24px block separation and zero overflow.
 
 ---
 
@@ -215,6 +215,7 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 
 ### 5.1 Immutable Original Downloads (`assets/2D/gimp/original_downloads/`)
 - All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json`) are unmodified, byte-for-byte archival downloads.
+- Every entry in `assets/2D/gimp/attributions.json` maintains non-empty museum catalog `inventory_number` and `original_dimensions` records, and its `inventory_number`, `creation_date`, and `current_location` fields are strictly synchronized with `game/data/mysteries.json` and `game/data/book_layout.json`.
 - Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
 
 ### 5.2 Runtime Game Textures (`game/assets/images/`)

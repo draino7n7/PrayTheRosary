@@ -5,9 +5,9 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 ## About the Project
 
 *Pray The Rosary* bridges digital devotions with classical fine art and traditional book design. Designed around a two-page spread concept mirroring a 6" x 9" spiral-bound prayer book:
-- **Left Page / Side:** Clear, distraction-free prayers for each decade (Apostles' Creed, Our Father, Hail Marys, Glory Be, Fatima Prayer), alongside scriptural passages and meditative reflections. Everything needed to pray the decade is presented on a single screen without cumbersome scrolling.
-- **Right Page / Side:** Large, contemplative public-domain Sacred Art masterpieces (from renowned institutions like the National Gallery of Art and The Metropolitan Museum of Art) corresponding to each mystery.
-- **Structured Content Architecture:** All mysteries, prayers, scripture verses, and art metadata are organized as structured data, serving as the single source of truth for both the interactive application and future printed book layout exports.
+- **Left Page / Side:** Clear, distraction-free prayers for each decade (Apostles' Creed, Our Father, Hail Marys, Glory Be, Fatima Prayer), alongside verbatim public-domain Douay-Rheims (Challoner Revision) scriptural passages and meditative reflections. Everything needed to pray the decade is presented on a single screen without cumbersome scrolling.
+- **Right Page / Side:** Large, contemplative public-domain Sacred Art masterpieces (from renowned institutions like the Museo del Prado, National Gallery of Art, Kunsthistorisches Museum, and State Hermitage Museum) corresponding to each mystery.
+- **Structured Content Architecture:** All mysteries, prayers, Douay-Rheims scripture verses, and authoritative museum catalog attributions (`inventory_number`, `original_dimensions`, `creation_date`, and `current_location` across all 23 masterworks) are organized as structured data (`game/data/mysteries.json`, `game/data/book_layout.json`, and `assets/2D/gimp/attributions.json`), serving as the single source of truth for both the interactive application and printed book layout exports.
 
 ### The Four Mysteries
 1. **The Joyful Mysteries** (The Annunciation, The Visitation, The Nativity, The Presentation, The Finding in the Temple)
@@ -35,10 +35,10 @@ The UI is built around a modular page card component architecture designed for t
   - `CoverPageCard`: Dedicated top header band with framed Murillo painting below, ensuring text never overlaps the sacred artwork.
   - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels.
   - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46) prayer sequences with rubrics.
-  - `MysteryPrayerPageCard`: Decade prayers, fruit badge, scripture passage, and meditation.
+  - `MysteryPrayerPageCard`: Decade prayers, fruit badge, verbatim Douay-Rheims scripture passage, and meditation.
   - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
-  - `CreditsPageCard`: Comprehensive artwork attributions across Pages 48 and 49.
-  - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph and book synopsis.
+  - `CreditsPageCard`: Comprehensive museum catalog artwork attributions across Pages 48 and 49.
+  - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph, book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary*.
 - **Data-Driven Hydration:** Cards are hydrated directly from `RosaryDataLoader` via `PageCard.create_for_page(page_data, loader)` or `card.bind_page_data(page_data, loader)`.
 
 ---
