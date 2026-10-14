@@ -1,0 +1,89 @@
+{
+	"version": 1,
+	"translation_note": "Traditional Catholic prayers in the public domain.",
+	"prayers": {
+		"sign_of_the_cross": {
+			"id": "sign_of_the_cross",
+			"title": "The Sign of the Cross",
+			"latin_title": "Signum Crucis",
+			"text": "In the name of the Father, and of the Son, and of the Holy Spirit. Amen."
+		},
+		"apostles_creed": {
+			"id": "apostles_creed",
+			"title": "The Apostles' Creed",
+			"latin_title": "Symbolum Apostolorum",
+			"text": "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; the third day He arose again from the dead; He ascended into heaven, and is seated at the right hand of God, the Father Almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen."
+		},
+		"our_father": {
+			"id": "our_father",
+			"title": "The Lord's Prayer (Our Father)",
+			"latin_title": "Pater Noster",
+			"text": "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.",
+			"leader_text": "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven.",
+			"response_text": "Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen."
+		},
+		"hail_mary": {
+			"id": "hail_mary",
+			"title": "The Hail Mary",
+			"latin_title": "Ave Maria",
+			"text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.",
+			"leader_text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus.",
+			"response_text": "Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
+		},
+		"hail_mary_faith": {
+			"id": "hail_mary_faith",
+			"title": "First Hail Mary (For an Increase of Faith)",
+			"latin_title": "Ave Maria (Pro Fide)",
+			"intention": "For an increase in the virtue of Faith",
+			"text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
+		},
+		"hail_mary_hope": {
+			"id": "hail_mary_hope",
+			"title": "Second Hail Mary (For an Increase of Hope)",
+			"latin_title": "Ave Maria (Pro Spe)",
+			"intention": "For an increase in the virtue of Hope",
+			"text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
+		},
+		"hail_mary_charity": {
+			"id": "hail_mary_charity",
+			"title": "Third Hail Mary (For an Increase of Charity)",
+			"latin_title": "Ave Maria (Pro Caritate)",
+			"intention": "For an increase in the virtue of Charity",
+			"text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
+		},
+		"glory_be": {
+			"id": "glory_be",
+			"title": "The Glory Be (Doxology)",
+			"latin_title": "Gloria Patri",
+			"text": "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
+			"leader_text": "Glory be to the Father, and to the Son, and to the Holy Spirit.",
+			"response_text": "As it was in the beginning, is now, and ever shall be, world without end. Amen."
+		},
+		"fatima_prayer": {
+			"id": "fatima_prayer",
+			"title": "The Fatima Prayer",
+			"latin_title": "Oratio Fatimae",
+			"text": "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy. Amen."
+		},
+		"hail_holy_queen": {
+			"id": "hail_holy_queen",
+			"title": "Hail, Holy Queen",
+			"latin_title": "Salve Regina",
+			"text": "Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve; to thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary!"
+		},
+		"versicle_response": {
+			"id": "versicle_response",
+			"title": "Versicle and Response",
+			"latin_title": "Ora Pro Nobis",
+			"leader_text": "V. Pray for us, O holy Mother of God.",
+			"response_text": "R. That we may be made worthy of the promises of Christ.",
+			"text": "V. Pray for us, O holy Mother of God.\nR. That we may be made worthy of the promises of Christ."
+		},
+		"rosary_concluding_prayer": {
+			"id": "rosary_concluding_prayer",
+			"title": "Concluding Rosary Prayer",
+			"latin_title": "Deus, Cuius Unigenitus",
+			"text": "Let us pray. O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal life, grant, we beseech Thee, that meditating upon these mysteries of the most holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."
+		}
+	}
+}

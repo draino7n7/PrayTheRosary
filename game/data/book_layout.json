@@ -1,0 +1,630 @@
+{
+	"version": 1,
+	"book_title": "Pray the Rosary",
+	"subtitle": "A Contemplative Visual Guide to the Twenty Mysteries",
+	"trim_size_inches": {
+		"width": 6.0,
+		"height": 9.0,
+		"tab_extension_width": 0.375,
+		"overall_width_with_tabs": 6.375,
+		"overhang_cover_width": 6.375,
+		"spread_width": 12.0,
+		"spread_height": 9.0,
+		"binding": "spiral-bound",
+		"artwork_page_header_note": "Every right-hand artwork page (Pages 5, 7, 9, ..., 47) includes a top header displaying the section or Mystery name so that when the spiral-bound book is folded 360 degrees back (or viewed in single-page scroll), the reader immediately knows which Mystery they are contemplating."
+	},
+	"index_tabs": [
+		{
+			"tab_order": 1,
+			"letter": "O",
+			"label": "Opening Prayers",
+			"sheet_number": 2,
+			"tab_attached_to_pages": [3, 4],
+			"target_spread_number": 2,
+			"target_left_page": 4,
+			"target_right_page": 5,
+			"vertical_step_index": 1,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'O' tab on the right and flipping that sheet (Pages 3–4) to the left opens directly to Spread 2: The Opening Prayers (Page 4 on the left, Page 5 artwork on the right)."
+		},
+		{
+			"tab_order": 2,
+			"letter": "J",
+			"label": "Joyful Mysteries",
+			"sheet_number": 3,
+			"tab_attached_to_pages": [5, 6],
+			"target_spread_number": 3,
+			"target_left_page": 6,
+			"target_right_page": 7,
+			"vertical_step_index": 2,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'J' tab on the right and flipping that sheet (Pages 5–6) to the left opens directly to Spread 3: The First Joyful Mystery (Page 6 on the left, Page 7 artwork on the right)."
+		},
+		{
+			"tab_order": 3,
+			"letter": "L",
+			"label": "Luminous Mysteries",
+			"sheet_number": 8,
+			"tab_attached_to_pages": [15, 16],
+			"target_spread_number": 8,
+			"target_left_page": 16,
+			"target_right_page": 17,
+			"vertical_step_index": 3,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'L' tab on the right and flipping that sheet (Pages 15–16) to the left opens directly to Spread 8: The First Luminous Mystery (Page 16 on the left, Page 17 artwork on the right)."
+		},
+		{
+			"tab_order": 4,
+			"letter": "S",
+			"label": "Sorrowful Mysteries",
+			"sheet_number": 13,
+			"tab_attached_to_pages": [25, 26],
+			"target_spread_number": 13,
+			"target_left_page": 26,
+			"target_right_page": 27,
+			"vertical_step_index": 4,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'S' tab on the right and flipping that sheet (Pages 25–26) to the left opens directly to Spread 13: The First Sorrowful Mystery (Page 26 on the left, Page 27 artwork on the right)."
+		},
+		{
+			"tab_order": 5,
+			"letter": "G",
+			"label": "Glorious Mysteries",
+			"sheet_number": 18,
+			"tab_attached_to_pages": [35, 36],
+			"target_spread_number": 18,
+			"target_left_page": 36,
+			"target_right_page": 37,
+			"vertical_step_index": 5,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'G' tab on the right and flipping that sheet (Pages 35–36) to the left opens directly to Spread 18: The First Glorious Mystery (Page 36 on the left, Page 37 artwork on the right)."
+		},
+		{
+			"tab_order": 6,
+			"letter": "C",
+			"label": "Closing Prayers",
+			"sheet_number": 23,
+			"tab_attached_to_pages": [45, 46],
+			"target_spread_number": 23,
+			"target_left_page": 46,
+			"target_right_page": 47,
+			"vertical_step_index": 6,
+			"tab_height_inches": 1.25,
+			"action_note": "Grabbing the 'C' tab on the right and flipping that sheet (Pages 45–46) to the left opens directly to Spread 23: The Closing Prayers (Page 46 on the left, Page 47 artwork on the right)."
+		}
+	],
+	"app_navigation_and_separators": {
+		"mode": "continuous_vertical_scroll",
+		"total_scrollable_pages": 50,
+		"top_right_menu": {
+			"supports_bookmarks": true,
+			"expandable_mystery_sets": true,
+			"mystery_set_click_behavior": "Clicking the Mystery Set name jumps to its 1st Mystery (left page); clicking the left arrow icon expands/collapses the list of all 5 individual Mysteries in that set."
+		},
+		"in_stream_separators": [
+			{
+				"after_page_number": 5,
+				"id": "after_opening_prayers_jump",
+				"type": "mystery_set_selector",
+				"prompt": "Select a Mystery Set to Continue Praying:",
+				"targets": [
+					{"label": "Joyful Mysteries (Mon & Sat)", "mystery_set_id": "joyful", "target_page": 6},
+					{"label": "Luminous Mysteries (Thu)", "mystery_set_id": "luminous", "target_page": 16},
+					{"label": "Sorrowful Mysteries (Tue & Fri)", "mystery_set_id": "sorrowful", "target_page": 26},
+					{"label": "Glorious Mysteries (Wed & Sun)", "mystery_set_id": "glorious", "target_page": 36}
+				]
+			},
+			{
+				"after_page_number": 15,
+				"id": "after_joyful_mysteries_jump",
+				"type": "closing_prayers_jump",
+				"prompt": "End of the Five Joyful Mysteries",
+				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"target_page": 46
+			},
+			{
+				"after_page_number": 25,
+				"id": "after_luminous_mysteries_jump",
+				"type": "closing_prayers_jump",
+				"prompt": "End of the Five Luminous Mysteries",
+				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"target_page": 46
+			},
+			{
+				"after_page_number": 35,
+				"id": "after_sorrowful_mysteries_jump",
+				"type": "closing_prayers_jump",
+				"prompt": "End of the Five Sorrowful Mysteries",
+				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"target_page": 46
+			},
+			{
+				"after_page_number": 45,
+				"id": "after_glorious_mysteries_jump",
+				"type": "closing_prayers_jump",
+				"prompt": "End of the Five Glorious Mysteries",
+				"button_label": "Proceed to the Closing Prayers (Page 46)",
+				"target_page": 46
+			}
+		]
+	},
+	"pagination_summary": {
+		"total_views": 26,
+		"total_interior_spreads": 24,
+		"total_page_sides": 50,
+		"total_double_sided_leaves": 25,
+		"notes": "Front Cover (Page 1), 24 interior two-page spreads (Pages 2–49, where Page 2 is the Inside Front Cover opposite Page 3, and Page 49 is the Inside Back Cover opposite Page 48), and Outside Back Cover (Page 50)."
+	},
+	"front_cover": {
+		"view_index": 0,
+		"page_number": 1,
+		"id": "front_cover",
+		"type": "cover",
+		"title": "Pray the Rosary",
+		"subtitle": "A Contemplative Visual Guide to the Twenty Mysteries",
+		"layout_notes": "Full-bleed portrait cover artwork with the title 'Pray the Rosary' set in warm gold/ivory serif typography over the upper crimson drapery.",
+		"artwork": {
+			"id": "cover",
+			"title": "The Virgin of the Rosary (La Virgen del Rosario)",
+			"artist": "Bartolomé Esteban Murillo",
+			"artist_dates": "1617–1682",
+			"creation_date": "c. 1650–1655",
+			"medium": "Oil on canvas",
+			"current_location": "Museo del Prado, Madrid, Spain",
+			"inventory_number": "P00975",
+			"master_file": "assets/2D/gimp/original_downloads/cover_master_murillo.jpg",
+			"runtime_texture_path": "res://assets/images/cover.webp"
+		}
+	},
+	"spreads": [
+		{
+			"spread_number": 1,
+			"view_index": 1,
+			"id": "history_and_how_to_use",
+			"type": "front_matter_spread",
+			"title": "History of the Rosary & How to Use This Book",
+			"left_page": {
+				"page_number": 2,
+				"position": "inside_front_cover_verso",
+				"heading": "The History of the Holy Rosary",
+				"subheading": "Origins of the Gospel Prayer of the Church",
+				"sections": [
+					{
+						"title": "Monastic Roots & The Marian Psalter",
+						"body": "The roots of the Rosary reach back to the early centuries of the Church, when monks prayed all 150 Psalms of David each week. For the faithful and lay brothers who could not read Latin manuscripts, a devotion arose of reciting 150 Pater Nosters (Our Fathers), and later 150 Ave Marias (Hail Marys), counted on cords of knotted beads known as 'Paternosters.' Known as the 'Psalter of the Blessed Virgin Mary,' this practice allowed every believer to unite their daily work and prayer to the liturgical rhythm of the Church."
+					},
+					{
+						"title": "St. Dominic & Preaching the Mysteries",
+						"body": "In the thirteenth century, tradition holds that the Blessed Virgin Mary entrusted the Rosary to St. Dominic de Guzmán (1170–1221) as a spiritual remedy against heresy—uniting vocal prayer with quiet meditation on the saving events of Christ's life, death, and resurrection. In the fifteenth century, the Carthusian monk Dominic of Prussia and the Dominican friar Blessed Alan de la Roche organized the Marian Psalter into fifteen decades, each paired with a specific Gospel mystery."
+					},
+					{
+						"title": "Pope St. Pius V & The Twenty Mysteries",
+						"body": "In 1569, Pope St. Pius V formally established the traditional form of the fifteen Joyful, Sorrowful, and Glorious Mysteries in his papal bull Consueverunt Romani Pontifices, and in 1571 instituted the Feast of Our Lady of the Rosary. More than four centuries later, in his 2002 Apostolic Letter Rosarium Virginis Mariae, Pope St. John Paul II enriched this heritage by introducing the five Luminous Mysteries (the Mysteries of Light), inviting Christians to contemplate the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."
+					}
+				]
+			},
+			"right_page": {
+				"page_number": 3,
+				"position": "recto",
+				"heading": "Structure of the Book & How to Pray",
+				"subheading": "Praying with Scripture, Prayer, and Sacred Art",
+				"sections": [
+					{
+						"title": "How This Book Is Organized",
+						"body": "Every prayer section and Mystery in this book is designed as a single, self-contained two-page spread so you never need to flip back and forth while praying:\n• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture, a brief meditation, and the complete prayers for that decade.\n• Right Page (Visual Contemplation): Displays the Mystery header at the top and a full-page Renaissance or Baroque masterpiece to rest your eyes and heart upon as you pray the ten Hail Marys.\n• Six Index Tabs (O, J, L, S, G, C): Grab any tab on the right and flip it to the left to open directly to the Opening Prayers (O), Joyful (J), Luminous (L), Sorrowful (S), or Glorious (G) Mysteries, or the Closing Prayers (C)."
+					},
+					{
+						"title": "Step-by-Step Guide to Praying the Rosary",
+						"body": "1. Opening Prayers (Tab O, Pages 4–5): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Five Decades (Tabs J, L, S, G, Pages 6–45): Flip the tab for the day's Mystery set to the left. Read the Scripture and meditation, pray one Our Father, ten Hail Marys while contemplating the Mystery and artwork, one Glory Be, and the Fatima Prayer. Proceed through all five decades of that Mystery set.\n3. Closing Prayers (Tab C, Pages 46–47): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
+					},
+					{
+						"title": "Weekly Schedule of the Mysteries",
+						"body": "• Joyful Mysteries (Tab J, Pages 6–15): Monday & Saturday (and Sundays of Advent & Christmas)\n• Luminous Mysteries (Tab L, Pages 16–25): Thursday\n• Sorrowful Mysteries (Tab S, Pages 26–35): Tuesday & Friday (and Sundays of Lent)\n• Glorious Mysteries (Tab G, Pages 36–45): Wednesday & Sunday"
+					}
+				]
+			}
+		},
+		{
+			"spread_number": 2,
+			"view_index": 2,
+			"id": "opening_prayers",
+			"type": "prayer_art_spread",
+			"title": "The Opening Prayers",
+			"tab_letter": "O",
+			"left_page": {
+				"page_number": 4,
+				"position": "verso",
+				"heading": "The Opening Prayers",
+				"subheading": "Entering into the Presence of the Most Holy Trinity",
+				"prayer_steps": [
+					{
+						"step_number": 1,
+						"bead_label": "On the Crucifix",
+						"prayer_id": "sign_of_the_cross",
+						"rubric": "Begin by making the Sign of the Cross:"
+					},
+					{
+						"step_number": 2,
+						"bead_label": "On the Crucifix",
+						"prayer_id": "apostles_creed",
+						"rubric": "Still holding the Crucifix, profess the Apostles' Creed:"
+					},
+					{
+						"step_number": 3,
+						"bead_label": "First Large Bead",
+						"prayer_id": "our_father",
+						"rubric": "For the intentions of the Holy Father and the Church:"
+					},
+					{
+						"step_number": 4,
+						"bead_label": "Three Small Beads",
+						"prayer_id": "hail_mary",
+						"repetitions": 3,
+						"intentions": [
+							"1. For an increase in the virtue of Faith",
+							"2. For an increase in the virtue of Hope",
+							"3. For an increase in the virtue of Charity"
+						],
+						"rubric": "Pray three Hail Marys for the theological virtues of Faith, Hope, and Charity:"
+					},
+					{
+						"step_number": 5,
+						"bead_label": "Before the Medallion",
+						"prayer_id": "glory_be",
+						"rubric": "Conclude the introductory prayers with the Glory Be:"
+					}
+				]
+			},
+			"right_page": {
+				"page_number": 5,
+				"position": "recto",
+				"heading": "The Opening Prayers",
+				"subheading": "The Most Holy Trinity",
+				"artwork": {
+					"id": "opening_prayers",
+					"title": "The Holy Trinity (La Trinidad)",
+					"artist": "El Greco (Doménikos Theotokópoulos)",
+					"artist_dates": "1541–1614",
+					"creation_date": "1577–1579",
+					"medium": "Oil on canvas",
+					"current_location": "Museo del Prado, Madrid, Spain",
+					"inventory_number": "P00824",
+					"master_file": "assets/2D/gimp/original_downloads/opening_master_el_greco_trinity.jpg",
+					"runtime_texture_path": "res://assets/images/opening_prayers.webp"
+				}
+			}
+		},
+		{
+			"spread_number": 3,
+			"view_index": 3,
+			"id": "joyful_1_annunciation",
+			"type": "mystery_spread",
+			"mystery_set_id": "joyful",
+			"decade_number": 1,
+			"left_page_number": 6,
+			"right_page_number": 7
+		},
+		{
+			"spread_number": 4,
+			"view_index": 4,
+			"id": "joyful_2_visitation",
+			"type": "mystery_spread",
+			"mystery_set_id": "joyful",
+			"decade_number": 2,
+			"left_page_number": 8,
+			"right_page_number": 9
+		},
+		{
+			"spread_number": 5,
+			"view_index": 5,
+			"id": "joyful_3_nativity",
+			"type": "mystery_spread",
+			"mystery_set_id": "joyful",
+			"decade_number": 3,
+			"left_page_number": 10,
+			"right_page_number": 11
+		},
+		{
+			"spread_number": 6,
+			"view_index": 6,
+			"id": "joyful_4_presentation",
+			"type": "mystery_spread",
+			"mystery_set_id": "joyful",
+			"decade_number": 4,
+			"left_page_number": 12,
+			"right_page_number": 13
+		},
+		{
+			"spread_number": 7,
+			"view_index": 7,
+			"id": "joyful_5_finding_in_temple",
+			"type": "mystery_spread",
+			"mystery_set_id": "joyful",
+			"decade_number": 5,
+			"left_page_number": 14,
+			"right_page_number": 15
+		},
+		{
+			"spread_number": 8,
+			"view_index": 8,
+			"id": "luminous_1_baptism",
+			"type": "mystery_spread",
+			"mystery_set_id": "luminous",
+			"decade_number": 1,
+			"left_page_number": 16,
+			"right_page_number": 17
+		},
+		{
+			"spread_number": 9,
+			"view_index": 9,
+			"id": "luminous_2_wedding_at_cana",
+			"type": "mystery_spread",
+			"mystery_set_id": "luminous",
+			"decade_number": 2,
+			"left_page_number": 18,
+			"right_page_number": 19
+		},
+		{
+			"spread_number": 10,
+			"view_index": 10,
+			"id": "luminous_3_proclamation",
+			"type": "mystery_spread",
+			"mystery_set_id": "luminous",
+			"decade_number": 3,
+			"left_page_number": 20,
+			"right_page_number": 21
+		},
+		{
+			"spread_number": 11,
+			"view_index": 11,
+			"id": "luminous_4_transfiguration",
+			"type": "mystery_spread",
+			"mystery_set_id": "luminous",
+			"decade_number": 4,
+			"left_page_number": 22,
+			"right_page_number": 23
+		},
+		{
+			"spread_number": 12,
+			"view_index": 12,
+			"id": "luminous_5_eucharist",
+			"type": "mystery_spread",
+			"mystery_set_id": "luminous",
+			"decade_number": 5,
+			"left_page_number": 24,
+			"right_page_number": 25
+		},
+		{
+			"spread_number": 13,
+			"view_index": 13,
+			"id": "sorrowful_1_agony",
+			"type": "mystery_spread",
+			"mystery_set_id": "sorrowful",
+			"decade_number": 1,
+			"left_page_number": 26,
+			"right_page_number": 27
+		},
+		{
+			"spread_number": 14,
+			"view_index": 14,
+			"id": "sorrowful_2_scourging",
+			"type": "mystery_spread",
+			"mystery_set_id": "sorrowful",
+			"decade_number": 2,
+			"left_page_number": 28,
+			"right_page_number": 29
+		},
+		{
+			"spread_number": 15,
+			"view_index": 15,
+			"id": "sorrowful_3_crowning_with_thorns",
+			"type": "mystery_spread",
+			"mystery_set_id": "sorrowful",
+			"decade_number": 3,
+			"left_page_number": 30,
+			"right_page_number": 31
+		},
+		{
+			"spread_number": 16,
+			"view_index": 16,
+			"id": "sorrowful_4_carrying_cross",
+			"type": "mystery_spread",
+			"mystery_set_id": "sorrowful",
+			"decade_number": 4,
+			"left_page_number": 32,
+			"right_page_number": 33
+		},
+		{
+			"spread_number": 17,
+			"view_index": 17,
+			"id": "sorrowful_5_crucifixion",
+			"type": "mystery_spread",
+			"mystery_set_id": "sorrowful",
+			"decade_number": 5,
+			"left_page_number": 34,
+			"right_page_number": 35
+		},
+		{
+			"spread_number": 18,
+			"view_index": 18,
+			"id": "glorious_1_resurrection",
+			"type": "mystery_spread",
+			"mystery_set_id": "glorious",
+			"decade_number": 1,
+			"left_page_number": 36,
+			"right_page_number": 37
+		},
+		{
+			"spread_number": 19,
+			"view_index": 19,
+			"id": "glorious_2_ascension",
+			"type": "mystery_spread",
+			"mystery_set_id": "glorious",
+			"decade_number": 2,
+			"left_page_number": 38,
+			"right_page_number": 39
+		},
+		{
+			"spread_number": 20,
+			"view_index": 20,
+			"id": "glorious_3_pentecost",
+			"type": "mystery_spread",
+			"mystery_set_id": "glorious",
+			"decade_number": 3,
+			"left_page_number": 40,
+			"right_page_number": 41
+		},
+		{
+			"spread_number": 21,
+			"view_index": 21,
+			"id": "glorious_4_assumption",
+			"type": "mystery_spread",
+			"mystery_set_id": "glorious",
+			"decade_number": 4,
+			"left_page_number": 42,
+			"right_page_number": 43
+		},
+		{
+			"spread_number": 22,
+			"view_index": 22,
+			"id": "glorious_5_coronation",
+			"type": "mystery_spread",
+			"mystery_set_id": "glorious",
+			"decade_number": 5,
+			"left_page_number": 44,
+			"right_page_number": 45
+		},
+		{
+			"spread_number": 23,
+			"view_index": 23,
+			"id": "closing_prayers",
+			"type": "prayer_art_spread",
+			"title": "The Closing Prayers",
+			"tab_letter": "C",
+			"left_page": {
+				"page_number": 46,
+				"position": "verso",
+				"heading": "The Closing Prayers",
+				"subheading": "Entrusting Our Prayers to the Mother of Mercy",
+				"prayer_steps": [
+					{
+						"step_number": 1,
+						"bead_label": "On the Center Medallion",
+						"prayer_id": "hail_holy_queen",
+						"rubric": "After completing the five decades, pray the Hail, Holy Queen (Salve Regina):"
+					},
+					{
+						"step_number": 2,
+						"bead_label": "Versicle & Response",
+						"prayer_id": "versicle_response",
+						"rubric": "Leader and Response:"
+					},
+					{
+						"step_number": 3,
+						"bead_label": "Concluding Collect",
+						"prayer_id": "rosary_concluding_prayer",
+						"rubric": "Conclude with the Rosary Prayer:"
+					},
+					{
+						"step_number": 4,
+						"bead_label": "Final Blessing",
+						"prayer_id": "sign_of_the_cross",
+						"rubric": "End by making the Sign of the Cross:"
+					}
+				]
+			},
+			"right_page": {
+				"page_number": 47,
+				"position": "recto",
+				"heading": "The Closing Prayers",
+				"subheading": "Hail, Holy Queen (Salve Regina)",
+				"artwork": {
+					"id": "closing_prayers",
+					"title": "The Immaculate Conception of Los Venerables (Inmaculada de Soult)",
+					"artist": "Bartolomé Esteban Murillo",
+					"artist_dates": "1617–1682",
+					"creation_date": "c. 1678",
+					"medium": "Oil on canvas",
+					"current_location": "Museo del Prado, Madrid, Spain",
+					"inventory_number": "P00972",
+					"master_file": "assets/2D/gimp/original_downloads/closing_master_murillo_immaculate_conception.jpg",
+					"runtime_texture_path": "res://assets/images/closing_prayers.webp"
+				}
+			}
+		},
+		{
+			"spread_number": 24,
+			"view_index": 24,
+			"id": "credits_and_attributions",
+			"type": "credits_spread",
+			"title": "Sacred Artwork Credits & Attributions",
+			"left_page": {
+				"page_number": 48,
+				"position": "verso",
+				"heading": "Sacred Artwork Credits (Part I)",
+				"subheading": "Cover, Prayers, Joyful Mysteries & Luminous Mysteries",
+				"attribution_ids": [
+					"cover",
+					"opening_prayers",
+					"closing_prayers",
+					"joyful_1_annunciation",
+					"joyful_2_visitation",
+					"joyful_3_nativity",
+					"joyful_4_presentation",
+					"joyful_5_finding_in_temple",
+					"luminous_1_baptism",
+					"luminous_2_wedding_at_cana",
+					"luminous_3_proclamation",
+					"luminous_4_transfiguration",
+					"luminous_5_eucharist"
+				]
+			},
+			"right_page": {
+				"page_number": 49,
+				"position": "inside_back_cover_recto",
+				"heading": "Sacred Artwork Credits (Part II) & Colophon",
+				"subheading": "Sorrowful Mysteries, Glorious Mysteries & Text Sources",
+				"attribution_ids": [
+					"sorrowful_1_agony",
+					"sorrowful_2_scourging",
+					"sorrowful_3_crowning_with_thorns",
+					"sorrowful_4_carrying_cross",
+					"sorrowful_5_crucifixion",
+					"glorious_1_resurrection",
+					"glorious_2_ascension",
+					"glorious_3_pentecost",
+					"glorious_4_assumption",
+					"glorious_5_coronation"
+				],
+				"colophon": {
+					"scripture_notice": "Scripture quotations are taken from the Douay-Rheims Bible (Challoner Revision), which is in the public domain.",
+					"artwork_notice": "All twenty-three paintings reproduced in this volume are public-domain masterworks (PD-Art / CC0) courtesy of the Museo Nacional del Prado (Madrid), the Kunsthistorisches Museum (Vienna), the National Gallery (London), the National Gallery of Art (Washington, D.C.), the Gallerie dell'Accademia (Venice), the Pinacoteca di Brera (Milan), the State Hermitage Museum (St. Petersburg), the Museum of Fine Arts (Boston), the Nelson-Atkins Museum of Art (Kansas City), the Princeton University Art Museum, the Museum of National History at Frederiksborg Castle, the Real Academia de Bellas Artes de San Fernando (Madrid), St. Paul's Church (Antwerp), and the Church of Our Lady (Bruges)."
+				}
+			}
+		}
+	],
+	"back_cover": {
+		"view_index": 25,
+		"page_number": 50,
+		"id": "back_cover",
+		"type": "back_cover",
+		"title": "Pray the Rosary",
+		"subtitle": "A Contemplative Visual Guide to the Twenty Mysteries",
+		"background_palette": {
+			"primary_hex": "#4A1215",
+			"secondary_hex": "#2A090B",
+			"accent_gold_hex": "#D4AF37",
+			"text_ivory_hex": "#F7F2E7",
+			"notes": "Deep Baroque crimson and warm gold palette harmonizing with the upper red drapery of Bartolomé Esteban Murillo's 'The Virgin of the Rosary' on the front cover."
+		},
+		"epigraph": {
+			"quote": "The Rosary, though clearly Marian in character, is at heart a Christocentric prayer. In the sobriety of its elements, it has all the depth of the Gospel message in its entirety, of which it can be said to be a compendium.",
+			"attribution": "Pope St. John Paul II, Rosarium Virginis Mariae (2002)"
+		},
+		"synopsis": "Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers, Sacred Scripture passages, and spiritual fruits of all twenty Mysteries on the left-hand page with twenty-three breathtaking Renaissance and Baroque masterworks on the right-hand page. Whether used for quiet personal contemplation, family prayer, or learning the Rosary for the first time, this volume invites you to gaze upon the face of Christ with the heart of His Blessed Mother.",
+		"marian_counsel": {
+			"quote": "Never will anyone who says his Rosary every day be led astray. This is a statement that I would gladly sign with my blood.",
+			"attribution": "St. Louis Marie de Montfort, The Secret of the Rosary"
+		}
+	}
+}
