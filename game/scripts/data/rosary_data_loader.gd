@@ -18,6 +18,7 @@ var _mystery_sets_by_id: Dictionary = {}
 var _mysteries_by_id: Dictionary = {}
 var _spreads_by_number: Dictionary = {}
 var _pages_by_number: Dictionary = {}
+var _artworks_by_id: Dictionary = {}
 var _is_loaded: bool = false
 
 
@@ -83,6 +84,14 @@ func get_all_prayers() -> Dictionary:
 	return _prayers_by_id
 
 
+func get_artwork(artwork_id: String) -> Dictionary:
+	return _artworks_by_id.get(artwork_id, {})
+
+
+func get_all_artworks() -> Dictionary:
+	return _artworks_by_id
+
+
 func get_mystery_set(set_id: String) -> Dictionary:
 	return _mystery_sets_by_id.get(set_id, {})
 
@@ -139,6 +148,22 @@ func get_hydrated_spread(spread_number: int) -> Dictionary:
 			if step is Dictionary:
 				var pid: String = str(step.get("prayer_id", ""))
 				step["prayer"] = get_prayer(pid)
+	elif spread_type == "credits_spread":
+		var lp_credits: Dictionary = hydrated.get("left_page", {})
+		var left_artworks: Array[Dictionary] = []
+		for aid: Variant in lp_credits.get("attribution_ids", []):
+			var art: Dictionary = get_artwork(str(aid))
+			if not art.is_empty():
+				left_artworks.append(art)
+		lp_credits["attributions"] = left_artworks
+
+		var rp_credits: Dictionary = hydrated.get("right_page", {})
+		var right_artworks: Array[Dictionary] = []
+		for aid: Variant in rp_credits.get("attribution_ids", []):
+			var art: Dictionary = get_artwork(str(aid))
+			if not art.is_empty():
+				right_artworks.append(art)
+		rp_credits["attributions"] = right_artworks
 
 	return hydrated
 
@@ -258,6 +283,7 @@ func _build_indexes() -> void:
 	_mysteries_by_id.clear()
 	_spreads_by_number.clear()
 	_pages_by_number.clear()
+	_artworks_by_id.clear()
 
 	var prayers_dict: Dictionary = prayers_data.get("prayers", {})
 	for pid: String in prayers_dict.keys():
@@ -275,12 +301,22 @@ func _build_indexes() -> void:
 				if dec_val is Dictionary:
 					var dec_id: String = str(dec_val.get("id", ""))
 					_mysteries_by_id[dec_id] = dec_val
+					var dec_art: Dictionary = dec_val.get("artwork", {})
+					if not dec_art.is_empty():
+						_artworks_by_id[str(dec_art.get("id", dec_id))] = dec_art
 
 	var spreads: Array = book_layout_data.get("spreads", [])
 	for sp_val: Variant in spreads:
 		if sp_val is Dictionary:
 			var sp_num: int = int(sp_val.get("spread_number", 0))
 			_spreads_by_number[sp_num] = sp_val
+			var rp_art: Dictionary = sp_val.get("right_page", {}).get("artwork", {})
+			if not rp_art.is_empty():
+				_artworks_by_id[str(rp_art.get("id", ""))] = rp_art
+
+	var cover_art: Dictionary = get_front_cover().get("artwork", {})
+	if not cover_art.is_empty():
+		_artworks_by_id[str(cover_art.get("id", "cover"))] = cover_art
 
 	# Build flat 1..50 pages index for continuous vertical scroll
 	var front: Dictionary = get_front_cover().duplicate(true)

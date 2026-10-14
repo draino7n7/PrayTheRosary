@@ -25,6 +25,22 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 
 ---
 
+## 2:3 Portrait Page Card Architecture
+
+The UI is built around a modular page card component architecture designed for the continuous 50-page vertical scroll:
+- **Unified Root Facade (`game/scenes/ui/page_card.tscn` / `game/scripts/ui/page_card.gd`):** Uses Godot's `AspectRatioContainer` (`ratio = 2.0 / 3.0`) to enforce a clean 2:3 portrait card geometry across mobile, tablet, and desktop display viewports.
+- **Specialized Sub-Cards (`game/scenes/ui/pages/`):** Dynamically instantiates the appropriate sub-card component for each page type:
+  - `CoverPageCard`: Full-bleed Murillo painting with gold/ivory title typography in the drapery.
+  - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels.
+  - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46) prayer sequences with rubrics.
+  - `MysteryPrayerPageCard`: Decade prayers, fruit badge, scripture passage, and meditation.
+  - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
+  - `CreditsPageCard`: Comprehensive artwork attributions across Pages 48 and 49.
+  - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph and book synopsis.
+- **Data-Driven Hydration:** Cards are hydrated directly from `RosaryDataLoader` via `PageCard.create_for_page(page_data, loader)` or `card.bind_page_data(page_data, loader)`.
+
+---
+
 ## OpenGameStack Integration
 
 This project is configured as an **OpenGameStack (OGS)** project. It includes `stack.json` and `ogs_config.json` files which define the exact environment (Godot 4.7.2) required to run and build the application.

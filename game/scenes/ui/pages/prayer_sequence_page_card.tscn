@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://e2f3g4h5i6j7k"]
+
+[ext_resource type="Script" path="res://scripts/ui/pages/prayer_sequence_page_card.gd" id="1_prayer_seq"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_font_bold"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="3_font_italic"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
+bg_color = Color(0.980392, 0.964706, 0.933333, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.721569, 0.568627, 0.188235, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="PrayerSequencePageCard" type="AspectRatioContainer"]
+custom_minimum_size = Vector2(720, 1080)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+ratio = 0.666667
+alignment_horizontal = 1
+alignment_vertical = 1
+script = ExtResource("1_prayer_seq")
+
+[node name="CardPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(720, 1080)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_parchment")
+
+[node name="MarginContainer" type="MarginContainer" parent="CardPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 35
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CardPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderVBox" type="VBoxContainer" parent="CardPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SubheadingLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
+theme_override_fonts/font = ExtResource("3_font_italic")
+theme_override_font_sizes/font_size = 17
+text = "Entering into the Presence of the Most Holy Trinity"
+horizontal_alignment = 1
+
+[node name="HeadingLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.419608, 0.113725, 0.129412, 1)
+theme_override_fonts/font = ExtResource("2_font_bold")
+theme_override_font_sizes/font_size = 28
+text = "The Opening Prayers"
+horizontal_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
+custom_minimum_size = Vector2(240, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.721569, 0.568627, 0.188235, 1)
+
+[node name="PrayerStepsContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
