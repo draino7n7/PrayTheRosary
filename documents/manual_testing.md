@@ -50,9 +50,10 @@ This document outlines the strict manual testing procedures required before any 
   - 22pt italic subheading, 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
   - Calibrated typography auto-fitting based on character density (`total_chars <= 1650`):
     - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
-    - Page 3 (1,770 chars): 23pt section headers and 20pt body paragraphs.
+    - Page 3 (1,813 chars): 23pt section headers and 20pt body paragraphs.
   - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) accurately documents: `"...and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
   - Page 3 Section 1 (*How This Book Is Organized*) explicitly notes the Bible translation in the `"Left Page (Word & Prayer)"` bullet: `• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade.`
+  - Page 3 Section 2 (*Step-by-Step Guide to Praying the Rosary*) displays `"2. The Decades (Tabs J, L, S, G):"` and explains praying either the five decades of the day's Mystery set or all four Mystery sets (twenty decades) back-to-back in chronological order (`Joyful, Luminous, Sorrowful, Glorious`) for a complete Rosary, with all three sections fitting comfortably inside the `720×1080` card with zero overflow.
   - Section containers configure `SIZE_EXPAND_FILL` to evenly balance vertical space across the full 1080px canvas with zero text overflow or clipping.
 
 ### TC-PAGE-03: Prayer Sequence Cards (`Pages 4 & 46`)
