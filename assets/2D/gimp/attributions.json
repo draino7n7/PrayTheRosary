@@ -16,7 +16,7 @@
 			"inventory_number": "P00975",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Murillo%2C_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg",
-			"master_file": "assets/2D/gimp/cover_master_murillo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/cover_master_murillo.jpg",
 			"master_resolution": "3824x6056",
 			"notes": "Our Lady seated on a stone bench holding the Christ Child, with both holding a strand of the Holy Rosary. Natural portrait aspect ratio ideal for 6x9 print cover."
 		},
@@ -35,7 +35,7 @@
 			"inventory_number": "P00824",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/f/fe/La_Trinidad_%28El_Greco%2C_1577-1579%29.jpg",
-			"master_file": "assets/2D/gimp/opening_master_el_greco_trinity.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/opening_master_el_greco_trinity.jpg",
 			"master_resolution": "1759x3051",
 			"notes": "God the Father holding the Crucified Christ with the Holy Spirit as a dove and surrounding angels. Direct theological visual for the Trinitarian opening formula of the Rosary."
 		},
@@ -54,7 +54,7 @@
 			"inventory_number": "P00972",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/6/62/Inmaculada_de_los_Venerables_o_de_Soult.jpg",
-			"master_file": "assets/2D/gimp/closing_master_murillo_immaculate_conception.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/closing_master_murillo_immaculate_conception.jpg",
 			"master_resolution": "2080x3051",
 			"notes": "Our Lady crowned by divine light, standing atop the crescent moon in white and blue drapery, surrounded by jubilant cherubim. Stylistic bookend matching the Murillo cover."
 		},
@@ -71,7 +71,7 @@
 			"inventory_number": "P00969",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Bartolome_murillo-anunciacion.jpg",
-			"master_file": "assets/2D/gimp/joyful_1_annunciation_master_murillo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/joyful_1_annunciation_master_murillo.jpg",
 			"master_resolution": "2524x3051",
 			"notes": "Archangel Gabriel kneeling before the Virgin Mary as the Holy Spirit descends in golden light surrounded by cherubim."
 		},
@@ -87,7 +87,7 @@
 			"inventory_number": "y1994-17",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Philippe_de_Champaigne_-_The_Visitation_-_y1994-17_-_Princeton_University_Art_Museum.jpg",
-			"master_file": "assets/2D/gimp/joyful_2_visitation_master_champaigne.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/joyful_2_visitation_master_champaigne.jpg",
 			"master_resolution": "1487x2000",
 			"notes": "French Baroque depiction of the Virgin Mary and St. Elizabeth embracing, with St. Joseph and St. Zechariah in the background."
 		},
@@ -104,7 +104,7 @@
 			"inventory_number": "NG6270",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Adoration_of_the_Shepherds_by_Guido_Reni.jpg",
-			"master_file": "assets/2D/gimp/joyful_3_nativity_master_guido_reni.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/joyful_3_nativity_master_guido_reni.jpg",
 			"master_resolution": "3953x6000",
 			"notes": "Nocturnal Baroque adoration scene where the newborn Christ Child radiates light onto Mary and the kneeling shepherds, with a choir of angels above."
 		},
@@ -121,7 +121,7 @@
 			"inventory_number": "Cat. 44",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/1/10/Accademia_-_Presentation_of_Jesus_in_the_Temple_by_Vittore_Carpaccio_Cat.44.jpg",
-			"master_file": "assets/2D/gimp/joyful_4_presentation_master_carpaccio.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/joyful_4_presentation_master_carpaccio.jpg",
 			"master_resolution": "3760x6608",
 			"notes": "Venetian High Renaissance altarpiece depicting Mary presenting the Infant Jesus to Simeon in the Temple."
 		},
@@ -138,7 +138,7 @@
 			"inventory_number": "1952.5.47.a (NGA 41661)",
 			"license": "Public Domain (CC0 / Open Access)",
 			"master_source_url": "https://upload.wikimedia.org/wikipedia/commons/0/05/Bernard_van_Orley%2C_Christ_among_the_Doctors_%28obverse%29%2C_c._1513%2C_NGA_41661.jpg",
-			"master_file": "assets/2D/gimp/joyful_5_finding_in_temple_master_van_orley.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/joyful_5_finding_in_temple_master_van_orley.jpg",
 			"master_resolution": "2407x4000",
 			"notes": "Northern Renaissance panel showing the twelve-year-old Jesus seated in the center teaching the Doctors of the Law while Mary and Joseph arrive behind Him."
 		},
@@ -155,7 +155,7 @@
 			"inventory_number": "GG 222",
 			"license": "Public Domain (CC0 / Google Art Project)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Guido_Reni_-_The_Baptism_of_Christ_-_Google_Art_Project.jpg",
-			"master_file": "assets/2D/gimp/luminous_1_baptism_master_guido_reni.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/luminous_1_baptism_master_guido_reni.jpg",
 			"master_resolution": "4808x6829",
 			"notes": "St. John the Baptist pours water over Christ in the River Jordan as angels hold His garments and the Holy Spirit descends from Heaven."
 		},
@@ -171,7 +171,7 @@
 			"current_location": "Nelson-Atkins Museum of Art, Kansas City, Missouri",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Sebastiano_Ricci_043.jpg",
-			"master_file": "assets/2D/gimp/luminous_2_wedding_at_cana_master_ricci.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/luminous_2_wedding_at_cana_master_ricci.jpg",
 			"master_resolution": "2536x3120",
 			"notes": "Vertical Venetian Baroque composition of the wedding banquet at Cana, with a servant holding up a glass of the newly transformed wine above the stone water jars."
 		},
@@ -186,7 +186,7 @@
 			"current_location": "Museum of National History, Frederiksborg Castle, Hillerød, Denmark",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Bloch-SermonOnTheMount.jpg",
-			"master_file": "assets/2D/gimp/luminous_3_proclamation_master_carl_bloch.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/luminous_3_proclamation_master_carl_bloch.jpg",
 			"master_resolution": "1377x1545",
 			"notes": "Christ seated on the Galilean hillside proclaiming the Kingdom of God and calling His listeners to conversion."
 		},
@@ -202,7 +202,7 @@
 			"current_location": "Church of Our Lady (Onze-Lieve-Vrouwekerk), Bruges, Belgium",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Gerard_David_-_The_transfiguration.jpg",
-			"master_file": "assets/2D/gimp/luminous_4_transfiguration_master_gerard_david.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/luminous_4_transfiguration_master_gerard_david.jpg",
 			"master_resolution": "1329x1823",
 			"notes": "Northern Renaissance panel showing the transfigured Christ on Mount Tabor flanked by Moses and Elijah in the clouds, with God the Father above and Peter, James, and John below."
 		},
@@ -218,7 +218,7 @@
 			"current_location": "Pinacoteca di Brera, Milan, Italy",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_Last_Supper_-_WGA20255.jpg",
-			"master_file": "assets/2D/gimp/luminous_5_eucharist_master_rubens.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/luminous_5_eucharist_master_rubens.jpg",
 			"master_resolution": "2500x3033",
 			"notes": "Baroque altarpiece depicting Christ bathed in candlelight at the Last Supper, blessing the Eucharistic bread with the chalice before Him."
 		},
@@ -235,7 +235,7 @@
 			"inventory_number": "GG 9127",
 			"license": "Public Domain (CC0 / Google Art Project)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Giovanni_Battista_Caracciolo,_called_Battistello_-_Christ_on_the_Mount_of_Olives_(Christ%E2%80%99s_Fear_of_Death)_-_Google_Art_Project.jpg",
-			"master_file": "assets/2D/gimp/sorrowful_1_agony_master_caracciolo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/sorrowful_1_agony_master_caracciolo.jpg",
 			"master_resolution": "5037x6166",
 			"notes": "Caravaggesque tenebrist depiction of Christ kneeling in agony in Gethsemane as a comforting angel leans down from Heaven."
 		},
@@ -251,7 +251,7 @@
 			"current_location": "St. Paul's Church (Sint-Pauluskerk), Antwerp, Belgium",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:De_Mysteri%C3%ABn_van_de_Rozenkrans._De_geseling_van_Christus,_Peter_Paul_Rubens,_17de_eeuw,_Sint-Pauluskerk_Antwerpen.jpg",
-			"master_file": "assets/2D/gimp/sorrowful_2_scourging_master_rubens.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/sorrowful_2_scourging_master_rubens.jpg",
 			"master_resolution": "5126x6920",
 			"notes": "Painted by Rubens specifically for the Fifteen Mysteries of the Rosary cycle at St. Paul's Church in Antwerp."
 		},
@@ -268,7 +268,7 @@
 			"inventory_number": "P01474",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Anthonis_van_Dyck_004.jpg",
-			"master_file": "assets/2D/gimp/sorrowful_3_crowning_with_thorns_master_van_dyck.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/sorrowful_3_crowning_with_thorns_master_van_dyck.jpg",
 			"master_resolution": "2362x2705",
 			"notes": "Flemish Baroque masterpiece depicting Roman soldiers pressing the crown of thorns onto Christ and offering a reed scepter."
 		},
@@ -285,7 +285,7 @@
 			"inventory_number": "P00298",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Christ_Falling_on_the_Way_to_Calvary_-_Raphael.jpg",
-			"master_file": "assets/2D/gimp/sorrowful_4_carrying_cross_master_raphael.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/sorrowful_4_carrying_cross_master_raphael.jpg",
 			"master_resolution": "2200x3051",
 			"notes": "High Renaissance masterpiece showing Christ falling beneath the Cross on the way to Calvary and exchanging a sorrowful gaze with the Blessed Virgin Mary."
 		},
@@ -302,7 +302,7 @@
 			"inventory_number": "P00967",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Cristo_crucificado_(Murillo).jpg",
-			"master_file": "assets/2D/gimp/sorrowful_5_crucifixion_master_murillo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/sorrowful_5_crucifixion_master_murillo.jpg",
 			"master_resolution": "2029x2717",
 			"notes": "Spanish Baroque Crucifixion by Murillo at the Museo del Prado, showing Christ on the Cross illuminated against the dark sky of Golgotha."
 		},
@@ -319,7 +319,7 @@
 			"inventory_number": "0651",
 			"license": "Public Domain (CC0 / Google Art Project)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Bartolom%C3%A9_Esteban_Murillo_-_Resurrecci%C3%B3n_del_Se%C3%B1or_-_Google_Art_Project.jpg",
-			"master_file": "assets/2D/gimp/glorious_1_resurrection_master_murillo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/glorious_1_resurrection_master_murillo.jpg",
 			"master_resolution": "2051x3001",
 			"notes": "The risen Christ ascends in radiant golden light holding the banner of victory while the Roman guards recoil and sleep around the open tomb below."
 		},
@@ -336,7 +336,7 @@
 			"inventory_number": "42.556",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Jesus_ascending_to_heaven.jpg",
-			"master_file": "assets/2D/gimp/glorious_2_ascension_master_copley.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/glorious_2_ascension_master_copley.jpg",
 			"master_resolution": "2802x3134",
 			"notes": "Painted during Copley's study in Rome; Christ ascends in white robes into golden clouds as the Apostles kneel in wonder and two angels point heavenward."
 		},
@@ -353,7 +353,7 @@
 			"inventory_number": "P03018",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Maino_Pentecost%C3%A9s,_1620-1625._Museo_del_Prado.jpg",
-			"master_file": "assets/2D/gimp/glorious_3_pentecost_master_maino.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/glorious_3_pentecost_master_maino.jpg",
 			"master_resolution": "2244x2952",
 			"notes": "Spanish Baroque altarpiece depicting the Virgin Mary at the center of the Upper Room surrounded by the Apostles and Mary Magdalene as the Holy Spirit and tongues of fire descend."
 		},
@@ -370,7 +370,7 @@
 			"inventory_number": "ГЭ-341",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Bartolome_Murillo_-_Assumption_of_the_Virgin.jpg",
-			"master_file": "assets/2D/gimp/glorious_4_assumption_master_murillo.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/glorious_4_assumption_master_murillo.jpg",
 			"master_resolution": "3183x4305",
 			"notes": "The Virgin Mary rises into heavenly golden light in white and royal blue robes, borne aloft by a joyful choir of cherubim."
 		},
@@ -387,7 +387,7 @@
 			"inventory_number": "P01168",
 			"license": "Public Domain (CC0 / PD-Art)",
 			"master_source_url": "https://commons.wikimedia.org/wiki/File:Diego_Vel%C3%A1zquez_-_Coronation_of_the_Virgin_-_Prado.jpg",
-			"master_file": "assets/2D/gimp/glorious_5_coronation_master_velazquez.jpg",
+			"master_file": "assets/2D/gimp/original_downloads/glorious_5_coronation_master_velazquez.jpg",
 			"master_resolution": "2292x3051",
 			"notes": "God the Father and God the Son crown the Virgin Mary with a wreath of roses beneath the radiant dove of the Holy Spirit."
 		}

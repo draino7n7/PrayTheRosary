@@ -125,13 +125,15 @@ Each decade is represented as an independent spread:
     - `art_year`: String
     - `art_source`: String
 
-### 4.2 Sacred Art Standards
+### 4.2 Sacred Art Standards & Archival Protection
 - Public Domain (CC0 / Open Access) from institutions like:
-  - The Metropolitan Museum of Art (Open Access)
-  - National Gallery of Art (NGA Images)
-  - The Art Institute of Chicago
-  - Wikimedia Commons (Public Domain)
-- File format: Compressed WebP or PNG for Godot runtime; master print TIFF/high-res JPEG kept in asset archive for print export.
+  - Museo del Prado, National Gallery, Kunsthistorisches Museum, Metropolitan Museum of Art, National Gallery of Art, Art Institute of Chicago, and Wikimedia Commons.
+- **Immutable Original Downloads (`assets/2D/gimp/original_downloads/`):**
+  - All 23 `*_master_*.jpg` files in `assets/2D/gimp/original_downloads/` (cataloged in `assets/2D/gimp/attributions.json`) are unmodified, byte-for-byte archival downloads.
+  - Agents and scripts must **never** modify, overwrite, crop, resize, rename, or delete any file inside `assets/2D/gimp/original_downloads/`.
+- **Derived Assets:**
+  - Working GIMP project files (`.xcf`) and print-ready crops belong in `assets/2D/gimp/`.
+  - Compressed runtime textures (`.webp` / `.png` / `.jpg`) for the Godot application belong in `game/assets/`.
 
 ---
 
