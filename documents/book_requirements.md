@@ -64,9 +64,9 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 3. **Left-Hand Mystery Prayer Pages (`Even Page Sides 6, 8, 10, ..., 44`):**
    - Self-contained on a single $6" \times 9"$ page so the reader never turns a page mid-decade:
      - Mystery Ordinal Subtitle, Title, and **Fruit of the Mystery**
-     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and ordered citation (including traditional DRBO book names with modern equivalents where helpful, such as *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*)
+     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and clean book, chapter, and verse citation (without repeating a trailing `" (Douay-Rheims)"` suffix on each page, since the `Douay-Rheims / Confraternity Edition of the Bible` is noted once in the front matter on Page Side 3 under *"How This Book Is Organized"* and in the Page Side 49 colophon; includes traditional DRBO book names with modern equivalents where helpful, such as *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*, ordered strictly to match the sequence of quoted verses)
      - 1–2 sentence Contemplative Meditation
-     - Full text of the Decade Prayers (*Our Father*, *Hail Mary* with `10×` rubric, *Glory Be*, and *Fatima Prayer*)
+     - Full text of the Decade Prayers (*The Our Father* `1×`, *The Hail Mary* `10×`, *The Glory Be* `1×`, and *The Fatima Prayer* `1×`, using the simplified titles `"The Our Father"` and `"The Glory Be"` without parenthetical `"The Lord's Prayer"` or `"(Doxology)"`)
 
 ---
 
