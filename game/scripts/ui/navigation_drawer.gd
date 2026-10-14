@@ -123,6 +123,7 @@ var _is_built: bool = false
 @onready var scrim: ColorRect = get_node_or_null("DrawerOverlay/Scrim") as ColorRect
 @onready var drawer_panel: PanelContainer = get_node_or_null("DrawerOverlay/DrawerPanel") as PanelContainer
 @onready var close_button: Button = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/CloseButton") as Button
+@onready var drawer_scroll: ScrollContainer = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll") as ScrollContainer
 @onready var content_container: VBoxContainer = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll/ContentContainer") as VBoxContainer
 @onready var resume_button: Button = null
 
@@ -179,6 +180,11 @@ func _resolve_nodes() -> void:
 		drawer_panel = get_node_or_null("DrawerOverlay/DrawerPanel") as PanelContainer
 	if close_button == null:
 		close_button = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/CloseButton") as Button
+	if drawer_scroll == null:
+		drawer_scroll = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll") as ScrollContainer
+	if drawer_scroll != null:
+		drawer_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		drawer_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	if content_container == null:
 		content_container = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll/ContentContainer") as VBoxContainer
 
@@ -242,6 +248,7 @@ func _build_drawer_items() -> void:
 	# 8. Bottom Landmark Section Buttons
 	_build_landmark_group(LANDMARKS_BOTTOM)
 
+	BasePageCard.configure_pass_through_mouse_filters(content_container)
 	_is_built = true
 
 

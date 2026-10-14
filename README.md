@@ -46,7 +46,7 @@ The UI is built around a modular page card component architecture designed for t
 ## Continuous Vertical Scroll View & Navigation
 
 The application connects all 50 sequential pages into a unified, distraction-free reading experience:
-- **Continuous 50-Page Stream (`game/scenes/main/main.tscn` / `game/scripts/main/main.gd`):** Presents all pages from Cover to Back Cover in a single vertical `ScrollContainer`. Page cards stay horizontally centered at a 2:3 aspect ratio against a deep ambient espresso backdrop (`#141010`).
+- **Continuous 50-Page Stream (`game/scenes/main/main.tscn` / `game/scripts/main/main.gd`):** Presents all pages from Cover to Back Cover in a single vertical `ScrollContainer` with a clean, scrollbar-free layout (`SCROLL_MODE_SHOW_NEVER`) and pass-through mouse filters (`MOUSE_FILTER_PASS` / `MOUSE_FILTER_IGNORE`), supporting smooth touch swipe, left-mouse click-drag, and mouse wheel scrolling across mobile, tablet, and desktop. Page cards stay horizontally centered at a 2:3 aspect ratio against a deep ambient espresso backdrop (`#141010`).
 - **Top-Right Navigation Drawer & Table of Contents (`game/scenes/ui/navigation_drawer.tscn`):** An unobtrusive floating button (`☰`) in the top-right corner slides open a full-featured navigation drawer with background touch isolation, featuring:
   - **"Resume Last Page" Action:** Dynamically remembers and displays the last visited page with one-tap restoration.
   - **Expandable Mystery Set Accordions:** Dual-action rows for all 4 Mystery sets with left disclosure arrows (`▸` / `▾`) expanding the 5 individual mysteries and title buttons navigating directly to each set's opening page.

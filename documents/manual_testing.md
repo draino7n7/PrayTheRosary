@@ -101,12 +101,21 @@ This document outlines the strict manual testing procedures required before any 
 
 ## Test 6.0: Continuous 50-Page Vertical Scroll, Jump Bars & Reading Progress
 
-### TC-SCROLL-01: Continuous 50-Page Scroll View & Viewport Centering
+### TC-SCROLL-01: Continuous 50-Page Scroll View, Hidden Scrollbars & Touch/Mouse/Wheel Scrolling
 - **Step 1:** Launch the application (`godot --path game`) on desktop (widescreen window) and resize or simulate mobile (portrait).
 - **Expected:**
   - The application presents all 50 sequential page cards in a single vertical stream.
+  - **No Scrollbars:** Neither the main 50-page `ScrollContainer` nor the `NavigationDrawer/DrawerScroll` renders a vertical or horizontal scrollbar along the right or bottom edge (`vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER`, `horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED`).
   - In widescreen / desktop mode, page cards remain centered horizontally with strict 2:3 aspect ratio against the deep espresso `#141010` ambient backdrop.
   - In portrait mode, page cards fill the screen width smoothly.
+- **Step 2:** Hover the cursor directly over page card backgrounds, sacred artwork paintings, text paragraphs, and in-stream separator bars, and scroll up/down using the **mouse wheel** (`MOUSE_BUTTON_WHEEL_UP` / `MOUSE_BUTTON_WHEEL_DOWN`).
+- **Expected:**
+  - The 50-page stream scrolls smoothly up and down regardless of which child control is beneath the cursor (no child control swallows wheel events).
+- **Step 3:** On a touchscreen (or using left-mouse-button click-and-drag on desktop), swipe/drag vertically up and down across page cards and separator buttons.
+- **Expected:**
+  - Swiping/dragging up (`relative.y < 0`) smoothly advances down the stream (`scroll_vertical` increases), and swiping/dragging down (`relative.y > 0`) scrolls back up toward Page 1 (`scroll_vertical` decreases).
+  - Unpressed mouse hover motion (`button_mask == 0`) does not scroll the stream.
+  - Interactive buttons inside `InStreamJumpBar` and `NavigationDrawer` (`mouse_filter = MOUSE_FILTER_PASS`) still respond to clicks/taps normally while allowing drag gestures to scroll.
 
 ### TC-SCROLL-02: In-Stream Mystery Set Jump Bar (After Page 5)
 - **Step 1:** Scroll past Page 5 (The Opening Prayers).

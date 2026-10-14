@@ -13,6 +13,8 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
 ### Core Design Tenets
 1. **Continuous 50-Page Vertical Scroll:**
    - The application presents all **50 sequential portrait pages** (`Page 1` Front Cover at the very top through `Page 50` Back Cover at the bottom) in a single smooth vertical `ScrollContainer`.
+   - **Scrollbar-Free Sacred Booklet Aesthetic:** Both `Main/ScrollContainer` and `NavigationDrawer/DrawerScroll` enforce `vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER` (`3`) and `horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED` (`0`) so no right-side or bottom scrollbar ever interrupts the full-bleed contemplation view.
+   - **Touch Swipe, Mouse Drag & Mouse Wheel Scrolling:** `Main.handle_scroll_input(event)` (invoked from `Main._input(event)` when the navigation drawer is closed) directly handles `InputEventScreenDrag` (touch swipe), left-mouse-button `InputEventMouseMotion` (`button_mask & MOUSE_BUTTON_MASK_LEFT != 0`), and `InputEventMouseButton` (`MOUSE_BUTTON_WHEEL_UP` / `MOUSE_BUTTON_WHEEL_DOWN`), clamping `scroll_container.scroll_vertical` to `[0, max_scroll]` and cancelling any active scroll tween. In `game/project.godot`, `[input_devices]` sets `pointing/emulate_touch_from_mouse=true`.
    - Every page is rendered as a distinct **$2:3$ ($6:9$) portrait page card**. On portrait mobile screens, page cards fill the viewport width; on wider tablet/desktop windows, page cards remain centered horizontally at a $2:3$ aspect ratio against a deep ambient backdrop (`#141010`).
    - Integrated with 5 in-stream quick-jump separator bars (`InStreamJumpBar`) placed after Page 5 and after each mystery set (Pages 15, 25, 35, 45), comprising exactly 55 elements in the continuous stream.
 2. **Distraction-Free Contemplation:**
@@ -58,11 +60,12 @@ The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the ve
 
 ### 3.0 Modular Component Architecture
 - **Root Facade Component (`res://scenes/ui/page_card.tscn` / `res://scripts/ui/page_card.gd`):**
-  - Inherits `AspectRatioContainer` with strict $2:3$ ratio (`ratio = 2.0 / 3.0`) and minimum design size `720×1080`.
+  - Inherits `BasePageCard` (`AspectRatioContainer`) with strict $2:3$ ratio (`ratio = 2.0 / 3.0`) and minimum design size `720×1080`.
   - Automatically instantiates and hosts the appropriate specialized sub-card based on `page_data["page_type"]`.
   - Exposes static factory method `PageCard.create_for_page(page_data, loader)` and `bind_page_data(page_data, loader)` for continuous scroll instantiation.
 - **Base Class (`res://scripts/ui/pages/base_page_card.gd`):**
-  - Defines `BasePageCard`, extending `Control`, establishing the common lifecycle method `bind_page_data(page_data, loader)` and standard inspector accessors (`get_heading_text()`, `get_subheading_text()`, `get_body_text()`).
+  - Defines `BasePageCard`, extending `AspectRatioContainer`, establishing `mouse_filter = Control.MOUSE_FILTER_PASS`, the common lifecycle method `bind_page_data(page_data, loader)`, standard inspector accessors (`get_heading_text()`, `get_subheading_text()`), and the recursive helper `BasePageCard.configure_pass_through_mouse_filters(node: Node)`.
+  - **Pass-Through Mouse Filter Enforcement:** Every `Control` inside `PageCard`, `InStreamJumpBar`, and `NavigationDrawer/ContentContainer` is configured via `configure_pass_through_mouse_filters()` so that `BaseButton` descendants use `Control.MOUSE_FILTER_PASS` (allowing clicks/taps while passing drag/wheel input through), `Label` / `TextureRect` / `ColorRect` nodes use `Control.MOUSE_FILTER_IGNORE`, and layout containers use `Control.MOUSE_FILTER_PASS` (never `Control.MOUSE_FILTER_STOP`).
 - **Data Hydration (`res://scripts/data/rosary_data_loader.gd`):**
   - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`.
   - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.

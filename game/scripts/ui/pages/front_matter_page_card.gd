@@ -73,6 +73,8 @@ func _apply_page_data() -> void:
 
 			sections_container.add_child(sec_vbox)
 
+	configure_pass_through_mouse_filters(self)
+
 
 func get_section_count() -> int:
 	if sections_container != null:

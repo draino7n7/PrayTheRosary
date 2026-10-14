@@ -62,6 +62,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+mouse_filter = 1
 ratio = 0.666667
 alignment_horizontal = 1
 alignment_vertical = 1
@@ -72,24 +73,29 @@ custom_minimum_size = Vector2(720, 1080)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_cover_panel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CardPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_constants/separation = 14
 
 [node name="HeaderBand" type="PanelContainer" parent="CardPanel/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_header_band")
 
 [node name="TitleVBox" type="VBoxContainer" parent="CardPanel/VBoxContainer/HeaderBand"]
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="CardPanel/VBoxContainer/HeaderBand/TitleVBox"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
 theme_override_colors/font_shadow_color = Color(0.1, 0.02, 0.02, 0.8)
 theme_override_constants/shadow_offset_x = 1
@@ -101,6 +107,7 @@ horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="CardPanel/VBoxContainer/HeaderBand/TitleVBox"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_colors/font_shadow_color = Color(0.1, 0.02, 0.02, 0.8)
 theme_override_constants/shadow_offset_x = 1
@@ -115,18 +122,21 @@ autowrap_mode = 2
 custom_minimum_size = Vector2(220, 2)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 color = Color(0.831373, 0.686275, 0.215686, 1)
 
 [node name="ArtworkContainer" type="PanelContainer" parent="CardPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_artwork_frame")
 
 [node name="CoverTexture" type="TextureRect" parent="CardPanel/VBoxContainer/ArtworkContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 texture = ExtResource("2_tex")
 expand_mode = 1
 stretch_mode = 5

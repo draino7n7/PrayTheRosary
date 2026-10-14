@@ -23,6 +23,7 @@ static func create_for_page(data: Dictionary, loader: RosaryDataLoader = null) -
 func _ready() -> void:
 	if not page_data.is_empty() and current_sub_card == null:
 		_apply_page_data()
+	configure_pass_through_mouse_filters(self)
 
 
 func _apply_page_data() -> void:
@@ -46,6 +47,7 @@ func _apply_page_data() -> void:
 	current_sub_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(current_sub_card)
 	current_sub_card.bind_page_data(page_data, data_loader)
+	configure_pass_through_mouse_filters(self)
 
 
 func _resolve_scene_for_page_type(p_type: String) -> PackedScene:

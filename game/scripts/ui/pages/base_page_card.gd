@@ -32,6 +32,7 @@ func _init() -> void:
 	custom_minimum_size = DESIGN_SIZE
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	mouse_filter = Control.MOUSE_FILTER_PASS
 
 
 func bind_page_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
@@ -40,6 +41,7 @@ func bind_page_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
 	page_number = int(data.get("page_number", 0))
 	page_type = str(data.get("page_type", ""))
 	_apply_page_data()
+	configure_pass_through_mouse_filters(self)
 
 
 func set_page_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
@@ -49,6 +51,21 @@ func set_page_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
 func _apply_page_data() -> void:
 	# Virtual method implemented by subclasses
 	pass
+
+
+static func configure_pass_through_mouse_filters(node: Node) -> void:
+	if node == null:
+		return
+	if node is BaseButton:
+		(node as BaseButton).mouse_filter = Control.MOUSE_FILTER_PASS
+	elif node is Control:
+		var ctrl: Control = node as Control
+		if ctrl is Label or ctrl is TextureRect or ctrl is ColorRect:
+			ctrl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			ctrl.mouse_filter = Control.MOUSE_FILTER_PASS
+	for child: Node in node.get_children():
+		configure_pass_through_mouse_filters(child)
 
 
 func get_heading_text() -> String:
