@@ -71,8 +71,105 @@ func test_page_1_front_cover_card() -> void:
 	assert_not_null(tex, "Cover artwork texture must load")
 	assert_true(tex.get_width() > 0 and tex.get_height() > 0, "Cover texture must have non-zero dimensions")
 
+	var cover_sub: CoverPageCard = card.get_sub_card() as CoverPageCard
+	assert_not_null(cover_sub, "Sub card must be CoverPageCard")
+
+	var header_c: Control = cover_sub.get_header_container()
+	var artwork_c: Control = cover_sub.get_artwork_container()
+	var cover_tex_rect: TextureRect = cover_sub.get_cover_texture()
+	var title_lbl: Label = cover_sub.title_label
+	var subtitle_lbl: Label = cover_sub.subtitle_label
+
+	assert_not_null(header_c, "Top Header Band container must exist")
+	assert_not_null(artwork_c, "Artwork framed container must exist")
+	assert_not_null(cover_tex_rect, "CoverTexture must exist")
+	assert_not_null(title_lbl, "TitleLabel must exist")
+	assert_not_null(subtitle_lbl, "SubtitleLabel must exist")
+
+	# Verify vertical layout hierarchy separation
+	assert_eq(header_c.get_parent(), artwork_c.get_parent(), "Header and Artwork containers must share the same vertical container parent")
+	assert_true(header_c.get_parent() is VBoxContainer, "Header and Artwork container parent must be a VBoxContainer")
+	assert_true(header_c.get_index() < artwork_c.get_index(), "Header container must precede artwork container in vertical layout order")
+
+	# Force layout update to compute rects
+	card.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	card.size = Vector2(720, 1080)
+	card.propagate_notification(Container.NOTIFICATION_SORT_CHILDREN)
+
+	var header_bottom: float = header_c.position.y + header_c.size.y
+	var artwork_top: float = artwork_c.position.y
+	assert_true(header_bottom <= artwork_top, "Header bottom (%f) must be <= artwork top (%f)" % [header_bottom, artwork_top])
+
+	var title_rect: Rect2 = title_lbl.get_global_rect()
+	var subtitle_rect: Rect2 = subtitle_lbl.get_global_rect()
+	var cover_rect: Rect2 = cover_tex_rect.get_global_rect()
+	assert_false(title_rect.intersects(cover_rect), "Title label must not overlap cover texture")
+	assert_false(subtitle_rect.intersects(cover_rect), "Subtitle label must not overlap cover texture")
+	assert_true(title_rect.end.y <= cover_rect.position.y, "Title label bottom must be strictly above cover texture top")
+	assert_true(subtitle_rect.end.y <= cover_rect.position.y, "Subtitle label bottom must be strictly above cover texture top")
+
 	_assert_no_visible_page_numbers(card, 1)
 	card.free()
+
+
+func test_cover_page_card_dedicated_header_and_framed_artwork() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var p1: Dictionary = loader.get_page(1)
+	assert_false(p1.is_empty(), "Page 1 data must exist")
+
+	var cover: CoverPageCard = CoverPageCardScene.instantiate() as CoverPageCard
+	test_root_window.add_child(cover)
+	cover.bind_page_data(p1, loader)
+
+	var header_c: Control = cover.get_header_container()
+	var artwork_c: Control = cover.get_artwork_container()
+	var tex_rect: TextureRect = cover.get_cover_texture()
+
+	assert_not_null(header_c, "Header container must not be null")
+	assert_not_null(artwork_c, "Artwork container must not be null")
+	assert_not_null(tex_rect, "CoverTexture must not be null")
+
+	# Verify TextureRect aspect ratio preserving properties
+	assert_eq(tex_rect.expand_mode, TextureRect.EXPAND_IGNORE_SIZE, "CoverTexture expand_mode must be EXPAND_IGNORE_SIZE (1)")
+	assert_eq(tex_rect.stretch_mode, TextureRect.STRETCH_KEEP_ASPECT_CENTERED, "CoverTexture stretch_mode must be STRETCH_KEEP_ASPECT_CENTERED (5)")
+
+	# Verify container hierarchy and ordering
+	var parent_vbox: VBoxContainer = header_c.get_parent() as VBoxContainer
+	assert_not_null(parent_vbox, "Parent container must be a VBoxContainer")
+	assert_eq(artwork_c.get_parent(), parent_vbox, "Artwork container must share the same parent VBoxContainer")
+	assert_true(header_c.get_index() < artwork_c.get_index(), "Header must appear before artwork container in VBox order")
+
+	# Verify layout rects and separation
+	cover.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	cover.size = Vector2(720, 1080)
+	cover.propagate_notification(Container.NOTIFICATION_SORT_CHILDREN)
+
+	var header_bottom: float = header_c.position.y + header_c.size.y
+	var artwork_top: float = artwork_c.position.y
+	assert_true(header_bottom <= artwork_top, "Header bottom must be strictly <= artwork top (%f vs %f)" % [header_bottom, artwork_top])
+
+	var title_lbl: Label = cover.title_label
+	var subtitle_lbl: Label = cover.subtitle_label
+	assert_not_null(title_lbl, "Title label must exist")
+	assert_not_null(subtitle_lbl, "Subtitle label must exist")
+
+	var title_rect: Rect2 = title_lbl.get_global_rect()
+	var subtitle_rect: Rect2 = subtitle_lbl.get_global_rect()
+	var tex_rect_bounds: Rect2 = tex_rect.get_global_rect()
+
+	assert_false(title_rect.intersects(tex_rect_bounds), "Title must have zero overlap with cover texture")
+	assert_false(subtitle_rect.intersects(tex_rect_bounds), "Subtitle must have zero overlap with cover texture")
+	assert_true(title_rect.end.y <= tex_rect_bounds.position.y, "Title rect bottom must be strictly above artwork top")
+	assert_true(subtitle_rect.end.y <= tex_rect_bounds.position.y, "Subtitle rect bottom must be strictly above artwork top")
+
+	# Test artwork unload and reload lifecycle
+	assert_not_null(cover.get_artwork_texture(), "Artwork texture must be loaded")
+	cover.unload_artwork()
+	assert_null(tex_rect.texture, "Unload artwork must clear texture")
+	cover.load_artwork()
+	assert_not_null(cover.get_artwork_texture(), "Load artwork must restore texture")
+
+	cover.free()
 
 
 func test_pages_2_and_3_front_matter_cards() -> void:
