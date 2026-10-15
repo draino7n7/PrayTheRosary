@@ -28,10 +28,12 @@ func _apply_page_data() -> void:
 		artwork_container = _resolve_artwork_container()
 
 	if title_label != null:
+		title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		var raw_title: String = str(page_data.get("title", "PRAY THE ROSARY"))
 		title_label.text = raw_title.to_upper()
 
 	if subtitle_label != null:
+		subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		var raw_subtitle: String = str(page_data.get("subtitle", "A Contemplative Visual Guide to the Twenty Mysteries"))
 		subtitle_label.text = raw_subtitle
 

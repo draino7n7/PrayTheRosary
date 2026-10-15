@@ -33,28 +33,35 @@ func _apply_page_data() -> void:
 		counsel_attr_label = get_node_or_null("CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/CounselContainer/CounselAttrLabel") as Label
 
 	if title_label != null:
+		title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		var raw_title: String = str(page_data.get("title", "PRAY THE ROSARY"))
 		title_label.text = raw_title.to_upper()
 
 	if subtitle_label != null:
+		subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		subtitle_label.text = str(page_data.get("subtitle", "A Contemplative Visual Guide to the Twenty Mysteries"))
 
 	var epigraph: Dictionary = page_data.get("epigraph", {})
 	if epigraph_quote_label != null:
+		epigraph_quote_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		epigraph_quote_label.text = "“%s”" % str(epigraph.get("quote", ""))
 		epigraph_quote_label.add_theme_constant_override("line_spacing", 3)
 	if epigraph_attr_label != null:
+		epigraph_attr_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		epigraph_attr_label.text = "— %s" % str(epigraph.get("attribution", ""))
 
 	if synopsis_label != null:
+		synopsis_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		synopsis_label.text = str(page_data.get("synopsis", ""))
 		synopsis_label.add_theme_constant_override("line_spacing", 3)
 
 	var counsel: Dictionary = page_data.get("marian_counsel", {})
 	if counsel_quote_label != null:
+		counsel_quote_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		counsel_quote_label.text = "“%s”" % str(counsel.get("quote", ""))
 		counsel_quote_label.add_theme_constant_override("line_spacing", 3)
 	if counsel_attr_label != null:
+		counsel_attr_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		counsel_attr_label.text = "— %s" % str(counsel.get("attribution", ""))
 
 

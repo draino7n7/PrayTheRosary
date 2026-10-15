@@ -5,6 +5,10 @@
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="3_font_italic"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 bg_color = Color(0.980392, 0.964706, 0.933333, 1)
 border_width_left = 2
 border_width_top = 2
@@ -65,6 +69,7 @@ theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 22
 text = "Entering into the Presence of the Most Holy Trinity"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="HeadingLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
 layout_mode = 2
@@ -74,6 +79,7 @@ theme_override_fonts/font = ExtResource("2_font_bold")
 theme_override_font_sizes/font_size = 34
 text = "The Opening Prayers"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
 custom_minimum_size = Vector2(240, 2)

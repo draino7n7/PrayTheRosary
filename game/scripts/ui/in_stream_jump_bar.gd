@@ -62,6 +62,7 @@ func _apply_separator_data() -> void:
 		buttons_container = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer") as VBoxContainer
 
 	if prompt_label != null:
+		prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		prompt_label.text = prompt_text
 
 	if buttons_container == null:

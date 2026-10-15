@@ -25,8 +25,10 @@ func _apply_page_data() -> void:
 		artwork_texture = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ArtFrame/ArtworkTexture") as TextureRect
 
 	if subheading_label != null:
+		subheading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		subheading_label.text = str(page_data.get("subheading", ""))
 	if heading_label != null:
+		heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		heading_label.text = str(page_data.get("heading", ""))
 
 	load_artwork()

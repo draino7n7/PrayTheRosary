@@ -6,6 +6,10 @@
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Regular.ttf" id="4_font_regular"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 bg_color = Color(0.980392, 0.964706, 0.933333, 1)
 border_width_left = 2
 border_width_top = 2
@@ -91,6 +95,7 @@ theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 22
 text = "The First Joyful Mystery"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="HeadingLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
 layout_mode = 2
@@ -100,6 +105,7 @@ theme_override_fonts/font = ExtResource("2_font_bold")
 theme_override_font_sizes/font_size = 34
 text = "The Annunciation"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="FruitBadge" type="PanelContainer" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
 layout_mode = 2
@@ -115,6 +121,7 @@ theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 18
 text = "Fruit of the Mystery: Humility"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/VBoxContainer/HeaderVBox"]
 custom_minimum_size = Vector2(240, 2)
@@ -140,6 +147,7 @@ theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
 theme_override_fonts/font = ExtResource("2_font_bold")
 theme_override_font_sizes/font_size = 17
 text = "Luke 1:28, 38 (Douay-Rheims)"
+autowrap_mode = 3
 
 [node name="ScriptureTextLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ScriptureContainer/ScriptureVBox"]
 layout_mode = 2
@@ -148,7 +156,7 @@ theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 22
 text = "“And the angel being come in, said unto her: Hail, full of grace...”"
-autowrap_mode = 2
+autowrap_mode = 3
 
 [node name="MeditationLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -157,7 +165,7 @@ theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
 theme_override_font_sizes/font_size = 22
 text = "With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word."
-autowrap_mode = 2
+autowrap_mode = 3
 
 [node name="DecadePrayersContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2

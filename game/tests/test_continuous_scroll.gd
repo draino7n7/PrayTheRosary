@@ -824,4 +824,21 @@ func test_scroll_anchor_stability_on_preset_switch() -> void:
 	main_node.free()
 
 
+func test_page_container_width_constraint_across_presets() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	var presets: Array[String] = ["normal", "mobile", "extra_large"]
+	for preset: String in presets:
+		main_node.set_text_size_preset(preset)
+		var pc: VBoxContainer = main_node.page_container
+		assert_not_null(pc, "PageContainer must exist in Main")
+		var pc_min_w: float = pc.get_combined_minimum_size().x
+		assert_true(pc_min_w <= 720.0, "PageContainer combined_minimum_size.x (%f) must be <= 720.0 under preset '%s'" % [pc_min_w, preset])
+
+	main_node.free()
+
+
+
 
