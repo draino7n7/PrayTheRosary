@@ -126,6 +126,8 @@ func handle_scroll_input(event: InputEvent) -> void:
 	if navigation_drawer != null and navigation_drawer.is_open():
 		_stop_momentum()
 		return
+	if event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
 
 	# 1. Screen Touch (Tap / Press Down & Release)
 	if event is InputEventScreenTouch:
@@ -190,11 +192,14 @@ func handle_scroll_input(event: InputEvent) -> void:
 	# 3. Screen Drag
 	elif event is InputEventScreenDrag:
 		var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
+		delta_y = -int(round(drag_event.relative.y))
+		if delta_y == 0:
+			return
+
 		if _is_momentum_scrolling:
 			_stop_momentum()
 		if _scroll_tween != null and _scroll_tween.is_valid():
 			_scroll_tween.kill()
-		delta_y = -int(round(drag_event.relative.y))
 
 		var now: int = Time.get_ticks_msec()
 		var sample_vel_y: float = 0.0
@@ -214,11 +219,15 @@ func handle_scroll_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
 		if (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+			_is_mouse_dragging = true
+			delta_y = -int(round(motion_event.relative.y))
+			if delta_y == 0:
+				return
+
 			if _is_momentum_scrolling:
 				_stop_momentum()
 			if _scroll_tween != null and _scroll_tween.is_valid():
 				_scroll_tween.kill()
-			delta_y = -int(round(motion_event.relative.y))
 
 			var now: int = Time.get_ticks_msec()
 			var sample_vel_y: float = 0.0
@@ -233,7 +242,6 @@ func handle_scroll_input(event: InputEvent) -> void:
 			_record_drag_sample(now, sample_vel_y)
 			_drag_velocity_y = _calculate_rolling_velocity(now)
 			_last_drag_time_msec = now
-			_is_mouse_dragging = true
 
 	if delta_y == 0:
 		return
@@ -351,7 +359,7 @@ func _setup_reader_controls() -> void:
 func _setup_navigation_drawer() -> void:
 	_ensure_initialized()
 	if scroll_container != null:
-		scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if navigation_drawer != null:
 		navigation_drawer.set_data_loader(data_loader)
 		navigation_drawer.set_progress_manager(progress_manager)
@@ -562,7 +570,7 @@ func _on_drawer_opened() -> void:
 
 func _on_drawer_closed() -> void:
 	if scroll_container != null:
-		scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if reader_button != null:
 		reader_button.mouse_filter = Control.MOUSE_FILTER_STOP
 

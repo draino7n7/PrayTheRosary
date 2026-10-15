@@ -343,12 +343,15 @@ func test_main_integration_with_navigation_drawer() -> void:
 	main.scroll_to_page(16, false)
 	assert_eq(nav_drawer.get_saved_page(), 16, "Drawer saved page must update when Main scrolls")
 
-	# 3. Opening drawer pauses background scroll touches
-	assert_eq(main.scroll_container.mouse_filter, Control.MOUSE_FILTER_STOP, "ScrollContainer should have MOUSE_FILTER_STOP when drawer closed")
+	# 3. Opening drawer pauses background scroll touches and reader button
+	assert_eq(main.scroll_container.mouse_filter, Control.MOUSE_FILTER_IGNORE, "ScrollContainer should have MOUSE_FILTER_IGNORE when drawer closed")
+	assert_eq(main.reader_button.mouse_filter, Control.MOUSE_FILTER_STOP, "ReaderButton should have MOUSE_FILTER_STOP when drawer closed")
 	nav_drawer.open_drawer(false)
 	assert_eq(main.scroll_container.mouse_filter, Control.MOUSE_FILTER_IGNORE, "ScrollContainer must have MOUSE_FILTER_IGNORE when drawer open")
+	assert_eq(main.reader_button.mouse_filter, Control.MOUSE_FILTER_IGNORE, "ReaderButton must have MOUSE_FILTER_IGNORE when drawer open")
 
 	nav_drawer.close_drawer(false)
-	assert_eq(main.scroll_container.mouse_filter, Control.MOUSE_FILTER_STOP, "ScrollContainer must restore MOUSE_FILTER_STOP when drawer closed")
+	assert_eq(main.scroll_container.mouse_filter, Control.MOUSE_FILTER_IGNORE, "ScrollContainer must maintain MOUSE_FILTER_IGNORE when drawer closed")
+	assert_eq(main.reader_button.mouse_filter, Control.MOUSE_FILTER_STOP, "ReaderButton must restore MOUSE_FILTER_STOP when drawer closed")
 
 	main.free()
