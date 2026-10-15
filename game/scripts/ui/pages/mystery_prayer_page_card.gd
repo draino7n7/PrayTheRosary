@@ -75,34 +75,62 @@ func _apply_page_data() -> void:
 			fruit_font_size = 18
 			citation_font_size = 17
 
+	var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
+	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
+	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
+
+	var sub_text: String = str(page_data.get("subheading", mys.get("ordinal_label", "")))
 	if subheading_label != null:
-		subheading_label.text = str(page_data.get("subheading", mys.get("ordinal_label", "")))
+		subheading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subheading_label.text = sub_text
 		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
+
+	var head_text: String = str(page_data.get("heading", mys.get("title", "")))
 	if heading_label != null:
-		heading_label.text = str(page_data.get("heading", mys.get("title", "")))
+		heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		heading_label.text = head_text
 		heading_label.add_theme_font_size_override("font_size", heading_font_size)
 
+	var fruit_name: String = str(mys.get("fruit", ""))
+	var fruit_str: String = "Fruit of the Mystery: %s" % fruit_name
 	if fruit_label != null:
-		var fruit: String = str(mys.get("fruit", ""))
-		fruit_label.text = "Fruit of the Mystery: %s" % fruit
+		fruit_label.text = fruit_str
+		fruit_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		fruit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		fruit_label.add_theme_font_size_override("font_size", fruit_font_size)
 
+		# Badge padding: 14 left + 14 right = 28px. Available badge width inside 656px card = 656px.
+		var available_badge_w: float = 656.0
+		var badge_margin_h: float = 28.0
+		var max_fruit_label_w: float = available_badge_w - badge_margin_h
+		var unwrapped_fruit_w: float = 0.0
+		if font_italic != null:
+			unwrapped_fruit_w = font_italic.get_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, -1, fruit_font_size).x
+		else:
+			unwrapped_fruit_w = float(fruit_str.length() * fruit_font_size) * 0.6
+		var target_label_w: float = ceilf(minf(unwrapped_fruit_w, max_fruit_label_w))
+		fruit_label.custom_minimum_size = Vector2(target_label_w, 0.0)
+
+		var fruit_badge: PanelContainer = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/HeaderVBox/FruitBadge") as PanelContainer
+		if fruit_badge != null:
+			fruit_badge.custom_minimum_size = Vector2(0.0, 0.0)
+
+	var cite_str: String = str(mys.get("scripture_reference", ""))
 	if scripture_citation_label != null:
-		scripture_citation_label.text = str(mys.get("scripture_reference", ""))
+		scripture_citation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		scripture_citation_label.text = cite_str
 		scripture_citation_label.add_theme_font_size_override("font_size", citation_font_size)
 	if scripture_text_label != null:
+		scripture_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		scripture_text_label.text = "“%s”" % scrip_str
 		scripture_text_label.add_theme_font_size_override("font_size", body_font_size)
 		scripture_text_label.add_theme_constant_override("line_spacing", 2)
 
 	if meditation_label != null:
+		meditation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		meditation_label.text = med_str
 		meditation_label.add_theme_font_size_override("font_size", body_font_size)
 		meditation_label.add_theme_constant_override("line_spacing", 2)
-
-	var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
-	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
 	var decade_prayers: Array = page_data.get("decade_prayers", [])
 	if decade_prayers_container != null:
@@ -133,6 +161,7 @@ func _apply_page_data() -> void:
 				rubric_label.add_theme_font_override("font", font_bold)
 			rubric_label.add_theme_font_size_override("font_size", rubric_font_size)
 			rubric_label.add_theme_color_override("font_color", COLOR_CRIMSON)
+			rubric_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			p_vbox.add_child(rubric_label)
 
 			var p_text: String = str(prayer_dict.get("text", ""))
@@ -152,15 +181,15 @@ func _apply_page_data() -> void:
 
 	var total_h: float = 64.0
 	if font_italic != null:
-		total_h += font_italic.get_height(subheading_font_size) + 4.0
+		total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 	if font_bold != null:
-		total_h += font_bold.get_height(heading_font_size) + 4.0
+		total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
 	if font_italic != null:
-		total_h += font_italic.get_height(fruit_font_size) + 8.0 + 4.0
+		total_h += font_italic.get_multiline_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, 628.0, fruit_font_size).y + 8.0 + 4.0
 	total_h += 2.0 + 10.0
 
 	if font_bold != null:
-		total_h += font_bold.get_height(citation_font_size) + 2.0
+		total_h += font_bold.get_multiline_string_size(cite_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, citation_font_size).y + 2.0
 	if font_italic != null:
 		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + 8.0 + 10.0
 	if font_reg != null:
@@ -174,8 +203,11 @@ func _apply_page_data() -> void:
 		var prayer_dict: Dictionary = p_item.get("prayer", {})
 		if prayer_dict.is_empty() and data_loader != null:
 			prayer_dict = data_loader.get_prayer(pid)
+		var reps: int = int(p_item.get("repetitions", 1))
+		var prayer_title: String = str(prayer_dict.get("title", pid.capitalize()))
+		var rubric_str: String = "%d× %s" % [reps, prayer_title]
 		if font_bold != null:
-			total_h += font_bold.get_height(rubric_font_size) + 2.0
+			total_h += font_bold.get_multiline_string_size(rubric_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y + 2.0
 		var p_text: String = str(prayer_dict.get("text", ""))
 		if p_text != "" and font_reg != null:
 			total_h += font_reg.get_multiline_string_size(p_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y

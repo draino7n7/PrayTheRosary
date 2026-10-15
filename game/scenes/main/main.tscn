@@ -101,6 +101,7 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 
 [node name="PageContainer" type="VBoxContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

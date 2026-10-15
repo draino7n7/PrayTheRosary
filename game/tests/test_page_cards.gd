@@ -833,3 +833,57 @@ func test_artwork_and_cover_cards_aspect_ratio_lock() -> void:
 			assert_true(abs(card.get_sub_card().ratio - (2.0 / 3.0)) < 0.001, "Page %d subcard under preset '%s' must strictly preserve 2:3 ratio lock" % [p_num, preset])
 
 		card.free()
+
+
+func test_all_fifty_pages_width_constraint_across_presets() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var presets: Array[String] = ["normal", "mobile", "extra_large"]
+
+	for p_num: int in range(1, 51):
+		var p_data: Dictionary = loader.get_page(p_num)
+		assert_false(p_data.is_empty(), "Page %d data must exist" % p_num)
+
+		for preset: String in presets:
+			var card: PageCard = PageCardScene.instantiate() as PageCard
+			test_root_window.add_child(card)
+			card.bind_page_data(p_data, loader)
+			card.set_text_size_preset(preset)
+
+			var card_min_w: float = card.get_combined_minimum_size().x
+			assert_true(card_min_w <= 720.0, "Page %d under '%s' card combined_minimum_size.x (%f) must be <= 720.0" % [p_num, preset, card_min_w])
+			assert_true(card.custom_minimum_size.x <= 720.0, "Page %d under '%s' card custom_minimum_size.x (%f) must be <= 720.0" % [p_num, preset, card.custom_minimum_size.x])
+
+			var sub_card: BasePageCard = card.get_sub_card()
+			if sub_card != null:
+				var sub_min_w: float = sub_card.get_combined_minimum_size().x
+				assert_true(sub_min_w <= 720.0, "Page %d under '%s' subcard combined_minimum_size.x (%f) must be <= 720.0" % [p_num, preset, sub_min_w])
+				assert_true(sub_card.custom_minimum_size.x <= 720.0, "Page %d under '%s' subcard custom_minimum_size.x (%f) must be <= 720.0" % [p_num, preset, sub_card.custom_minimum_size.x])
+
+				var card_panel: PanelContainer = sub_card.get_node_or_null("CardPanel") as PanelContainer
+				if card_panel != null:
+					var panel_min_w: float = card_panel.get_combined_minimum_size().x
+					assert_true(panel_min_w <= 720.0, "Page %d under '%s' CardPanel combined_minimum_size.x (%f) must be <= 720.0" % [p_num, preset, panel_min_w])
+
+				_assert_no_label_exceeds_content_width(sub_card, p_num, preset)
+
+			card.free()
+
+
+func _assert_no_label_exceeds_content_width(node: Node, page_num: int, preset: String) -> void:
+	if node is Label:
+		var lbl: Label = node as Label
+		var is_in_scripture: bool = _is_inside_scripture_container(lbl)
+		var max_allowed_w: float = 636.0 if is_in_scripture else 656.0
+		var min_w: float = lbl.get_combined_minimum_size().x
+		assert_true(min_w <= max_allowed_w, "Page %d '%s' label '%s' min_size.x (%f) must not exceed %f" % [page_num, preset, lbl.name, min_w, max_allowed_w])
+	for child: Node in node.get_children():
+		_assert_no_label_exceeds_content_width(child, page_num, preset)
+
+
+static func _is_inside_scripture_container(node: Node) -> bool:
+	var curr: Node = node.get_parent()
+	while curr != null:
+		if curr.name == "ScriptureContainer":
+			return true
+		curr = curr.get_parent()
+	return false

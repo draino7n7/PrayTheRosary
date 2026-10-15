@@ -33,11 +33,15 @@ func _apply_page_data() -> void:
 			heading_font_size = 34
 			subheading_font_size = 22
 
+	var sub_text: String = str(page_data.get("subheading", ""))
 	if subheading_label != null:
-		subheading_label.text = str(page_data.get("subheading", ""))
+		subheading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subheading_label.text = sub_text
 		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
+	var head_text: String = str(page_data.get("heading", ""))
 	if heading_label != null:
-		heading_label.text = str(page_data.get("heading", ""))
+		heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		heading_label.text = head_text
 		heading_label.add_theme_font_size_override("font_size", heading_font_size)
 
 	if steps_container != null:
@@ -72,9 +76,9 @@ func _apply_page_data() -> void:
 
 		var total_h: float = 64.0
 		if font_italic != null:
-			total_h += font_italic.get_height(subheading_font_size) + 4.0
+			total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 		if font_bold != null:
-			total_h += font_bold.get_height(heading_font_size) + 4.0
+			total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
 		total_h += 2.0 + 14.0
 
 		for step_val: Variant in steps:
@@ -118,13 +122,14 @@ func _apply_page_data() -> void:
 				var title_lbl: Label = Label.new()
 				title_lbl.name = "PrayerTitle"
 				title_lbl.text = title
+				title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				if font_bold != null:
 					title_lbl.add_theme_font_override("font", font_bold)
 				title_lbl.add_theme_font_size_override("font_size", title_font_size)
 				title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 				step_vbox.add_child(title_lbl)
 				if font_bold != null:
-					total_h += font_bold.get_height(title_font_size) + 3.0
+					total_h += font_bold.get_multiline_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y + 3.0
 
 			var text: String = str(prayer.get("text", ""))
 			if text != "":

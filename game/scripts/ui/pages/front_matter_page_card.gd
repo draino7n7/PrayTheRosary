@@ -33,11 +33,16 @@ func _apply_page_data() -> void:
 			heading_font_size = 34
 			subheading_font_size = 22
 
+	var sub_text: String = str(page_data.get("subheading", ""))
 	if subheading_label != null:
-		subheading_label.text = str(page_data.get("subheading", ""))
+		subheading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subheading_label.text = sub_text
 		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
+
+	var head_text: String = str(page_data.get("heading", ""))
 	if heading_label != null:
-		heading_label.text = str(page_data.get("heading", ""))
+		heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		heading_label.text = head_text
 		heading_label.add_theme_font_size_override("font_size", heading_font_size)
 
 	if sections_container != null:
@@ -72,9 +77,9 @@ func _apply_page_data() -> void:
 
 		var total_h: float = 64.0
 		if font_italic != null:
-			total_h += font_italic.get_height(subheading_font_size) + 6.0
+			total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 6.0
 		if font_bold != null:
-			total_h += font_bold.get_height(heading_font_size) + 6.0
+			total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 6.0
 		total_h += 2.0 + 20.0
 
 		for sec_val: Variant in sections:
@@ -86,9 +91,10 @@ func _apply_page_data() -> void:
 			sec_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			sec_vbox.add_theme_constant_override("separation", 6)
 
+			var sec_title: String = str(sec.get("title", ""))
 			var title_lbl: Label = Label.new()
 			title_lbl.name = "SectionTitle"
-			title_lbl.text = str(sec.get("title", ""))
+			title_lbl.text = sec_title
 			if font_bold != null:
 				title_lbl.add_theme_font_override("font", font_bold)
 			title_lbl.add_theme_font_size_override("font_size", title_font_size)
@@ -96,7 +102,7 @@ func _apply_page_data() -> void:
 			title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			sec_vbox.add_child(title_lbl)
 			if font_bold != null:
-				total_h += font_bold.get_height(title_font_size) + 6.0
+				total_h += font_bold.get_multiline_string_size(sec_title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y + 6.0
 
 			var body_lbl: Label = Label.new()
 			body_lbl.name = "SectionBody"

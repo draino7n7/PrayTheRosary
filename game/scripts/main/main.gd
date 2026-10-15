@@ -339,6 +339,7 @@ func build_scroll_stream() -> void:
 		return
 
 	page_container.mouse_filter = Control.MOUSE_FILTER_PASS
+	page_container.custom_minimum_size = Vector2(BasePageCard.DESIGN_WIDTH, 0.0)
 
 	# Clear any existing elements
 	for child: Node in page_container.get_children():

@@ -55,11 +55,15 @@ func _apply_page_data() -> void:
 			details_font_size = 14
 			notice_font_size = 13
 
+	var sub_text: String = str(page_data.get("subheading", ""))
 	if subheading_label != null:
-		subheading_label.text = str(page_data.get("subheading", ""))
+		subheading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subheading_label.text = sub_text
 		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
+	var head_text: String = str(page_data.get("heading", ""))
 	if heading_label != null:
-		heading_label.text = str(page_data.get("heading", ""))
+		heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		heading_label.text = head_text
 		heading_label.add_theme_font_size_override("font_size", heading_font_size)
 
 	var artworks: Array = []
@@ -138,19 +142,21 @@ func _apply_page_data() -> void:
 		else:
 			colophon_container.visible = true
 			if scripture_notice_label != null:
+				scripture_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				scripture_notice_label.text = str(colophon.get("scripture_notice", ""))
 				scripture_notice_label.add_theme_font_size_override("font_size", notice_font_size)
 				scripture_notice_label.add_theme_constant_override("line_spacing", -1)
 			if colophon_notice_label != null:
+				colophon_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				colophon_notice_label.text = str(colophon.get("artwork_notice", ""))
 				colophon_notice_label.add_theme_font_size_override("font_size", notice_font_size)
 				colophon_notice_label.add_theme_constant_override("line_spacing", -1)
 
 	var total_h: float = 44.0
 	if font_italic != null:
-		total_h += font_italic.get_height(subheading_font_size) + 2.0
+		total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 2.0
 	if font_bold != null:
-		total_h += font_bold.get_height(heading_font_size) + 2.0
+		total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 2.0
 	total_h += 2.0 + 6.0
 
 	for art_val: Variant in artworks:
