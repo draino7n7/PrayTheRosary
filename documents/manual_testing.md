@@ -117,6 +117,20 @@ This document outlines the strict manual testing procedures required before any 
   - Swiping/dragging up (`relative.y < 0`) smoothly advances down the stream (`scroll_vertical` increases), and swiping/dragging down (`relative.y > 0`) scrolls back up toward Page 1 (`scroll_vertical` decreases).
   - Unpressed mouse hover motion (`button_mask == 0`) does not scroll the stream.
   - Interactive buttons inside `InStreamJumpBar` and `NavigationDrawer` (`mouse_filter = MOUSE_FILTER_PASS`) still respond to clicks/taps normally while allowing drag gestures to scroll.
+- **Step 4:** Perform a fast vertical swipe / flick on a touch screen or fast left-mouse drag.
+- **Expected:**
+  - Scrolling smoothly glides through prayer pages with natural momentum, decelerating smoothly according to exponential friction until resting gently.
+  - As pages pass through the viewport, texture virtualization dynamically loads active paintings and frees distant textures without stuttering.
+- **Step 5:** During an active momentum glide, tap anywhere on the screen (or left-click with mouse).
+- **Expected:**
+  - Scrolling immediately halts at the exact tap position without jumping or rubber-banding.
+  - Lifting the finger/mouse button without dragging does not trigger residual momentum.
+- **Step 6:** Perform a high-velocity swipe / flick upward toward Page 1 or downward toward Page 50.
+- **Expected:**
+  - Scrolling strictly stops at stream boundaries (`scroll_vertical = 0` at top, `max_scroll` at bottom) without overshooting, bouncing, or residual drift.
+- **Step 7:** Perform a slow drag and release without flicking (`velocity < 120` px/s or pausing > 150ms before releasing).
+- **Expected:**
+  - Scrolling stops immediately where the gesture ends, without any momentum drift.
 
 ### TC-SCROLL-02: In-Stream Mystery Set Jump Bar (After Page 5)
 - **Step 1:** Scroll past Page 5 (The Opening Prayers).
