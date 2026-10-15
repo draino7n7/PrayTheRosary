@@ -361,6 +361,11 @@ func test_scrollbar_hidden_and_pass_through_mouse_filters() -> void:
 		ScrollContainer.SCROLL_MODE_DISABLED,
 		"Main ScrollContainer horizontal_scroll_mode must be SCROLL_MODE_DISABLED (0)"
 	)
+	assert_eq(
+		main_node.scroll_container.mouse_filter,
+		Control.MOUSE_FILTER_IGNORE,
+		"Main ScrollContainer mouse_filter must be MOUSE_FILTER_IGNORE (2)"
+	)
 
 	var nav_drawer: NavigationDrawer = main_node.get_navigation_drawer()
 	assert_not_null(nav_drawer, "NavigationDrawer must exist")
@@ -980,6 +985,354 @@ func test_page_container_width_constraint_across_presets() -> void:
 		assert_true(pc_min_w <= 720.0, "PageContainer combined_minimum_size.x (%f) must be <= 720.0 under preset '%s'" % [pc_min_w, preset])
 
 	main_node.free()
+
+
+func test_momentum_scroll_survives_emulated_touch_and_mouse_events() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	# 1. ScrollContainer Mouse Filter Decoupling
+	assert_eq(
+		main_node.scroll_container.mouse_filter,
+		Control.MOUSE_FILTER_IGNORE,
+		"ScrollContainer.mouse_filter must be MOUSE_FILTER_IGNORE (2)"
+	)
+
+	# 2. Desktop Mouse Flick with Emulated Touch (Release Order 1: Mouse Up, then Emulated Touch Up)
+	main_node.scroll_to_page(5, false)
+	var initial_scroll: int = main_node.scroll_container.scroll_vertical
+
+	var mouse_down_1: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_down_1.device = 0
+	mouse_down_1.button_index = MOUSE_BUTTON_LEFT
+	mouse_down_1.pressed = true
+	main_node.handle_scroll_input(mouse_down_1)
+
+	var emu_touch_down_1: InputEventScreenTouch = InputEventScreenTouch.new()
+	emu_touch_down_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_touch_down_1.pressed = true
+	main_node.handle_scroll_input(emu_touch_down_1)
+
+	var mouse_motion_1: InputEventMouseMotion = InputEventMouseMotion.new()
+	mouse_motion_1.device = 0
+	mouse_motion_1.button_mask = MOUSE_BUTTON_MASK_LEFT
+	mouse_motion_1.relative = Vector2(0.0, -100.0)
+	mouse_motion_1.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(mouse_motion_1)
+
+	var emu_drag_1: InputEventScreenDrag = InputEventScreenDrag.new()
+	emu_drag_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_drag_1.relative = Vector2(0.0, -100.0)
+	emu_drag_1.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(emu_drag_1)
+
+	assert_eq(
+		main_node.scroll_container.scroll_vertical,
+		initial_scroll + 100,
+		"Desktop drag must scroll 1:1 (+100px), not double-scroll (+200px) from emulated event"
+	)
+
+	# Release Order 1: physical mouse up first, then emulated touch up
+	var mouse_up_1: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_up_1.device = 0
+	mouse_up_1.button_index = MOUSE_BUTTON_LEFT
+	mouse_up_1.pressed = false
+	main_node.handle_scroll_input(mouse_up_1)
+
+	var emu_touch_up_1: InputEventScreenTouch = InputEventScreenTouch.new()
+	emu_touch_up_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_touch_up_1.pressed = false
+	main_node.handle_scroll_input(emu_touch_up_1)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum scrolling must be active after mouse flick and emulated touch release (release order 1)"
+	)
+	assert_true(
+		main_node.get_momentum_velocity() > 1000.0,
+		"Momentum velocity must be positive and brisk in release order 1"
+	)
+
+	# Verify glide across multiple frames
+	var prev_pos: int = main_node.scroll_container.scroll_vertical
+	for _f: int in range(5):
+		main_node._process(0.016)
+		assert_true(
+			main_node.scroll_container.scroll_vertical > prev_pos,
+			"Scroll position must advance during momentum glide"
+		)
+		prev_pos = main_node.scroll_container.scroll_vertical
+
+	main_node.stop_momentum()
+
+	# 3. Desktop Mouse Flick with Emulated Touch (Release Order 2: Emulated Touch Up first, then Mouse Up)
+	main_node.scroll_to_page(5, false)
+	initial_scroll = main_node.scroll_container.scroll_vertical
+
+	var mouse_down_2: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_down_2.device = 0
+	mouse_down_2.button_index = MOUSE_BUTTON_LEFT
+	mouse_down_2.pressed = true
+	main_node.handle_scroll_input(mouse_down_2)
+
+	var emu_touch_down_2: InputEventScreenTouch = InputEventScreenTouch.new()
+	emu_touch_down_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_touch_down_2.pressed = true
+	main_node.handle_scroll_input(emu_touch_down_2)
+
+	var mouse_motion_2: InputEventMouseMotion = InputEventMouseMotion.new()
+	mouse_motion_2.device = 0
+	mouse_motion_2.button_mask = MOUSE_BUTTON_MASK_LEFT
+	mouse_motion_2.relative = Vector2(0.0, -120.0)
+	mouse_motion_2.velocity = Vector2(0.0, -1600.0)
+	main_node.handle_scroll_input(mouse_motion_2)
+
+	var emu_drag_2: InputEventScreenDrag = InputEventScreenDrag.new()
+	emu_drag_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_drag_2.relative = Vector2(0.0, -120.0)
+	emu_drag_2.velocity = Vector2(0.0, -1600.0)
+	main_node.handle_scroll_input(emu_drag_2)
+
+	assert_eq(
+		main_node.scroll_container.scroll_vertical,
+		initial_scroll + 120,
+		"Desktop drag must scroll 1:1 (+120px) in order 2"
+	)
+
+	# Emulated touch up FIRST, physical mouse up SECOND
+	var emu_touch_up_2: InputEventScreenTouch = InputEventScreenTouch.new()
+	emu_touch_up_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_touch_up_2.pressed = false
+	main_node.handle_scroll_input(emu_touch_up_2)
+
+	var mouse_up_2: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_up_2.device = 0
+	mouse_up_2.button_index = MOUSE_BUTTON_LEFT
+	mouse_up_2.pressed = false
+	main_node.handle_scroll_input(mouse_up_2)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum scrolling must be active when emulated touch release precedes mouse release (release order 2)"
+	)
+	assert_true(
+		main_node.get_momentum_velocity() > 1000.0,
+		"Momentum velocity must be positive and brisk in release order 2"
+	)
+
+	main_node.stop_momentum()
+
+	# 4. Mobile Touch Swipe with Emulated Mouse (Release Order 1: Touch Up, then Emulated Mouse Up)
+	main_node.scroll_to_page(5, false)
+	initial_scroll = main_node.scroll_container.scroll_vertical
+
+	var phys_touch_down_1: InputEventScreenTouch = InputEventScreenTouch.new()
+	phys_touch_down_1.device = 0
+	phys_touch_down_1.pressed = true
+	main_node.handle_scroll_input(phys_touch_down_1)
+
+	var emu_mouse_down_1: InputEventMouseButton = InputEventMouseButton.new()
+	emu_mouse_down_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_mouse_down_1.button_index = MOUSE_BUTTON_LEFT
+	emu_mouse_down_1.pressed = true
+	main_node.handle_scroll_input(emu_mouse_down_1)
+
+	var phys_drag_1: InputEventScreenDrag = InputEventScreenDrag.new()
+	phys_drag_1.device = 0
+	phys_drag_1.relative = Vector2(0.0, -100.0)
+	phys_drag_1.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(phys_drag_1)
+
+	var emu_motion_1: InputEventMouseMotion = InputEventMouseMotion.new()
+	emu_motion_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_motion_1.button_mask = MOUSE_BUTTON_MASK_LEFT
+	emu_motion_1.relative = Vector2(0.0, -100.0)
+	emu_motion_1.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(emu_motion_1)
+
+	assert_eq(
+		main_node.scroll_container.scroll_vertical,
+		initial_scroll + 100,
+		"Physical touch drag must scroll 1:1 (+100px) while ignoring emulated mouse motion"
+	)
+
+	var phys_touch_up_1: InputEventScreenTouch = InputEventScreenTouch.new()
+	phys_touch_up_1.device = 0
+	phys_touch_up_1.pressed = false
+	main_node.handle_scroll_input(phys_touch_up_1)
+
+	var emu_mouse_up_1: InputEventMouseButton = InputEventMouseButton.new()
+	emu_mouse_up_1.device = InputEvent.DEVICE_ID_EMULATION
+	emu_mouse_up_1.button_index = MOUSE_BUTTON_LEFT
+	emu_mouse_up_1.pressed = false
+	main_node.handle_scroll_input(emu_mouse_up_1)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum scrolling must be active after mobile touch swipe with emulated mouse release (release order 1)"
+	)
+	assert_true(
+		main_node.get_momentum_velocity() > 1000.0,
+		"Momentum velocity must be positive and brisk for mobile touch swipe"
+	)
+
+	main_node.stop_momentum()
+
+	# 5. Mobile Touch Swipe with Emulated Mouse (Release Order 2: Emulated Mouse Up, then Touch Up)
+	main_node.scroll_to_page(5, false)
+	initial_scroll = main_node.scroll_container.scroll_vertical
+
+	var phys_touch_down_2: InputEventScreenTouch = InputEventScreenTouch.new()
+	phys_touch_down_2.device = 0
+	phys_touch_down_2.pressed = true
+	main_node.handle_scroll_input(phys_touch_down_2)
+
+	var emu_mouse_down_2: InputEventMouseButton = InputEventMouseButton.new()
+	emu_mouse_down_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_mouse_down_2.button_index = MOUSE_BUTTON_LEFT
+	emu_mouse_down_2.pressed = true
+	main_node.handle_scroll_input(emu_mouse_down_2)
+
+	var phys_drag_2: InputEventScreenDrag = InputEventScreenDrag.new()
+	phys_drag_2.device = 0
+	phys_drag_2.relative = Vector2(0.0, -100.0)
+	phys_drag_2.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(phys_drag_2)
+
+	var emu_motion_2: InputEventMouseMotion = InputEventMouseMotion.new()
+	emu_motion_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_motion_2.button_mask = MOUSE_BUTTON_MASK_LEFT
+	emu_motion_2.relative = Vector2(0.0, -100.0)
+	emu_motion_2.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(emu_motion_2)
+
+	# Emulated mouse up first, then physical touch up
+	var emu_mouse_up_2: InputEventMouseButton = InputEventMouseButton.new()
+	emu_mouse_up_2.device = InputEvent.DEVICE_ID_EMULATION
+	emu_mouse_up_2.button_index = MOUSE_BUTTON_LEFT
+	emu_mouse_up_2.pressed = false
+	main_node.handle_scroll_input(emu_mouse_up_2)
+
+	var phys_touch_up_2: InputEventScreenTouch = InputEventScreenTouch.new()
+	phys_touch_up_2.device = 0
+	phys_touch_up_2.pressed = false
+	main_node.handle_scroll_input(phys_touch_up_2)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum scrolling must be active after mobile touch swipe (release order 2)"
+	)
+	assert_true(
+		main_node.get_momentum_velocity() > 1000.0,
+		"Momentum velocity must be positive and brisk for mobile touch swipe order 2"
+	)
+
+	main_node.stop_momentum()
+
+	# 6. Zero-Delta Release Jitter (Mouse motion: relative = Vector2(5.0, 0.0))
+	main_node.scroll_to_page(5, false)
+
+	var jitter_mouse_down: InputEventMouseButton = InputEventMouseButton.new()
+	jitter_mouse_down.device = 0
+	jitter_mouse_down.button_index = MOUSE_BUTTON_LEFT
+	jitter_mouse_down.pressed = true
+	main_node.handle_scroll_input(jitter_mouse_down)
+
+	var flick_motion: InputEventMouseMotion = InputEventMouseMotion.new()
+	flick_motion.device = 0
+	flick_motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+	flick_motion.relative = Vector2(0.0, -100.0)
+	flick_motion.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(flick_motion)
+
+	var sample_count_before: int = main_node.get_velocity_sample_count()
+	var rolling_vel_before: float = main_node.get_rolling_velocity()
+	assert_true(sample_count_before > 0, "Velocity samples must exist after flick motion")
+	assert_true(rolling_vel_before >= 1400.0, "Rolling velocity should reflect flick velocity")
+
+	# Purely horizontal micro-movement jitter right before release: relative = Vector2(5.0, 0.0)
+	var jitter_motion: InputEventMouseMotion = InputEventMouseMotion.new()
+	jitter_motion.device = 0
+	jitter_motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+	jitter_motion.relative = Vector2(5.0, 0.0)
+	main_node.handle_scroll_input(jitter_motion)
+
+	var sample_count_after: int = main_node.get_velocity_sample_count()
+	var rolling_vel_after: float = main_node.get_rolling_velocity()
+
+	assert_eq(
+		sample_count_after,
+		sample_count_before,
+		"Zero-delta vertical motion (delta_y == 0) must NOT append a velocity sample"
+	)
+	assert_eq(
+		rolling_vel_after,
+		rolling_vel_before,
+		"Zero-delta vertical motion (delta_y == 0) must NOT reduce rolling velocity"
+	)
+
+	var jitter_mouse_up: InputEventMouseButton = InputEventMouseButton.new()
+	jitter_mouse_up.device = 0
+	jitter_mouse_up.button_index = MOUSE_BUTTON_LEFT
+	jitter_mouse_up.pressed = false
+	main_node.handle_scroll_input(jitter_mouse_up)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum must start after flick despite horizontal jitter before release"
+	)
+
+	main_node.stop_momentum()
+
+	# 7. Zero-Delta Release Jitter (Touch drag: relative = Vector2(5.0, 0.0))
+	var jitter_touch_down: InputEventScreenTouch = InputEventScreenTouch.new()
+	jitter_touch_down.device = 0
+	jitter_touch_down.pressed = true
+	main_node.handle_scroll_input(jitter_touch_down)
+
+	var flick_drag: InputEventScreenDrag = InputEventScreenDrag.new()
+	flick_drag.device = 0
+	flick_drag.relative = Vector2(0.0, -100.0)
+	flick_drag.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(flick_drag)
+
+	var touch_sample_count_before: int = main_node.get_velocity_sample_count()
+	var touch_rolling_vel_before: float = main_node.get_rolling_velocity()
+	assert_true(touch_sample_count_before > 0, "Touch velocity samples must exist after flick drag")
+	assert_true(touch_rolling_vel_before >= 1400.0, "Touch rolling velocity should reflect flick velocity")
+
+	var jitter_drag: InputEventScreenDrag = InputEventScreenDrag.new()
+	jitter_drag.device = 0
+	jitter_drag.relative = Vector2(5.0, 0.0)
+	main_node.handle_scroll_input(jitter_drag)
+
+	var touch_sample_count_after: int = main_node.get_velocity_sample_count()
+	var touch_rolling_vel_after: float = main_node.get_rolling_velocity()
+
+	assert_eq(
+		touch_sample_count_after,
+		touch_sample_count_before,
+		"Zero-delta touch drag (delta_y == 0) must NOT append a velocity sample"
+	)
+	assert_eq(
+		touch_rolling_vel_after,
+		touch_rolling_vel_before,
+		"Zero-delta touch drag (delta_y == 0) must NOT reduce rolling velocity"
+	)
+
+	var jitter_touch_up: InputEventScreenTouch = InputEventScreenTouch.new()
+	jitter_touch_up.device = 0
+	jitter_touch_up.pressed = false
+	main_node.handle_scroll_input(jitter_touch_up)
+
+	assert_true(
+		main_node.is_momentum_scrolling(),
+		"Momentum must start after touch flick despite horizontal jitter before release"
+	)
+
+	main_node.free()
+
 
 
 
