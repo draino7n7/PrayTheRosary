@@ -238,3 +238,70 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - During engine initialization, the full, uncropped cover painting (*The Virgin of the Rosary*) is displayed.
   - The splash screen background color displays the deep ambient espresso `#141010` (`Color(0.0784314, 0.0627451, 0.0627451, 1)`), seamlessly transitioning into the continuous scroll view.
+
+## Test 9.0: Global Dynamic Text Sizing & Accessibility Reader Controls
+
+### TC-TEXT-01: 'Aa' Reader Button UI & Preset Cycling
+- **Step 1:** Launch the application (`godot --path game`) and observe the top-left corner of the viewport.
+- **Expected:**
+  - A persistent, unobtrusive floating button labeled `"Aa"` ($52\times 52\text{px}$) is visible at offset $(18, 18)$ on CanvasLayer 10.
+  - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, subtle drop shadow, and deep charcoal bold Garamond typography (`#1E1815`) at 24pt.
+- **Step 2:** Click or tap the `"Aa"` button once.
+- **Expected:**
+  - Text size preset switches from `Normal` to `Mobile`.
+  - A top-centered toast banner appears with text: `"Text Size: Mobile"`.
+  - The toast smoothly fades out after ~1.2 seconds.
+- **Step 3:** Click or tap the `"Aa"` button a second time.
+- **Expected:**
+  - Text size preset switches from `Mobile` to `Extra Large`.
+  - A top-centered toast banner appears with text: `"Text Size: Extra Large"`.
+  - The toast smoothly fades out after ~1.2 seconds.
+- **Step 4:** Click or tap the `"Aa"` button a third time.
+- **Expected:**
+  - Text size preset wraps sequentially back to `Normal`.
+  - A top-centered toast banner appears with text: `"Text Size: Normal"`.
+- **Step 5:** Open the navigation drawer (top-right `☰` button).
+- **Expected:**
+  - While the navigation drawer is open, clicking or tapping on the `"Aa"` button area does not cycle text size presets (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`).
+  - Closing the drawer restores normal interactivity (`MOUSE_FILTER_STOP`).
+
+### TC-TEXT-02: Text Size Scaling & Dynamic Card Elongation
+- **Step 1:** Scroll to an interior prayer page (e.g. Page 4 *The Opening Prayers*, Page 6 *The Annunciation*, or Page 48 *Sacred Artwork Credits*).
+- **Step 2:** Observe font sizes and card height under the `Normal` preset.
+- **Expected:**
+  - Card height fits cleanly within the standard $720\times 1080$ ($2:3$) portrait dimensions.
+  - No text is truncated or clipped; no internal scrollbars appear.
+- **Step 3:** Tap the `"Aa"` button to switch to the `Mobile` preset.
+- **Expected:**
+  - Headings, subheadings, fruit badges, scripture citations, prayer titles, rubrics, and body text visibly increase in size (e.g. body text scales from ~22pt to ~31–33pt).
+  - The card dynamically expands vertically beyond 1080px (`custom_minimum_size.y > 1080px`) to comfortably accommodate the larger typography.
+  - All text remains fully visible without truncation or internal scrollbars.
+- **Step 4:** Tap the `"Aa"` button to switch to the `Extra Large` preset.
+- **Expected:**
+  - Typography scales further (e.g. body text scales to ~40–44pt, headings up to 44pt).
+  - The card elongates even further vertically to accommodate the high-visibility typography.
+  - All text remains completely legible and unclipped.
+
+### TC-TEXT-03: Sacred Artwork Aspect Ratio Preservation
+- **Step 1:** Scroll to an artwork page (e.g. Page 5 *Opening Prayers Artwork*, Page 7 *The Annunciation Painting*, or Page 23 *The Transfiguration Painting*) or the Front/Back Covers (Page 1 or Page 50).
+- **Step 2:** Cycle through all 3 text size presets (`Normal` -> `Mobile` -> `Extra Large`).
+- **Expected:**
+  - Sacred artwork cards and cover cards strictly preserve their rigid 2:3 ($720\times 1080$) portrait aspect ratio across all presets.
+  - Artwork cards and cover cards do NOT elongate vertically (`custom_minimum_size = Vector2(720, 1080)`, `ratio = 2.0 / 3.0`).
+  - Paintings remain centered within their antique gold borders without distortion, stretching, or cropping.
+
+### TC-TEXT-04: Viewport Scroll Anchor Stability
+- **Step 1:** Scroll into the middle of a mystery prayer card (e.g. Page 26 *The Agony in the Garden*) so that the meditation or decade prayers are centered in the viewport.
+- **Step 2:** Tap the `"Aa"` button to change the text size preset (`Normal` -> `Mobile` -> `Extra Large`).
+- **Expected:**
+  - As the text-heavy cards expand or shrink throughout the stream, the viewport scroll position smoothly re-anchors to keep the currently viewed content centered in the viewport.
+  - The user does not jump disorientingly to the top or bottom of the book, nor lose their place within the decade.
+
+### TC-TEXT-05: Preset Persistence Across Restarts
+- **Step 1:** Tap the `"Aa"` button to select `Mobile` or `Extra Large` preset.
+- **Step 2:** Close the application completely.
+- **Step 3:** Relaunch the application (`godot --path game`).
+- **Expected:**
+  - The application restores the previously selected text size preset on launch from `user://reading_progress.cfg` (`[reading_progress]` section, `text_size_preset` key).
+  - Text-heavy cards immediately render with the chosen font scaling without requiring the user to cycle presets again.
+

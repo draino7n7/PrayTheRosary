@@ -34,14 +34,10 @@ func _apply_page_data() -> void:
 
 	var mys: Dictionary = page_data.get("mystery", {})
 
-	if subheading_label != null:
-		subheading_label.text = str(page_data.get("subheading", mys.get("ordinal_label", "")))
-	if heading_label != null:
-		heading_label.text = str(page_data.get("heading", mys.get("title", "")))
-
-	if fruit_label != null:
-		var fruit: String = str(mys.get("fruit", ""))
-		fruit_label.text = "Fruit of the Mystery: %s" % fruit
+	var heading_font_size: int = 34
+	var subheading_font_size: int = 22
+	var fruit_font_size: int = 18
+	var citation_font_size: int = 17
 
 	var scrip_str: String = str(mys.get("scripture_text", ""))
 	var med_str: String = str(mys.get("meditation", ""))
@@ -58,9 +54,42 @@ func _apply_page_data() -> void:
 
 	var rubric_font_size: int = 17 if body_font_size <= 22 else 18
 
+	match text_size_preset:
+		PRESET_MOBILE:
+			heading_font_size = 38
+			subheading_font_size = 25
+			fruit_font_size = 24
+			citation_font_size = 23
+			body_font_size = 31 if total_text_len > 580 else (32 if total_text_len > 480 else 33)
+			rubric_font_size = 24 if body_font_size <= 31 else 25
+		PRESET_EXTRA_LARGE:
+			heading_font_size = 44
+			subheading_font_size = 29
+			fruit_font_size = 30
+			citation_font_size = 29
+			body_font_size = 40 if total_text_len > 580 else (42 if total_text_len > 480 else 44)
+			rubric_font_size = 31 if body_font_size <= 40 else 33
+		_:
+			heading_font_size = 34
+			subheading_font_size = 22
+			fruit_font_size = 18
+			citation_font_size = 17
+
+	if subheading_label != null:
+		subheading_label.text = str(page_data.get("subheading", mys.get("ordinal_label", "")))
+		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
+	if heading_label != null:
+		heading_label.text = str(page_data.get("heading", mys.get("title", "")))
+		heading_label.add_theme_font_size_override("font_size", heading_font_size)
+
+	if fruit_label != null:
+		var fruit: String = str(mys.get("fruit", ""))
+		fruit_label.text = "Fruit of the Mystery: %s" % fruit
+		fruit_label.add_theme_font_size_override("font_size", fruit_font_size)
+
 	if scripture_citation_label != null:
 		scripture_citation_label.text = str(mys.get("scripture_reference", ""))
-		scripture_citation_label.add_theme_font_size_override("font_size", 17)
+		scripture_citation_label.add_theme_font_size_override("font_size", citation_font_size)
 	if scripture_text_label != null:
 		scripture_text_label.text = "“%s”" % scrip_str
 		scripture_text_label.add_theme_font_size_override("font_size", body_font_size)
@@ -71,13 +100,15 @@ func _apply_page_data() -> void:
 		meditation_label.add_theme_font_size_override("font_size", body_font_size)
 		meditation_label.add_theme_constant_override("line_spacing", 2)
 
+	var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
+	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
+	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
+
+	var decade_prayers: Array = page_data.get("decade_prayers", [])
 	if decade_prayers_container != null:
 		for child: Node in decade_prayers_container.get_children():
-			child.queue_free()
-
-		var decade_prayers: Array = page_data.get("decade_prayers", [])
-		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
+			decade_prayers_container.remove_child(child)
+			child.free()
 
 		for p_item_val: Variant in decade_prayers:
 			if not (p_item_val is Dictionary):
@@ -119,7 +150,57 @@ func _apply_page_data() -> void:
 
 			decade_prayers_container.add_child(p_vbox)
 
+	var total_h: float = 64.0
+	if font_italic != null:
+		total_h += font_italic.get_height(subheading_font_size) + 4.0
+	if font_bold != null:
+		total_h += font_bold.get_height(heading_font_size) + 4.0
+	if font_italic != null:
+		total_h += font_italic.get_height(fruit_font_size) + 8.0 + 4.0
+	total_h += 2.0 + 10.0
+
+	if font_bold != null:
+		total_h += font_bold.get_height(citation_font_size) + 2.0
+	if font_italic != null:
+		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + 8.0 + 10.0
+	if font_reg != null:
+		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + 10.0
+
+	for p_item_val: Variant in decade_prayers:
+		if not (p_item_val is Dictionary):
+			continue
+		var p_item: Dictionary = p_item_val
+		var pid: String = str(p_item.get("prayer_id", ""))
+		var prayer_dict: Dictionary = p_item.get("prayer", {})
+		if prayer_dict.is_empty() and data_loader != null:
+			prayer_dict = data_loader.get_prayer(pid)
+		if font_bold != null:
+			total_h += font_bold.get_height(rubric_font_size) + 2.0
+		var p_text: String = str(prayer_dict.get("text", ""))
+		if p_text != "" and font_reg != null:
+			total_h += font_reg.get_multiline_string_size(p_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+		total_h += 8.0
+
+	var final_height: float = DESIGN_HEIGHT
+	if text_size_preset != PRESET_NORMAL:
+		final_height = maxf(1081.0, ceilf(total_h + 30.0))
+
+	custom_minimum_size = Vector2(DESIGN_WIDTH, final_height)
+	ratio = DESIGN_WIDTH / final_height
+	var card_panel: PanelContainer = get_node_or_null("CardPanel") as PanelContainer
+	if card_panel != null:
+		card_panel.custom_minimum_size = Vector2(DESIGN_WIDTH, final_height)
+
+	var p: Node = get_parent()
+	if p != null and p is PageCard:
+		(p as PageCard)._sync_with_sub_card()
+
 	configure_pass_through_mouse_filters(self)
+
+
+func _apply_text_size_preset() -> void:
+	if not page_data.is_empty():
+		_apply_page_data()
 
 
 func get_fruit_text() -> String:

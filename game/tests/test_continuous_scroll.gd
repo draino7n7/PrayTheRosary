@@ -693,4 +693,135 @@ func test_momentum_scroll_slow_drag_no_momentum() -> void:
 	main_node.free()
 
 
+func test_text_size_preset_persistence() -> void:
+	var test_path: String = "user://test_text_preset_persistence.cfg"
+	if FileAccess.file_exists(test_path):
+		DirAccess.remove_absolute(test_path)
+
+	var rpm: ReadingProgressManager = ReadingProgressManagerScript.new(test_path) as ReadingProgressManager
+	# 1. Fallback default when no file exists
+	assert_eq(rpm.load_text_size_preset(), "normal", "Fallback default text size preset must be 'normal'")
+	assert_false(rpm.has_saved_text_size_preset(), "has_saved_text_size_preset must be false when config doesn't exist")
+
+	# 2. Save and reload "mobile"
+	var ok: bool = rpm.save_text_size_preset("mobile")
+	assert_true(ok, "Saving preset 'mobile' should return true")
+	assert_true(rpm.has_saved_text_size_preset(), "has_saved_text_size_preset must be true after saving")
+	assert_eq(rpm.load_text_size_preset(), "mobile", "Loaded preset must be 'mobile'")
+
+	# 3. Save and reload "extra_large"
+	rpm.save_text_size_preset("extra_large")
+	assert_eq(rpm.load_text_size_preset(), "extra_large", "Loaded preset must be 'extra_large'")
+
+	# 4. Normalization checks
+	rpm.save_text_size_preset("Mobile")
+	assert_eq(rpm.load_text_size_preset(), "mobile", "Preset 'Mobile' must normalize to 'mobile'")
+	rpm.save_text_size_preset("Extra Large")
+	assert_eq(rpm.load_text_size_preset(), "extra_large", "Preset 'Extra Large' must normalize to 'extra_large'")
+	rpm.save_text_size_preset("invalid_preset_value")
+	assert_eq(rpm.load_text_size_preset(), "normal", "Invalid preset must normalize to fallback 'normal'")
+
+	rpm.clear_progress()
+	if FileAccess.file_exists(test_path):
+		DirAccess.remove_absolute(test_path)
+
+
+func test_reader_button_ui_and_preset_cycling() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	var reader_btn: Button = main_node.get_reader_button()
+	assert_not_null(reader_btn, "Top-left reader button must exist in Main scene")
+
+	# 1. CanvasLayer verification (layer >= 10)
+	var parent_layer: CanvasLayer = main_node.reader_layer
+	assert_not_null(parent_layer, "ReaderControls CanvasLayer must exist")
+	assert_true(parent_layer.layer >= 10, "Reader button CanvasLayer must be layer >= 10 (got %d)" % parent_layer.layer)
+
+	# 2. Dimensions and positioning (offset_left=18, offset_top=18, offset_right=70, offset_bottom=70, size 52x52)
+	assert_eq(reader_btn.offset_left, 18.0, "Reader button offset_left must be 18")
+	assert_eq(reader_btn.offset_top, 18.0, "Reader button offset_top must be 18")
+	assert_eq(reader_btn.offset_right, 70.0, "Reader button offset_right must be 70")
+	assert_eq(reader_btn.offset_bottom, 70.0, "Reader button offset_bottom must be 70")
+	assert_eq(reader_btn.custom_minimum_size, Vector2(52, 52), "Reader button custom_minimum_size must be 52x52")
+
+	# 3. Label and styling attributes
+	assert_eq(reader_btn.text, "Aa", "Reader button text must be 'Aa'")
+	assert_eq(reader_btn.mouse_filter, Control.MOUSE_FILTER_STOP, "Reader button must stop mouse within its bounds")
+
+	# 4. Preset cycling: Normal -> Mobile -> Extra Large -> Normal
+	main_node.set_text_size_preset("normal")
+	assert_eq(main_node.get_text_size_preset(), "normal", "Initial preset should be 'normal'")
+
+	var next1: String = main_node.cycle_text_size_preset()
+	assert_eq(next1, "mobile", "First cycle must switch to 'mobile'")
+	assert_eq(main_node.get_text_size_preset(), "mobile", "Current preset must be 'mobile'")
+	assert_true(main_node.preset_toast.visible, "Preset toast feedback must become visible upon cycling")
+	assert_true(main_node.toast_label.text.contains("Mobile"), "Toast label must indicate Mobile preset")
+
+	var next2: String = main_node.cycle_text_size_preset()
+	assert_eq(next2, "extra_large", "Second cycle must switch to 'extra_large'")
+	assert_eq(main_node.get_text_size_preset(), "extra_large", "Current preset must be 'extra_large'")
+	assert_true(main_node.toast_label.text.contains("Extra Large"), "Toast label must indicate Extra Large preset")
+
+	var next3: String = main_node.cycle_text_size_preset()
+	assert_eq(next3, "normal", "Third cycle must return to 'normal'")
+	assert_eq(main_node.get_text_size_preset(), "normal", "Current preset must be 'normal'")
+	assert_true(main_node.toast_label.text.contains("Normal"), "Toast label must indicate Normal preset")
+
+	# Reset to normal before freeing
+	main_node.set_text_size_preset("normal")
+	main_node.free()
+
+
+func test_scroll_anchor_stability_on_preset_switch() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	# Start on baseline Normal preset
+	main_node.set_text_size_preset("normal")
+	main_node.scroll_to_page(4, false)
+	assert_eq(main_node.get_current_page(), 4, "Should be on Page 4")
+
+	var target_y_normal: int = main_node.get_target_scroll_for_page(4)
+	assert_eq(main_node.scroll_container.scroll_vertical, target_y_normal, "ScrollContainer should match Page 4 target Y")
+
+	# Switch to Mobile preset
+	main_node.set_text_size_preset("mobile")
+	var target_y_mobile: int = main_node.get_target_scroll_for_page(4)
+	assert_true(target_y_mobile >= target_y_normal, "Page 4 target position under Mobile (%d) must be >= Normal (%d)" % [target_y_mobile, target_y_normal])
+
+	# Check viewport scroll position after anchor adjustment
+	var scroll_mobile: int = main_node.scroll_container.scroll_vertical
+	var viewport_h: float = main_node.scroll_container.size.y if main_node.scroll_container.size.y > 0.0 else 1280.0
+	var viewport_center_mobile: float = float(scroll_mobile) + viewport_h * 0.5
+	var p4_card_mobile: PageCard = main_node.get_page_card(4)
+	var p4_h_mobile: float = p4_card_mobile.custom_minimum_size.y
+
+	# Verify viewport center remains within Page 4 bounds
+	assert_true(viewport_center_mobile >= float(target_y_mobile) - 200.0, "Viewport center must remain near Page 4 after switching to Mobile")
+	assert_true(viewport_center_mobile <= float(target_y_mobile) + p4_h_mobile + 200.0, "Viewport center must stay within Page 4 height range after switching to Mobile")
+
+	# Switch to Extra Large preset
+	main_node.set_text_size_preset("extra_large")
+	var target_y_xl: int = main_node.get_target_scroll_for_page(4)
+	assert_true(target_y_xl >= target_y_mobile, "Page 4 target position under Extra Large (%d) must be >= Mobile (%d)" % [target_y_xl, target_y_mobile])
+
+	var scroll_xl: int = main_node.scroll_container.scroll_vertical
+	var viewport_center_xl: float = float(scroll_xl) + viewport_h * 0.5
+	var p4_card_xl: PageCard = main_node.get_page_card(4)
+	var p4_h_xl: float = p4_card_xl.custom_minimum_size.y
+
+	assert_true(viewport_center_xl >= float(target_y_xl) - 200.0, "Viewport center must remain near Page 4 after switching to Extra Large")
+	assert_true(viewport_center_xl <= float(target_y_xl) + p4_h_xl + 200.0, "Viewport center must stay within Page 4 height range after switching to Extra Large")
+
+	# Switch back to Normal
+	main_node.set_text_size_preset("normal")
+	assert_eq(main_node.get_target_scroll_for_page(4), target_y_normal, "Target scroll for Page 4 must restore to baseline Normal position")
+
+	main_node.free()
+
+
 

@@ -675,3 +675,161 @@ func _assert_no_visible_page_numbers(node: Node, page_num: int) -> void:
 			assert_true(false, "Found visible page number label displaying '%s'" % text)
 	for child: Node in node.get_children():
 		_assert_no_visible_page_numbers(child, page_num)
+
+
+func test_dynamic_text_size_presets_font_scaling() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+
+	# 1. PrayerSequencePageCard (Page 4)
+	var p4_card: PageCard = PageCardScene.instantiate() as PageCard
+	test_root_window.add_child(p4_card)
+	p4_card.bind_page_data(loader.get_page(4), loader)
+	var psc: PrayerSequencePageCard = p4_card.get_sub_card() as PrayerSequencePageCard
+	assert_not_null(psc, "Page 4 subcard must be PrayerSequencePageCard")
+
+	p4_card.set_text_size_preset("normal")
+	var p4_body_normal: int = (psc.steps_container.get_child(0).get_node("PrayerText") as Label).get_theme_font_size("font_size")
+	var p4_title_normal: int = (psc.steps_container.get_child(0).get_node("PrayerTitle") as Label).get_theme_font_size("font_size")
+	var p4_head_normal: int = psc.heading_label.get_theme_font_size("font_size")
+
+	p4_card.set_text_size_preset("mobile")
+	var p4_body_mobile: int = (psc.steps_container.get_child(0).get_node("PrayerText") as Label).get_theme_font_size("font_size")
+	var p4_title_mobile: int = (psc.steps_container.get_child(0).get_node("PrayerTitle") as Label).get_theme_font_size("font_size")
+	var p4_head_mobile: int = psc.heading_label.get_theme_font_size("font_size")
+
+	p4_card.set_text_size_preset("extra_large")
+	var p4_body_xl: int = (psc.steps_container.get_child(0).get_node("PrayerText") as Label).get_theme_font_size("font_size")
+	var p4_title_xl: int = (psc.steps_container.get_child(0).get_node("PrayerTitle") as Label).get_theme_font_size("font_size")
+	var p4_head_xl: int = psc.heading_label.get_theme_font_size("font_size")
+
+	assert_true(p4_body_normal < p4_body_mobile and p4_body_mobile < p4_body_xl, "Page 4 body font size must strictly increase: %d < %d < %d" % [p4_body_normal, p4_body_mobile, p4_body_xl])
+	assert_true(p4_title_normal < p4_title_mobile and p4_title_mobile < p4_title_xl, "Page 4 title font size must strictly increase: %d < %d < %d" % [p4_title_normal, p4_title_mobile, p4_title_xl])
+	assert_true(p4_head_normal < p4_head_mobile and p4_head_mobile < p4_head_xl, "Page 4 heading font size must strictly increase: %d < %d < %d" % [p4_head_normal, p4_head_mobile, p4_head_xl])
+	p4_card.free()
+
+	# 2. MysteryPrayerPageCard (Page 6)
+	var p6_card: PageCard = PageCardScene.instantiate() as PageCard
+	test_root_window.add_child(p6_card)
+	p6_card.bind_page_data(loader.get_page(6), loader)
+	var mpc: MysteryPrayerPageCard = p6_card.get_sub_card() as MysteryPrayerPageCard
+	assert_not_null(mpc, "Page 6 subcard must be MysteryPrayerPageCard")
+
+	p6_card.set_text_size_preset("normal")
+	var p6_scrip_normal: int = mpc.scripture_text_label.get_theme_font_size("font_size")
+	var p6_cite_normal: int = mpc.scripture_citation_label.get_theme_font_size("font_size")
+	var p6_fruit_normal: int = mpc.fruit_label.get_theme_font_size("font_size")
+
+	p6_card.set_text_size_preset("mobile")
+	var p6_scrip_mobile: int = mpc.scripture_text_label.get_theme_font_size("font_size")
+	var p6_cite_mobile: int = mpc.scripture_citation_label.get_theme_font_size("font_size")
+	var p6_fruit_mobile: int = mpc.fruit_label.get_theme_font_size("font_size")
+
+	p6_card.set_text_size_preset("extra_large")
+	var p6_scrip_xl: int = mpc.scripture_text_label.get_theme_font_size("font_size")
+	var p6_cite_xl: int = mpc.scripture_citation_label.get_theme_font_size("font_size")
+	var p6_fruit_xl: int = mpc.fruit_label.get_theme_font_size("font_size")
+
+	assert_true(p6_scrip_normal < p6_scrip_mobile and p6_scrip_mobile < p6_scrip_xl, "Page 6 scripture font size must strictly increase: %d < %d < %d" % [p6_scrip_normal, p6_scrip_mobile, p6_scrip_xl])
+	assert_true(p6_cite_normal < p6_cite_mobile and p6_cite_mobile < p6_cite_xl, "Page 6 citation font size must strictly increase: %d < %d < %d" % [p6_cite_normal, p6_cite_mobile, p6_cite_xl])
+	assert_true(p6_fruit_normal < p6_fruit_mobile and p6_fruit_mobile < p6_fruit_xl, "Page 6 fruit badge font size must strictly increase: %d < %d < %d" % [p6_fruit_normal, p6_fruit_mobile, p6_fruit_xl])
+	p6_card.free()
+
+	# 3. FrontMatterPageCard (Page 2)
+	var p2_card: PageCard = PageCardScene.instantiate() as PageCard
+	test_root_window.add_child(p2_card)
+	p2_card.bind_page_data(loader.get_page(2), loader)
+	var fmc: FrontMatterPageCard = p2_card.get_sub_card() as FrontMatterPageCard
+	assert_not_null(fmc, "Page 2 subcard must be FrontMatterPageCard")
+
+	p2_card.set_text_size_preset("normal")
+	var p2_body_normal: int = (fmc.sections_container.get_child(0).get_node("SectionBody") as Label).get_theme_font_size("font_size")
+	var p2_title_normal: int = (fmc.sections_container.get_child(0).get_node("SectionTitle") as Label).get_theme_font_size("font_size")
+
+	p2_card.set_text_size_preset("mobile")
+	var p2_body_mobile: int = (fmc.sections_container.get_child(0).get_node("SectionBody") as Label).get_theme_font_size("font_size")
+	var p2_title_mobile: int = (fmc.sections_container.get_child(0).get_node("SectionTitle") as Label).get_theme_font_size("font_size")
+
+	p2_card.set_text_size_preset("extra_large")
+	var p2_body_xl: int = (fmc.sections_container.get_child(0).get_node("SectionBody") as Label).get_theme_font_size("font_size")
+	var p2_title_xl: int = (fmc.sections_container.get_child(0).get_node("SectionTitle") as Label).get_theme_font_size("font_size")
+
+	assert_true(p2_body_normal < p2_body_mobile and p2_body_mobile < p2_body_xl, "Page 2 body font size must strictly increase: %d < %d < %d" % [p2_body_normal, p2_body_mobile, p2_body_xl])
+	assert_true(p2_title_normal < p2_title_mobile and p2_title_mobile < p2_title_xl, "Page 2 title font size must strictly increase: %d < %d < %d" % [p2_title_normal, p2_title_mobile, p2_title_xl])
+	p2_card.free()
+
+	# 4. CreditsPageCard (Page 48)
+	var p48_card: PageCard = PageCardScene.instantiate() as PageCard
+	test_root_window.add_child(p48_card)
+	p48_card.bind_page_data(loader.get_page(48), loader)
+	var cpc: CreditsPageCard = p48_card.get_sub_card() as CreditsPageCard
+	assert_not_null(cpc, "Page 48 subcard must be CreditsPageCard")
+
+	p48_card.set_text_size_preset("normal")
+	var p48_title_normal: int = (cpc.credits_container.get_child(0).get_node("Title") as Label).get_theme_font_size("font_size")
+	var p48_details_normal: int = (cpc.credits_container.get_child(0).get_node("Details") as Label).get_theme_font_size("font_size")
+
+	p48_card.set_text_size_preset("mobile")
+	var p48_title_mobile: int = (cpc.credits_container.get_child(0).get_node("Title") as Label).get_theme_font_size("font_size")
+	var p48_details_mobile: int = (cpc.credits_container.get_child(0).get_node("Details") as Label).get_theme_font_size("font_size")
+
+	p48_card.set_text_size_preset("extra_large")
+	var p48_title_xl: int = (cpc.credits_container.get_child(0).get_node("Title") as Label).get_theme_font_size("font_size")
+	var p48_details_xl: int = (cpc.credits_container.get_child(0).get_node("Details") as Label).get_theme_font_size("font_size")
+
+	assert_true(p48_title_normal < p48_title_mobile and p48_title_mobile < p48_title_xl, "Page 48 title font size must strictly increase: %d < %d < %d" % [p48_title_normal, p48_title_mobile, p48_title_xl])
+	assert_true(p48_details_normal < p48_details_mobile and p48_details_mobile < p48_details_xl, "Page 48 details font size must strictly increase: %d < %d < %d" % [p48_details_normal, p48_details_mobile, p48_details_xl])
+	p48_card.free()
+
+
+func test_text_cards_dynamic_vertical_elongation() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var test_pages: Array[int] = [2, 4, 6, 48]
+
+	for p_num: int in test_pages:
+		var card: PageCard = PageCardScene.instantiate() as PageCard
+		test_root_window.add_child(card)
+		card.bind_page_data(loader.get_page(p_num), loader)
+
+		# 1. Normal preset: baseline dimensions (<= 1080px)
+		card.set_text_size_preset("normal")
+		assert_true(card.custom_minimum_size.y <= 1080.0, "Page %d normal height must be <= 1080.0, got %f" % [p_num, card.custom_minimum_size.y])
+		assert_true(card.get_sub_card().custom_minimum_size.y <= 1080.0, "Page %d subcard normal height must be <= 1080.0" % p_num)
+
+		# 2. Mobile preset: expands vertically > 1080px
+		card.set_text_size_preset("mobile")
+		var mobile_h: float = card.custom_minimum_size.y
+		assert_true(mobile_h > 1080.0, "Page %d mobile height (%f) must exceed 1080px" % [p_num, mobile_h])
+		assert_true(card.get_required_card_height() > 1080.0, "Page %d required height must exceed 1080px" % p_num)
+		assert_true(card.get_sub_card().custom_minimum_size.y > 1080.0, "Page %d subcard mobile height must exceed 1080px" % p_num)
+		assert_true(card.get_sub_card().get_required_card_height() > 1080.0, "Page %d subcard required height must exceed 1080px" % p_num)
+
+		# 3. Extra Large preset: expands further beyond mobile height
+		card.set_text_size_preset("extra_large")
+		var xl_h: float = card.custom_minimum_size.y
+		assert_true(xl_h > 1080.0, "Page %d extra_large height (%f) must exceed 1080px" % [p_num, xl_h])
+		assert_true(xl_h > mobile_h, "Page %d extra_large height (%f) must exceed mobile height (%f)" % [p_num, xl_h, mobile_h])
+		assert_true(card.get_required_card_height() > mobile_h, "Page %d extra_large required height must exceed mobile height" % p_num)
+		assert_true(card.get_sub_card().custom_minimum_size.y > mobile_h, "Page %d subcard extra_large height must exceed mobile height" % p_num)
+		assert_true(card.get_sub_card().get_required_card_height() > mobile_h, "Page %d subcard extra_large required height must exceed mobile height" % p_num)
+
+		card.free()
+
+
+func test_artwork_and_cover_cards_aspect_ratio_lock() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var test_pages: Array[int] = [1, 5, 23, 50]
+	var presets: Array[String] = ["normal", "mobile", "extra_large"]
+
+	for p_num: int in test_pages:
+		var card: PageCard = PageCardScene.instantiate() as PageCard
+		test_root_window.add_child(card)
+		card.bind_page_data(loader.get_page(p_num), loader)
+
+		for preset: String in presets:
+			card.set_text_size_preset(preset)
+			assert_eq(card.custom_minimum_size, Vector2(720.0, 1080.0), "Page %d under preset '%s' must strictly preserve 720x1080 min size" % [p_num, preset])
+			assert_true(abs(card.ratio - (2.0 / 3.0)) < 0.001, "Page %d under preset '%s' must strictly preserve 2:3 ratio lock" % [p_num, preset])
+			assert_eq(card.get_sub_card().custom_minimum_size, Vector2(720.0, 1080.0), "Page %d subcard under preset '%s' must strictly preserve 720x1080 min size" % [p_num, preset])
+			assert_true(abs(card.get_sub_card().ratio - (2.0 / 3.0)) < 0.001, "Page %d subcard under preset '%s' must strictly preserve 2:3 ratio lock" % [p_num, preset])
+
+		card.free()

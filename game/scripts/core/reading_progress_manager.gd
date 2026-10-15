@@ -6,7 +6,9 @@ extends RefCounted
 const DEFAULT_CONFIG_PATH: String = "user://reading_progress.cfg"
 const SECTION_NAME: String = "reading_progress"
 const KEY_PAGE_NUMBER: String = "last_page_number"
+const KEY_TEXT_SIZE_PRESET: String = "text_size_preset"
 const KEY_UPDATED_AT: String = "updated_at"
+const DEFAULT_TEXT_SIZE_PRESET: String = "normal"
 const MIN_PAGE: int = 1
 const MAX_PAGE: int = 50
 
@@ -60,6 +62,48 @@ func has_saved_progress() -> bool:
 	if config.load(config_path) != OK:
 		return false
 	return config.has_section_key(SECTION_NAME, KEY_PAGE_NUMBER)
+
+
+func save_text_size_preset(preset: Variant) -> bool:
+	var normalized: String = BasePageCard.normalize_preset(preset)
+	var config: ConfigFile = ConfigFile.new()
+
+	if FileAccess.file_exists(config_path):
+		var err_load: Error = config.load(config_path)
+		if err_load != OK:
+			push_warning("ReadingProgressManager: Could not load existing config at %s, overwriting." % config_path)
+
+	config.set_value(SECTION_NAME, KEY_TEXT_SIZE_PRESET, normalized)
+	config.set_value(SECTION_NAME, KEY_UPDATED_AT, int(Time.get_unix_time_from_system()))
+
+	var err_save: Error = config.save(config_path)
+	if err_save != OK:
+		push_error("ReadingProgressManager: Failed to save text size preset to %s (error code %d)" % [config_path, err_save])
+		return false
+	return true
+
+
+func load_text_size_preset() -> String:
+	if not FileAccess.file_exists(config_path):
+		return DEFAULT_TEXT_SIZE_PRESET
+
+	var config: ConfigFile = ConfigFile.new()
+	var err: Error = config.load(config_path)
+	if err != OK:
+		push_warning("ReadingProgressManager: Failed to load config from %s, defaulting to preset 'normal'" % config_path)
+		return DEFAULT_TEXT_SIZE_PRESET
+
+	var val: Variant = config.get_value(SECTION_NAME, KEY_TEXT_SIZE_PRESET, DEFAULT_TEXT_SIZE_PRESET)
+	return BasePageCard.normalize_preset(val)
+
+
+func has_saved_text_size_preset() -> bool:
+	if not FileAccess.file_exists(config_path):
+		return false
+	var config: ConfigFile = ConfigFile.new()
+	if config.load(config_path) != OK:
+		return false
+	return config.has_section_key(SECTION_NAME, KEY_TEXT_SIZE_PRESET)
 
 
 func clear_progress() -> bool:
