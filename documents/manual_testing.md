@@ -117,9 +117,11 @@ This document outlines the strict manual testing procedures required before any 
   - Swiping/dragging up (`relative.y < 0`) smoothly advances down the stream (`scroll_vertical` increases), and swiping/dragging down (`relative.y > 0`) scrolls back up toward Page 1 (`scroll_vertical` decreases).
   - Unpressed mouse hover motion (`button_mask == 0`) does not scroll the stream.
   - Interactive buttons inside `InStreamJumpBar` and `NavigationDrawer` (`mouse_filter = MOUSE_FILTER_PASS`) still respond to clicks/taps normally while allowing drag gestures to scroll.
-- **Step 4:** Perform a fast vertical swipe / flick on a touch screen or fast left-mouse drag.
+- **Step 4:** Perform a fast vertical swipe / flick on a physical mobile touchscreen, simulated touch mode, or fast left-mouse drag flick on Desktop (with `pointing/emulate_touch_from_mouse` active).
 - **Expected:**
-  - Scrolling smoothly glides through prayer pages with natural momentum, gliding across 1.5 to 3+ portrait page cards over 1.5–2.5 seconds and decelerating smoothly according to exponential friction until resting gently.
+  - Scrolling smoothly glides through prayer pages with natural momentum without sudden stop or collision on release, gliding across 1.5 to 3+ portrait page cards over 1.5–2.5 seconds and decelerating smoothly according to exponential friction until resting gently.
+  - Device emulation events (`DEVICE_ID_EMULATION`) and native `ScrollContainer` touch tracking do not collide with custom momentum physics or truncate velocity samples, ensuring both mouse flicks and touch swipes glide freely.
+  - Purely horizontal micro-movement jitter immediately prior to finger lift or mouse release does not zero the rolling velocity or suppress flick momentum.
   - As pages pass through the viewport, texture virtualization dynamically loads active paintings and frees distant textures without stuttering.
 - **Step 5:** During an active momentum glide, tap anywhere on the screen (or left-click with mouse).
 - **Expected:**
@@ -172,11 +174,11 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - The navigation drawer smoothly slides into view from the right edge.
   - A semi-transparent dimming scrim (`#00000080`) darkens the background content.
-  - Background scrolling is disabled (`ScrollContainer.mouse_filter = MOUSE_FILTER_IGNORE`).
+  - Background scrolling is disabled and floating reader button is disabled (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`, `ScrollContainer.mouse_filter = MOUSE_FILTER_IGNORE`).
 - **Step 3:** Click anywhere on the dimmed scrim backdrop or press the `Escape` key (`ui_cancel`).
 - **Expected:**
   - The drawer smoothly closes and the dimming scrim disappears.
-  - Background scrolling is restored (`ScrollContainer.mouse_filter = MOUSE_FILTER_STOP`).
+  - Background scrolling and reader button interactivity are restored (`reader_button.mouse_filter = MOUSE_FILTER_STOP`, `ScrollContainer.mouse_filter` maintains `MOUSE_FILTER_IGNORE`).
 
 ### TC-NAV-02: Resume Last Page Action & Reading Progress Synchronization
 - **Step 1:** Scroll or jump to an interior mystery page (e.g., Page 16: *The Baptism of Jesus in the Jordan*).
