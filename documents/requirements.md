@@ -115,6 +115,30 @@ To maximize mobile readability, eliminate vacant vertical whitespace, and guaran
   - `ArtworkPageCard` (`Pages 5, 7, 9, ..., 47`), `CoverPageCard` (`Page 1`), and `BackCoverPageCard` (`Page 50`) are strictly locked to the canonical 2:3 portrait aspect ratio (`ratio = 2.0 / 3.0`, `custom_minimum_size = Vector2(720.0, 1080.0)`) across all text size presets.
   - Sacred artwork paintings and book covers are never stretched, distorted, cropped, or elongated.
 
+### 3.0.2 Strict 720px Card Width Constraint, StyleBox Content Margins & Universal Word-Smart Wrapping
+To prevent lateral expansion, horizontal overflow, and asymmetrical screen shifts across all viewports and typography presets:
+- **Strict 720px Width Enforcement:**
+  - All page cards (`PageCard` and its specialized sub-cards), `CardPanel` containers, and `PageContainer` must strictly enforce a maximum width constraint of 720px (`custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0`).
+  - No page card, panel, or nested child control may expand horizontally beyond 720px under any circumstances, guaranteeing zero lateral scroll drift and perfectly balanced viewport centering.
+- **Universal Word-Smart Label Autowrapping (`autowrap_mode = TextServer.AUTOWRAP_WORD_SMART`):**
+  - All `Label` nodes across all page card scenes and runtime programmatic instantiations (`SubheadingLabel`, `HeadingLabel`, `FruitLabel`, `ScriptureCitationLabel`, `ScriptureTextLabel`, `MeditationLabel`, `DecadeRubric`, `PrayerText`, `PrayerTitle`, `SectionTitleLabel`, `SectionBody`, `TitleLabel`, `SubtitleLabel`, `EpigraphQuoteLabel`, `ColophonNoticeLabel`, `ScriptureNoticeLabel`, `InStreamJumpBar/PromptLabel`, etc.) must enforce `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (enum value `3`).
+  - Never leave text labels unwrapped or configured with word-only wrapping (`AUTOWRAP_WORD`), which can trigger minimum width expansion on long titles or scaled typography.
+- **CardPanel StyleBoxFlat Explicit Zero Content Margins (`content_margin_* = 0.0`):**
+  - In Godot 4, `StyleBoxFlat` default internal content margins (`content_margin_left`, `content_margin_right`, `content_margin_top`, `content_margin_bottom`) default to `-1.0`, causing the engine to implicitly inherit the border widths (e.g., 2px left + 2px right = 4px). In a 720px panel with 720px content, this implicit margin adds 4px to the panel's combined minimum size (yielding 724px), causing horizontal blowout and rightward shift.
+  - All card background `StyleBoxFlat` resources (e.g. `StyleBoxFlat_parchment`, `StyleBoxFlat_cover_crimson`) must explicitly set `content_margin_left = 0.0`, `content_margin_top = 0.0`, `content_margin_right = 0.0`, and `content_margin_bottom = 0.0`.
+- **FruitBadge Dynamic Width Clamping Pattern:**
+  - The `FruitBadge` (`PanelContainer`) inside `MysteryPrayerPageCard` uses `size_flags_horizontal = SIZE_SHRINK_CENTER` so the pill badge wraps tightly around short fruit names (e.g. *"Humility"*). Under enlarged presets (e.g., `extra_large` on *"Fruit of the Mystery: Contempt of the World"* or *"Fruit of the Mystery: Conversion of Sinners"*), unwrapped text width would exceed available content width (656px - 28px horizontal padding = 628px) and push the entire card width beyond 720px.
+  - To prevent this while retaining center-shrink behavior on shorter strings, `FruitLabel.custom_minimum_size.x` must be clamped dynamically:
+    ```gdscript
+    var unwrapped_fruit_w: float = font_italic.get_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, -1, fruit_font_size).x
+    var target_label_w: float = ceilf(minf(unwrapped_fruit_w, 628.0))
+    fruit_label.custom_minimum_size = Vector2(target_label_w, 0.0)
+    fruit_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    ```
+- **Dynamic Multiline Card Height Calculation (`Font.get_multiline_string_size`):**
+  - Dynamic vertical height calculations (`total_h`) in text cards must calculate heading, fruit, citation, and rubric heights using `Font.get_multiline_string_size(text, alignment, max_width, font_size).y` (using 656.0px for standard card content, 636.0px for scripture container, and 628.0px for fruit badge) rather than single-line approximations (`Font.get_height()`) so that multi-line wrapped headers are accurately reflected in card elongation.
+
+
 ### 3.1 Type 1: Front Cover Card (`Page 1`, `res://scenes/ui/pages/cover_page_card.tscn`, `res://scripts/ui/pages/cover_page_card.gd`)
 - Structured vertical layout (`VBoxContainer`) featuring a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215`) with antique gold border (`#D4AF37`), housing **"PRAY THE ROSARY"** in warm gold 38pt bold (`#D4AF37`), the subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory 22pt italic (`#F7F2E7`), and an ornamental gold divider line.
 - Positioned strictly below the header is a framed artwork container enclosing Bartolomé Esteban Murillo's *The Virgin of the Rosary* (`res://assets/images/cover.webp`) (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`), guaranteeing that zero text elements overlap any portion of the sacred painting.
@@ -278,6 +302,10 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
      godot --headless --path game -s res://tests/test_runner.gd
      ```
    - All data files, liturgical date calculations, save/load persistence, and UI scenes must have automated unit tests with 0 failures.
+4. **Card Width & Label Wrapping Standards:**
+   - All page cards, `CardPanel` containers, and `PageContainer` must maintain `custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0` across all text presets.
+   - All text labels must specify `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (`3`) to prevent horizontal minimum width expansion.
+   - All card panel `StyleBoxFlat` resources must explicitly specify `content_margin_* = 0.0` to eliminate 4px implicit border margin blowout.
 ---
 
 ## 7. Platform & Export Specifications (App Icon, Adaptive Icons & Boot Splash)

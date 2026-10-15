@@ -305,3 +305,21 @@ This document outlines the strict manual testing procedures required before any 
   - The application restores the previously selected text size preset on launch from `user://reading_progress.cfg` (`[reading_progress]` section, `text_size_preset` key).
   - Text-heavy cards immediately render with the chosen font scaling without requiring the user to cycle presets again.
 
+### TC-TEXT-06: Strict 720px Card Width Constraint & Header/FruitBadge Text Wrapping Across Presets
+- **Step 1:** Tap the `"Aa"` button to switch to the `Extra Large` text preset.
+- **Step 2:** Scroll through the continuous stream and inspect text cards with long titles and fruit tags:
+  - Page 8 (The Second Joyful Mystery: *The Visitation* / *Fruit of the Mystery: Love of Neighbor*).
+  - Page 10 (The Third Joyful Mystery: *The Nativity* / *Fruit of the Mystery: Poverty in Spirit*).
+  - Page 26 (The First Sorrowful Mystery: *The Agony in the Garden* / *Fruit of the Mystery: Contempt of the World*).
+  - Page 28 (The Second Sorrowful Mystery: *The Scourging at the Pillar* / *Fruit of the Mystery: Mortification of the Senses*).
+  - Page 48 & Page 49 (*Sacred Artwork Credits Parts I & II*).
+- **Expected:**
+  - **Zero Horizontal Expansion:** All page cards remain strictly constrained to a maximum width of 720px (`custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0`). The scroll stream does not shift rightward or introduce horizontal panning.
+  - **Clean Multiline Header Wrapping:** Long headings (e.g. *The Scourging at the Pillar*, *Sacred Artwork Credits (Part I)*) and subheadings wrap cleanly onto two or more lines without clipping or overflowing their container boundaries (`autowrap_mode = TextServer.AUTOWRAP_WORD_SMART`).
+  - **Dynamic Fruit Badge Clamping:**
+    - Short fruit badges (e.g. Page 6: *Fruit of the Mystery: Humility*) remain tightly shrink-wrapped and centered horizontally in their gold pill container (`size_flags_horizontal = SIZE_SHRINK_CENTER`).
+    - Long fruit badges (e.g. Page 26: *Fruit of the Mystery: Contempt of the World*, Page 28: *Fruit of the Mystery: Mortification of the Senses*) wrap onto multiple lines without expanding past the maximum content width (628px), preserving the pill box styling and keeping card width strictly at 720px.
+  - **Interior Scripture Frame Border:** The 1px interior scripture frame border (`ScriptureContainer`) on Mystery Prayer Cards remains completely visible with 10px internal margins and zero lateral cutoff.
+  - **Symmetrical Lateral Margins:** Symmetrical 32px margins (left and right) are preserved uniformly across all 50 cards under all presets.
+
+
