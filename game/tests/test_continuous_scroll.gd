@@ -447,3 +447,250 @@ func test_touch_swipe_mouse_drag_and_wheel_scroll_input() -> void:
 	main_node.free()
 
 
+func test_momentum_scroll_high_velocity_drag_release() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(5, false)
+	var initial_scroll: int = main_node.scroll_container.scroll_vertical
+
+	# 1. High-velocity touch swipe
+	var touch_down: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_down.pressed = true
+	main_node.handle_scroll_input(touch_down)
+
+	var swipe_up: InputEventScreenDrag = InputEventScreenDrag.new()
+	swipe_up.relative = Vector2(0.0, -100.0)
+	swipe_up.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(swipe_up)
+
+	assert_eq(main_node.scroll_container.scroll_vertical, initial_scroll + 100, "1:1 drag should move scroll by 100px")
+	assert_eq(main_node.get_drag_velocity(), 1500.0, "Drag velocity should track -velocity.y (1500 px/s)")
+
+	var touch_up: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_up.pressed = false
+	main_node.handle_scroll_input(touch_up)
+
+	assert_true(main_node.is_momentum_scrolling(), "High-velocity touch release must initiate momentum scrolling")
+	assert_true(main_node.get_momentum_velocity() > 1000.0, "Initial momentum velocity must match flick velocity")
+
+	# Step physics frame 1
+	var prev_scroll: int = main_node.scroll_container.scroll_vertical
+	var prev_vel: float = main_node.get_momentum_velocity()
+	main_node._process(0.016)
+
+	assert_true(main_node.scroll_container.scroll_vertical > prev_scroll, "Scroll position must advance after process step")
+	assert_true(main_node.get_momentum_velocity() < prev_vel, "Velocity must decelerate due to friction")
+
+	# Step physics frame 2
+	prev_scroll = main_node.scroll_container.scroll_vertical
+	prev_vel = main_node.get_momentum_velocity()
+	main_node._process(0.016)
+
+	assert_true(main_node.scroll_container.scroll_vertical > prev_scroll, "Scroll position must continue advancing on frame 2")
+	assert_true(main_node.get_momentum_velocity() < prev_vel, "Velocity must continue decelerating")
+
+	# Verify virtualization and page progress update during large glide
+	var p5_page: int = main_node.get_current_page()
+	main_node.start_momentum(4000.0)
+	main_node._process(0.4)
+	assert_true(main_node.get_current_page() >= p5_page, "Active page must advance or stay consistent as scroll increases")
+
+	# Stop momentum for mouse test
+	main_node.stop_momentum()
+	assert_false(main_node.is_momentum_scrolling(), "Momentum must be stopped")
+
+	# 2. High-velocity left mouse drag
+	var mouse_down: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_down.button_index = MOUSE_BUTTON_LEFT
+	mouse_down.pressed = true
+	main_node.handle_scroll_input(mouse_down)
+
+	var mouse_drag: InputEventMouseMotion = InputEventMouseMotion.new()
+	mouse_drag.button_mask = MOUSE_BUTTON_MASK_LEFT
+	mouse_drag.relative = Vector2(0.0, -80.0)
+	mouse_drag.velocity = Vector2(0.0, -1200.0)
+	main_node.handle_scroll_input(mouse_drag)
+
+	var mouse_up: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_up.button_index = MOUSE_BUTTON_LEFT
+	mouse_up.pressed = false
+	main_node.handle_scroll_input(mouse_up)
+
+	assert_true(main_node.is_momentum_scrolling(), "High-velocity mouse release must initiate momentum scrolling")
+	assert_true(main_node.get_momentum_velocity() > 800.0, "Momentum velocity should be positive and high")
+
+	# Advance frames until momentum naturally rests
+	var step_count: int = 0
+	while main_node.is_momentum_scrolling() and step_count < 300:
+		main_node._process(0.05)
+		step_count += 1
+
+	assert_false(main_node.is_momentum_scrolling(), "Momentum glide must naturally rest when velocity drops below cutoff")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Residual momentum velocity must be 0 at rest")
+
+	main_node.free()
+
+
+func test_momentum_scroll_interruption_by_touch_and_mouse_press() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(10, false)
+
+	# 1. Interruption by touch press
+	main_node.start_momentum(1000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum scrolling should be active")
+	main_node._process(0.016)
+
+	var touch_press: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_press.pressed = true
+	main_node.handle_scroll_input(touch_press)
+
+	assert_false(main_node.is_momentum_scrolling(), "Touch press must immediately halt active momentum")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Momentum velocity must be 0 after touch press interruption")
+
+	# Releasing tap without drag must NOT start momentum
+	var touch_release: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_release.pressed = false
+	main_node.handle_scroll_input(touch_release)
+	assert_false(main_node.is_momentum_scrolling(), "Releasing tap without dragging must not trigger momentum")
+
+	# 2. Interruption by mouse press
+	main_node.start_momentum(1000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum scrolling should be active")
+
+	var mouse_press: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_press.button_index = MOUSE_BUTTON_LEFT
+	mouse_press.pressed = true
+	main_node.handle_scroll_input(mouse_press)
+
+	assert_false(main_node.is_momentum_scrolling(), "Mouse press must immediately halt active momentum")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Momentum velocity must be 0 after mouse press interruption")
+
+	var mouse_release: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_release.button_index = MOUSE_BUTTON_LEFT
+	mouse_release.pressed = false
+	main_node.handle_scroll_input(mouse_release)
+	assert_false(main_node.is_momentum_scrolling(), "Releasing mouse click without dragging must not trigger momentum")
+
+	# 3. Interruption by drawer opening
+	main_node.start_momentum(1000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum scrolling should be active")
+	main_node._on_drawer_opened()
+	assert_false(main_node.is_momentum_scrolling(), "Opening drawer must halt active momentum")
+
+	# 4. Interruption by page jump
+	main_node.start_momentum(1000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum scrolling should be active")
+	main_node.scroll_to_page(20, false)
+	assert_false(main_node.is_momentum_scrolling(), "Initiating scroll_to_page must halt active momentum")
+
+	main_node.free()
+
+
+func test_momentum_scroll_boundary_clamping() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	# 1. Top boundary clamping (moving toward Page 1, scroll = 0)
+	main_node.scroll_container.scroll_vertical = 80
+	main_node.start_momentum(-2000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Upward momentum should be active")
+
+	# Process 0.1s: 80 - 2000 * 0.1 = -120, hitting top boundary
+	main_node._process(0.1)
+
+	assert_eq(main_node.scroll_container.scroll_vertical, 0, "Scroll position must clamp strictly to 0 at top boundary")
+	assert_false(main_node.is_momentum_scrolling(), "Residual momentum must be halted immediately at top boundary")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Momentum velocity must be zeroed upon hitting top boundary")
+
+	# Subsequent process steps must not move below 0
+	main_node._process(0.016)
+	assert_eq(main_node.scroll_container.scroll_vertical, 0, "Scroll position must remain at 0 without negative overshoot")
+
+	# 2. Bottom boundary clamping (moving toward Page 50, max scroll)
+	var max_scroll: int = main_node._get_max_scroll_vertical()
+	main_node.scroll_container.scroll_vertical = max_scroll - 80
+	main_node.start_momentum(2000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Downward momentum should be active")
+
+	# Process 0.1s: max - 80 + 2000 * 0.1 = max + 120, hitting bottom boundary
+	main_node._process(0.1)
+
+	assert_eq(main_node.scroll_container.scroll_vertical, max_scroll, "Scroll position must clamp strictly to max_scroll at bottom boundary")
+	assert_false(main_node.is_momentum_scrolling(), "Residual momentum must be halted immediately at bottom boundary")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Momentum velocity must be zeroed upon hitting bottom boundary")
+
+	# Subsequent process steps must not move beyond max_scroll
+	main_node._process(0.016)
+	assert_eq(main_node.scroll_container.scroll_vertical, max_scroll, "Scroll position must remain at max_scroll without overshooting")
+
+	# 3. Guard against starting momentum beyond boundaries
+	main_node.scroll_container.scroll_vertical = 0
+	main_node.start_momentum(-1000.0)
+	assert_false(main_node.is_momentum_scrolling(), "Starting upward momentum when already at 0 must not activate momentum")
+
+	main_node.scroll_container.scroll_vertical = max_scroll
+	main_node.start_momentum(1000.0)
+	assert_false(main_node.is_momentum_scrolling(), "Starting downward momentum when already at max_scroll must not activate momentum")
+
+	main_node.free()
+
+
+func test_momentum_scroll_slow_drag_no_momentum() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(5, false)
+	var initial_scroll: int = main_node.scroll_container.scroll_vertical
+
+	# 1. Slow touch drag below MIN_FLICK_VELOCITY (50 px/s < 120 px/s)
+	var touch_down: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_down.pressed = true
+	main_node.handle_scroll_input(touch_down)
+
+	var slow_drag: InputEventScreenDrag = InputEventScreenDrag.new()
+	slow_drag.relative = Vector2(0.0, -15.0)
+	slow_drag.velocity = Vector2(0.0, -50.0)
+	main_node.handle_scroll_input(slow_drag)
+
+	assert_eq(main_node.scroll_container.scroll_vertical, initial_scroll + 15, "Slow drag must move position 1:1")
+
+	var touch_up: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_up.pressed = false
+	main_node.handle_scroll_input(touch_up)
+
+	assert_false(main_node.is_momentum_scrolling(), "Slow drag below flick threshold must not initiate momentum scrolling")
+
+	# Process frames: no drift
+	main_node._process(0.016)
+	assert_eq(main_node.scroll_container.scroll_vertical, initial_scroll + 15, "Position must remain stationary after slow drag release")
+
+	# 2. Slow mouse drag
+	var mouse_down: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_down.button_index = MOUSE_BUTTON_LEFT
+	mouse_down.pressed = true
+	main_node.handle_scroll_input(mouse_down)
+
+	var slow_mouse: InputEventMouseMotion = InputEventMouseMotion.new()
+	slow_mouse.button_mask = MOUSE_BUTTON_MASK_LEFT
+	slow_mouse.relative = Vector2(0.0, -10.0)
+	slow_mouse.velocity = Vector2(0.0, -40.0)
+	main_node.handle_scroll_input(slow_mouse)
+
+	var mouse_up: InputEventMouseButton = InputEventMouseButton.new()
+	mouse_up.button_index = MOUSE_BUTTON_LEFT
+	mouse_up.pressed = false
+	main_node.handle_scroll_input(mouse_up)
+
+	assert_false(main_node.is_momentum_scrolling(), "Slow mouse drag below flick threshold must not initiate momentum scrolling")
+
+	main_node.free()
+
+
+

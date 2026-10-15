@@ -11,6 +11,12 @@ const ARTWORK_BUFFER_PAGES: int = 4
 const WHEEL_SCROLL_STEP: int = 80
 const COLOR_AMBIENT_ESPRESSO: Color = Color(0.0784314, 0.0627451, 0.0627451, 1.0) # #141010
 
+const MIN_FLICK_VELOCITY: float = 120.0
+const MOMENTUM_STOP_VELOCITY: float = 10.0
+const MOMENTUM_FRICTION: float = 0.96
+const MAX_MOMENTUM_VELOCITY: float = 6000.0
+const DRAG_PAUSE_TIMEOUT_MS: int = 150
+
 const PAGE_CARD_SCENE: PackedScene = preload("res://scenes/ui/page_card.tscn")
 const JUMP_BAR_SCENE: PackedScene = preload("res://scenes/ui/in_stream_jump_bar.tscn")
 
@@ -25,6 +31,13 @@ var _scroll_tween: Tween = null
 var _save_timer: Timer = null
 var _is_restoring_initial_page: bool = false
 var _is_initialized: bool = false
+
+var _is_momentum_scrolling: bool = false
+var _momentum_velocity_y: float = 0.0
+var _momentum_scroll_y: float = 0.0
+var _drag_velocity_y: float = 0.0
+var _last_drag_time_msec: int = 0
+var _is_mouse_dragging: bool = false
 
 @onready var background: ColorRect = get_node_or_null("Background") as ColorRect
 @onready var scroll_container: ScrollContainer = get_node_or_null("ScrollContainer") as ScrollContainer
@@ -52,6 +65,46 @@ func _ready() -> void:
 		_update_virtualization(1)
 
 
+func _process(delta: float) -> void:
+	if not _is_momentum_scrolling:
+		return
+	if scroll_container == null:
+		_stop_momentum()
+		return
+	if navigation_drawer != null and navigation_drawer.is_open():
+		_stop_momentum()
+		return
+	if delta <= 0.0:
+		return
+
+	var max_scroll: int = _get_max_scroll_vertical()
+	_momentum_scroll_y += _momentum_velocity_y * delta
+
+	# Strict boundary clamping: halt residual momentum immediately at stream ends
+	if _momentum_scroll_y <= 0.0:
+		_momentum_scroll_y = 0.0
+		scroll_container.scroll_vertical = 0
+		_stop_momentum()
+		return
+	elif _momentum_scroll_y >= float(max_scroll):
+		_momentum_scroll_y = float(max_scroll)
+		scroll_container.scroll_vertical = max_scroll
+		_stop_momentum()
+		return
+
+	var new_scroll: int = clampi(int(round(_momentum_scroll_y)), 0, max_scroll)
+	scroll_container.scroll_vertical = new_scroll
+
+	var active_page: int = get_current_page_number()
+	if active_page != _current_page:
+		_on_scroll_value_changed(float(new_scroll))
+
+	# Exponential friction decay curve
+	_momentum_velocity_y *= pow(MOMENTUM_FRICTION, delta * 60.0)
+	if absf(_momentum_velocity_y) < MOMENTUM_STOP_VELOCITY:
+		_stop_momentum()
+
+
 func _input(event: InputEvent) -> void:
 	if navigation_drawer == null or not navigation_drawer.is_open():
 		handle_scroll_input(event)
@@ -62,24 +115,95 @@ func handle_scroll_input(event: InputEvent) -> void:
 	if event == null or scroll_container == null:
 		return
 	if navigation_drawer != null and navigation_drawer.is_open():
+		_stop_momentum()
+		return
+
+	# 1. Screen Touch (Tap / Press Down & Release)
+	if event is InputEventScreenTouch:
+		var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+		if touch_event.pressed:
+			_stop_momentum()
+			if _scroll_tween != null and _scroll_tween.is_valid():
+				_scroll_tween.kill()
+			_drag_velocity_y = 0.0
+			_last_drag_time_msec = Time.get_ticks_msec()
+		else:
+			var now: int = Time.get_ticks_msec()
+			var elapsed: int = now - _last_drag_time_msec
+			if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(_drag_velocity_y) >= MIN_FLICK_VELOCITY:
+				_start_momentum(_drag_velocity_y)
+			else:
+				_stop_momentum()
+			_drag_velocity_y = 0.0
 		return
 
 	var delta_y: int = 0
-	if event is InputEventScreenDrag:
-		var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
-		delta_y = -int(round(drag_event.relative.y))
-	elif event is InputEventMouseMotion:
-		var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
-		if (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
-			delta_y = -int(round(motion_event.relative.y))
-	elif event is InputEventMouseButton:
+
+	# 2. Mouse Button (Left Button Press / Release & Wheel)
+	if event is InputEventMouseButton:
 		var button_event: InputEventMouseButton = event as InputEventMouseButton
-		if button_event.pressed:
+		if button_event.button_index == MOUSE_BUTTON_LEFT:
+			if button_event.pressed:
+				_stop_momentum()
+				if _scroll_tween != null and _scroll_tween.is_valid():
+					_scroll_tween.kill()
+				_drag_velocity_y = 0.0
+				_last_drag_time_msec = Time.get_ticks_msec()
+				_is_mouse_dragging = true
+			else:
+				if _is_mouse_dragging:
+					_is_mouse_dragging = false
+					var now: int = Time.get_ticks_msec()
+					var elapsed: int = now - _last_drag_time_msec
+					if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(_drag_velocity_y) >= MIN_FLICK_VELOCITY:
+						_start_momentum(_drag_velocity_y)
+					else:
+						_stop_momentum()
+					_drag_velocity_y = 0.0
+			return
+		elif button_event.pressed:
+			_stop_momentum()
+			if _scroll_tween != null and _scroll_tween.is_valid():
+				_scroll_tween.kill()
 			var factor: float = button_event.factor if button_event.factor > 0.0 else 1.0
 			if button_event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				delta_y = int(round(float(WHEEL_SCROLL_STEP) * factor))
 			elif button_event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				delta_y = -int(round(float(WHEEL_SCROLL_STEP) * factor))
+
+	# 3. Screen Drag
+	elif event is InputEventScreenDrag:
+		var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
+		_stop_momentum()
+		if _scroll_tween != null and _scroll_tween.is_valid():
+			_scroll_tween.kill()
+		delta_y = -int(round(drag_event.relative.y))
+
+		var now: int = Time.get_ticks_msec()
+		if drag_event.velocity.y != 0.0:
+			_drag_velocity_y = -drag_event.velocity.y
+		elif _last_drag_time_msec > 0 and now > _last_drag_time_msec:
+			var dt_sec: float = float(now - _last_drag_time_msec) / 1000.0
+			_drag_velocity_y = -drag_event.relative.y / dt_sec
+		_last_drag_time_msec = now
+
+	# 4. Mouse Motion
+	elif event is InputEventMouseMotion:
+		var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+		if (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+			_stop_momentum()
+			if _scroll_tween != null and _scroll_tween.is_valid():
+				_scroll_tween.kill()
+			delta_y = -int(round(motion_event.relative.y))
+
+			var now: int = Time.get_ticks_msec()
+			if motion_event.velocity.y != 0.0:
+				_drag_velocity_y = -motion_event.velocity.y
+			elif _last_drag_time_msec > 0 and now > _last_drag_time_msec:
+				var dt_sec: float = float(now - _last_drag_time_msec) / 1000.0
+				_drag_velocity_y = -motion_event.relative.y / dt_sec
+			_last_drag_time_msec = now
+			_is_mouse_dragging = true
 
 	if delta_y == 0:
 		return
@@ -89,6 +213,28 @@ func handle_scroll_input(event: InputEvent) -> void:
 
 	var max_scroll: int = _get_max_scroll_vertical()
 	scroll_container.scroll_vertical = clampi(scroll_container.scroll_vertical + delta_y, 0, max_scroll)
+
+
+func _start_momentum(initial_velocity: float) -> void:
+	if scroll_container == null:
+		return
+	var max_scroll: int = _get_max_scroll_vertical()
+	if scroll_container.scroll_vertical <= 0 and initial_velocity < 0.0:
+		_stop_momentum()
+		return
+	if scroll_container.scroll_vertical >= max_scroll and initial_velocity > 0.0:
+		_stop_momentum()
+		return
+
+	_momentum_velocity_y = clampf(initial_velocity, -MAX_MOMENTUM_VELOCITY, MAX_MOMENTUM_VELOCITY)
+	_momentum_scroll_y = float(scroll_container.scroll_vertical)
+	_is_momentum_scrolling = true
+
+
+func _stop_momentum() -> void:
+	_is_momentum_scrolling = false
+	_momentum_velocity_y = 0.0
+	_drag_velocity_y = 0.0
 
 
 func _get_max_scroll_vertical() -> int:
@@ -221,6 +367,7 @@ func _restore_saved_page(saved_page: int) -> void:
 
 
 func scroll_to_page(page_number: int, animate: bool = true) -> void:
+	_stop_momentum()
 	_ensure_initialized()
 	var clamped_page: int = clampi(page_number, 1, TOTAL_PAGES)
 	var target_y: int = get_target_scroll_for_page(clamped_page)
@@ -315,7 +462,7 @@ func _on_scroll_value_changed(_value: float) -> void:
 			navigation_drawer.set_saved_page(_current_page)
 		page_changed.emit(_current_page)
 
-		if _save_timer != null:
+		if _save_timer != null and _save_timer.is_inside_tree():
 			_save_timer.start()
 
 
@@ -333,6 +480,8 @@ func _on_navigation_drawer_page_requested(target_page: int) -> void:
 
 
 func _on_drawer_opened() -> void:
+	_stop_momentum()
+	_is_mouse_dragging = false
 	if scroll_container != null:
 		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -375,4 +524,25 @@ func get_current_page() -> int:
 
 func get_navigation_drawer() -> NavigationDrawer:
 	return navigation_drawer
+
+
+func is_momentum_scrolling() -> bool:
+	return _is_momentum_scrolling
+
+
+func get_momentum_velocity() -> float:
+	return _momentum_velocity_y
+
+
+func get_drag_velocity() -> float:
+	return _drag_velocity_y
+
+
+func stop_momentum() -> void:
+	_stop_momentum()
+
+
+func start_momentum(velocity: float) -> void:
+	_start_momentum(velocity)
+
 
