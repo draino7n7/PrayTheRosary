@@ -59,6 +59,14 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
   - Complete `RosaryPalette` color table (`parchment` `#FAF6EE`, `charcoal` `#1E1815`, `crimson` `#6B1D21`, `umber` `#5C4338`, `gold` `#B89130`, `ambient_espresso` `#141010`, `cover_crimson` `#4A1215`, `warm_gold` `#D4AF37`, `ivory_text` `#F7F2E7`).
   - Styled controls for `Label`, `RichTextLabel` (normal, bold, italics fonts), `Button` (interactive flat styleboxes with gold accents across normal, hover, pressed, focus, and disabled states), `PanelContainer` (parchment background with 2px gold border), and `ScrollContainer` (transparent empty stylebox for seamless vertical scrolling).
 
+### 2.3 Global Dynamic Text Sizing System
+To accommodate diverse user needs, high-DPI mobile devices, and accessible reader experiences, the application features a global typography scaling system with 3 distinct presets:
+- **`normal` (Normal / Default):** The baseline layout matching the 6" × 9" physical prayer book spread geometry. All 50 page cards fit within the canonical 720×1080 (2:3) canvas with zero vertical overflow. Standard body text: 19–24pt; headings: 34–38pt; subheadings: 22–24pt.
+- **`mobile` (Mobile Large):** Optimized for reading on handheld screens while holding physical rosary beads. Scales headings up to 38pt, subheadings to 25pt, fruit badges to 24pt, scripture citations to 23pt, and body text/rubrics up to 27–33pt (approximately 1.35× scaling factor).
+- **`extra_large` (Extra Large):** High-visibility accessibility mode for seniors and low-vision readers. Scales headings up to 44pt, subheadings to 29pt, fruit badges to 30pt, scripture citations to 29pt, and body text/rubrics up to 35–44pt (approximately 1.7× scaling factor).
+
+Under the `mobile` and `extra_large` presets, text-heavy cards dynamically elongate vertically to guarantee zero truncation and zero internal scrollbars, while sacred art and cover pages maintain their locked 2:3 aspect ratio.
+
 ---
 
 ## 3. Page Card Types in the 50-Page Vertical Scroll
@@ -67,38 +75,45 @@ The 50 pages returned by `RosaryDataLoader.get_all_pages()` render inside the ve
 
 ### 3.0 Modular Component Architecture
 - **Root Facade Component (`res://scenes/ui/page_card.tscn` / `res://scripts/ui/page_card.gd`):**
-  - Inherits `BasePageCard` (`AspectRatioContainer`) with strict $2:3$ ratio (`ratio = 2.0 / 3.0`) and minimum design size `720×1080`.
+  - Inherits `BasePageCard` (`AspectRatioContainer`) with default $2:3$ ratio (`ratio = 2.0 / 3.0`) and minimum design size `720×1080`.
   - Automatically instantiates and hosts the appropriate specialized sub-card based on `page_data["page_type"]`.
   - Exposes static factory method `PageCard.create_for_page(page_data, loader)` and `bind_page_data(page_data, loader)` for continuous scroll instantiation.
+  - Dynamically synchronizes dimensions with sub-cards via `_sync_with_sub_card()`: when a text-heavy sub-card elongates vertically beyond 1080px under larger typography presets, `PageCard` sets `custom_minimum_size = Vector2(720.0, target_h)` and adjusts `ratio = 720.0 / target_h`. For artwork and cover pages, it strictly preserves `custom_minimum_size = Vector2(720.0, 1080.0)` and `ratio = 2.0 / 3.0`.
 - **Base Class (`res://scripts/ui/pages/base_page_card.gd`):**
-  - Defines `BasePageCard`, extending `AspectRatioContainer`, establishing `mouse_filter = Control.MOUSE_FILTER_PASS`, the common lifecycle method `bind_page_data(page_data, loader)`, standard inspector accessors (`get_heading_text()`, `get_subheading_text()`), and the recursive helper `BasePageCard.configure_pass_through_mouse_filters(node: Node)`.
+  - Defines `BasePageCard`, extending `AspectRatioContainer`, establishing `mouse_filter = Control.MOUSE_FILTER_PASS`, the common lifecycle method `bind_page_data(page_data, loader)`, typography preset management (`set_text_size_preset()`, `get_text_size_preset()`, `normalize_preset()`, `get_required_card_height()`), standard inspector accessors (`get_heading_text()`, `get_subheading_text()`), and the recursive helper `BasePageCard.configure_pass_through_mouse_filters(node: Node)`.
   - **Pass-Through Mouse Filter Enforcement:** Every `Control` inside `PageCard`, `InStreamJumpBar`, and `NavigationDrawer/ContentContainer` is configured via `configure_pass_through_mouse_filters()` so that `BaseButton` descendants use `Control.MOUSE_FILTER_PASS` (allowing clicks/taps while passing drag/wheel input through), `Label` / `TextureRect` / `ColorRect` nodes use `Control.MOUSE_FILTER_IGNORE`, and layout containers use `Control.MOUSE_FILTER_PASS` (never `Control.MOUSE_FILTER_STOP`).
 - **Data Hydration (`res://scripts/data/rosary_data_loader.gd`):**
   - `RosaryDataLoader` indexes all artwork entries via `get_artwork(artwork_id)` and `get_all_artworks()`, attaching each painting's non-numbered placement `section_label` (`"Front Cover"`, `"Opening Prayers"`, `"1st Joyful Mystery (The Annunciation)"` .. `"5th Glorious Mystery (The Coronation of the Blessed Virgin Mary)"`, and `"Closing Prayers"`).
   - Credits spreads (`spread_type == "credits_spread"`, Pages 48 & 49) automatically hydrate artwork attribution dictionaries in `lp_credits["attributions"]` and `rp_credits["attributions"]`.
 
-### 3.0.1 Typography Sizing, Margin Standardization & Layout Calibration
-To maximize mobile readability, eliminate vacant vertical whitespace, and guarantee zero vertical text clipping or internal scrolling on the $720×1080$ ($2:3$) portrait card canvas:
+### 3.0.1 Typography Sizing, Margin Standardization & Dynamic Vertical Card Elongation
+To maximize mobile readability, eliminate vacant vertical whitespace, and guarantee zero vertical text clipping or internal scrolling on the $720×1080$ portrait canvas across all typography presets:
 - **Standardized MarginContainers:**
   - Standard page card scenes (`CoverPageCard`, `FrontMatterPageCard`, `PrayerSequencePageCard`, `MysteryPrayerPageCard`, `ArtworkPageCard`) enforce a uniform **32px** margin on all four edges (`margin_left = 32`, `margin_right = 32`, `margin_top = 32`, `margin_bottom = 32`), yielding a consistent content width of 656px (`CreditsPageCard` uses 32px left/right margins and 22px top/bottom margins).
   - `BackCoverPageCard` aligns with 34–36px outer padding and 24px content block vertical separation.
-- **Header Typography Sizing:**
+- **Header Typography Sizing (Normal Preset Baseline):**
   - `SubheadingLabel`: Standardized to **22–24pt** (>= 22pt) in EB Garamond Italic (22pt on standard cards, 24pt on BackCover subtitle).
   - `HeadingLabel`: Standardized to **34–38pt** (>= 34pt) in EB Garamond Bold (34pt on standard cards, 38pt on Cover & BackCover titles).
 - **Body Typography Auto-Fitting & Vertical Space Distribution:**
-  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density (`total_chars <= 1650`). Page 2 (1,622 chars) renders at 22pt body / 25pt section headers; Page 3 (1,813 chars) renders at 20pt body / 23pt section headers. Section containers configure `SIZE_EXPAND_FILL` to distribute content evenly across the full 1080px canvas.
-  - **Prayer Sequences (`Pages 4 & 46`):** Calibrated scaling: Page 4 (5 prayer steps) renders at 19pt body / 16pt rubrics / 20pt titles; Page 46 (4 prayer steps) renders at 23pt body / 18pt rubrics / 24pt titles. Prayer step containers configure `SIZE_EXPAND_FILL`.
+  - **Front Matter (`Pages 2 & 3`):** Dynamic font scaling calibrated to character density (`total_chars <= 1650`). Normal: Page 2 (1,622 chars) renders at 22pt body / 25pt section headers; Page 3 (1,813 chars) renders at 20pt body / 23pt section headers. Mobile: 26–28pt body / 30–32pt headers. Extra Large: 32–36pt body / 38–40pt headers. Section containers configure `SIZE_EXPAND_FILL`.
+  - **Prayer Sequences (`Pages 4 & 46`):** Calibrated scaling: Page 4 (5 prayer steps) renders at 19pt body / 16pt rubrics / 20pt titles (Normal), 27pt body / 22pt rubrics / 28pt titles (Mobile), 35pt body / 28pt rubrics / 36pt titles (Extra Large); Page 46 (4 prayer steps) renders at 23pt body / 18pt rubrics / 24pt titles (Normal), 32pt body / 24pt rubrics / 33pt titles (Mobile), 42pt body / 32pt rubrics / 42pt titles (Extra Large). Prayer step containers configure `SIZE_EXPAND_FILL`.
   - **Mystery Prayers (`Pages 6, 8, ..., 44 even`):**
-    - Fruit badge standardized to 18pt in gold pill box.
-    - Scripture citation standardized to 17pt bold with gold vertical border accent.
-    - Dynamic density scaling: Standard-density mysteries render at 22pt body / 20pt scripture / 18pt decade rubric; high-density mysteries (such as Page 40 Pentecost, 1,326 chars) render at 20pt body / 18pt scripture / 17pt decade rubric.
+    - Fruit badge: 18pt (Normal), 24pt (Mobile), 30pt (Extra Large) in gold pill box.
+    - Scripture citation: 17pt (Normal), 23pt (Mobile), 29pt (Extra Large) bold with gold vertical border accent.
+    - Dynamic density scaling: Normal renders at 22–24pt body / 18–20pt scripture / 17–18pt decade rubric; Mobile scales to 31–33pt body / 24–25pt rubric; Extra Large scales to 40–44pt body / 31–33pt rubric.
     - Decade prayer step containers configure `SIZE_EXPAND_FILL` for vertical balance.
   - **Credits & Colophon (`Pages 48 & 49`):**
-    - Part I (Page 48, 12 attributions in sequential book order: Front Cover, Opening Prayers, Joyful Mysteries 1–5, and Luminous Mysteries 1–5): 16pt bold title (`"%s — %s" % [section_label, art_title]`) / 14pt regular details with `SIZE_EXPAND_FILL` and 22px top/bottom margins.
-    - Part II (Page 49, 11 attributions + Colophon in sequential book order: Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, and Closing Prayers last): 16pt bold title (`"%s — %s" % [section_label, art_title]`) / 14pt regular details / 13pt colophon notices.
+    - Part I (Page 48, 12 attributions): Normal: 16pt bold title / 14pt details; Mobile: 22pt bold title / 19pt details; Extra Large: 28pt bold title / 24pt details.
+    - Part II (Page 49, 11 attributions + Colophon): Normal: 16pt bold title / 14pt details / 13pt colophon; Mobile: 22pt bold title / 19pt details / 17pt colophon; Extra Large: 28pt bold title / 24pt details / 22pt colophon.
   - **Back Cover (`Page 50`):** 38pt title / 22pt subtitle / 22pt epigraphs / 20pt synopsis / 17pt attributions with 24px vertical separation and `SIZE_EXPAND_FILL`.
-- **Zero Vertical Overflow Guarantee:**
-  - Automated tests assert that all 50 hydrated pages have total required height $\le 1080.0\text{px}$, ensuring no text clipping or hidden lines across the entire 50-page stream.
+- **Dynamic Vertical Elongation Rules for Text Cards:**
+  - Text-heavy cards (`PrayerSequencePageCard`, `MysteryPrayerPageCard`, `FrontMatterPageCard`, `CreditsPageCard`) calculate their exact required content height using `FontFile.get_multiline_string_size()`.
+  - Under `normal` preset, content height fits cleanly within the standard `1080.0px` envelope (`height <= 1080.0px`).
+  - Under `mobile` and `extra_large` presets, when content demands additional height, cards dynamically elongate vertically beyond 1080px (`height > 1080.0px`), updating `custom_minimum_size.y` and adjusting `ratio = DESIGN_WIDTH / final_height`.
+  - This guarantees that enlarged fonts never clip, truncate, or spawn awkward internal nested scrollbars inside cards; the continuous outer vertical stream absorbs all vertical growth naturally.
+- **Strict 2:3 Aspect Ratio Lock for Artwork and Covers:**
+  - `ArtworkPageCard` (`Pages 5, 7, 9, ..., 47`), `CoverPageCard` (`Page 1`), and `BackCoverPageCard` (`Page 50`) are strictly locked to the canonical 2:3 portrait aspect ratio (`ratio = 2.0 / 3.0`, `custom_minimum_size = Vector2(720.0, 1080.0)`) across all text size presets.
+  - Sacred artwork paintings and book covers are never stretched, distorted, cropped, or elongated.
 
 ### 3.1 Type 1: Front Cover Card (`Page 1`, `res://scenes/ui/pages/cover_page_card.tscn`, `res://scripts/ui/pages/cover_page_card.gd`)
 - Structured vertical layout (`VBoxContainer`) featuring a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215`) with antique gold border (`#D4AF37`), housing **"PRAY THE ROSARY"** in warm gold 38pt bold (`#D4AF37`), the subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory 22pt italic (`#F7F2E7`), and an ornamental gold divider line.
@@ -206,7 +221,7 @@ Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, mont
 ### 4.4 Automatic "Resume Last Page" Persistence (`user://reading_progress.cfg`)
 Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_manager.gd`):
 - Tracks the currently viewed page number (`1..50`) calculated dynamically from the vertical scroll position in `Main` (`res://scripts/main/main.gd`).
-- Persists to `user://reading_progress.cfg` using Godot's `ConfigFile` under section `[progress]`, key `last_viewed_page`.
+- Persists to `user://reading_progress.cfg` using Godot's `ConfigFile` under section `[reading_progress]`, key `last_page_number`.
 - **Save Debouncing:** Debounces disk writes with a 600ms timer during active scrolling to prevent disk thrashing, while immediately saving on discrete jump bar activations.
 - **Launch Restoration:** On startup, loads the saved page (defaulting to `Page 1` on fresh launch) and restores the vertical scroll position cleanly.
 
@@ -218,6 +233,23 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
    - Transparent fallback: `PageCard.get_artwork_texture()` automatically reloads textures on demand if queried outside the active window.
 2. **Screen Keep-Awake:**
    - `Main._ready()` calls `DisplayServer.screen_set_keep_on(true)` guarded by `DisplayServer.get_name() != "headless"` to prevent mobile displays from dimming or locking during contemplative prayer.
+
+### 4.6 Floating "Aa" Reader Button & Typography Preset Persistence
+- **Top-Left Floating "Aa" Reader Button:**
+  - Located on a dedicated HUD canvas layer (`ReaderCanvasLayer`, `layer = 10`) positioned at `offset_left = 18.0`, `offset_top = 18.0`, with fixed dimensions `52×52px`.
+  - Visual styling matches the canonical illuminated manuscript palette: warm parchment background (`#FAF6EE` at 0.92 alpha), 2px antique gold border (`#B89130`), corner radius 8px, drop shadow, and deep charcoal bold Garamond typography (`#1E1815`) at 24pt.
+  - Interactive states: Hover border brightens to `#D4AF37`, pressed border shifts to Marian crimson `#6B1D21`.
+  - Pass-through handling: When the navigation drawer is opened, `reader_button.mouse_filter = Control.MOUSE_FILTER_IGNORE` to prevent clicks through the drawer scrim; restored to `MOUSE_FILTER_STOP` upon drawer closing.
+- **One-Tap Preset Cycling & Feedback Toast:**
+  - Tapping the "Aa" button cycles sequentially through: `Normal` $\rightarrow$ `Mobile` $\rightarrow$ `Extra Large` $\rightarrow$ `Normal`.
+  - Displays a centered top floating toast banner (`PresetToast`, `PanelContainer`) styled in parchment and gold with bold Garamond 18pt text (e.g., *"Text Size: Normal"*, *"Text Size: Mobile"*, *"Text Size: Extra Large"*).
+  - In graphical runtimes, the toast smoothly lingers for 1.2s before fading out over 0.4s via a tween.
+- **Viewport Scroll Anchor Stability:**
+  - When switching presets, `Main.set_text_size_preset()` calculates the relative vertical center of the currently viewed page element in the viewport prior to resizing.
+  - After all 50 cards update their minimum dimensions and layouts, the viewport scroll position is re-anchored to the exact relative position of that same element, preventing abrupt jumps, disorientation, or lost reading position.
+- **Configuration Persistence (`user://reading_progress.cfg`):**
+  - Stored under section `[reading_progress]`, key `text_size_preset` (values: `"normal"`, `"mobile"`, `"extra_large"`).
+  - Loaded automatically at application boot by `Main._ready()` / `ReadingProgressManager`, restoring the user's preferred typography scale before initial card rendering.
 
 ---
 
