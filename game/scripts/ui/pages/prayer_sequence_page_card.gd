@@ -20,14 +20,30 @@ func _apply_page_data() -> void:
 	if steps_container == null:
 		steps_container = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/PrayerStepsContainer") as VBoxContainer
 
+	var heading_font_size: int = 34
+	var subheading_font_size: int = 22
+	match text_size_preset:
+		PRESET_MOBILE:
+			heading_font_size = 38
+			subheading_font_size = 25
+		PRESET_EXTRA_LARGE:
+			heading_font_size = 44
+			subheading_font_size = 29
+		_:
+			heading_font_size = 34
+			subheading_font_size = 22
+
 	if subheading_label != null:
 		subheading_label.text = str(page_data.get("subheading", ""))
+		subheading_label.add_theme_font_size_override("font_size", subheading_font_size)
 	if heading_label != null:
 		heading_label.text = str(page_data.get("heading", ""))
+		heading_label.add_theme_font_size_override("font_size", heading_font_size)
 
 	if steps_container != null:
 		for child: Node in steps_container.get_children():
-			child.queue_free()
+			steps_container.remove_child(child)
+			child.free()
 
 		var steps: Array = page_data.get("prayer_steps", [])
 		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
@@ -39,6 +55,27 @@ func _apply_page_data() -> void:
 		var body_font_size: int = 19 if is_five_step else 23
 		var rubric_font_size: int = 16 if is_five_step else 18
 		var title_font_size: int = 20 if is_five_step else 24
+
+		match text_size_preset:
+			PRESET_MOBILE:
+				body_font_size = 27 if is_five_step else 32
+				rubric_font_size = 22 if is_five_step else 24
+				title_font_size = 28 if is_five_step else 33
+			PRESET_EXTRA_LARGE:
+				body_font_size = 35 if is_five_step else 42
+				rubric_font_size = 28 if is_five_step else 32
+				title_font_size = 36 if is_five_step else 42
+			_:
+				body_font_size = 19 if is_five_step else 23
+				rubric_font_size = 16 if is_five_step else 18
+				title_font_size = 20 if is_five_step else 24
+
+		var total_h: float = 64.0
+		if font_italic != null:
+			total_h += font_italic.get_height(subheading_font_size) + 4.0
+		if font_bold != null:
+			total_h += font_bold.get_height(heading_font_size) + 4.0
+		total_h += 2.0 + 14.0
 
 		for step_val: Variant in steps:
 			if not (step_val is Dictionary):
@@ -68,6 +105,8 @@ func _apply_page_data() -> void:
 				rubric_lbl.add_theme_color_override("font_color", COLOR_UMBER)
 				rubric_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(rubric_lbl)
+				if font_italic != null:
+					total_h += font_italic.get_multiline_string_size(rubric_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y + 3.0
 
 			# Prayer Title & Text
 			var prayer: Dictionary = step.get("prayer", {})
@@ -84,6 +123,8 @@ func _apply_page_data() -> void:
 				title_lbl.add_theme_font_size_override("font_size", title_font_size)
 				title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 				step_vbox.add_child(title_lbl)
+				if font_bold != null:
+					total_h += font_bold.get_height(title_font_size) + 3.0
 
 			var text: String = str(prayer.get("text", ""))
 			if text != "":
@@ -97,10 +138,32 @@ func _apply_page_data() -> void:
 				text_lbl.add_theme_constant_override("line_spacing", 2)
 				text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(text_lbl)
+				if font_reg != null:
+					total_h += font_reg.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
 
+			total_h += 10.0
 			steps_container.add_child(step_vbox)
 
+		var final_height: float = DESIGN_HEIGHT
+		if text_size_preset != PRESET_NORMAL:
+			final_height = maxf(1081.0, ceilf(total_h + 30.0))
+
+		custom_minimum_size = Vector2(DESIGN_WIDTH, final_height)
+		ratio = DESIGN_WIDTH / final_height
+		var card_panel: PanelContainer = get_node_or_null("CardPanel") as PanelContainer
+		if card_panel != null:
+			card_panel.custom_minimum_size = Vector2(DESIGN_WIDTH, final_height)
+
+		var p: Node = get_parent()
+		if p != null and p is PageCard:
+			(p as PageCard)._sync_with_sub_card()
+
 	configure_pass_through_mouse_filters(self)
+
+
+func _apply_text_size_preset() -> void:
+	if not page_data.is_empty():
+		_apply_page_data()
 
 
 func get_step_count() -> int:

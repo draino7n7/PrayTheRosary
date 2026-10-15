@@ -46,8 +46,47 @@ func _apply_page_data() -> void:
 	current_sub_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	current_sub_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(current_sub_card)
+	current_sub_card.text_size_preset = text_size_preset
 	current_sub_card.bind_page_data(page_data, data_loader)
+	_sync_with_sub_card()
 	configure_pass_through_mouse_filters(self)
+
+
+func set_text_size_preset(preset: Variant) -> void:
+	text_size_preset = normalize_preset(preset)
+	if current_sub_card != null:
+		current_sub_card.set_text_size_preset(text_size_preset)
+	_sync_with_sub_card()
+
+
+func _sync_with_sub_card() -> void:
+	if current_sub_card != null and _is_text_page_type(page_type):
+		var target_h: float = current_sub_card.custom_minimum_size.y
+		if target_h > DESIGN_HEIGHT:
+			custom_minimum_size = Vector2(DESIGN_WIDTH, target_h)
+			ratio = DESIGN_WIDTH / target_h
+		else:
+			custom_minimum_size = DESIGN_SIZE
+			ratio = ASPECT_RATIO
+	else:
+		custom_minimum_size = DESIGN_SIZE
+		ratio = ASPECT_RATIO
+
+
+func get_required_card_height() -> float:
+	if current_sub_card != null:
+		return current_sub_card.get_required_card_height()
+	return custom_minimum_size.y
+
+
+static func _is_text_page_type(p_type: String) -> bool:
+	match p_type:
+		"front_matter_spread_left", "front_matter_spread_right", "front_matter_spread", \
+		"prayer_sequence_page", "mystery_prayer_page", \
+		"credits_spread_left", "credits_spread_right", "credits_spread":
+			return true
+		_:
+			return false
 
 
 func _resolve_scene_for_page_type(p_type: String) -> PackedScene:

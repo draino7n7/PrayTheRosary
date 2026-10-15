@@ -38,11 +38,17 @@ var _momentum_scroll_y: float = 0.0
 var _drag_velocity_y: float = 0.0
 var _last_drag_time_msec: int = 0
 var _is_mouse_dragging: bool = false
+var _current_text_preset: String = ""
+var _toast_tween: Tween = null
 
 @onready var background: ColorRect = get_node_or_null("Background") as ColorRect
 @onready var scroll_container: ScrollContainer = get_node_or_null("ScrollContainer") as ScrollContainer
 @onready var page_container: VBoxContainer = get_node_or_null("ScrollContainer/PageContainer") as VBoxContainer
 @onready var navigation_drawer: NavigationDrawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
+@onready var reader_layer: CanvasLayer = get_node_or_null("ReaderCanvasLayer") as CanvasLayer
+@onready var reader_button: Button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+@onready var preset_toast: PanelContainer = get_node_or_null("ReaderCanvasLayer/PresetToast") as PanelContainer
+@onready var toast_label: Label = get_node_or_null("ReaderCanvasLayer/PresetToast/ToastLabel") as Label
 
 
 func _ready() -> void:
@@ -50,6 +56,7 @@ func _ready() -> void:
 		DisplayServer.screen_set_keep_on(true)
 
 	_ensure_initialized()
+	_setup_reader_controls()
 	_setup_save_timer()
 	_setup_scroll_listening()
 	_setup_navigation_drawer()
@@ -260,9 +267,20 @@ func _ensure_initialized() -> void:
 		background = get_node_or_null("Background") as ColorRect
 	if navigation_drawer == null:
 		navigation_drawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
+	if reader_layer == null:
+		reader_layer = get_node_or_null("ReaderCanvasLayer") as CanvasLayer
+	if reader_button == null:
+		reader_button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+	if preset_toast == null:
+		preset_toast = get_node_or_null("ReaderCanvasLayer/PresetToast") as PanelContainer
+	if toast_label == null:
+		toast_label = get_node_or_null("ReaderCanvasLayer/PresetToast/ToastLabel") as Label
 
 	if progress_manager == null:
 		progress_manager = ReadingProgressManager.new()
+
+	if _current_text_preset == "":
+		_current_text_preset = progress_manager.load_text_size_preset()
 
 	if data_loader == null:
 		data_loader = RosaryDataLoader.new()
@@ -271,6 +289,12 @@ func _ensure_initialized() -> void:
 		data_loader.load_all()
 
 	_is_initialized = true
+
+
+func _setup_reader_controls() -> void:
+	_ensure_initialized()
+	if reader_button != null and not reader_button.pressed.is_connected(_on_reader_button_pressed):
+		reader_button.pressed.connect(_on_reader_button_pressed)
 
 
 func _setup_navigation_drawer() -> void:
@@ -342,6 +366,8 @@ func build_scroll_stream() -> void:
 		card.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		page_container.add_child(card)
 		card.bind_page_data(page_data, data_loader)
+		if _current_text_preset != "":
+			card.set_text_size_preset(_current_text_preset)
 		_page_cards[p_num] = card
 		_stream_elements.append(card)
 
@@ -401,15 +427,7 @@ func get_target_scroll_for_page(page_number: int) -> int:
 		return 0
 
 	var card: PageCard = _page_cards.get(clamped_page)
-	if card == null:
-		return 0
-
-	# When the node is already laid out by Godot's UI pipeline:
-	if card.position.y > 0.0:
-		return int(card.position.y)
-
-	# Accurate fallback for headless testing where engine drawing passes are bypassed:
-	if page_container == null:
+	if card == null or page_container == null:
 		return 0
 
 	var offset: float = 0.0
@@ -417,10 +435,12 @@ func get_target_scroll_for_page(page_number: int) -> int:
 	for child: Node in page_container.get_children():
 		if child == card:
 			break
-		if child is PageCard:
-			offset += BasePageCard.DESIGN_HEIGHT + separation
-		elif child is Control:
-			offset += (child as Control).get_combined_minimum_size().y + separation
+		if child is Control:
+			var ctrl: Control = child as Control
+			var h: float = maxf(ctrl.custom_minimum_size.y, ctrl.size.y)
+			if h <= 0.0:
+				h = BasePageCard.DESIGN_HEIGHT
+			offset += h + separation
 	return int(offset)
 
 
@@ -484,11 +504,15 @@ func _on_drawer_opened() -> void:
 	_is_mouse_dragging = false
 	if scroll_container != null:
 		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if reader_button != null:
+		reader_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _on_drawer_closed() -> void:
 	if scroll_container != null:
 		scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
+	if reader_button != null:
+		reader_button.mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 func _update_virtualization(active_page: int) -> void:
@@ -498,6 +522,120 @@ func _update_virtualization(active_page: int) -> void:
 			card.load_artwork()
 		else:
 			card.unload_artwork()
+
+
+func cycle_text_size_preset() -> String:
+	var next_preset: String = BasePageCard.PRESET_NORMAL
+	match _current_text_preset:
+		BasePageCard.PRESET_NORMAL:
+			next_preset = BasePageCard.PRESET_MOBILE
+		BasePageCard.PRESET_MOBILE:
+			next_preset = BasePageCard.PRESET_EXTRA_LARGE
+		BasePageCard.PRESET_EXTRA_LARGE:
+			next_preset = BasePageCard.PRESET_NORMAL
+		_:
+			next_preset = BasePageCard.PRESET_NORMAL
+	set_text_size_preset(next_preset)
+	_show_preset_feedback(next_preset)
+	return next_preset
+
+
+func _on_reader_button_pressed() -> void:
+	cycle_text_size_preset()
+
+
+func _show_preset_feedback(preset: String) -> void:
+	if preset_toast == null or toast_label == null:
+		return
+	var display_name: String = "Normal"
+	match preset:
+		BasePageCard.PRESET_MOBILE:
+			display_name = "Mobile"
+		BasePageCard.PRESET_EXTRA_LARGE:
+			display_name = "Extra Large"
+		_:
+			display_name = "Normal"
+	toast_label.text = "Text Size: %s" % display_name
+	preset_toast.visible = true
+	preset_toast.modulate.a = 1.0
+
+	if DisplayServer.get_name() == "headless":
+		return
+
+	if _toast_tween != null and _toast_tween.is_valid():
+		_toast_tween.kill()
+	_toast_tween = create_tween()
+	_toast_tween.tween_interval(1.2)
+	_toast_tween.tween_property(preset_toast, "modulate:a", 0.0, 0.4)
+	_toast_tween.tween_callback(func() -> void: preset_toast.visible = false)
+
+
+func set_text_size_preset(preset: Variant) -> void:
+	_ensure_initialized()
+	var normalized: String = BasePageCard.normalize_preset(preset)
+
+	# 1. Determine viewport center relative to current content
+	var viewport_h: float = scroll_container.size.y if (scroll_container != null and scroll_container.size.y > 0.0) else 1280.0
+	var current_scroll: int = scroll_container.scroll_vertical if scroll_container != null else 0
+	var current_center_y: float = float(current_scroll) + viewport_h * 0.5
+
+	var anchor_elem: Control = null
+	var anchor_rel_offset: float = 0.5
+	if page_container != null and not _stream_elements.is_empty():
+		var accum: float = 0.0
+		var sep: float = float(page_container.get_theme_constant("separation"))
+		for elem_node: Node in _stream_elements:
+			if elem_node is Control:
+				var elem: Control = elem_node as Control
+				var h: float = maxf(elem.custom_minimum_size.y, elem.size.y)
+				if h <= 0.0:
+					h = BasePageCard.DESIGN_HEIGHT
+				if current_center_y >= accum and current_center_y <= accum + h + sep:
+					anchor_elem = elem
+					anchor_rel_offset = (current_center_y - accum) / maxf(h, 1.0)
+					break
+				accum += h + sep
+
+	_current_text_preset = normalized
+
+	# 2. Update all page cards
+	for p_num: int in _page_cards.keys():
+		var card: PageCard = _page_cards[p_num]
+		card.set_text_size_preset(_current_text_preset)
+
+	# 3. Persist setting
+	if progress_manager != null:
+		progress_manager.save_text_size_preset(_current_text_preset)
+
+	# 4. Re-anchor scroll
+	if scroll_container != null and page_container != null and anchor_elem != null:
+		var new_accum: float = 0.0
+		var sep: float = float(page_container.get_theme_constant("separation"))
+		for elem_node: Node in _stream_elements:
+			if elem_node is Control:
+				var elem: Control = elem_node as Control
+				var h: float = maxf(elem.custom_minimum_size.y, elem.size.y)
+				if h <= 0.0:
+					h = BasePageCard.DESIGN_HEIGHT
+				if elem == anchor_elem:
+					var new_target_center: float = new_accum + anchor_rel_offset * h
+					var new_scroll: int = int(round(new_target_center - viewport_h * 0.5))
+					var max_s: int = _get_max_scroll_vertical()
+					scroll_container.scroll_vertical = clampi(new_scroll, 0, max_s)
+					break
+				new_accum += h + sep
+
+	_get_max_scroll_vertical()
+
+
+func get_text_size_preset() -> String:
+	return _current_text_preset
+
+
+func get_reader_button() -> Button:
+	if reader_button == null:
+		reader_button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+	return reader_button
 
 
 # Public inspector accessors for automated testing & QA:

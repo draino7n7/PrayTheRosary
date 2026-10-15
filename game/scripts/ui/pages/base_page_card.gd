@@ -19,10 +19,15 @@ const COLOR_COVER_DARK: Color = Color("2A090B")
 const COLOR_COVER_GOLD: Color = Color("D4AF37")
 const COLOR_COVER_IVORY: Color = Color("F7F2E7")
 
+const PRESET_NORMAL: String = "normal"
+const PRESET_MOBILE: String = "mobile"
+const PRESET_EXTRA_LARGE: String = "extra_large"
+
 var page_number: int = 0
 var page_type: String = ""
 var page_data: Dictionary = {}
 var data_loader: RosaryDataLoader = null
+var text_size_preset: String = PRESET_NORMAL
 
 
 func _init() -> void:
@@ -51,6 +56,43 @@ func set_page_data(data: Dictionary, loader: RosaryDataLoader = null) -> void:
 func _apply_page_data() -> void:
 	# Virtual method implemented by subclasses
 	pass
+
+
+static func normalize_preset(preset: Variant) -> String:
+	if preset is int or preset is float:
+		match int(preset):
+			1:
+				return PRESET_MOBILE
+			2:
+				return PRESET_EXTRA_LARGE
+			_:
+				return PRESET_NORMAL
+	var s: String = str(preset).to_lower().strip_edges().replace(" ", "_").replace("-", "_")
+	match s:
+		"mobile":
+			return PRESET_MOBILE
+		"extra_large", "extralarge", "extra_large_size", "xl":
+			return PRESET_EXTRA_LARGE
+		_:
+			return PRESET_NORMAL
+
+
+func set_text_size_preset(preset: Variant) -> void:
+	text_size_preset = normalize_preset(preset)
+	_apply_text_size_preset()
+
+
+func get_text_size_preset() -> String:
+	return text_size_preset
+
+
+func _apply_text_size_preset() -> void:
+	# Virtual method implemented by subclasses
+	pass
+
+
+func get_required_card_height() -> float:
+	return custom_minimum_size.y
 
 
 static func configure_pass_through_mouse_filters(node: Node) -> void:
