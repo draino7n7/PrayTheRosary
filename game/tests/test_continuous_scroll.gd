@@ -491,6 +491,16 @@ func test_momentum_scroll_high_velocity_drag_release() -> void:
 	assert_true(main_node.scroll_container.scroll_vertical > prev_scroll, "Scroll position must continue advancing on frame 2")
 	assert_true(main_node.get_momentum_velocity() < prev_vel, "Velocity must continue decelerating")
 
+	# Allow the 1500 px/s flick glide to proceed until rest to verify multi-page glide distance
+	var glide_frames: int = 0
+	while main_node.is_momentum_scrolling() and glide_frames < 600:
+		main_node._process(0.016)
+		glide_frames += 1
+
+	var total_touch_glide: int = main_node.scroll_container.scroll_vertical - (initial_scroll + 100)
+	assert_true(total_touch_glide >= 1080, "A brisk 1500 px/s flick must glide across at least 1 full portrait page height (>= 1080px), traveled %d px" % total_touch_glide)
+	assert_false(main_node.is_momentum_scrolling(), "Momentum should naturally rest after full glide")
+
 	# Verify virtualization and page progress update during large glide
 	var p5_page: int = main_node.get_current_page()
 	main_node.start_momentum(4000.0)
@@ -529,6 +539,138 @@ func test_momentum_scroll_high_velocity_drag_release() -> void:
 
 	assert_false(main_node.is_momentum_scrolling(), "Momentum glide must naturally rest when velocity drops below cutoff")
 	assert_eq(main_node.get_momentum_velocity(), 0.0, "Residual momentum velocity must be 0 at rest")
+
+	main_node.free()
+
+
+func test_momentum_scroll_rolling_velocity_window_captures_decelerating_flick() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(10, false)
+	var initial_scroll: int = main_node.scroll_container.scroll_vertical
+
+	var touch_down: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_down.pressed = true
+	main_node.handle_scroll_input(touch_down)
+
+	# 1. First fast drag event during the flick stroke (1800 px/s)
+	var drag1: InputEventScreenDrag = InputEventScreenDrag.new()
+	drag1.relative = Vector2(0.0, -80.0)
+	drag1.velocity = Vector2(0.0, -1800.0)
+	main_node.handle_scroll_input(drag1)
+
+	# 2. Second fast drag event during peak flick speed (2000 px/s)
+	var drag2: InputEventScreenDrag = InputEventScreenDrag.new()
+	drag2.relative = Vector2(0.0, -90.0)
+	drag2.velocity = Vector2(0.0, -2000.0)
+	main_node.handle_scroll_input(drag2)
+
+	# 3. Third drag event simulating finger deceleration during final 30ms before lift (80 px/s).
+	# Note: instantaneous 80 px/s is below MIN_FLICK_VELOCITY (100 px/s).
+	var drag3: InputEventScreenDrag = InputEventScreenDrag.new()
+	drag3.relative = Vector2(0.0, -5.0)
+	drag3.velocity = Vector2(0.0, -80.0)
+	main_node.handle_scroll_input(drag3)
+
+	# Buffer should record all 3 samples within the rolling window
+	assert_eq(main_node.get_velocity_sample_count(), 3, "Sample buffer must retain all 3 recent samples")
+
+	# Expected rolling average: (1800 + 2000 + 80) / 3 = 1293.33 px/s
+	var rolling_vel: float = main_node.get_rolling_velocity()
+	assert_true(rolling_vel > 1200.0 and rolling_vel < 1350.0, "Rolling velocity should calculate window average (~1293 px/s), got %f" % rolling_vel)
+
+	# Release touch: rolling average must be used to initiate momentum
+	var touch_up: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_up.pressed = false
+	main_node.handle_scroll_input(touch_up)
+
+	assert_true(main_node.is_momentum_scrolling(), "Rolling window must initiate momentum despite final sample decelerating below flick threshold")
+	assert_true(main_node.get_momentum_velocity() > 1200.0, "Initiated momentum velocity must reflect rolling average, got %f" % main_node.get_momentum_velocity())
+
+	# Process frames until momentum rests
+	var frames: int = 0
+	while main_node.is_momentum_scrolling() and frames < 600:
+		main_node._process(0.016)
+		frames += 1
+
+	assert_false(main_node.is_momentum_scrolling(), "Momentum must come to a natural rest")
+	assert_true(main_node.scroll_container.scroll_vertical > initial_scroll + 1000, "Glide should travel significant distance")
+
+	main_node.free()
+
+
+func test_momentum_scroll_deliberate_pause_prevents_momentum() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	main_node.scroll_to_page(10, false)
+	var initial_scroll: int = main_node.scroll_container.scroll_vertical
+
+	var touch_down: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_down.pressed = true
+	main_node.handle_scroll_input(touch_down)
+
+	# Fast drag
+	var swipe: InputEventScreenDrag = InputEventScreenDrag.new()
+	swipe.relative = Vector2(0.0, -100.0)
+	swipe.velocity = Vector2(0.0, -1500.0)
+	main_node.handle_scroll_input(swipe)
+
+	var scroll_after_drag: int = main_node.scroll_container.scroll_vertical
+	assert_eq(scroll_after_drag, initial_scroll + 100, "1:1 drag should advance scroll")
+
+	# Deliberate pause exceeding DRAG_PAUSE_TIMEOUT_MS (150ms)
+	OS.delay_msec(160)
+
+	var touch_up: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_up.pressed = false
+	main_node.handle_scroll_input(touch_up)
+
+	assert_false(main_node.is_momentum_scrolling(), "Deliberate pause (>150ms) before lifting must result in zero momentum (static stop)")
+	assert_eq(main_node.get_momentum_velocity(), 0.0, "Momentum velocity must be 0 after paused release")
+
+	main_node._process(0.016)
+	assert_eq(main_node.scroll_container.scroll_vertical, scroll_after_drag, "Position must remain stationary without drift after paused release")
+
+	main_node.free()
+
+
+func test_momentum_scroll_multi_page_glide_distance() -> void:
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	# Start at Page 10 (well away from bounds 0 and max_scroll ~54,000)
+	main_node.scroll_to_page(10, false)
+	var start_scroll: int = main_node.scroll_container.scroll_vertical
+
+	# 1. Brisk flick of 2000 px/s: should glide across ~2 portrait page heights (>= 1800px)
+	main_node.start_momentum(2000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum must start for 2000 px/s")
+
+	var frames: int = 0
+	while main_node.is_momentum_scrolling() and frames < 600:
+		main_node._process(0.016)
+		frames += 1
+
+	var glide_dist_2000: int = main_node.scroll_container.scroll_vertical - start_scroll
+	assert_true(glide_dist_2000 >= 1800, "2000 px/s flick must glide >= 1800px (~2 pages), traveled %d px" % glide_dist_2000)
+
+	# 2. Strong brisk flick of 3000 px/s: should glide across 3+ portrait page heights (>= 3000px)
+	var start_scroll_3000: int = main_node.scroll_container.scroll_vertical
+	main_node.start_momentum(3000.0)
+	assert_true(main_node.is_momentum_scrolling(), "Momentum must start for 3000 px/s")
+
+	frames = 0
+	while main_node.is_momentum_scrolling() and frames < 600:
+		main_node._process(0.016)
+		frames += 1
+
+	var glide_dist_3000: int = main_node.scroll_container.scroll_vertical - start_scroll_3000
+	assert_true(glide_dist_3000 >= 3000, "3000 px/s flick must glide >= 3000px (~3 pages), traveled %d px" % glide_dist_3000)
 
 	main_node.free()
 

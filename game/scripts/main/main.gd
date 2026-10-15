@@ -11,11 +11,12 @@ const ARTWORK_BUFFER_PAGES: int = 4
 const WHEEL_SCROLL_STEP: int = 80
 const COLOR_AMBIENT_ESPRESSO: Color = Color(0.0784314, 0.0627451, 0.0627451, 1.0) # #141010
 
-const MIN_FLICK_VELOCITY: float = 120.0
-const MOMENTUM_STOP_VELOCITY: float = 10.0
-const MOMENTUM_FRICTION: float = 0.96
+const MIN_FLICK_VELOCITY: float = 100.0
+const MOMENTUM_STOP_VELOCITY: float = 12.0
+const MOMENTUM_FRICTION: float = 0.986
 const MAX_MOMENTUM_VELOCITY: float = 6000.0
 const DRAG_PAUSE_TIMEOUT_MS: int = 150
+const VELOCITY_SAMPLE_WINDOW_MS: int = 120
 
 const PAGE_CARD_SCENE: PackedScene = preload("res://scenes/ui/page_card.tscn")
 const JUMP_BAR_SCENE: PackedScene = preload("res://scenes/ui/in_stream_jump_bar.tscn")
@@ -38,6 +39,7 @@ var _momentum_scroll_y: float = 0.0
 var _drag_velocity_y: float = 0.0
 var _last_drag_time_msec: int = 0
 var _is_mouse_dragging: bool = false
+var _velocity_samples: Array[Dictionary] = [] # Array of {"time": int, "vel_y": float}
 var _current_text_preset: String = ""
 var _toast_tween: Tween = null
 
@@ -132,15 +134,18 @@ func handle_scroll_input(event: InputEvent) -> void:
 			_stop_momentum()
 			if _scroll_tween != null and _scroll_tween.is_valid():
 				_scroll_tween.kill()
+			_velocity_samples.clear()
 			_drag_velocity_y = 0.0
 			_last_drag_time_msec = Time.get_ticks_msec()
 		else:
 			var now: int = Time.get_ticks_msec()
 			var elapsed: int = now - _last_drag_time_msec
-			if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(_drag_velocity_y) >= MIN_FLICK_VELOCITY:
-				_start_momentum(_drag_velocity_y)
+			var release_vel: float = _calculate_rolling_velocity(now)
+			if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(release_vel) >= MIN_FLICK_VELOCITY:
+				_start_momentum(release_vel)
 			else:
 				_stop_momentum()
+			_velocity_samples.clear()
 			_drag_velocity_y = 0.0
 		return
 
@@ -154,6 +159,7 @@ func handle_scroll_input(event: InputEvent) -> void:
 				_stop_momentum()
 				if _scroll_tween != null and _scroll_tween.is_valid():
 					_scroll_tween.kill()
+				_velocity_samples.clear()
 				_drag_velocity_y = 0.0
 				_last_drag_time_msec = Time.get_ticks_msec()
 				_is_mouse_dragging = true
@@ -162,14 +168,17 @@ func handle_scroll_input(event: InputEvent) -> void:
 					_is_mouse_dragging = false
 					var now: int = Time.get_ticks_msec()
 					var elapsed: int = now - _last_drag_time_msec
-					if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(_drag_velocity_y) >= MIN_FLICK_VELOCITY:
-						_start_momentum(_drag_velocity_y)
+					var release_vel: float = _calculate_rolling_velocity(now)
+					if elapsed <= DRAG_PAUSE_TIMEOUT_MS and absf(release_vel) >= MIN_FLICK_VELOCITY:
+						_start_momentum(release_vel)
 					else:
 						_stop_momentum()
+					_velocity_samples.clear()
 					_drag_velocity_y = 0.0
 			return
 		elif button_event.pressed:
 			_stop_momentum()
+			_velocity_samples.clear()
 			if _scroll_tween != null and _scroll_tween.is_valid():
 				_scroll_tween.kill()
 			var factor: float = button_event.factor if button_event.factor > 0.0 else 1.0
@@ -181,34 +190,48 @@ func handle_scroll_input(event: InputEvent) -> void:
 	# 3. Screen Drag
 	elif event is InputEventScreenDrag:
 		var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
-		_stop_momentum()
+		if _is_momentum_scrolling:
+			_stop_momentum()
 		if _scroll_tween != null and _scroll_tween.is_valid():
 			_scroll_tween.kill()
 		delta_y = -int(round(drag_event.relative.y))
 
 		var now: int = Time.get_ticks_msec()
+		var sample_vel_y: float = 0.0
 		if drag_event.velocity.y != 0.0:
-			_drag_velocity_y = -drag_event.velocity.y
+			sample_vel_y = -drag_event.velocity.y
 		elif _last_drag_time_msec > 0 and now > _last_drag_time_msec:
 			var dt_sec: float = float(now - _last_drag_time_msec) / 1000.0
-			_drag_velocity_y = -drag_event.relative.y / dt_sec
+			sample_vel_y = -drag_event.relative.y / dt_sec
+		elif _last_drag_time_msec > 0:
+			sample_vel_y = -drag_event.relative.y / 0.016
+
+		_record_drag_sample(now, sample_vel_y)
+		_drag_velocity_y = _calculate_rolling_velocity(now)
 		_last_drag_time_msec = now
 
 	# 4. Mouse Motion
 	elif event is InputEventMouseMotion:
 		var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
 		if (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
-			_stop_momentum()
+			if _is_momentum_scrolling:
+				_stop_momentum()
 			if _scroll_tween != null and _scroll_tween.is_valid():
 				_scroll_tween.kill()
 			delta_y = -int(round(motion_event.relative.y))
 
 			var now: int = Time.get_ticks_msec()
+			var sample_vel_y: float = 0.0
 			if motion_event.velocity.y != 0.0:
-				_drag_velocity_y = -motion_event.velocity.y
+				sample_vel_y = -motion_event.velocity.y
 			elif _last_drag_time_msec > 0 and now > _last_drag_time_msec:
 				var dt_sec: float = float(now - _last_drag_time_msec) / 1000.0
-				_drag_velocity_y = -motion_event.relative.y / dt_sec
+				sample_vel_y = -motion_event.relative.y / dt_sec
+			elif _last_drag_time_msec > 0:
+				sample_vel_y = -motion_event.relative.y / 0.016
+
+			_record_drag_sample(now, sample_vel_y)
+			_drag_velocity_y = _calculate_rolling_velocity(now)
 			_last_drag_time_msec = now
 			_is_mouse_dragging = true
 
@@ -242,6 +265,34 @@ func _stop_momentum() -> void:
 	_is_momentum_scrolling = false
 	_momentum_velocity_y = 0.0
 	_drag_velocity_y = 0.0
+	_velocity_samples.clear()
+
+
+func _record_drag_sample(current_time: int, sample_velocity_y: float) -> void:
+	_prune_velocity_samples(current_time)
+	_velocity_samples.append({
+		"time": current_time,
+		"vel_y": sample_velocity_y
+	})
+
+
+func _prune_velocity_samples(current_time: int) -> void:
+	var cutoff_time: int = current_time - VELOCITY_SAMPLE_WINDOW_MS
+	var valid_samples: Array[Dictionary] = []
+	for sample: Dictionary in _velocity_samples:
+		if int(sample.get("time", 0)) >= cutoff_time:
+			valid_samples.append(sample)
+	_velocity_samples = valid_samples
+
+
+func _calculate_rolling_velocity(current_time: int) -> float:
+	_prune_velocity_samples(current_time)
+	if _velocity_samples.is_empty():
+		return 0.0
+	var total_vel: float = 0.0
+	for sample: Dictionary in _velocity_samples:
+		total_vel += float(sample.get("vel_y", 0.0))
+	return total_vel / float(_velocity_samples.size())
 
 
 func _get_max_scroll_vertical() -> int:
@@ -675,6 +726,14 @@ func get_momentum_velocity() -> float:
 
 func get_drag_velocity() -> float:
 	return _drag_velocity_y
+
+
+func get_velocity_sample_count() -> int:
+	return _velocity_samples.size()
+
+
+func get_rolling_velocity() -> float:
+	return _calculate_rolling_velocity(Time.get_ticks_msec())
 
 
 func stop_momentum() -> void:
