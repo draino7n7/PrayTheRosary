@@ -52,7 +52,9 @@ This document outlines the strict manual testing procedures required before any 
     - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
     - Page 3 (1,813 chars): 23pt section headers and 20pt body paragraphs.
   - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) accurately documents: `"...and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
-  - Page 3 Section 1 (*How This Book Is Organized*) explicitly notes the Bible translation in the `"Left Page (Word & Prayer)"` bullet: `• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade.`
+  - Page 3 Section 1 (*How This Book Is Organized*) explicitly notes:
+    - Group recitation guidance in the opening paragraph: lines printed in regular type are spoken by the leader and lines in bold are spoken by everyone together in unison.
+    - Bible translation in the `"Left Page (Word & Prayer)"` bullet: `• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade.`
   - Page 3 Section 2 (*Step-by-Step Guide to Praying the Rosary*) displays `"2. The Decades (Tabs J, L, S, G):"` and explains praying either the five decades of the day's Mystery set or all four Mystery sets (twenty decades) back-to-back in chronological order (`Joyful, Luminous, Sorrowful, Glorious`) for a complete Rosary, with all three sections fitting comfortably inside the `720×1080` card with zero overflow.
   - Section containers configure `SIZE_EXPAND_FILL` to evenly balance vertical space across the full 1080px canvas with zero text overflow or clipping.
 
@@ -60,8 +62,15 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect Page 4 (*The Opening Prayers*) and Page 46 (*The Closing Prayers*).
 - **Expected:**
   - Standardized 32px uniform margins, 22pt italic subheading, and 34pt bold heading.
-  - Page 4 displays exactly 5 introductory prayer steps formatted with 20pt prayer titles, 16pt rubrics, and 19pt body text, using the simplified titles `"The Our Father"` (Step 3) and `"The Glory Be"` (Step 5) without `"The Lord's Prayer"` or `"(Doxology)"`. *The Glory Be* is rendered as a single unified sentence with a comma following the invocatory clause (*"Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen."*) rather than two separate sentences.
-  - Page 46 displays 4 concluding prayer steps formatted with 24pt prayer titles, 18pt rubrics, and 23pt body text.
+  - Page 4 displays exactly 5 introductory prayer steps formatted with 20pt prayer titles, 16pt rubrics, and 19pt body text, using the simplified titles `"The Our Father"` (Step 3) and `"The Glory Be"` (Step 5) without `"The Lord's Prayer"` or `"(Doxology)"`:
+    - *The Sign of the Cross* renders entirely in bold-weight serif (`EBGaramond-Bold.ttf`) as a unison prayer.
+    - *The Apostles' Creed*, *The Our Father*, three *Hail Marys for Faith, Hope, and Charity*, and *The Glory Be* render with regular leader text (`EBGaramond-Regular.ttf`) and bold group response (`EBGaramond-Bold.ttf`) stacked vertically on separate lines.
+    - *The Glory Be* is rendered as a single unified sentence with a comma separating the invocatory clause from the lowercase group response (*"Glory be to the Father, and to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever shall be, world without end. Amen."*).
+  - Page 46 displays 4 concluding prayer steps formatted with 24pt prayer titles, 18pt rubrics, and 23pt body text:
+    - *Hail, Holy Queen* renders entirely in bold-weight serif (`EBGaramond-Bold.ttf`) as a unison prayer.
+    - *Versicle & Response* displays clean typography without legacy `"V. "` and `"R. "` prefixes, splitting regular leader text (*"Pray for us, O holy Mother of God."*) and bold group response (*"That we may be made worthy of the promises of Christ."*).
+    - *Concluding Rosary Prayer* splits regular leader text (*"Let us pray."*) and bold group response (the collect prayer starting *"O God, whose only begotten Son..."*).
+    - Closing *Sign of the Cross* renders entirely in bold-weight serif (`EBGaramond-Bold.ttf`).
   - Distinct muted umber rubric tags (e.g., `[1×]`, `[10×]`, `[Sign of the Cross]`) precede each prayer item.
   - Prayer step containers expand (`SIZE_EXPAND_FILL`) to balance card height with zero vertical overflow.
 
@@ -81,7 +90,10 @@ This document outlines the strict manual testing procedures required before any 
     - **Glorious 4 (`Page 42`):** Citation order reads `"Judith 15:10; Psalm 44:14, 16"`, matching the sequence of quoted verses.
     - **Glorious 5 (`Page 44`):** Citation reads `"Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7"`.
   - Contemplative meditation renders at 20–22pt regular text.
-  - Decade prayers (*The Our Father* with rubric `"1× The Our Father"`, *The Hail Mary* with rubric `"10× The Hail Mary"`, *The Glory Be* with rubric `"1× The Glory Be"` formatted as a single continuous sentence with a comma and lowercase response [*\"Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen.\"*], and *The Fatima Prayer* with rubric `"1× The Fatima Prayer"`) render with 17–18pt bold rubrics and 20–22pt regular text.
+  - Decade prayers (*The Our Father* with rubric `"1× The Our Father"`, *The Hail Mary* with rubric `"10× The Hail Mary"`, *The Glory Be* with rubric `"1× The Glory Be"`, and *The Fatima Prayer* with rubric `"1× The Fatima Prayer"`) render with 17–18pt bold rubrics and 20–22pt prayer text:
+    - *The Our Father*, *The Hail Mary*, and *The Glory Be* split into regular leader text (`EBGaramond-Regular.ttf`) and bold group response (`EBGaramond-Bold.ttf`) on a new line.
+    - *The Glory Be* is formatted as a single continuous sentence with a comma terminating the leader line and a lowercase response clause (*"Glory be to the Father, and to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever shall be, world without end. Amen."*).
+    - *The Fatima Prayer* is rendered entirely in bold-weight serif (`EBGaramond-Bold.ttf`) as a unison prayer.
   - High-density passages (e.g., Page 40 Pentecost with 1,326 chars) auto-fit cleanly to 20pt body / 18pt scripture / 17pt rubrics, guaranteeing zero internal scrolling and zero vertical overflow on the 720×1080 canvas.
 
 ### TC-PAGE-05: Sacred Artwork Cards (`Odd Pages 5, 7, 9, ..., 47`)
@@ -338,5 +350,51 @@ This document outlines the strict manual testing procedures required before any 
     - Long fruit badges (e.g. Page 26: *Fruit of the Mystery: Contempt of the World*, Page 28: *Fruit of the Mystery: Mortification of the Senses*) wrap onto multiple lines without expanding past the maximum content width (628px), preserving the pill box styling and keeping card width strictly at 720px.
   - **Interior Scripture Frame Border:** The 1px interior scripture frame border (`ScriptureContainer`) on Mystery Prayer Cards remains completely visible with 10px internal margins and zero lateral cutoff.
   - **Symmetrical Lateral Margins:** Symmetrical 32px margins (left and right) are preserved uniformly across all 50 cards under all presets.
+
+## Test 10.0: Group Recitation & Leader/Response Typography
+
+### TC-LEAD-01: Page 4 Opening Prayers Leader and Group Response Formatting
+- **Step 1:** Navigate to Page 4 (*The Opening Prayers*).
+- **Step 2:** Inspect the typography of each of the 5 prayer steps:
+  1. *The Sign of the Cross*: Rendered entirely in bold-weight Garamond (`EBGaramond-Bold.ttf`) as a unison prayer.
+  2. *The Apostles' Creed*: Opening section through `"...born of the Virgin Mary,"` renders in regular Garamond (`EBGaramond-Regular.ttf`) as leader text; response section starting `"Suffered under Pontius Pilate..."` renders in bold Garamond (`EBGaramond-Bold.ttf`) on a new line.
+  3. *The Our Father*: Opening section through `"...on earth as it is in heaven."` renders in regular Garamond; response section starting `"Give us this day our daily bread..."` renders in bold Garamond on a new line.
+  4. *Three Hail Marys (Faith, Hope, Charity)*: Opening clause through `"...and blessed is the fruit of thy womb, Jesus."` renders in regular Garamond; response section starting `"Holy Mary, Mother of God, pray for us sinners..."` renders in bold Garamond on a new line.
+  5. *The Glory Be*: Invocatory clause (*"Glory be to the Father, and to the Son, and to the Holy Spirit,"*) terminates with a comma and renders in regular Garamond; response clause (*"as it was in the beginning, is now, and ever shall be, world without end. Amen."*) renders in bold Garamond on a new line in lowercase continuation.
+- **Expected:**
+  - Distinct vertical stacking between leader (regular) and response (bold) labels.
+  - Zero text overlap or line collisions.
+  - Card fits comfortably within standard 1080px height budget under `Normal` preset.
+
+### TC-LEAD-02: Mystery Prayer Pages (6, 8, ..., 44) Decade Prayers Typography
+- **Step 1:** Navigate to any Mystery Prayer page (e.g. Page 6: *The Annunciation*, Page 20: *The Wedding at Cana*, Page 26: *The Agony in the Garden*, or Page 40: *The Descent of the Holy Spirit*).
+- **Step 2:** Inspect the 4 decade prayers:
+  1. *1× The Our Father*: Regular leader text followed by bold group response on a new line.
+  2. *10× The Hail Mary*: Regular leader text followed by bold group response on a new line.
+  3. *1× The Glory Be*: Regular leader invocatory clause ending with a comma, followed by bold lowercase group response on a new line.
+  4. *1× The Fatima Prayer*: Entire prayer rendered in bold Garamond (`EBGaramond-Bold.ttf`) with leader text hidden (`PrayerText.visible = false`).
+- **Expected:**
+  - Clear visual demarcation between leader recitation and communal group response.
+  - All 20 mystery prayer cards display identical, consistent styling.
+  - Total card height fits strictly within 1080px under `Normal` preset with zero internal scrolling.
+
+### TC-LEAD-03: Page 46 Closing Prayers Leader and Group Response Formatting
+- **Step 1:** Navigate to Page 46 (*The Closing Prayers*).
+- **Step 2:** Inspect the 4 concluding prayer steps:
+  1. *Hail, Holy Queen / Salve Regina*: Entire prayer rendered in bold Garamond (`EBGaramond-Bold.ttf`) as a unison prayer.
+  2. *Versicle & Response*: Clean visual formatting without legacy liturgical prefixes (`"V. "` and `"R. "`). Versicle (*"Pray for us, O holy Mother of God."*) renders in regular leader type; Response (*"That we may be made worthy of the promises of Christ."*) renders in bold group response type on a new line.
+  3. *Concluding Rosary Prayer*: Leader text (*"Let us pray."*) renders in regular Garamond; collect prayer (*"O God, whose only begotten Son, by his life, death, and resurrection..."*) renders in bold Garamond on a new line.
+  4. *The Sign of the Cross*: Rendered entirely in bold Garamond as a unison prayer.
+- **Expected:**
+  - Clean, modern liturgical typography without clutter or manuscript abbreviations.
+  - Card fits cleanly within 1080px under `Normal` preset.
+
+### TC-LEAD-04: Typography Scaling Across Text Presets for Leader and Response
+- **Step 1:** Navigate to Page 4, Page 6, or Page 46.
+- **Step 2:** Cycle the "Aa" reader button from `Normal` to `Mobile` and then `Extra Large`.
+- **Expected:**
+  - Both leader (`PrayerText`) and response (`ResponseText`) labels scale uniformly using identical point sizes across all presets.
+  - Line breaks and vertical spacing between leader and response remain crisp and proportional.
+  - Dynamic vertical card elongation occurs smoothly under `Mobile` and `Extra Large` without clipping, truncation, or lateral drift.
 
 

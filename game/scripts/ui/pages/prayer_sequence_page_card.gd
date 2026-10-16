@@ -56,9 +56,9 @@ func _apply_page_data() -> void:
 
 		# Calibrate font size between Page 4 (5 steps with long Creed) and Page 46 (4 steps)
 		var is_five_step: bool = steps.size() >= 5
-		var body_font_size: int = 19 if is_five_step else 23
-		var rubric_font_size: int = 16 if is_five_step else 18
-		var title_font_size: int = 20 if is_five_step else 24
+		var body_font_size: int = 18 if is_five_step else 22
+		var rubric_font_size: int = 15 if is_five_step else 18
+		var title_font_size: int = 19 if is_five_step else 23
 
 		match text_size_preset:
 			PRESET_MOBILE:
@@ -70,9 +70,9 @@ func _apply_page_data() -> void:
 				rubric_font_size = 28 if is_five_step else 32
 				title_font_size = 36 if is_five_step else 42
 			_:
-				body_font_size = 19 if is_five_step else 23
-				rubric_font_size = 16 if is_five_step else 18
-				title_font_size = 20 if is_five_step else 24
+				body_font_size = 18 if is_five_step else 22
+				rubric_font_size = 15 if is_five_step else 18
+				title_font_size = 19 if is_five_step else 23
 
 		var total_h: float = 64.0
 		if font_italic != null:
@@ -131,22 +131,57 @@ func _apply_page_data() -> void:
 				if font_bold != null:
 					total_h += font_bold.get_multiline_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y + 3.0
 
-			var text: String = str(prayer.get("text", ""))
-			if text != "":
-				var text_lbl: Label = Label.new()
-				text_lbl.name = "PrayerText"
-				text_lbl.text = text
+			var leader_str: String = str(prayer.get("leader_text", ""))
+			var response_str: String = str(prayer.get("response_text", ""))
+			if leader_str == "" and response_str == "":
+				response_str = str(prayer.get("text", ""))
+
+			var text_lbl: Label = Label.new()
+			text_lbl.name = "PrayerText"
+			text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			text_lbl.add_theme_font_size_override("font_size", body_font_size)
+			text_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			text_lbl.add_theme_constant_override("line_spacing", 2)
+
+			var resp_lbl: Label = Label.new()
+			resp_lbl.name = "ResponseText"
+			resp_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			resp_lbl.add_theme_font_size_override("font_size", body_font_size)
+			resp_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			resp_lbl.add_theme_constant_override("line_spacing", 2)
+			if font_bold != null:
+				resp_lbl.add_theme_font_override("font", font_bold)
+
+			if leader_str != "":
+				text_lbl.text = leader_str
+				text_lbl.visible = true
 				if font_reg != null:
 					text_lbl.add_theme_font_override("font", font_reg)
-				text_lbl.add_theme_font_size_override("font_size", body_font_size)
-				text_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
-				text_lbl.add_theme_constant_override("line_spacing", 2)
-				text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(text_lbl)
 				if font_reg != null:
-					total_h += font_reg.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+					total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+			else:
+				# Unison prayer: PrayerText is hidden, ResponseText displays entire prayer in bold
+				text_lbl.text = ""
+				text_lbl.visible = false
+				if font_bold != null:
+					text_lbl.add_theme_font_override("font", font_bold)
+				step_vbox.add_child(text_lbl)
 
-			total_h += 10.0
+			if response_str != "":
+				resp_lbl.text = response_str
+				resp_lbl.visible = true
+				step_vbox.add_child(resp_lbl)
+				if font_bold != null:
+					total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+				if leader_str != "":
+					total_h += 3.0
+			else:
+				resp_lbl.text = ""
+				resp_lbl.visible = false
+				step_vbox.add_child(resp_lbl)
+
+			total_h += 8.0
 			steps_container.add_child(step_vbox)
 
 		var final_height: float = DESIGN_HEIGHT

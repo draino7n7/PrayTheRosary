@@ -46,13 +46,15 @@ func _apply_page_data() -> void:
 	# Calibrate font size dynamically based on passage length
 	var body_font_size: int = 24
 	if total_text_len > 580:
-		body_font_size = 22
+		body_font_size = 20
 	elif total_text_len > 480:
-		body_font_size = 23
+		body_font_size = 21
+	elif total_text_len > 380:
+		body_font_size = 22
 	else:
-		body_font_size = 24
+		body_font_size = 23
 
-	var rubric_font_size: int = 17 if body_font_size <= 22 else 18
+	var rubric_font_size: int = 17 if body_font_size <= 21 else 18
 
 	match text_size_preset:
 		PRESET_MOBILE:
@@ -60,15 +62,15 @@ func _apply_page_data() -> void:
 			subheading_font_size = 25
 			fruit_font_size = 24
 			citation_font_size = 23
-			body_font_size = 31 if total_text_len > 580 else (32 if total_text_len > 480 else 33)
-			rubric_font_size = 24 if body_font_size <= 31 else 25
+			body_font_size = 29 if total_text_len > 580 else (30 if total_text_len > 480 else (31 if total_text_len > 380 else 32))
+			rubric_font_size = 24 if body_font_size <= 29 else 25
 		PRESET_EXTRA_LARGE:
 			heading_font_size = 44
 			subheading_font_size = 29
 			fruit_font_size = 30
 			citation_font_size = 29
-			body_font_size = 40 if total_text_len > 580 else (42 if total_text_len > 480 else 44)
-			rubric_font_size = 31 if body_font_size <= 40 else 33
+			body_font_size = 38 if total_text_len > 580 else (40 if total_text_len > 480 else (42 if total_text_len > 380 else 44))
+			rubric_font_size = 31 if body_font_size <= 38 else 33
 		_:
 			heading_font_size = 34
 			subheading_font_size = 22
@@ -164,18 +166,49 @@ func _apply_page_data() -> void:
 			rubric_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			p_vbox.add_child(rubric_label)
 
-			var p_text: String = str(prayer_dict.get("text", ""))
-			if p_text != "":
-				var text_label: Label = Label.new()
-				text_label.name = "PrayerText"
-				text_label.text = p_text
+			var leader_str: String = str(prayer_dict.get("leader_text", ""))
+			var response_str: String = str(prayer_dict.get("response_text", ""))
+			if leader_str == "" and response_str == "":
+				response_str = str(prayer_dict.get("text", ""))
+
+			var text_label: Label = Label.new()
+			text_label.name = "PrayerText"
+			text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			text_label.add_theme_font_size_override("font_size", body_font_size)
+			text_label.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			text_label.add_theme_constant_override("line_spacing", 2)
+
+			var resp_label: Label = Label.new()
+			resp_label.name = "ResponseText"
+			resp_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			resp_label.add_theme_font_size_override("font_size", body_font_size)
+			resp_label.add_theme_color_override("font_color", COLOR_CHARCOAL)
+			resp_label.add_theme_constant_override("line_spacing", 2)
+			if font_bold != null:
+				resp_label.add_theme_font_override("font", font_bold)
+
+			if leader_str != "":
+				text_label.text = leader_str
+				text_label.visible = true
 				if font_reg != null:
 					text_label.add_theme_font_override("font", font_reg)
-				text_label.add_theme_font_size_override("font_size", body_font_size)
-				text_label.add_theme_color_override("font_color", COLOR_CHARCOAL)
-				text_label.add_theme_constant_override("line_spacing", 2)
-				text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				p_vbox.add_child(text_label)
+			else:
+				# Unison prayer: PrayerText is hidden, ResponseText displays entire prayer in bold
+				text_label.text = ""
+				text_label.visible = false
+				if font_bold != null:
+					text_label.add_theme_font_override("font", font_bold)
+				p_vbox.add_child(text_label)
+
+			if response_str != "":
+				resp_label.text = response_str
+				resp_label.visible = true
+				p_vbox.add_child(resp_label)
+			else:
+				resp_label.text = ""
+				resp_label.visible = false
+				p_vbox.add_child(resp_label)
 
 			decade_prayers_container.add_child(p_vbox)
 
@@ -208,9 +241,17 @@ func _apply_page_data() -> void:
 		var rubric_str: String = "%d× %s" % [reps, prayer_title]
 		if font_bold != null:
 			total_h += font_bold.get_multiline_string_size(rubric_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y + 2.0
-		var p_text: String = str(prayer_dict.get("text", ""))
-		if p_text != "" and font_reg != null:
-			total_h += font_reg.get_multiline_string_size(p_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+		var leader_str: String = str(prayer_dict.get("leader_text", ""))
+		var response_str: String = str(prayer_dict.get("response_text", ""))
+		if leader_str == "" and response_str == "":
+			response_str = str(prayer_dict.get("text", ""))
+
+		if leader_str != "" and font_reg != null:
+			total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+		if response_str != "" and font_bold != null:
+			total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+		if leader_str != "" and response_str != "":
+			total_h += 2.0
 		total_h += 8.0
 
 	var final_height: float = DESIGN_HEIGHT

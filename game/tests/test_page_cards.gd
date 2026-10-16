@@ -267,6 +267,57 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	var p4_glory_be_title: Label = psc4.steps_container.get_child(4).get_node("PrayerTitle") as Label
 	assert_eq(p4_our_father_title.text, "The Our Father", "Page 4 Step 3 title must be 'The Our Father'")
 	assert_eq(p4_glory_be_title.text, "The Glory Be", "Page 4 Step 5 title must be 'The Glory Be'")
+
+	var font_bold: Font = load("res://assets/fonts/EBGaramond-Bold.ttf") as Font
+	var font_reg: Font = load("res://assets/fonts/EBGaramond-Regular.ttf") as Font
+
+	# Step 1: Sign of the Cross (Unison)
+	var step1: VBoxContainer = psc4.steps_container.get_child(0) as VBoxContainer
+	var s1_prayer: Label = step1.get_node("PrayerText") as Label
+	var s1_resp: Label = step1.get_node("ResponseText") as Label
+	assert_false(s1_prayer.visible, "Page 4 Step 1 (Sign of Cross) PrayerText must be hidden (unison prayer)")
+	assert_true(s1_resp.visible, "Page 4 Step 1 (Sign of Cross) ResponseText must be visible")
+	assert_eq(s1_resp.text, "In the name of the Father, and of the Son, and of the Holy Spirit. Amen.")
+	assert_eq(s1_resp.get_theme_font("font"), font_bold, "Page 4 Step 1 ResponseText must use bold font")
+
+	# Step 2: Apostles' Creed (Split)
+	var step2: VBoxContainer = psc4.steps_container.get_child(1) as VBoxContainer
+	var s2_prayer: Label = step2.get_node("PrayerText") as Label
+	var s2_resp: Label = step2.get_node("ResponseText") as Label
+	assert_true(s2_prayer.visible, "Page 4 Step 2 (Apostles' Creed) PrayerText must be visible")
+	assert_true(s2_prayer.text.begins_with("I believe in God, the Father Almighty"), "Page 4 Step 2 PrayerText must contain leader text")
+	assert_eq(s2_prayer.get_theme_font("font"), font_reg, "Page 4 Step 2 PrayerText must use regular font")
+	assert_true(s2_resp.visible, "Page 4 Step 2 (Apostles' Creed) ResponseText must be visible")
+	assert_true(s2_resp.text.begins_with("I believe in the Holy Spirit"), "Page 4 Step 2 ResponseText must contain response text")
+	assert_eq(s2_resp.get_theme_font("font"), font_bold, "Page 4 Step 2 ResponseText must use bold font")
+
+	# Step 3: Our Father (Split)
+	var step3: VBoxContainer = psc4.steps_container.get_child(2) as VBoxContainer
+	var s3_prayer: Label = step3.get_node("PrayerText") as Label
+	var s3_resp: Label = step3.get_node("ResponseText") as Label
+	assert_true(s3_prayer.visible, "Page 4 Step 3 (Our Father) PrayerText must be visible")
+	assert_eq(s3_prayer.get_theme_font("font"), font_reg, "Page 4 Step 3 PrayerText must use regular font")
+	assert_true(s3_resp.visible, "Page 4 Step 3 (Our Father) ResponseText must be visible")
+	assert_eq(s3_resp.get_theme_font("font"), font_bold, "Page 4 Step 3 ResponseText must use bold font")
+
+	# Step 4: Three Hail Marys (Split)
+	var step4: VBoxContainer = psc4.steps_container.get_child(3) as VBoxContainer
+	var s4_prayer: Label = step4.get_node("PrayerText") as Label
+	var s4_resp: Label = step4.get_node("ResponseText") as Label
+	assert_true(s4_prayer.visible, "Page 4 Step 4 (Hail Mary) PrayerText must be visible")
+	assert_eq(s4_prayer.get_theme_font("font"), font_reg, "Page 4 Step 4 PrayerText must use regular font")
+	assert_true(s4_resp.visible, "Page 4 Step 4 (Hail Mary) ResponseText must be visible")
+	assert_eq(s4_resp.get_theme_font("font"), font_bold, "Page 4 Step 4 ResponseText must use bold font")
+
+	# Step 5: Glory Be (Split)
+	var step5: VBoxContainer = psc4.steps_container.get_child(4) as VBoxContainer
+	var s5_prayer: Label = step5.get_node("PrayerText") as Label
+	var s5_resp: Label = step5.get_node("ResponseText") as Label
+	assert_true(s5_prayer.visible, "Page 4 Step 5 (Glory Be) PrayerText must be visible")
+	assert_eq(s5_prayer.get_theme_font("font"), font_reg, "Page 4 Step 5 PrayerText must use regular font")
+	assert_true(s5_resp.visible, "Page 4 Step 5 (Glory Be) ResponseText must be visible")
+	assert_eq(s5_resp.get_theme_font("font"), font_bold, "Page 4 Step 5 ResponseText must use bold font")
+
 	_assert_no_visible_page_numbers(card4, 4)
 	card4.free()
 
@@ -285,6 +336,44 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	assert_true(psc46.heading_label.get_theme_font_size("font_size") >= 34, "Page 46 heading font size must be >= 34pt")
 	var p46_text: Label = psc46.steps_container.get_child(0).get_node("PrayerText") as Label
 	assert_true(p46_text.get_theme_font_size("font_size") >= 22, "Page 46 PrayerText font size must be >= 22pt (was 14pt)")
+
+	# Step 1: Hail, Holy Queen (Unison)
+	var p46_s1: VBoxContainer = psc46.steps_container.get_child(0) as VBoxContainer
+	var p46_s1_prayer: Label = p46_s1.get_node("PrayerText") as Label
+	var p46_s1_resp: Label = p46_s1.get_node("ResponseText") as Label
+	assert_false(p46_s1_prayer.visible, "Page 46 Step 1 (Hail Holy Queen) PrayerText must be hidden (unison prayer)")
+	assert_true(p46_s1_resp.visible, "Page 46 Step 1 (Hail Holy Queen) ResponseText must be visible")
+	assert_eq(p46_s1_resp.get_theme_font("font"), font_bold, "Page 46 Step 1 ResponseText must use bold font")
+
+	# Step 2: Versicle & Response (Split)
+	var p46_s2: VBoxContainer = psc46.steps_container.get_child(1) as VBoxContainer
+	var p46_s2_prayer: Label = p46_s2.get_node("PrayerText") as Label
+	var p46_s2_resp: Label = p46_s2.get_node("ResponseText") as Label
+	assert_true(p46_s2_prayer.visible, "Page 46 Step 2 (Versicle & Response) PrayerText must be visible")
+	assert_eq(p46_s2_prayer.text, "Pray for us, O holy Mother of God.")
+	assert_eq(p46_s2_prayer.get_theme_font("font"), font_reg, "Page 46 Step 2 PrayerText must use regular font")
+	assert_true(p46_s2_resp.visible, "Page 46 Step 2 ResponseText must be visible")
+	assert_eq(p46_s2_resp.text, "That we may be made worthy of the promises of Christ.")
+	assert_eq(p46_s2_resp.get_theme_font("font"), font_bold, "Page 46 Step 2 ResponseText must use bold font")
+
+	# Step 3: Concluding Rosary Prayer (Split)
+	var p46_s3: VBoxContainer = psc46.steps_container.get_child(2) as VBoxContainer
+	var p46_s3_prayer: Label = p46_s3.get_node("PrayerText") as Label
+	var p46_s3_resp: Label = p46_s3.get_node("ResponseText") as Label
+	assert_true(p46_s3_prayer.visible, "Page 46 Step 3 (Concluding Rosary Prayer) PrayerText must be visible")
+	assert_eq(p46_s3_prayer.text, "Let us pray.")
+	assert_eq(p46_s3_prayer.get_theme_font("font"), font_reg, "Page 46 Step 3 PrayerText must use regular font")
+	assert_true(p46_s3_resp.visible, "Page 46 Step 3 ResponseText must be visible")
+	assert_true(p46_s3_resp.text.begins_with("O God, whose only begotten Son"))
+	assert_eq(p46_s3_resp.get_theme_font("font"), font_bold, "Page 46 Step 3 ResponseText must use bold font")
+
+	# Step 4: Final Blessing (Unison)
+	var p46_s4: VBoxContainer = psc46.steps_container.get_child(3) as VBoxContainer
+	var p46_s4_prayer: Label = p46_s4.get_node("PrayerText") as Label
+	var p46_s4_resp: Label = p46_s4.get_node("ResponseText") as Label
+	assert_false(p46_s4_prayer.visible, "Page 46 Step 4 (Sign of Cross) PrayerText must be hidden (unison prayer)")
+	assert_true(p46_s4_resp.visible, "Page 46 Step 4 ResponseText must be visible")
+	assert_eq(p46_s4_resp.get_theme_font("font"), font_bold, "Page 46 Step 4 ResponseText must use bold font")
 	_assert_no_visible_page_numbers(card46, 46)
 	card46.free()
 
@@ -338,6 +427,47 @@ func test_all_twenty_mystery_prayer_cards() -> void:
 
 		assert_true(rubric_texts.has("1× The Our Father"), "Page %d must render '1× The Our Father' in decade rubrics" % p_num)
 		assert_true(rubric_texts.has("1× The Glory Be"), "Page %d must render '1× The Glory Be' in decade rubrics" % p_num)
+
+		var font_bold: Font = load("res://assets/fonts/EBGaramond-Bold.ttf") as Font
+		var font_reg: Font = load("res://assets/fonts/EBGaramond-Regular.ttf") as Font
+
+		var decade_children: Array[Node] = mpc.decade_prayers_container.get_children()
+		assert_eq(decade_children.size(), 4, "Page %d must have 4 decade prayers" % p_num)
+
+		# 0: Our Father (Split)
+		var of_vbox: VBoxContainer = decade_children[0] as VBoxContainer
+		var of_prayer: Label = of_vbox.get_node("PrayerText") as Label
+		var of_resp: Label = of_vbox.get_node("ResponseText") as Label
+		assert_true(of_prayer.visible, "Page %d Our Father PrayerText must be visible" % p_num)
+		assert_eq(of_prayer.get_theme_font("font"), font_reg, "Page %d Our Father PrayerText must use regular font" % p_num)
+		assert_true(of_resp.visible, "Page %d Our Father ResponseText must be visible" % p_num)
+		assert_eq(of_resp.get_theme_font("font"), font_bold, "Page %d Our Father ResponseText must use bold font" % p_num)
+
+		# 1: Hail Mary (Split)
+		var hm_vbox: VBoxContainer = decade_children[1] as VBoxContainer
+		var hm_prayer: Label = hm_vbox.get_node("PrayerText") as Label
+		var hm_resp: Label = hm_vbox.get_node("ResponseText") as Label
+		assert_true(hm_prayer.visible, "Page %d Hail Mary PrayerText must be visible" % p_num)
+		assert_eq(hm_prayer.get_theme_font("font"), font_reg, "Page %d Hail Mary PrayerText must use regular font" % p_num)
+		assert_true(hm_resp.visible, "Page %d Hail Mary ResponseText must be visible" % p_num)
+		assert_eq(hm_resp.get_theme_font("font"), font_bold, "Page %d Hail Mary ResponseText must use bold font" % p_num)
+
+		# 2: Glory Be (Split)
+		var gb_vbox: VBoxContainer = decade_children[2] as VBoxContainer
+		var gb_prayer: Label = gb_vbox.get_node("PrayerText") as Label
+		var gb_resp: Label = gb_vbox.get_node("ResponseText") as Label
+		assert_true(gb_prayer.visible, "Page %d Glory Be PrayerText must be visible" % p_num)
+		assert_eq(gb_prayer.get_theme_font("font"), font_reg, "Page %d Glory Be PrayerText must use regular font" % p_num)
+		assert_true(gb_resp.visible, "Page %d Glory Be ResponseText must be visible" % p_num)
+		assert_eq(gb_resp.get_theme_font("font"), font_bold, "Page %d Glory Be ResponseText must use bold font" % p_num)
+
+		# 3: Fatima Prayer (Unison)
+		var fp_vbox: VBoxContainer = decade_children[3] as VBoxContainer
+		var fp_prayer: Label = fp_vbox.get_node("PrayerText") as Label
+		var fp_resp: Label = fp_vbox.get_node("ResponseText") as Label
+		assert_false(fp_prayer.visible, "Page %d Fatima Prayer PrayerText must be hidden (unison)" % p_num)
+		assert_true(fp_resp.visible, "Page %d Fatima Prayer ResponseText must be visible" % p_num)
+		assert_eq(fp_resp.get_theme_font("font"), font_bold, "Page %d Fatima Prayer ResponseText must use bold font" % p_num)
 
 		_assert_no_visible_page_numbers(card, p_num)
 		card.free()
@@ -569,9 +699,9 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 		total_h += 2.0 + 14.0
 		var steps: Array = p_data.get("prayer_steps", [])
 		var is_5: bool = steps.size() >= 5
-		var body_sz: int = 19 if is_5 else 23
-		var rubric_sz: int = 16 if is_5 else 18
-		var title_sz: int = 20 if is_5 else 24
+		var body_sz: int = 18 if is_5 else 22
+		var rubric_sz: int = 15 if is_5 else 18
+		var title_sz: int = 19 if is_5 else 23
 		for s_val: Variant in steps:
 			if not (s_val is Dictionary):
 				continue
@@ -586,9 +716,18 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 				p = loader.get_prayer(str(s.get("prayer_id", "")))
 			if str(p.get("title", "")) != "":
 				total_h += font_bold.get_height(title_sz) + 3.0
-			if str(p.get("text", "")) != "":
-				total_h += font_reg.get_multiline_string_size(str(p.get("text", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
-			total_h += 10.0
+			var leader_str: String = str(p.get("leader_text", ""))
+			var response_str: String = str(p.get("response_text", ""))
+			if leader_str == "" and response_str == "":
+				response_str = str(p.get("text", ""))
+
+			if leader_str != "":
+				total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			if response_str != "":
+				total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			if leader_str != "" and response_str != "":
+				total_h += 3.0
+			total_h += 8.0
 	elif sub is MysteryPrayerPageCard:
 		total_h += font_italic.get_height(22) + 4.0
 		total_h += font_bold.get_height(34) + 4.0
@@ -600,10 +739,14 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 		var t_len: int = scrip_str.length() + med_str.length()
 		var body_sz: int = 24
 		if t_len > 580:
-			body_sz = 22
+			body_sz = 20
 		elif t_len > 480:
+			body_sz = 21
+		elif t_len > 380:
+			body_sz = 22
+		else:
 			body_sz = 23
-		var rubric_sz: int = 17 if body_sz <= 22 else 18
+		var rubric_sz: int = 17 if body_sz <= 21 else 18
 		total_h += font_bold.get_height(17) + 2.0
 		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
 		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 10.0
@@ -616,7 +759,17 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			var p_dict: Dictionary = p_item.get("prayer", {})
 			if p_dict.is_empty():
 				p_dict = loader.get_prayer(str(p_item.get("prayer_id", "")))
-			total_h += font_reg.get_multiline_string_size(str(p_dict.get("text", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			var leader_str: String = str(p_dict.get("leader_text", ""))
+			var response_str: String = str(p_dict.get("response_text", ""))
+			if leader_str == "" and response_str == "":
+				response_str = str(p_dict.get("text", ""))
+
+			if leader_str != "":
+				total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			if response_str != "":
+				total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
+			if leader_str != "" and response_str != "":
+				total_h += 2.0
 			total_h += 8.0
 	elif sub is CreditsPageCard:
 		total_h = 44.0 # 22 top + 22 bottom margins
