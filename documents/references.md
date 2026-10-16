@@ -76,8 +76,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/cover_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/cover.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00975`): [Museo del Prado Collection — The Virgin of the Rosary](https://www.museodelprado.es/en/the-collection/art-work/the-virgin-of-the-rosary/66248332-88b6-46c9-a8c1-271c5f9b8c79)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Murillo, Bartolomé Estéban - The Madonna of the Rosary - Google Art Project.jpg](https://upload.wikimedia.org/wikipedia/commons/9/9b/Murillo%2C_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg)
+  - [Reference 1] Museo del Prado Official Catalog (`P00975`): [Museo del Prado Collection — The Virgin of the Rosary](https://www.museodelprado.es/en/the-collection/art-work/the-virgin-of-the-rosary/eb5f85ec-f95d-4709-ab09-693206bfb3f5), [Dulwich Picture Gallery](https://www.dulwichpicturegallery.org.uk/explore-the-collection/251-300/the-virgin-of-the-rosary/), [Wikidata Q3918296](https://www.wikidata.org/wiki/Q3918296), and [Wikidata Q23929017](https://www.wikidata.org/wiki/Q23929017)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Murillo,_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/9/9b/Murillo%2C_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg)
 
 ---
 
@@ -94,8 +94,8 @@ flowchart TD
   2. **St. Dominic & Preaching the Mysteries**:
      - *Summary*: Tradition holds that Our Lady entrusted the Rosary to St. Dominic de Guzmán (1170–1221) to combat heresy by pairing vocal prayer with quiet meditation on Christ's life, death, and resurrection. Carthusian Dominic of Prussia and Dominican Blessed Alan de la Roche later organized the Marian Psalter into fifteen decades with specific Gospel mysteries.
      - [Reference 1] Pope St. Pius V, Papal Bull *Consueverunt Romani Pontifices* (Sept 17, 1569): [Papal Encyclicals Online — Consueverunt Romani Pontifices](https://www.papalencyclicals.net/pius05/p5consue.htm)
-     - [Reference 2] Catholic Encyclopedia ("Feast of the Holy Rosary"): [New Advent — Feast of the Holy Rosary](https://www.newadvent.org/cathen/13188b.htm)
-     - [Reference 3] Vatican News (Liturgical Feast of Our Lady of the Rosary & Battle of Lepanto 1571): [Vatican News — Feast of Our Lady of the Rosary](https://www.vaticannews.va/en/liturgical-holidays/feast-of-our-lady-of-the-rosary.html)
+     - [Reference 2] Catholic Encyclopedia: [New Advent — Feast of the Holy Rosary](https://www.newadvent.org/cathen/13189a.htm) and [New Advent — Confraternity of the Holy Rosary](https://www.newadvent.org/cathen/13188b.htm)
+     - [Reference 3] Vatican News (Liturgical Feast of Our Lady of the Rosary & Battle of Lepanto 1571): [Vatican News — Memorial of Our Lady of the Rosary](https://www.vaticannews.va/en/liturgical-holidays/memorial-of-our-lady-of-the-rosary.html)
   3. **Pope St. Pius V & The Twenty Mysteries**:
      - *Summary*: Pope St. Pius V codified the 15 Joyful, Sorrowful, and Glorious Mysteries in 1569 (*Consueverunt Romani Pontifices*) and established the Feast of Our Lady of Victory in 1571 (renamed Feast of Our Lady of the Rosary in 1573 by Pope Gregory XIII). In 2002, Pope St. John Paul II added the five Luminous Mysteries (Mysteries of Light) in *Rosarium Virginis Mariae*.
      - [Reference 1] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§19): [Vatican Archives — Rosarium Virginis Mariae §19](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
@@ -180,8 +180,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/opening_master_el_greco_trinity.jpg`
   - **Runtime Texture:** `res://assets/images/opening_prayers.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00824`): [Museo del Prado Collection — The Holy Trinity](https://www.museodelprado.es/en/the-collection/art-work/the-holy-trinity/81643c13-a745-4221-8e9a-7517c2f1f0a4)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:La Trinidad (El Greco, 1577-1579).jpg](https://upload.wikimedia.org/wikipedia/commons/f/fe/La_Trinidad_%28El_Greco%2C_1577-1579%29.jpg)
+  - [Reference 1] Museo del Prado Official Catalog (`P00824`): [Museo del Prado Collection — The Holy Trinity](https://www.museodelprado.es/en/the-collection/art-work/the-holy-trinity/8b502bfc-bc6d-43d1-b72b-b047eeea033c) and [Wikidata Q6553555](https://www.wikidata.org/wiki/Q6553555)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:La_Trinidad_%28El_Greco%2C_1577-1579%29.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/f/fe/La_Trinidad_%28El_Greco%2C_1577-1579%29.jpg)
 
 ---
 
@@ -224,8 +224,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_1_annunciation_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/joyful_1_annunciation.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00970`): [Museo del Prado Collection — The Annunciation](https://www.museodelprado.es/en/the-collection/art-work/the-annunciation/31bc7855-879e-43ee-8ec1-fa89ffb5e28a)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bartolome murillo-anunciacion.jpg](https://upload.wikimedia.org/wikipedia/commons/b/b9/Bartolome_murillo-anunciacion.jpg)
+  - [Reference 1] Museo del Prado Official Catalog (`P00970`): [Museo del Prado Collection — The Annunciation](https://www.museodelprado.es/en/the-collection/art-work/the-annunciation/971fbc95-3a0d-4559-8859-270e54bc153c) and [Wikidata Q27749754](https://www.wikidata.org/wiki/Q27749754)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Bartolome_murillo-anunciacion.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/b/b9/Bartolome_murillo-anunciacion.jpg)
 
 ---
 
@@ -264,8 +264,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_2_visitation_master_champaigne.jpg`
   - **Runtime Texture:** `res://assets/images/joyful_2_visitation.webp`
 - **Primary Source References:**
-  - [Reference 1] Princeton University Art Museum Official Catalog (`y1994-17`): [Princeton Art Museum — The Visitation](https://artmuseum.princeton.edu/collections/objects/30672)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Philippe de Champaigne - The Visitation - y1994-17 - Princeton University Art Museum.jpg](https://upload.wikimedia.org/wikipedia/commons/c/c8/Philippe_de_Champaigne_-_The_Visitation_-_y1994-17_-_Princeton_University_Art_Museum.jpg)
+  - [Reference 1] Princeton University Art Museum Official Catalog (`y1994-17`): [Princeton Art Museum — The Visitation](https://artmuseum.princeton.edu/collections/objects/34052) and [Wikidata Q106772100](https://www.wikidata.org/wiki/Q106772100)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Philippe_de_Champaigne_-_The_Visitation_-_y1994-17_-_Princeton_University_Art_Museum.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/c/c8/Philippe_de_Champaigne_-_The_Visitation_-_y1994-17_-_Princeton_University_Art_Museum.jpg)
 
 ---
 
@@ -304,8 +304,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_3_nativity_master_guido_reni.jpg`
   - **Runtime Texture:** `res://assets/images/joyful_3_nativity.webp`
 - **Primary Source References:**
-  - [Reference 1] National Gallery London Official Catalog (`NG6270`): [National Gallery London — The Adoration of the Shepherds](https://www.nationalgallery.org.uk/paintings/guido-reni-the-adoration-of-the-shepherds)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:The Adoration of the Shepherds by Guido Reni.jpg](https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Adoration_of_the_Shepherds_by_Guido_Reni.jpg)
+  - [Reference 1] National Gallery London Official Catalog (`NG6270`): [National Gallery London — The Adoration of the Shepherds](https://www.nationalgallery.org.uk/paintings/guido-reni-the-adoration-of-the-shepherds) and [Wikidata Q26705664](https://www.wikidata.org/wiki/Q26705664)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:The_Adoration_of_the_Shepherds_by_Guido_Reni.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Adoration_of_the_Shepherds_by_Guido_Reni.jpg)
 
 ---
 
@@ -344,8 +344,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_4_presentation_master_carpaccio.jpg`
   - **Runtime Texture:** `res://assets/images/joyful_4_presentation.webp`
 - **Primary Source References:**
-  - [Reference 1] Gallerie dell'Accademia Venice Official Catalog: [Gallerie dell'Accademia — Presentazione di Gesù al tempio](https://www.gallerieaccademia.it/presentazione-di-gesu-al-tempio)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Accademia - Presentation of Jesus in the Temple by Vittore Carpaccio Cat.44.jpg](https://upload.wikimedia.org/wikipedia/commons/1/10/Accademia_-_Presentation_of_Jesus_in_the_Temple_by_Vittore_Carpaccio_Cat.44.jpg)
+  - [Reference 1] Gallerie dell'Accademia Venice Official Catalog (`Cat. 44`): [Gallerie dell'Accademia — Presentazione di Gesù al tempio](https://www.gallerieaccademia.it/opera/presentazione-di-gesu-al-tempio/) and [Wikidata Q77700498](https://www.wikidata.org/wiki/Q77700498)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Accademia_-_Presentation_of_Jesus_in_the_Temple_by_Vittore_Carpaccio_Cat.44.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/1/10/Accademia_-_Presentation_of_Jesus_in_the_Temple_by_Vittore_Carpaccio_Cat.44.jpg)
 
 ---
 
@@ -384,8 +384,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_5_finding_in_temple_master_van_orley.jpg`
   - **Runtime Texture:** `res://assets/images/joyful_5_finding_in_temple.webp`
 - **Primary Source References:**
-  - [Reference 1] National Gallery of Art Washington Official Catalog (`1952.5.47.a`): [NGA Washington — Christ among the Doctors](https://www.nga.gov/collection/art-object-page.41661.html)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bernard van Orley, Christ among the Doctors (obverse), c. 1513, NGA 41661.jpg](https://upload.wikimedia.org/wikipedia/commons/0/05/Bernard_van_Orley%2C_Christ_among_the_Doctors_%28obverse%29%2C_c._1513%2C_NGA_41661.jpg)
+  - [Reference 1] National Gallery of Art Washington Official Catalog (`1952.5.47.a`): [NGA Washington — Christ among the Doctors](https://www.nga.gov/collection/art-object-page.41661.html) and [Wikidata Q20175333](https://www.wikidata.org/wiki/Q20175333)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Bernard_van_Orley%2C_Christ_among_the_Doctors_%28obverse%29%2C_c._1513%2C_NGA_41661.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/0/05/Bernard_van_Orley%2C_Christ_among_the_Doctors_%28obverse%29%2C_c._1513%2C_NGA_41661.jpg)
 
 ---
 
@@ -424,7 +424,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_1_baptism_master_guido_reni.jpg`
   - **Runtime Texture:** `res://assets/images/luminous_1_baptism.webp`
 - **Primary Source References:**
-  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG 222`): [KHM Vienna — The Baptism of Christ](https://www.khm.at/objektdb/detail/1531/)
+  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG 222`): [KHM Vienna (English) — The Baptism of Christ](https://www.khm.at/en/artworks/the-baptism-of-christ-1522), [KHM Vienna (German) — Taufe Christi](https://www.khm.at/kunstwerke/taufe-christi-1522), and [Wikidata Q28019217](https://www.wikidata.org/wiki/Q28019217)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Guido Reni - The Baptism of Christ - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Guido_Reni_-_The_Baptism_of_Christ_-_Google_Art_Project.jpg)
 
 ---
@@ -464,7 +464,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_2_wedding_at_cana_master_ricci.jpg`
   - **Runtime Texture:** `res://assets/images/luminous_2_wedding_at_cana.webp`
 - **Primary Source References:**
-  - [Reference 1] Nelson-Atkins Museum of Art Official Catalog (`59-2`): [Nelson-Atkins Collection — The Marriage at Cana](https://art.nelson-atkins.org/objects/10207/the-marriage-at-cana)
+  - [Reference 1] Nelson-Atkins Museum of Art Official Catalog (`59-2`): [Nelson-Atkins Collection — The Marriage Feast at Cana](https://art.nelson-atkins.org/objects/29292/the-marriage-feast-at-cana) and [Wikidata Q64562525](https://www.wikidata.org/wiki/Q64562525)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Sebastiano Ricci 043.jpg](https://commons.wikimedia.org/wiki/File:Sebastiano_Ricci_043.jpg)
 
 ---
@@ -504,7 +504,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_3_proclamation_master_carl_bloch.jpg`
   - **Runtime Texture:** `res://assets/images/luminous_3_proclamation.webp`
 - **Primary Source References:**
-  - [Reference 1] Museum of National History Frederiksborg Castle Carl Bloch Collection: [Frederiksborg Castle Museum](https://dnm.dk/)
+  - [Reference 1] Museum of National History Frederiksborg Castle Carl Bloch Collection: [Frederiksborg Castle Museum](https://frederiksborg.dk/en/) and [Wikidata Q22084482](https://www.wikidata.org/wiki/Q22084482)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bloch-SermonOnTheMount.jpg](https://commons.wikimedia.org/wiki/File:Bloch-SermonOnTheMount.jpg)
 
 ---
@@ -544,7 +544,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_4_transfiguration_master_gerard_david.jpg`
   - **Runtime Texture:** `res://assets/images/luminous_4_transfiguration.webp`
 - **Primary Source References:**
-  - [Reference 1] Musea Brugge / Church of Our Lady Collection: [Musea Brugge — Onze-Lieve-Vrouwekerk](https://www.museabrugge.be/en/visit-our-museums/our-museums-and-monuments/onze-lieve-vrouwekerk)
+  - [Reference 1] Musea Brugge / Church of Our Lady Collection (`OLV.0003.I`): [Musea Brugge — OLV-Kerk Museum](https://www.museabrugge.be/en/visit/locations/olv-kerk-museum), [BALaT KIK-IRPA 89054](https://balat.kikirpa.be/object/89054), [Topstukken Vlaanderen](https://topstukken.vlaanderen.be/topstukken/topstuk/4547a626-a994-4bce-b217-812bfd0d4a4f), and [Wikidata Q27058070](https://www.wikidata.org/wiki/Q27058070)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Gerard David - The transfiguration.jpg](https://commons.wikimedia.org/wiki/File:Gerard_David_-_The_transfiguration.jpg)
 
 ---
@@ -584,7 +584,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_5_eucharist_master_rubens.jpg`
   - **Runtime Texture:** `res://assets/images/luminous_5_eucharist.webp`
 - **Primary Source References:**
-  - [Reference 1] Pinacoteca di Brera Official Catalog (`Inv. 97`): [Pinacoteca di Brera Collection — Last Supper](https://pinacotecabrera.org/en/collezione_online/last-supper/)
+  - [Reference 1] Pinacoteca di Brera Official Catalog (`Inv. 97`): [Pinacoteca di Brera Collezione Online — Last Supper](https://pinacotecabrera.org/en/collezioni/collezione-on-line/last-supper/), [Pinacoteca di Brera Restauro](https://pinacotecabrera.org/en/collezioni/conservazione-e-restauro/last-supper/), and [Wikidata Q3699475](https://www.wikidata.org/wiki/Q3699475)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Peter Paul Rubens - Last Supper - WGA20255.jpg](https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_Last_Supper_-_WGA20255.jpg)
 
 ---
@@ -624,8 +624,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_1_agony_master_caracciolo.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_1_agony.webp`
 - **Primary Source References:**
-  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG F17`): [KHM Vienna — Christ on the Mount of Olives](https://www.khm.at/objektdb/detail/403/)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Giovanni Battista Caracciolo, called Battistello - Christ on the Mount of Olives (Christ’s Fear of Death) - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Giovanni_Battista_Caracciolo,_called_Battistello_-_Christ_on_the_Mount_of_Olives_(Christ%E2%80%99s_Fear_of_Death)_-_Google_Art_Project.jpg)
+  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG F17`): [KHM Vienna (English) — Christ on the Mount of Olives](https://www.khm.at/en/artworks/christ-on-the-mount-of-olives-187), [KHM Vienna (German) — Christus am Oelberg](https://www.khm.at/kunstwerke/christus-am-oelberg-187), and [Wikidata Q27978904](https://www.wikidata.org/wiki/Q27978904)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Giovanni Battista Caracciolo, called Battistello - Christ on the Mount of Olives (Christ’s Fear of Death) - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Giovanni_Battista_Caracciolo,_called_Battistello_-_Christ_on_the_Mount_of_Olives_%28Christ%E2%80%99s_Fear_of_Death%29_-_Google_Art_Project.jpg)
 
 ---
 
@@ -664,7 +664,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_2_scourging_master_rubens.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_2_scourging.webp`
 - **Primary Source References:**
-  - [Reference 1] St. Paul's Church Antwerp Rosary Cycle Guide: [Sint-Pauluskerk Antwerpen](https://sintpaulusantwerpen.be/)
+  - [Reference 1] St. Paul's Church Antwerp Rosary Cycle Guide (`70926`): [Sint-Pauluskerk Antwerpen](https://www.sintpaulusantwerpen.be/en/art-history/), [BALaT KIK-IRPA 70926](https://balat.kikirpa.be/object/70926), [Topstukken Vlaanderen](https://topstukken.vlaanderen.be/topstukken/topstuk/4735ed58-d788-47d9-b0fe-db5a21fe3566), and [Wikidata Q109265497](https://www.wikidata.org/wiki/Q109265497)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:De Mysteriën van de Rozenkrans. De geseling van Christus, Peter Paul Rubens, 17de eeuw, Sint-Pauluskerk Antwerpen.jpg](https://commons.wikimedia.org/wiki/File:De_Mysteri%C3%ABn_van_de_Rozenkrans._De_geseling_van_Christus,_Peter_Paul_Rubens,_17de_eeuw,_Sint-Pauluskerk_Antwerpen.jpg)
 
 ---
@@ -704,7 +704,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_3_crowning_with_thorns_master_van_dyck.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_3_crowning_with_thorns.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P01474`): [Museo del Prado Collection — The Crowning with Thorns](https://www.museodelprado.es/en/the-collection/art-work/the-crowning-with-thorns/1bb2d634-118b-494b-9721-e00f951e44ef)
+  - [Reference 1] Museo del Prado Official Catalog (`P01474`): [Museo del Prado Collection — The Crowning with Thorns](https://www.museodelprado.es/en/the-collection/art-work/the-crowning-with-thorns/8115e55f-004f-45c3-b574-fb9880c2fb57) and [Wikidata Q609576](https://www.wikidata.org/wiki/Q609576)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Anthonis van Dyck 004.jpg](https://commons.wikimedia.org/wiki/File:Anthonis_van_Dyck_004.jpg)
 
 ---
@@ -744,7 +744,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_4_carrying_cross_master_raphael.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_4_carrying_cross.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00298`): [Museo del Prado Collection — Christ Falls on the Way to Calvary](https://www.museodelprado.es/en/the-collection/art-work/christ-falls-on-the-way-to-calvary/82eb0216-0421-4f51-a9f4-6663f72e353b)
+  - [Reference 1] Museo del Prado Official Catalog (`P00298`): [Museo del Prado Collection — Christ Falls on the Way to Calvary](https://www.museodelprado.es/en/the-collection/art-work/christ-falls-on-the-way-to-calvary/870c8293-1691-4a90-88ff-b554a2bc3fe8) and [Wikidata Q2664637](https://www.wikidata.org/wiki/Q2664637)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Christ Falling on the Way to Calvary - Raphael.jpg](https://commons.wikimedia.org/wiki/File:Christ_Falling_on_the_Way_to_Calvary_-_Raphael.jpg)
 
 ---
@@ -784,8 +784,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_5_crucifixion_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_5_crucifixion.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00967`): [Museo del Prado Collection — Christ on the Cross](https://www.museodelprado.es/en/the-collection/art-work/christ-on-the-cross/04259b3f-1002-4fc9-b690-33431ebf10b7)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Cristo crucificado (Murillo).jpg](https://commons.wikimedia.org/wiki/File:Cristo_crucificado_(Murillo).jpg)
+  - [Reference 1] Museo del Prado Official Catalog (`P00967`): [Museo del Prado Collection — Christ on the Cross](https://www.museodelprado.es/en/the-collection/art-work/christ-on-the-cross/4cc5628b-c77f-4e4e-8b06-f529d42bd57e) and [Wikidata Q9191556](https://www.wikidata.org/wiki/Q9191556)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Cristo crucificado (Murillo).jpg](https://commons.wikimedia.org/wiki/File:Cristo_crucificado_%28Murillo%29.jpg)
 
 ---
 
@@ -824,7 +824,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_1_resurrection_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_1_resurrection.webp`
 - **Primary Source References:**
-  - [Reference 1] Real Academia de Bellas Artes de San Fernando Official Catalog (`0641`): [Academia Colecciones — La Resurrección del Señor](https://www.academiacolecciones.com/pinturas/inventario.php?id=0641)
+  - [Reference 1] Real Academia de Bellas Artes de San Fernando Official Catalog (`0641`): [Academia Colecciones — La Resurrección del Señor](https://www.academiacolecciones.com/pinturas/inventario.php?id=0641) and [Wikidata Q131541441](https://www.wikidata.org/wiki/Q131541441)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bartolomé Esteban Murillo - Resurrección del Señor - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Bartolom%C3%A9_Esteban_Murillo_-_Resurrecci%C3%B3n_del_Se%C3%B1or_-_Google_Art_Project.jpg)
 
 ---
@@ -864,7 +864,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_2_ascension_master_copley.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_2_ascension.webp`
 - **Primary Source References:**
-  - [Reference 1] Museum of Fine Arts Boston Official Catalog (`25.95`): [MFA Boston — The Ascension](https://collections.mfa.org/objects/32338)
+  - [Reference 1] Museum of Fine Arts Boston Official Catalog (`25.95`): [MFA Boston — The Ascension](https://collections.mfa.org/objects/32172) and [Wikidata Q20771735](https://www.wikidata.org/wiki/Q20771735)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Jesus ascending to heaven.jpg](https://commons.wikimedia.org/wiki/File:Jesus_ascending_to_heaven.jpg)
 
 ---
@@ -904,7 +904,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_3_pentecost_master_maino.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_3_pentecost.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P03018`): [Museo del Prado Collection — Pentecost](https://www.museodelprado.es/en/the-collection/art-work/pentecost/d8e137f8-be58-48b4-a20c-7bfeae3081e6)
+  - [Reference 1] Museo del Prado Official Catalog (`P03018`): [Museo del Prado Collection — Pentecost](https://www.museodelprado.es/en/the-collection/art-work/pentecost/dd47d10a-81f7-4d79-befa-730edd79c408) and [Wikidata Q27699449](https://www.wikidata.org/wiki/Q27699449)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Maino Pentecostés, 1620-1625. Museo del Prado.jpg](https://commons.wikimedia.org/wiki/File:Maino_Pentecost%C3%A9s,_1620-1625._Museo_del_Prado.jpg)
 
 ---
@@ -920,7 +920,7 @@ flowchart TD
 - **Meditation:** Having completed the course of her earthly life, the Immaculate Mother of God is taken up body and soul into heavenly glory by the power of her Divine Son.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Judith 15 & Psalm 44): [DRBO.org — Judith 15](https://www.drbo.org/chapter/12015.htm) & [DRBO.org — Psalm 44](https://www.drbo.org/chapter/21044.htm), and [New Advent — Psalm 44](https://www.newadvent.org/bible/psa044.htm)
+  - [Reference 1] Douay-Rheims Bible Online (Judith 15 & Psalm 44): [DRBO.org — Judith 15](https://www.drbo.org/chapter/18015.htm), [New Advent — Judith 15](https://www.newadvent.org/bible/jth015.htm), [DRBO.org — Psalm 44](https://www.drbo.org/chapter/21044.htm), and [New Advent — Psalm 44](https://www.newadvent.org/bible/psa044.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23) and Pope Pius XII, Apostolic Constitution *Munificentissimus Deus* (Nov 1, 1950, defining the dogma of the Assumption): [Vatican Archives — Munificentissimus Deus](https://www.vatican.va/content/pius-xii/en/apost_constitutions/documents/hf_p-xii_apc_19501101_munificentissimus-deus.html)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -944,7 +944,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_4_assumption_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_4_assumption.webp`
 - **Primary Source References:**
-  - [Reference 1] State Hermitage Museum Official Catalog (`ГЭ-387`): [State Hermitage Museum Collection — Assumption of the Virgin](https://www.hermitagemuseum.org/wps/portal/hermitage/digital-collection/01.+paintings/32415)
+  - [Reference 1] State Hermitage Museum Catalog Record & Authorities (`ГЭ-387`): [Wikimedia Commons Category](https://commons.wikimedia.org/wiki/Category:Inmaculada_Concepci%C3%B3n_de_Walpole_%28Museo_del_Hermitage%29) and [Wikidata Q21711868](https://www.wikidata.org/wiki/Q21711868)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bartolome Murillo - Assumption of the Virgin.jpg](https://commons.wikimedia.org/wiki/File:Bartolome_Murillo_-_Assumption_of_the_Virgin.jpg)
 
 ---
@@ -984,7 +984,7 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_5_coronation_master_velazquez.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_5_coronation.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P01168`): [Museo del Prado Collection — The Coronation of the Virgin](https://www.museodelprado.es/en/the-collection/art-work/the-coronation-of-the-virgin/41262d22-192a-4a87-a2f6-3db2168393fb)
+  - [Reference 1] Museo del Prado Official Catalog (`P01168`): [Museo del Prado Collection — The Coronation of the Virgin](https://www.museodelprado.es/en/the-collection/art-work/the-coronation-of-the-virgin/5f39f2cc-0197-4522-aecf-1d8e3b2e4ae7) and [Wikidata Q3221859](https://www.wikidata.org/wiki/Q3221859)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Diego Velázquez - Coronation of the Virgin - Prado.jpg](https://commons.wikimedia.org/wiki/File:Diego_Vel%C3%A1zquez_-_Coronation_of_the_Virgin_-_Prado.jpg)
 
 ---
@@ -1031,8 +1031,8 @@ flowchart TD
   - **Local Master File:** `assets/2D/gimp/original_downloads/closing_master_murillo_immaculate_conception.jpg`
   - **Runtime Texture:** `res://assets/images/closing_prayers.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P02809`): [Museo del Prado Collection — The Immaculate Conception of Los Venerables](https://www.museodelprado.es/en/the-collection/art-work/the-immaculate-conception-of-the-venerables-or/1da51776-8801-4475-be75-d1fb76921319)
-  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Inmaculada de los Venerables o de Soult.jpg](https://upload.wikimedia.org/wikipedia/commons/6/62/Inmaculada_de_los_Venerables_o_de_Soult.jpg)
+  - [Reference 1] Museo del Prado Official Catalog (`P02809`): [Museo del Prado Collection — The Immaculate Conception of Los Venerables](https://www.museodelprado.es/en/the-collection/art-work/the-immaculate-conception-of-the-venerables-or/76179d81-beaf-4f9e-9a05-ef92340a00d1) and [Wikidata Q2456003](https://www.wikidata.org/wiki/Q2456003)
+  - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Inmaculada_de_los_Venerables_o_de_Soult.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/6/62/Inmaculada_de_los_Venerables_o_de_Soult.jpg)
 
 ---
 
@@ -1102,8 +1102,8 @@ flowchart TD
 - **Marian Counsel:**
   - *Quote*: *"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood."*
   - *Attribution*: St. Louis Marie de Montfort, *The Secret of the Rosary*, "First Rose: Prayers"
-  - [Reference 1] St. Louis Marie de Montfort, *The Secret of the Rosary* (EWTN Catholic Library): [EWTN Library — The Secret of the Rosary](https://www.ewtn.com/catholicism/library/secret-of-the-rosary-5671)
-  - [Reference 2] Catholic Tradition Online Edition: [Catholic Tradition — Secret of the Rosary](http://www.catholictradition.org/Mary/secret-rosary.htm)
+  - [Reference 1] St. Louis Marie de Montfort, *The Secret of the Rosary* (Montfortian Associates): [The Admirable Secret of the Rosary — Writings of Montfort](https://www.montfortian.info/writingsandhymns/the-admirable-secret-of-the-rosary.html)
+  - [Reference 2] Internet Archive Full Text: [Internet Archive — The Secret of the Rosary](https://archive.org/details/secretofrosary0000grig)
 - **Background Palette Verification:**
   - Primary Crimson: `#4A1215`
   - Secondary Crimson: `#2A090B`
