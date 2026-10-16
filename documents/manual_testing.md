@@ -150,19 +150,34 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 2:** Click *"Proceed to the Closing Prayers →"*.
 - **Expected:** The viewport scrolls directly to Page 46 (*The Closing Prayers*).
 
-### TC-SCROLL-04: Reading Progress Persistence Across App Restarts
-- **Step 1:** Scroll or jump to a specific interior page (e.g. Page 26: The Agony in the Garden).
-- **Step 2:** Close the application.
-- **Step 3:** Relaunch the application.
+### TC-SCROLL-04: Exact Reading Position & Lifecycle Persistence Across App Restarts
+- **Step 1:** Scroll or navigate to an interior prayer page (e.g., Page 6: *The Annunciation* or Page 26: *The Agony in the Garden*) and scroll partway down the card (e.g., halfway through the decade prayers).
+- **Step 2:** Minimize or background the application (triggering `NOTIFICATION_APPLICATION_PAUSED` / focus loss) or close the application window completely.
+- **Step 3:** Relaunch the application (`godot --path game`).
 - **Expected:**
-  - The scroll position is automatically restored to Page 26 without requiring manual re-navigation.
-  - Default on fresh installation (no `user://reading_progress.cfg`) starts at Page 1 (Front Cover).
+  - The application immediately restores to the exact vertical reading position and scroll offset (`last_scroll_vertical`), rather than resetting to the top of the card or drifting.
+- **Step 4:** Scroll all the way back to the very top of Page 1 (Front Cover, `scroll_vertical = 0`), then close or background the application.
+- **Step 5:** Relaunch the application.
+- **Expected:**
+  - The application opens strictly at the very top of Page 1 (`scroll_vertical = 0`).
+- **Step 6:** Launch on a fresh installation or with a missing/corrupted `user://reading_progress.cfg`.
+- **Expected:**
+  - The application falls back cleanly to Page 1 at `scroll_vertical = 0`.
 
 ### TC-SCROLL-05: Screen Keep-Awake Verification
 - **Step 1:** Launch the application on a physical mobile device or display-enabled OS.
 - **Step 2:** Leave the application open on a mystery prayer card for longer than the device's default display timeout (e.g., > 5 minutes).
 - **Expected:**
   - The display does not dim or sleep during prayer contemplation (`DisplayServer.screen_set_keep_on(true)`).
+
+### TC-SCROLL-06: Tall Mobile Aspect Ratio Startup & Zero Scroll Drift
+- **Step 1:** Launch the application in a tall mobile aspect ratio window (e.g. 720×1440 [18:9], 720×1560 [19.5:9], or 720×1600 [20:9]).
+- **Expected:**
+  - On initial launch (or after clearing progress), the app starts strictly at the very top of Front Cover (Page 1, `scroll_vertical = 0`), displaying the dedicated top header band and framed Murillo artwork.
+  - Zero downward scroll drift or ratcheting occurs during engine and layout startup; the viewport does not glide down toward later pages or get stuck on the Back Cover.
+- **Step 2:** Navigate to an interior page (e.g. Page 10: *The Nativity*), close the application, and relaunch in the tall aspect ratio window.
+- **Expected:**
+  - The app restores stably to Page 10 without any layout inflation drift across repeated launches.
 
 ## Test 7.0: Top-Right Navigation Drawer & Table of Contents
 

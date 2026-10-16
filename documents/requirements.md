@@ -245,12 +245,20 @@ Implemented in `RosaryDataLoader.get_recommended_mystery_set_for_date(year, mont
   - **Lenten Sundays** (from the First Sunday of Lent, 42 days before Easter, through Palm Sunday, 7 days before Easter): `"sorrowful"`
   - **Easter Season & Ordinary Time Sundays:** `"glorious"`
 
-### 4.4 Automatic "Resume Last Page" Persistence (`user://reading_progress.cfg`)
+### 4.4 Automatic "Resume Last Page" & Exact Scroll Offset Persistence (`user://reading_progress.cfg`)
 Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_manager.gd`):
-- Tracks the currently viewed page number (`1..50`) calculated dynamically from the vertical scroll position in `Main` (`res://scripts/main/main.gd`).
-- Persists to `user://reading_progress.cfg` using Godot's `ConfigFile` under section `[reading_progress]`, key `last_page_number`.
-- **Save Debouncing:** Debounces disk writes with a 600ms timer during active scrolling to prevent disk thrashing, while immediately saving on discrete jump bar activations.
-- **Launch Restoration:** On startup, loads the saved page (defaulting to `Page 1` on fresh launch) and restores the vertical scroll position cleanly.
+- **Page Number & Exact Scroll Tracking:** Tracks both the currently viewed page number (`1..50`) and the exact vertical scroll offset (`last_scroll_vertical`, integer in pixels) calculated dynamically from `Main` (`res://scripts/main/main.gd`).
+- **ConfigFile Storage:** Persists state to `user://reading_progress.cfg` using Godot's `ConfigFile` under section `[reading_progress]` keys `last_page_number` (`1..50`), `last_scroll_vertical` (`int`, pixels), and `updated_at` (Unix timestamp).
+- **Save Debouncing & Lifecycle Flushing:**
+  - Debounces disk writes with a 600ms timer (`_save_timer`) during active continuous scrolling (including intra-page adjustments and scrolling back to 0 on Page 1) to prevent disk thrashing, while immediately saving on discrete jump bar activations.
+  - Automatically flushes unsaved progress immediately via `_flush_saved_progress()` on application lifecycle and focus loss events (`NOTIFICATION_APPLICATION_PAUSED`, `NOTIFICATION_APPLICATION_FOCUS_OUT`, `NOTIFICATION_WM_CLOSE_REQUEST`, `NOTIFICATION_WM_GO_BACK_REQUEST`, and node `_exit_tree()`), guaranteeing that progress is preserved if the app is backgrounded or dismissed before the 600ms timer elapses.
+- **Sub-Page Offset Validation & Fallback:**
+  - Upon startup restoration, if `last_scroll_vertical` is recorded, it is validated against the saved page's vertical span (`[target_y, target_y_next]`). If within bounds, the exact sub-page scroll offset is restored; if out of bounds (such as after changing text size presets), the scroll position safely falls back to the top of the saved page.
+  - Corrupted, out-of-bounds (`< 1` or `> 50`), or missing configuration files strictly fall back to Page 1 (Front Cover) with `scroll_vertical = 0`.
+- **Deterministic Stream Height Calculation:**
+  - To prevent startup scroll drift and ratcheting on tall mobile viewports (e.g., 18:9, 19.5:9, 20:9), layout offset calculations in `get_target_scroll_for_page()`, `get_current_page_number()`, and `set_text_size_preset()` evaluate element heights deterministically via `_get_stream_element_height()`.
+  - For `PageCard` instances, heights strictly evaluate `custom_minimum_size.y` (defaulting to `BasePageCard.DESIGN_HEIGHT = 1080.0`) without relying on pre-sort unconstrained viewport `size.y` expansions, and root card anchors are constrained to `anchors_preset = 10` (`anchor_right = 1.0`).
+  - `_is_restoring_initial_page` state flag is held during startup restoration (deferred to post-layout or cleared synchronously in headless tests) to prevent spurious container sort events from overwriting restored page state.
 
 ### 4.5 Texture Virtualization & Screen Keep-Awake
 1. **Sliding Buffer Window Virtualization (`ARTWORK_BUFFER_PAGES = 4`):**
