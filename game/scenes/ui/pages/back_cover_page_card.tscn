@@ -81,9 +81,14 @@ theme_override_constants/margin_bottom = 26
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
-theme_override_constants/separation = 24
+theme_override_constants/separation = 158
 
-[node name="TitleLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
+[node name="HeaderVBox" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/HeaderVBox"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.831373, 0.686275, 0.215686, 1)
@@ -93,7 +98,7 @@ text = "PRAY THE ROSARY"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SubtitleLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
+[node name="SubtitleLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/HeaderVBox"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
@@ -103,7 +108,7 @@ text = "A Contemplative Visual Guide to the Twenty Mysteries"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
+[node name="Divider" type="ColorRect" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/HeaderVBox"]
 custom_minimum_size = Vector2(240, 2)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -112,7 +117,6 @@ color = Color(0.831373, 0.686275, 0.215686, 1)
 
 [node name="EpigraphContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 1
 theme_override_constants/separation = 6
 
@@ -137,7 +141,6 @@ autowrap_mode = 3
 
 [node name="SynopsisLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
@@ -147,7 +150,6 @@ autowrap_mode = 3
 
 [node name="CounselContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 1
 theme_override_constants/separation = 6
 

@@ -83,6 +83,7 @@ func _apply_page_data() -> void:
 	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
+	var sum_art_heights: float = 0.0
 	if credits_container != null:
 		for child: Node in credits_container.get_children():
 			credits_container.remove_child(child)
@@ -94,7 +95,7 @@ func _apply_page_data() -> void:
 			var art: Dictionary = art_val
 			var art_vbox: VBoxContainer = VBoxContainer.new()
 			art_vbox.name = "Attribution_%s" % str(art.get("id", ""))
-			art_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			art_vbox.size_flags_vertical = Control.SIZE_FILL
 			art_vbox.add_theme_constant_override("separation", 0)
 
 			var title_lbl: Label = Label.new()
@@ -114,6 +115,10 @@ func _apply_page_data() -> void:
 			title_lbl.add_theme_constant_override("line_spacing", -1)
 			title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			art_vbox.add_child(title_lbl)
+			var title_h: float = 0.0
+			if font_bold != null:
+				var t_lines: int = int(ceilf(font_bold.get_multiline_string_size(title_lbl.text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y / float(font_bold.get_height(title_font_size))))
+				title_h = font_bold.get_multiline_string_size(title_lbl.text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y - float(maxi(0, t_lines - 1))
 
 			var details: String = "%s (%s), %s • %s • %s" % [
 				str(art.get("artist", "")),
@@ -132,58 +137,68 @@ func _apply_page_data() -> void:
 			details_lbl.add_theme_constant_override("line_spacing", -1)
 			details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			art_vbox.add_child(details_lbl)
+			var details_h: float = 0.0
+			if font_reg != null:
+				var d_lines: int = int(ceilf(font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, 656.0, details_font_size).y / float(font_reg.get_height(details_font_size))))
+				details_h = font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, 656.0, details_font_size).y - float(maxi(0, d_lines - 1))
 
+			sum_art_heights += title_h + details_h
 			credits_container.add_child(art_vbox)
 
 	var colophon: Dictionary = page_data.get("colophon", {})
+	var colophon_h: float = 0.0
 	if colophon_container != null:
 		if colophon.is_empty():
 			colophon_container.visible = false
 		else:
 			colophon_container.visible = true
+			colophon_h += 1.0 + 3.0 # Divider + separation
 			if scripture_notice_label != null:
 				scripture_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				scripture_notice_label.text = str(colophon.get("scripture_notice", ""))
+				var sn_text: String = str(colophon.get("scripture_notice", ""))
+				scripture_notice_label.text = sn_text
 				scripture_notice_label.add_theme_font_size_override("font_size", notice_font_size)
 				scripture_notice_label.add_theme_constant_override("line_spacing", -1)
+				if font_italic != null:
+					var sn_lines: int = int(ceilf(font_italic.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_italic.get_height(notice_font_size))))
+					colophon_h += font_italic.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, sn_lines - 1)) + 3.0
 			if colophon_notice_label != null:
 				colophon_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				colophon_notice_label.text = str(colophon.get("artwork_notice", ""))
+				var cn_text: String = str(colophon.get("artwork_notice", ""))
+				colophon_notice_label.text = cn_text
 				colophon_notice_label.add_theme_font_size_override("font_size", notice_font_size)
 				colophon_notice_label.add_theme_constant_override("line_spacing", -1)
+				if font_reg != null:
+					var cn_lines: int = int(ceilf(font_reg.get_multiline_string_size(cn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_reg.get_height(notice_font_size))))
+					colophon_h += font_reg.get_multiline_string_size(cn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, cn_lines - 1))
 
-	var total_h: float = 44.0
+	var header_h: float = 0.0
 	if font_italic != null:
-		total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 2.0
+		header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 2.0
 	if font_bold != null:
-		total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 2.0
-	total_h += 2.0 + 6.0
+		header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 2.0
+	header_h += 2.0 # Divider
+	header_h += 4.0 # HeaderVBox separations
 
-	for art_val: Variant in artworks:
-		if not (art_val is Dictionary):
-			continue
-		var art: Dictionary = art_val
-		var sec_label: String = str(art.get("section_label", "")).strip_edges()
-		var art_title: String = str(art.get("title", "")).strip_edges()
-		var combined_title: String = "%s — %s" % [sec_label, art_title] if (sec_label != "" and art_title != "") else art_title
-		if font_bold != null:
-			total_h += font_bold.get_multiline_string_size(combined_title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y
-		var details: String = "%s (%s), %s • %s • %s" % [
-			str(art.get("artist", "")),
-			str(art.get("artist_dates", "")),
-			str(art.get("creation_date", "")),
-			str(art.get("medium", "")),
-			str(art.get("current_location", ""))
-		]
-		if font_reg != null:
-			total_h += font_reg.get_multiline_string_size(details, HORIZONTAL_ALIGNMENT_LEFT, 656.0, details_font_size).y + 3.0
+	var num_art: int = artworks.size()
+	var num_art_gaps: int = maxi(1, num_art - 1)
+	var applied_cred_sep: int = 3
+	if text_size_preset == PRESET_NORMAL:
+		var avail_cred: float = 1036.0 - header_h - 6.0
+		if not colophon.is_empty():
+			avail_cred -= (colophon_h + 6.0)
+		var leftover_cred: float = avail_cred - sum_art_heights
+		applied_cred_sep = int(floor(leftover_cred / float(num_art_gaps)))
+		applied_cred_sep = maxi(applied_cred_sep, 2)
+	else:
+		applied_cred_sep = 8 if text_size_preset == PRESET_MOBILE else 10
 
+	if credits_container != null:
+		credits_container.add_theme_constant_override("separation", applied_cred_sep)
+
+	var total_h: float = 44.0 + header_h + 6.0 + sum_art_heights + float(num_art_gaps * applied_cred_sep)
 	if not colophon.is_empty():
-		total_h += 6.0 + 1.0 + 3.0
-		if font_italic != null:
-			total_h += font_italic.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y + 3.0
-		if font_reg != null:
-			total_h += font_reg.get_multiline_string_size(str(colophon.get("artwork_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y
+		total_h += 6.0 + colophon_h
 
 	var final_height: float = DESIGN_HEIGHT
 	if text_size_preset != PRESET_NORMAL:

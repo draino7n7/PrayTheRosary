@@ -74,12 +74,14 @@ func _apply_page_data() -> void:
 				rubric_font_size = 15 if is_five_step else 18
 				title_font_size = 19 if is_five_step else 23
 
-		var total_h: float = 64.0
+		var header_h: float = 0.0
 		if font_italic != null:
-			total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
+			header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 		if font_bold != null:
-			total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
-		total_h += 2.0 + 14.0
+			header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
+		header_h += 2.0 # Divider height
+
+		var sum_step_heights: float = 0.0
 
 		for step_val: Variant in steps:
 			if not (step_val is Dictionary):
@@ -87,8 +89,11 @@ func _apply_page_data() -> void:
 			var step: Dictionary = step_val
 			var step_vbox: VBoxContainer = VBoxContainer.new()
 			step_vbox.name = "Step_%d" % int(step.get("step_number", 0))
-			step_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			step_vbox.size_flags_vertical = Control.SIZE_FILL
 			step_vbox.add_theme_constant_override("separation", 3)
+
+			var step_h: float = 0.0
+			var visible_count: int = 0
 
 			# Rubric row: bead label + rubric
 			var bead: String = str(step.get("bead_label", ""))
@@ -110,7 +115,8 @@ func _apply_page_data() -> void:
 				rubric_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(rubric_lbl)
 				if font_italic != null:
-					total_h += font_italic.get_multiline_string_size(rubric_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y + 3.0
+					step_h += font_italic.get_multiline_string_size(rubric_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y
+					visible_count += 1
 
 			# Prayer Title & Text
 			var prayer: Dictionary = step.get("prayer", {})
@@ -129,7 +135,8 @@ func _apply_page_data() -> void:
 				title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 				step_vbox.add_child(title_lbl)
 				if font_bold != null:
-					total_h += font_bold.get_multiline_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y + 3.0
+					step_h += font_bold.get_multiline_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y
+					visible_count += 1
 
 			var leader_str: String = str(prayer.get("leader_text", ""))
 			var response_str: String = str(prayer.get("response_text", ""))
@@ -159,7 +166,9 @@ func _apply_page_data() -> void:
 					text_lbl.add_theme_font_override("font", font_reg)
 				step_vbox.add_child(text_lbl)
 				if font_reg != null:
-					total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+					var l_lines: int = int(ceilf(font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+					step_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, l_lines - 1) * 2)
+					visible_count += 1
 			else:
 				# Unison prayer: PrayerText is hidden, ResponseText displays entire prayer in bold
 				text_lbl.text = ""
@@ -173,17 +182,34 @@ func _apply_page_data() -> void:
 				resp_lbl.visible = true
 				step_vbox.add_child(resp_lbl)
 				if font_bold != null:
-					total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
-				if leader_str != "":
-					total_h += 3.0
+					var r_lines: int = int(ceilf(font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_bold.get_height(body_font_size))))
+					step_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, r_lines - 1) * 2)
+					visible_count += 1
 			else:
 				resp_lbl.text = ""
 				resp_lbl.visible = false
 				step_vbox.add_child(resp_lbl)
 
-			total_h += 8.0
+			if visible_count > 1:
+				step_h += float((visible_count - 1) * 3)
+
+			sum_step_heights += step_h
 			steps_container.add_child(step_vbox)
 
+		var num_steps: int = steps.size()
+		var num_gaps: int = maxi(1, num_steps - 1)
+		var applied_sep: int = 10
+		if text_size_preset == PRESET_NORMAL:
+			var avail_steps_h: float = 1016.0 - header_h - 14.0
+			var leftover_steps_h: float = avail_steps_h - sum_step_heights
+			applied_sep = int(floor(leftover_steps_h / float(num_gaps)))
+			applied_sep = maxi(applied_sep, 8)
+		else:
+			applied_sep = 20 if text_size_preset == PRESET_MOBILE else 24
+
+		steps_container.add_theme_constant_override("separation", applied_sep)
+
+		var total_h: float = 64.0 + header_h + 14.0 + sum_step_heights + float(num_gaps * applied_sep)
 		var final_height: float = DESIGN_HEIGHT
 		if text_size_preset != PRESET_NORMAL:
 			final_height = maxf(1081.0, ceilf(total_h + 30.0))
