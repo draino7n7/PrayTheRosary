@@ -33,8 +33,10 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
    - **No On-Page Artwork Captions:** Artwork pages (`Pages 5, 7, 9, ..., 47`) display **only** the Top Section/Mystery Header and the gold-framed painting so nothing distracts from using the sacred image as a prayer focus. All artist, title, date, and museum attributions appear exclusively on the **Sacred Artwork Credits pages (`Pages 48–49`)**.
    - **No Interactive Bead-Clicking Mechanic (MVP):** Prayer pages display the complete text of the prayers with clear rubrics (e.g., *"10× Hail Mary"*), assuming the user prays with physical Rosary beads or their fingers.
    - **Silent & Always-On:** The MVP application is completely silent (no background music or sound effects) and keeps the device screen awake (`DisplayServer.screen_set_keep_on(true)` when not running headlessly) so the screen never dims or locks during a 3–4 minute decade.
-3. **Data-Driven Architecture:**
+3. **Data-Driven Architecture & Canonical Verification Ledger:**
    - All prayers, mysteries, Douay-Rheims Scripture readings, meditations, artwork metadata, and page sequences are loaded dynamically via `RosaryDataLoader` (`res://scripts/data/rosary_data_loader.gd`) from `res://data/prayers.json`, `res://data/mysteries.json`, and `res://data/book_layout.json`.
+   - **Canonical Verification Ledger (`documents/references.md`):** Serves as the complete primary source guide and verification ledger for all 50 physical pages in strict book order, 12 canonical prayers, 20 mysteries and spiritual fruits, Douay-Rheims Scripture citations and verbatim verses, and 23 master artworks (with museum inventory numbers, creation dates, current locations, and direct catalog URLs).
+   - **AI Agent Verification Rules (`.agents/rules/references_verification.md`):** Autonomous agents modifying or proposing changes to sacred text, prayers, Scripture, or artwork attributions must consult `documents/references.md` as the source of truth, verify against primary sources, and keep both JSON data files and `documents/references.md` synchronized.
 
 ---
 
@@ -314,6 +316,15 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 - These textures match the exact `runtime_texture_path` entries in `book_layout.json` and `mysteries.json` (e.g., `res://assets/images/cover.webp`, `res://assets/images/opening_prayers.webp`, `res://assets/images/closing_prayers.webp`, and the 20 mystery textures `res://assets/images/{set}_{num}_{name}.webp`).
 - Verified via automated unit tests in `game/tests/test_assets_and_theme.gd` to confirm non-zero dimensions, correct aspect ratios, and clean loading as `Texture2D`.
 
+### 5.3 Canonical References Guide & Source Verification Ledger (`documents/references.md`)
+- **Strict 50-Page Book Order Ledger:** `documents/references.md` serves as the authoritative, comprehensive primary source guide and verification ledger for the entire project, structured in strict sequential book order across all 50 physical pages (Page 1 Front Cover through Page 50 Back Cover).
+- **Comprehensive Coverage:** Documents all 12 canonical prayers from `prayers.json` (with leader/response parts and catechism/liturgical sources), all 20 mysteries and spiritual fruits from `mysteries.json`, public-domain Douay-Rheims (Challoner Revision) Scripture citations and verbatim texts, and all 23 master artworks from `attributions.json` (including master filenames, museum inventory numbers, creation dates, current locations, and verified catalog URLs from institutions such as the Museo del Prado, National Gallery, Kunsthistorisches Museum, and Hermitage).
+- **AI Agent Fact-Checking & Compliance Rules (`.agents/rules/references_verification.md`):** Autonomous subagents (`issue_creator`, `issue_resolver`, `pr_reviewer`) must strictly follow `.agents/rules/references_verification.md`:
+  1. Always consult `documents/references.md` before proposing or modifying any sacred text, prayer, Scripture citation, or artwork attribution.
+  2. Verify all modifications against authoritative primary sources (`vatican.va`, `usccb.org`, `drbo.org`, official museum catalogs).
+  3. Keep `documents/references.md`, `game/data/prayers.json`, `game/data/mysteries.json`, `game/data/book_layout.json`, and `assets/2D/gimp/attributions.json` in 100% mutual synchronization.
+  4. Never invent, truncate, modernize, or hallucinate citations, translations, or inventory numbers.
+
 ---
 
 ## 6. Technical Constraints & Testing Standards
@@ -331,6 +342,9 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
    - All page cards, `CardPanel` containers, and `PageContainer` must maintain `custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0` across all text presets.
    - All text labels must specify `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (`3`) to prevent horizontal minimum width expansion.
    - All card panel `StyleBoxFlat` resources must explicitly specify `content_margin_* = 0.0` to eliminate 4px implicit border margin blowout.
+5. **Reference & Verification Standards:**
+   - All data modifications must comply with `.agents/rules/references_verification.md` and be synchronized with `documents/references.md`.
+   - Verified by automated unit tests `test_references_document_and_agent_rules_exist_and_complete()` and `test_references_document_completeness_and_book_order()` in `game/tests/test_rosary_data.gd`.
 ---
 
 ## 7. Platform & Export Specifications (App Icon, Adaptive Icons & Boot Splash)
