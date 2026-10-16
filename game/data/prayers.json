@@ -55,9 +55,9 @@
 			"id": "glory_be",
 			"title": "The Glory Be",
 			"latin_title": "Gloria Patri",
-			"text": "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
-			"leader_text": "Glory be to the Father, and to the Son, and to the Holy Spirit.",
-			"response_text": "As it was in the beginning, is now, and ever shall be, world without end. Amen."
+			"text": "Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen.",
+			"leader_text": "Glory be to the Father, and to the Son, and to the Holy Spirit,",
+			"response_text": "as it was in the beginning, is now, and ever shall be, world without end. Amen."
 		},
 		"fatima_prayer": {
 			"id": "fatima_prayer",
