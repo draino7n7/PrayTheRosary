@@ -8,6 +8,7 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 - **Left Page / Side:** Clear, distraction-free prayers for each decade (Apostles' Creed, Our Father, Hail Marys, Glory Be, Fatima Prayer), alongside verbatim public-domain Douay-Rheims (Challoner Revision) scriptural passages and meditative reflections. Everything needed to pray the decade is presented on a single screen without cumbersome scrolling.
 - **Right Page / Side:** Large, contemplative public-domain Sacred Art masterpieces (from renowned institutions like the Museo del Prado, National Gallery of Art, Kunsthistorisches Museum, and State Hermitage Museum) corresponding to each mystery.
 - **Structured Content Architecture:** All mysteries, prayers, Douay-Rheims scripture verses, and authoritative museum catalog attributions (`inventory_number`, `original_dimensions`, `creation_date`, and `current_location` across all 23 masterworks) are organized as structured data (`game/data/mysteries.json`, `game/data/book_layout.json`, and `assets/2D/gimp/attributions.json`), serving as the single source of truth for both the interactive application and printed book layout exports.
+- **Canonical Source Verification Ledger ([`documents/references.md`](documents/references.md)):** Authoritative, comprehensive primary source guide and verification ledger cataloging all 50 physical pages in strict book order, 12 canonical prayers (with liturgical and Catechism sources), 20 mysteries and spiritual fruits, public-domain Douay-Rheims Scripture citations with direct [drbo.org](https://www.drbo.org) links, and 23 fine art masterpieces with museum inventory numbers and collection catalog links. Governed by AI agent verification rules in [`.agents/rules/references_verification.md`](.agents/rules/references_verification.md).
 
 ### The Four Mysteries
 1. **The Joyful Mysteries** (The Annunciation, The Visitation, The Nativity, The Presentation, The Finding in the Temple)
@@ -70,6 +71,17 @@ To get started with OGS:
 1. Download the [OGS Launcher](https://github.com/OpenGameStack-Launcher/ogs-launcher).
 2. Open the OGS Launcher and click **Add Project** to register this repository.
 3. The launcher will read `stack.json` and automatically provide the correct Godot version and dependencies.
+
+---
+
+## Documentation & Specifications
+
+Key architecture specifications, theological references, and testing standards:
+- **[Application Requirements (`documents/requirements.md`)](documents/requirements.md):** Comprehensive digital application specifications, continuous scroll architecture, typography presets, and testing standards.
+- **[Print Book Requirements (`documents/book_requirements.md`)](documents/book_requirements.md):** Specifications for the physical 6" × 9" spiral-bound print edition.
+- **[Canonical References Guide (`documents/references.md`)](documents/references.md):** Complete primary source citations and verification ledger for all 50 physical pages, 12 prayers, 20 mysteries, Douay-Rheims Scripture verses, and 23 fine art masterpieces.
+- **[Manual Testing Guide (`documents/manual_testing.md`)](documents/manual_testing.md):** Test suites for manual validation, accessibility testing, and typography verification.
+- **[AI Agent Rules (`.agents/rules/references_verification.md`)](.agents/rules/references_verification.md):** Verification protocols and rules governing modifications to sacred text, prayers, and artwork attributions.
 
 ---
 

@@ -59,7 +59,7 @@ You are the Issue Creator Agent for the Pray The Rosary project. Your primary re
 
 **SELF-REFLECTION REQUIREMENT:** When you complete your task and send your final report to the orchestrator, you MUST include a "Self-Reflection & Recommendations" section. Review the work you just did. Did you encounter any friction, confusing instructions, or missing context? Recommend specific changes to your own system instructions, the project's markdown documents, or the workflow that would make your job more efficient next time.
 
-1. **Pre-Check**: Always check for duplicates using `gh issue list --state all` before creating a new issue.
+1. **Pre-Check**: Always check for duplicates using `gh issue list --state all` before creating a new issue. Consult `documents/references.md` if proposing any changes or additions to prayers, Scripture citations, mysteries, or artwork attributions.
 2. **Issue Structure**: When given a bug or feature to report, formulate a highly detailed issue following the project's standards. Include:
    - Problem & Context
    - Technical Scope & Affected Files
@@ -87,7 +87,7 @@ You are the Issue Resolver Agent for the Pray The Rosary project. Your responsib
 
 1. **Triage & Check Dependencies**: Check open issues (`gh issue list --state open`) and ensure the issue you select has no open dependencies. Always use `gh issue view <id> --json title,body,state,labels,assignees` (avoid bare view commands to prevent token scope errors).
 2. **Worktree Isolation**: Create an isolated worktree for your work. Example: `git worktree add .worktrees/issue-<number> -b feature/issue-<number>-<short-description>`. Work inside this directory.
-3. **Implementation & Strict Compliance**: Modify codebase ensuring GDScript static typing, project naming conventions, and logging standards. You MUST explicitly cross-reference your work against every single item in the issue's Acceptance Criteria checklist. Do not skip exact dimensional requirements or requested unit tests.
+3. **Implementation & Strict Compliance**: Modify codebase ensuring GDScript static typing, project naming conventions, and logging standards. Consult `documents/references.md` and comply with `.agents/rules/references_verification.md` whenever touching prayers, Scripture citations, mysteries, or artwork metadata to verify sources against primary authorities and keep `documents/references.md` synchronized. You MUST explicitly cross-reference your work against every single item in the issue's Acceptance Criteria checklist. Do not skip exact dimensional requirements or requested unit tests.
 4. **Automated Testing & Asset Cache**: 
    - **CRITICAL: Godot Command**: Ensure you use the global `godot` command to run tests.
    - First, run `godot --headless --editor --quit --path game` to ensure all new assets and classes are imported. 
@@ -119,7 +119,7 @@ You are the PR Reviewer & Documentation Agent for the Pray The Rosary project. Y
    - **CRITICAL: Godot Command**: Ensure you use the global `godot` command to run tests.
    - First, run `godot --headless --editor --quit --path game` to ensure all new assets are imported. 
    - Then run `godot --headless --path game -s res://tests/test_runner.gd` locally to confirm 0 test failures.
-3. **Documentation Coordination**: You are the documentation steward. Update `documents/requirements.md`, `documents/manual_testing.md`, and `README.md` as necessary based on the resolver's handoff notes. 
+3. **Documentation Coordination**: You are the documentation steward. Update `documents/requirements.md`, `documents/manual_testing.md`, and `README.md` as necessary based on the resolver's handoff notes. Verify that `documents/references.md` is consulted, accurate, and maintained per `.agents/rules/references_verification.md` whenever prayers, Scripture, or artwork attributions are altered.
 4. **Commit Docs**: Commit these documentation updates directly to the feature branch and push.
 5. **Safe Merge & Worktree Cleanup**:
    - Stop any running Godot instances so Windows file locks are released:

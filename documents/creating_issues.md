@@ -86,6 +86,7 @@ Before publishing an issue via GitHub:
 2. [ ] **Inspect Codebase:** Verify the exact file paths, variable names, and current behavior in the code.
 3. [ ] **Clarify Design Choices:** Resolve any open design questions (e.g., color hex codes, UI behaviors, platform fallbacks) before publishing so the issue body contains firm decisions rather than open questions.
 4. [ ] **Include Documentation Acceptance Criteria:** Ensure the mandatory documentation coordination checklist is included per `documents/reviewing_and_merging_prs.md`.
+5. [ ] **Check Canonical References Ledger (`documents/references.md`):** If proposing any additions, modifications, or fixes to sacred text, prayers, translations, Scripture citations, mysteries, historical summaries, or artwork attributions, consult `documents/references.md` and `.agents/rules/references_verification.md` to ensure doctrinal and archival accuracy, and include an acceptance criterion to keep `documents/references.md` synchronized.
 
 ---
 

@@ -692,3 +692,158 @@ func test_all_twelve_prayers_leader_and_response_formatting_and_hydration() -> v
 	)
 
 
+func test_references_document_and_agent_rules_exist_and_complete() -> void:
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var references_path: String = repo_root.path_join("documents/references.md")
+	var rules_path: String = repo_root.path_join(".agents/rules/references_verification.md")
+
+	# 1. Existence and non-empty checks
+	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist on disk: %s" % references_path)
+	assert_true(FileAccess.file_exists(rules_path), ".agents/rules/references_verification.md must exist on disk: %s" % rules_path)
+
+	var ref_content: String = FileAccess.get_file_as_string(references_path)
+	var rules_content: String = FileAccess.get_file_as_string(rules_path)
+
+	assert_true(ref_content.length() > 500, "documents/references.md must contain comprehensive documentation")
+	assert_true(rules_content.length() > 100, ".agents/rules/references_verification.md must be non-empty")
+
+	# 2. Dedicated AI Agent Verification Section
+	assert_true(
+		ref_content.contains("AI Agent Verification & Fact-Checking Rules"),
+		"documents/references.md must have dedicated 'AI Agent Verification & Fact-Checking Rules' section at the top"
+	)
+	assert_true(
+		rules_content.contains("documents/references.md"),
+		".agents/rules/references_verification.md must mandate consulting documents/references.md"
+	)
+
+	# 3. Strict 50-Page Book Order Sequence
+	var prev_idx: int = -1
+	for page_num: int in range(1, 51):
+		var page_marker: String = "### Page %d" % page_num
+		var idx: int = ref_content.find(page_marker)
+		assert_ne(idx, -1, "documents/references.md must contain section heading '%s'" % page_marker)
+		if prev_idx != -1:
+			assert_true(
+				idx > prev_idx,
+				"Page %d (char %d) must appear strictly after Page %d (char %d) in book order" % [page_num, idx, page_num - 1, prev_idx]
+			)
+		prev_idx = idx
+
+	# 4. All 12 Prayers from prayers.json
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var expected_prayer_ids: Array[String] = [
+		"sign_of_the_cross",
+		"apostles_creed",
+		"our_father",
+		"hail_mary",
+		"hail_mary_faith",
+		"hail_mary_hope",
+		"hail_mary_charity",
+		"glory_be",
+		"fatima_prayer",
+		"hail_holy_queen",
+		"versicle_response",
+		"rosary_concluding_prayer"
+	]
+	for pid: String in expected_prayer_ids:
+		var pdict: Dictionary = loader.get_prayer(pid)
+		assert_false(pdict.is_empty(), "Prayer '%s' must exist" % pid)
+		var title: String = str(pdict.get("title", ""))
+		assert_true(
+			ref_content.contains(pid),
+			"documents/references.md must document prayer key '%s'" % pid
+		)
+		assert_true(
+			ref_content.contains(title),
+			"documents/references.md must document prayer title '%s'" % title
+		)
+
+	# 5. All 20 Mysteries from mysteries.json
+	var sets: Array[String] = ["joyful", "luminous", "sorrowful", "glorious"]
+	for s_id: String in sets:
+		var mset: Dictionary = loader.get_mystery_set(s_id)
+		var decades: Array = mset.get("decades", [])
+		for dec_obj in decades:
+			var dec: Dictionary = dec_obj as Dictionary
+			var dec_id: String = str(dec.get("id", ""))
+			var dec_title: String = str(dec.get("title", ""))
+			var dec_fruit: String = str(dec.get("fruit", ""))
+			assert_true(
+				ref_content.contains(dec_id),
+				"documents/references.md must document mystery ID '%s'" % dec_id
+			)
+			assert_true(
+				ref_content.contains(dec_title),
+				"documents/references.md must document mystery title '%s'" % dec_title
+			)
+			assert_true(
+				ref_content.contains(dec_fruit),
+				"documents/references.md must document spiritual fruit '%s'" % dec_fruit
+			)
+
+	# 6. All 23 Master Artworks from attributions.json and layout
+	var attributions_path: String = repo_root.path_join("assets/2D/gimp/attributions.json")
+	assert_true(FileAccess.file_exists(attributions_path), "attributions.json must exist")
+	var attr_raw: String = FileAccess.get_file_as_string(attributions_path)
+	var attr_json: Variant = JSON.parse_string(attr_raw)
+	assert_true(attr_json is Dictionary, "attributions.json must parse as Dictionary")
+	var images: Array = (attr_json as Dictionary).get("images", [])
+	assert_eq(images.size(), 23, "attributions.json must contain 23 images")
+
+	for img_obj in images:
+		var img: Dictionary = img_obj as Dictionary
+		var img_id: String = str(img.get("id", ""))
+		var master_file: String = str(img.get("master_file", ""))
+		var master_url: String = str(img.get("master_source_url", ""))
+		var inv: String = str(img.get("inventory_number", ""))
+		assert_true(
+			ref_content.contains(img_id),
+			"documents/references.md must document artwork ID '%s'" % img_id
+		)
+		assert_true(
+			ref_content.contains(master_file),
+			"documents/references.md must document master file '%s'" % master_file
+		)
+		assert_true(
+			ref_content.contains(master_url),
+			"documents/references.md must document master_source_url '%s'" % master_url
+		)
+		assert_true(
+			ref_content.contains(inv),
+			"documents/references.md must document inventory number '%s'" % inv
+		)
+
+	# 7. High-Quality Primary Source URLs
+	var primary_domains: Array[String] = [
+		"https://www.vatican.va",
+		"https://www.usccb.org",
+		"https://www.drbo.org",
+		"https://www.museodelprado.es",
+		"https://www.nationalgallery.org.uk",
+		"https://www.khm.at",
+		"https://www.newadvent.org"
+	]
+	for domain: String in primary_domains:
+		assert_true(
+			ref_content.contains(domain),
+			"documents/references.md must contain authoritative reference links from domain '%s'" % domain
+		)
+
+	assert_true(
+		ref_content.contains("[Reference 1]"),
+		"documents/references.md must use numbered '[Reference 1]' citations"
+	)
+	assert_true(
+		ref_content.contains("[Reference 2]"),
+		"documents/references.md must use numbered '[Reference 2]' citations"
+	)
+
+
+func test_references_document_completeness_and_book_order() -> void:
+	test_references_document_and_agent_rules_exist_and_complete()
+
+
+

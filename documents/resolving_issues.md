@@ -8,6 +8,7 @@ This document establishes the official standards, Git worktree workflow, and cod
 * **PowerShell Chaining:** When executing shell commands, NEVER use `&&` to chain commands together (it requires PowerShell 7+). Instead, use `;` or execute commands sequentially in separate tool calls.
 * **File Generation Encoding:** Generating text files via PowerShell pipes (e.g., `>` or `Set-Content`) or .NET APIs often creates UTF-16 LE encoding errors or adds a UTF-8 BOM (Byte Order Mark). Godot will completely fail to parse `.tscn` files that contain a BOM (`Parse Error: Expected '['`). ALWAYS use the `write_to_file` and `replace_file_content` agent tools to generate/edit text or script files to ensure proper UTF-8 encoding without BOMs.
 * **Documentation Redundancy:** Before requesting the PR Reviewer to document a feature or testing steps, always verify if the documentation already exists in `documents/requirements.md` or `documents/manual_testing.md`. Do not duplicate existing specification notes.
+* **Source Verification Ledger (`documents/references.md`):** Whenever modifying or adding prayers, Scripture citations, mysteries, meditations, historical summaries, or artwork attributions, you MUST consult `documents/references.md` and comply with `.agents/rules/references_verification.md`. Verify all textual and metadata changes against the cited authoritative primary sources (Vatican archives, USCCB, Douay-Rheims Bible Online, museum collection catalogs) and maintain source synchronization in `documents/references.md`.
 
 ---
 

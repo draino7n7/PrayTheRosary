@@ -397,4 +397,25 @@ This document outlines the strict manual testing procedures required before any 
   - Line breaks and vertical spacing between leader and response remain crisp and proportional.
   - Dynamic vertical card elongation occurs smoothly under `Mobile` and `Extra Large` without clipping, truncation, or lateral drift.
 
+## Test 11.0: Canonical References & Source Verification Ledger
 
+### TC-REF-01: References Document Existence and AI Verification Rules
+- **Step 1:** Confirm the existence of `documents/references.md` and `.agents/rules/references_verification.md` in the workspace.
+- **Expected:**
+  - Both files exist and are non-empty.
+  - `documents/references.md` opens with a dedicated **AI Agent Verification & Fact-Checking Rules** section specifying authoritative primary source requirements (Vatican, USCCB, DRBO, official museum catalogs) and zero-tolerance hallucination constraints.
+  - `.agents/rules/references_verification.md` specifies strict requirements for subagents to consult `documents/references.md` before making any text or attribution changes and to maintain mutual synchronization across data files.
+
+### TC-REF-02: Strict 50-Page Book Order Sequence
+- **Step 1:** Inspect the table of contents and section headings in `documents/references.md`.
+- **Expected:**
+  - Sections strictly follow sequential book order from `### Page 1` through `### Page 50`.
+  - Every page card type (Cover, History, Guide, Opening Prayers, 20 Mysteries, Closing Prayers, Credits Parts I & II, Back Cover) is documented with its corresponding prayers, Scripture citations, meditations, and artwork metadata in exact order.
+
+### TC-REF-03: Primary Source Citations and Verifiable External Hyperlinks
+- **Step 1:** Verify the external source citations and hyperlinks documented in `documents/references.md`.
+- **Expected:**
+  - Prayers cite canonical texts from authoritative Catholic repositories (e.g., `vatican.va`, `usccb.org`, `newadvent.org`).
+  - All 20 mystery Scripture passages cite public-domain Douay-Rheims (Challoner Revision) with direct chapter/verse links to `drbo.org`.
+  - All 23 master artworks include exact museum inventory numbers, creation dates, current institutions, master filenames in `assets/2D/gimp/original_downloads/`, and direct catalog hyperlinks (e.g., `museodelprado.es`, `nationalgallery.org.uk`, `khm.at`, State Hermitage Museum).
+  - All citations follow consistent numbered footnote references (`[Reference 1]`, `[Reference 2]`, etc.).
