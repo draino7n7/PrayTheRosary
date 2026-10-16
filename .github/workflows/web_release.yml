@@ -52,7 +52,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Web-Export
+          name: praytherosary-web
           path: ./game/export/web/
 
       - name: Deploy to Itch.io
@@ -69,10 +69,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           cd game/export/web
-          zip -r ../../../Web-Export.zip ./*
+          zip -r ../../../praytherosary-web.zip ./*
 
       - name: Upload Release Assets
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: Web-Export.zip
+          files: praytherosary-web.zip

@@ -100,7 +100,7 @@ jobs:
           fi
 
       - name: Export Android AAB
-        run: godot --verbose --headless --path ./game --export-release "Android" Game.aab
+        run: godot --verbose --headless --path ./game --export-release "Android" praytherosary.aab
 
       - name: Verify Android Build Inputs
         run: |
@@ -172,7 +172,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Game-Android
+          name: praytherosary-android
           path: |
             ./game/*.aab
             ./game/*-native-debug-symbols.zip
