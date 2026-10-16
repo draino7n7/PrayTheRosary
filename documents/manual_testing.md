@@ -440,3 +440,18 @@ This document outlines the strict manual testing procedures required before any 
   - All 20 mystery Scripture passages cite public-domain Douay-Rheims (Challoner Revision) with direct chapter/verse links to `drbo.org`.
   - All 23 master artworks include exact museum inventory numbers, creation dates, current institutions, master filenames in `assets/2D/gimp/original_downloads/`, and direct catalog hyperlinks (e.g., `museodelprado.es`, `nationalgallery.org.uk`, `khm.at`, State Hermitage Museum).
   - All citations follow consistent numbered footnote references (`[Reference 1]`, `[Reference 2]`, etc.).
+
+### TC-REF-04: Hyperlink Integrity, Markdown URL Encoding & Automated Verification Suite
+- **Step 1:** Run the headless Godot test suite from the repository root:
+  ```powershell
+  godot --headless --path game -s res://tests/test_runner.gd
+  ```
+- **Step 2:** Confirm that `test_references_document_completeness_and_book_order` in `game/tests/test_rosary_data.gd` passes with zero errors:
+  - Asserts that all Markdown link URLs in `documents/references.md` contain zero unescaped parentheses `(` or `)`. Parentheses must be percent-encoded as `%28` and `%29` so that Markdown parsers do not prematurely terminate links at the first closing parenthesis.
+  - Asserts that all links in `documents/references.md` strictly use the secure `https://` protocol (zero insecure `http://` links).
+  - Asserts the complete absence of all 20 obsolete, dead, or mismatched URL substrings (e.g., 4 Kings 15 `12015.htm`, obsolete object IDs `10207`, `30672`, `32338`, KHM obsolete paths `objektdb/detail/403` / `1531`, `secret-of-the-rosary-5671`, `catholictradition.org`, `collezione_online/last-supper`, `feast-of-our-lady-of-the-rosary.html`, or old Prado UUIDs).
+  - Asserts the presence of all 23 verified replacement URL substrings (e.g., Judith 15 `18015.htm`, `jth015.htm`, `13189a.htm`, `memorial-of-our-lady-of-the-rosary.html`, Nelson-Atkins `29292`, Princeton `34052`, MFA Boston `32172`, KHM `the-baptism-of-christ-1522`, `christ-on-the-mount-of-olives-187`, `collezione-on-line/last-supper`, `olv-kerk-museum`, BALaT `89054` / `70926`, `montfortian.info`, and verified Prado UUIDs).
+- **Step 3:** Spot-check Markdown link rendering in `documents/references.md` (e.g., Page 27 Caracciolo and Page 35 Murillo) to confirm links click through to the full URL without premature truncation.
+- **Expected:**
+  - Automated test suite completes with 0 failures (`8960+ passed`).
+  - Hyperlinks render and navigate correctly in standard Markdown parsers without broken parentheses or insecure protocols.
