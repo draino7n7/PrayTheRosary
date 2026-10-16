@@ -135,6 +135,7 @@ func _apply_page_data() -> void:
 		meditation_label.add_theme_constant_override("line_spacing", 2)
 
 	var decade_prayers: Array = page_data.get("decade_prayers", [])
+	var sum_dec_heights: float = 0.0
 	if decade_prayers_container != null:
 		for child: Node in decade_prayers_container.get_children():
 			decade_prayers_container.remove_child(child)
@@ -152,8 +153,11 @@ func _apply_page_data() -> void:
 
 			var p_vbox: VBoxContainer = VBoxContainer.new()
 			p_vbox.name = "Prayer_%s" % pid
-			p_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			p_vbox.size_flags_vertical = Control.SIZE_FILL
 			p_vbox.add_theme_constant_override("separation", 2)
+
+			var p_h: float = 0.0
+			var visible_count: int = 0
 
 			var prayer_title: String = str(prayer_dict.get("title", pid.capitalize()))
 			var rubric_label: Label = Label.new()
@@ -165,6 +169,9 @@ func _apply_page_data() -> void:
 			rubric_label.add_theme_color_override("font_color", COLOR_CRIMSON)
 			rubric_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			p_vbox.add_child(rubric_label)
+			if font_bold != null:
+				p_h += font_bold.get_multiline_string_size(rubric_label.text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y
+				visible_count += 1
 
 			var leader_str: String = str(prayer_dict.get("leader_text", ""))
 			var response_str: String = str(prayer_dict.get("response_text", ""))
@@ -193,6 +200,10 @@ func _apply_page_data() -> void:
 				if font_reg != null:
 					text_label.add_theme_font_override("font", font_reg)
 				p_vbox.add_child(text_label)
+				if font_reg != null:
+					var l_lines: int = int(ceilf(font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+					p_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, l_lines - 1) * 2)
+					visible_count += 1
 			else:
 				# Unison prayer: PrayerText is hidden, ResponseText displays entire prayer in bold
 				text_label.text = ""
@@ -205,55 +216,56 @@ func _apply_page_data() -> void:
 				resp_label.text = response_str
 				resp_label.visible = true
 				p_vbox.add_child(resp_label)
+				if font_bold != null:
+					var r_lines: int = int(ceilf(font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_bold.get_height(body_font_size))))
+					p_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, r_lines - 1) * 2)
+					visible_count += 1
 			else:
 				resp_label.text = ""
 				resp_label.visible = false
 				p_vbox.add_child(resp_label)
 
+			if visible_count > 1:
+				p_h += float((visible_count - 1) * 2)
+
+			sum_dec_heights += p_h
 			decade_prayers_container.add_child(p_vbox)
 
-	var total_h: float = 64.0
+	var header_h: float = 0.0
 	if font_italic != null:
-		total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
+		header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 	if font_bold != null:
-		total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
+		header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
 	if font_italic != null:
-		total_h += font_italic.get_multiline_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, 628.0, fruit_font_size).y + 8.0 + 4.0
-	total_h += 2.0 + 10.0
+		header_h += font_italic.get_multiline_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, 628.0, fruit_font_size).y + 8.0 + 4.0
+	header_h += 2.0 # Divider
 
+	var scripture_h: float = 8.0 # ScriptureContainer StyleBox margins
 	if font_bold != null:
-		total_h += font_bold.get_multiline_string_size(cite_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, citation_font_size).y + 2.0
+		scripture_h += font_bold.get_multiline_string_size(cite_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, citation_font_size).y + 2.0
 	if font_italic != null:
-		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + 8.0 + 10.0
+		var scrip_lines: int = int(ceilf(font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y / float(font_italic.get_height(body_font_size))))
+		scripture_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + (maxi(0, scrip_lines - 1) * 2)
+
+	var meditation_h: float = 0.0
 	if font_reg != null:
-		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + 10.0
+		var med_lines: int = int(ceilf(font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+		meditation_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, med_lines - 1) * 2)
 
-	for p_item_val: Variant in decade_prayers:
-		if not (p_item_val is Dictionary):
-			continue
-		var p_item: Dictionary = p_item_val
-		var pid: String = str(p_item.get("prayer_id", ""))
-		var prayer_dict: Dictionary = p_item.get("prayer", {})
-		if prayer_dict.is_empty() and data_loader != null:
-			prayer_dict = data_loader.get_prayer(pid)
-		var reps: int = int(p_item.get("repetitions", 1))
-		var prayer_title: String = str(prayer_dict.get("title", pid.capitalize()))
-		var rubric_str: String = "%d× %s" % [reps, prayer_title]
-		if font_bold != null:
-			total_h += font_bold.get_multiline_string_size(rubric_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y + 2.0
-		var leader_str: String = str(prayer_dict.get("leader_text", ""))
-		var response_str: String = str(prayer_dict.get("response_text", ""))
-		if leader_str == "" and response_str == "":
-			response_str = str(prayer_dict.get("text", ""))
+	var num_prayers: int = decade_prayers.size()
+	var num_dec_gaps: int = maxi(1, num_prayers - 1)
+	var applied_dec_sep: int = 6
+	if text_size_preset == PRESET_NORMAL:
+		var avail_for_dec: float = 1016.0 - (header_h + scripture_h + meditation_h + 30.0)
+		var leftover_dec: float = avail_for_dec - sum_dec_heights
+		applied_dec_sep = int(floor(leftover_dec / float(num_dec_gaps)))
+		applied_dec_sep = maxi(applied_dec_sep, 6)
+	else:
+		applied_dec_sep = 14 if text_size_preset == PRESET_MOBILE else 18
 
-		if leader_str != "" and font_reg != null:
-			total_h += font_reg.get_multiline_string_size(leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
-		if response_str != "" and font_bold != null:
-			total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
-		if leader_str != "" and response_str != "":
-			total_h += 2.0
-		total_h += 8.0
+	decade_prayers_container.add_theme_constant_override("separation", applied_dec_sep)
 
+	var total_h: float = 64.0 + header_h + scripture_h + meditation_h + 30.0 + sum_dec_heights + float(num_dec_gaps * applied_dec_sep)
 	var final_height: float = DESIGN_HEIGHT
 	if text_size_preset != PRESET_NORMAL:
 		final_height = maxf(1081.0, ceilf(total_h + 30.0))

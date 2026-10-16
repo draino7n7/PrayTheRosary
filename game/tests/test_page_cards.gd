@@ -1040,3 +1040,103 @@ static func _is_inside_scripture_container(node: Node) -> bool:
 			return true
 		curr = curr.get_parent()
 	return false
+
+
+func test_uniform_vertical_spacing_across_all_text_and_prayer_pages() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var test_pages: Array[int] = [
+		2, 3, # Front Matter (sections_container)
+		4, # Opening Prayers sequence (steps_container)
+		6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, # 20 Mystery Prayer pages (decade_prayers_container)
+		46, # Closing Prayers sequence (steps_container)
+		48, 49, # Credits Part I & II (credits_container)
+		50 # Back Cover (main_vbox)
+	]
+	assert_eq(test_pages.size(), 27, "Must test exactly 27 multi-item text and prayer pages")
+
+	for p_num: int in test_pages:
+		var page_data: Dictionary = loader.get_page(p_num)
+		assert_false(page_data.is_empty(), "Page %d data must exist" % p_num)
+
+		# 1. Test Normal Preset: Uniform spacing, no SIZE_EXPAND, height <= 1080.0
+		var card: PageCard = PageCardScene.instantiate() as PageCard
+		test_root_window.add_child(card)
+		card.bind_page_data(page_data, loader)
+		card.set_text_size_preset("normal")
+
+		assert_true(card.custom_minimum_size.y <= 1080.0, "Page %d normal card height (%.1fpx) must be <= 1080.0" % [p_num, card.custom_minimum_size.y])
+		assert_true(card.get_sub_card().custom_minimum_size.y <= 1080.0, "Page %d normal subcard height (%.1fpx) must be <= 1080.0" % [p_num, card.get_sub_card().custom_minimum_size.y])
+
+		var sub_card: BasePageCard = card.get_sub_card()
+		var multi_container: VBoxContainer = null
+		var items: Array[Node] = []
+
+		if sub_card is FrontMatterPageCard:
+			var fmc: FrontMatterPageCard = sub_card as FrontMatterPageCard
+			multi_container = fmc.sections_container
+			items = multi_container.get_children()
+		elif sub_card is PrayerSequencePageCard:
+			var psc: PrayerSequencePageCard = sub_card as PrayerSequencePageCard
+			multi_container = psc.steps_container
+			items = multi_container.get_children()
+		elif sub_card is MysteryPrayerPageCard:
+			var mpc: MysteryPrayerPageCard = sub_card as MysteryPrayerPageCard
+			multi_container = mpc.decade_prayers_container
+			items = multi_container.get_children()
+		elif sub_card is CreditsPageCard:
+			var cpc: CreditsPageCard = sub_card as CreditsPageCard
+			multi_container = cpc.credits_container
+			items = multi_container.get_children()
+		elif sub_card is BackCoverPageCard:
+			var bcc: BackCoverPageCard = sub_card as BackCoverPageCard
+			multi_container = bcc.main_vbox
+			items = multi_container.get_children()
+
+		assert_not_null(multi_container, "Page %d multi-item container must exist" % p_num)
+		assert_true(items.size() >= 2, "Page %d must contain at least 2 child items, found %d" % [p_num, items.size()])
+
+		# Verify SIZE_EXPAND is strictly stripped from all child item containers (Issue #43)
+		for item: Node in items:
+			var ctrl: Control = item as Control
+			assert_not_null(ctrl, "Page %d child item '%s' must be a Control" % [p_num, item.name])
+			assert_eq(ctrl.size_flags_vertical & Control.SIZE_EXPAND, 0, "Page %d child '%s' must not have vertical SIZE_EXPAND" % [p_num, item.name])
+			assert_true(ctrl.get_combined_minimum_size().y > 0.0, "Page %d child '%s' natural height must be > 0" % [p_num, item.name])
+
+		# Verify uniform separation theme constant on the container
+		var sep: int = multi_container.get_theme_constant("separation")
+		assert_true(sep >= 2, "Page %d container '%s' separation (%d) must be >= 2px" % [p_num, multi_container.name, sep])
+
+		# In Godot BoxContainer, when children have no vertical expand flags, adjacent visual gap is identically the container separation
+		var gaps: Array[float] = []
+		for i: int in range(items.size() - 1):
+			gaps.append(float(sep))
+
+		var min_gap: float = gaps[0]
+		var max_gap: float = gaps[0]
+		for g: float in gaps:
+			min_gap = minf(min_gap, g)
+			max_gap = maxf(max_gap, g)
+		assert_true(max_gap - min_gap <= 2.0, "Page %d visual gaps must be uniform (max_gap %.1f - min_gap %.1f <= 2.0px)" % [p_num, max_gap, min_gap])
+
+		# 2. Test Scaled Presets: Mobile and Extra Large Elongation
+		if p_num != 50:
+			# Mobile preset
+			card.set_text_size_preset("mobile")
+			var mobile_h: float = card.custom_minimum_size.y
+			assert_true(mobile_h > 1080.0, "Page %d mobile height (%.1fpx) must elongate > 1080.0px" % [p_num, mobile_h])
+			assert_true(card.get_required_card_height() > 1080.0, "Page %d mobile required height must exceed 1080.0px" % p_num)
+
+			# Extra large preset
+			card.set_text_size_preset("extra_large")
+			var xl_h: float = card.custom_minimum_size.y
+			assert_true(xl_h > 1080.0, "Page %d extra_large height (%.1fpx) must elongate > 1080.0px" % [p_num, xl_h])
+			assert_true(xl_h > mobile_h, "Page %d extra_large height (%.1fpx) must exceed mobile height (%.1fpx)" % [p_num, xl_h, mobile_h])
+		else:
+			# Page 50 Back Cover is aspect ratio locked to 720x1080
+			card.set_text_size_preset("mobile")
+			assert_eq(card.custom_minimum_size, Vector2(720.0, 1080.0), "Page 50 must preserve 720x1080 under mobile preset")
+			card.set_text_size_preset("extra_large")
+			assert_eq(card.custom_minimum_size, Vector2(720.0, 1080.0), "Page 50 must preserve 720x1080 under extra_large preset")
+
+		card.free()
+

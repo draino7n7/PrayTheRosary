@@ -75,12 +75,14 @@ func _apply_page_data() -> void:
 				body_font_size = 22 if total_chars <= 1650 else 20
 				title_font_size = body_font_size + 3
 
-		var total_h: float = 64.0
+		var header_h: float = 0.0
 		if font_italic != null:
-			total_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 6.0
+			header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 6.0
 		if font_bold != null:
-			total_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 6.0
-		total_h += 2.0 + 20.0
+			header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 6.0
+		header_h += 2.0 # Divider
+
+		var sum_sec_heights: float = 0.0
 
 		for sec_val: Variant in sections:
 			if not (sec_val is Dictionary):
@@ -88,8 +90,8 @@ func _apply_page_data() -> void:
 			var sec: Dictionary = sec_val
 			var sec_vbox: VBoxContainer = VBoxContainer.new()
 			sec_vbox.name = "Step_%s" % str(sec.get("title", "")).validate_node_name()
-			sec_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-			sec_vbox.add_theme_constant_override("separation", 6)
+			sec_vbox.size_flags_vertical = Control.SIZE_FILL
+			sec_vbox.add_theme_constant_override("separation", 4)
 
 			var sec_title: String = str(sec.get("title", ""))
 			var title_lbl: Label = Label.new()
@@ -101,25 +103,43 @@ func _apply_page_data() -> void:
 			title_lbl.add_theme_color_override("font_color", COLOR_CRIMSON)
 			title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			sec_vbox.add_child(title_lbl)
+			var title_h: float = 0.0
 			if font_bold != null:
-				total_h += font_bold.get_multiline_string_size(sec_title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y + 6.0
+				title_h = font_bold.get_multiline_string_size(sec_title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y
 
+			var body_str: String = str(sec.get("body", ""))
 			var body_lbl: Label = Label.new()
 			body_lbl.name = "SectionBody"
-			body_lbl.text = str(sec.get("body", ""))
+			body_lbl.text = body_str
 			if font_reg != null:
 				body_lbl.add_theme_font_override("font", font_reg)
 			body_lbl.add_theme_font_size_override("font_size", body_font_size)
 			body_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
-			body_lbl.add_theme_constant_override("line_spacing", 3)
+			body_lbl.add_theme_constant_override("line_spacing", 2)
 			body_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			sec_vbox.add_child(body_lbl)
+			var body_h: float = 0.0
 			if font_reg != null:
-				total_h += font_reg.get_multiline_string_size(str(sec.get("body", "")), HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y
+				var b_lines: int = int(ceilf(font_reg.get_multiline_string_size(body_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+				body_h = font_reg.get_multiline_string_size(body_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, b_lines - 1) * 2)
 
-			total_h += 16.0
+			sum_sec_heights += title_h + 4.0 + body_h
 			sections_container.add_child(sec_vbox)
 
+		var num_sections: int = sections.size()
+		var num_sec_gaps: int = maxi(1, num_sections - 1)
+		var applied_sec_sep: int = 12
+		if text_size_preset == PRESET_NORMAL:
+			var avail_sec: float = 1016.0 - header_h - 12.0
+			var leftover_sec: float = avail_sec - sum_sec_heights
+			applied_sec_sep = int(floor(leftover_sec / float(num_sec_gaps)))
+			applied_sec_sep = maxi(applied_sec_sep, 8)
+		else:
+			applied_sec_sep = 16 if text_size_preset == PRESET_MOBILE else 20
+
+		sections_container.add_theme_constant_override("separation", applied_sec_sep)
+
+		var total_h: float = 64.0 + header_h + 12.0 + sum_sec_heights + float(num_sec_gaps * applied_sec_sep)
 		var final_height: float = DESIGN_HEIGHT
 		if text_size_preset != PRESET_NORMAL:
 			final_height = maxf(1081.0, ceilf(total_h + 30.0))
