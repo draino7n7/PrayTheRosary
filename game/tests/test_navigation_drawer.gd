@@ -325,6 +325,9 @@ func test_liturgical_badge_assignment() -> void:
 
 
 func test_main_integration_with_navigation_drawer() -> void:
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	progress.clear_progress()
+
 	var main: Main = MainScene.instantiate() as Main
 	test_root_window.add_child(main)
 	main._ready()
@@ -355,3 +358,9 @@ func test_main_integration_with_navigation_drawer() -> void:
 	assert_eq(main.reader_button.mouse_filter, Control.MOUSE_FILTER_STOP, "ReaderButton must restore MOUSE_FILTER_STOP when drawer closed")
 
 	main.free()
+	progress.clear_progress()
+
+
+func cleanup() -> void:
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	progress.clear_progress()

@@ -58,6 +58,10 @@ func _ready() -> void:
 		DisplayServer.screen_set_keep_on(true)
 
 	_ensure_initialized()
+	_current_page = 1
+	if scroll_container != null:
+		scroll_container.scroll_vertical = 0
+
 	_setup_reader_controls()
 	_setup_save_timer()
 	_setup_scroll_listening()
@@ -67,11 +71,24 @@ func _ready() -> void:
 		build_scroll_stream()
 
 	var saved_page: int = progress_manager.load_progress()
-	if saved_page > 1:
-		_is_restoring_initial_page = true
-		call_deferred("_restore_saved_page", saved_page)
+	_is_restoring_initial_page = true
+	if DisplayServer.get_name() == "headless":
+		_restore_saved_page(saved_page)
 	else:
-		_update_virtualization(1)
+		call_deferred("_restore_saved_page", saved_page)
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_APPLICATION_PAUSED, \
+		NOTIFICATION_APPLICATION_FOCUS_OUT, \
+		NOTIFICATION_WM_CLOSE_REQUEST, \
+		NOTIFICATION_WM_GO_BACK_REQUEST:
+			_flush_saved_progress()
+
+
+func _exit_tree() -> void:
+	_flush_saved_progress()
 
 
 func _process(delta: float) -> void:
@@ -251,6 +268,8 @@ func handle_scroll_input(event: InputEvent) -> void:
 
 	var max_scroll: int = _get_max_scroll_vertical()
 	scroll_container.scroll_vertical = clampi(scroll_container.scroll_vertical + delta_y, 0, max_scroll)
+	if _save_timer != null and _save_timer.is_inside_tree():
+		_save_timer.start()
 
 
 func _start_momentum(initial_velocity: float) -> void:
@@ -448,20 +467,51 @@ func build_scroll_stream() -> void:
 
 
 func _restore_saved_page(saved_page: int) -> void:
-	_is_restoring_initial_page = false
-	scroll_to_page(saved_page, false)
+	var clamped_page: int = clampi(saved_page, 1, TOTAL_PAGES)
+	var max_scroll: int = _get_max_scroll_vertical()
+	var target_y: int = get_target_scroll_for_page(clamped_page)
+
+	var saved_offset: int = -1
+	if progress_manager != null:
+		saved_offset = progress_manager.load_scroll_offset()
+
+	var final_scroll: int = target_y
+	if saved_offset >= 0:
+		var page_min: int = target_y
+		var page_max: int = max_scroll
+		if clamped_page < TOTAL_PAGES:
+			page_max = get_target_scroll_for_page(clamped_page + 1)
+		else:
+			page_max = maxi(max_scroll, target_y)
+		if saved_offset >= page_min and saved_offset <= page_max:
+			final_scroll = clampi(saved_offset, 0, max_scroll)
+
+	_current_page = clamped_page
+	_update_virtualization(_current_page)
+	if navigation_drawer != null:
+		navigation_drawer.set_saved_page(_current_page)
+	page_changed.emit(_current_page)
+
+	if scroll_container != null:
+		scroll_container.scroll_vertical = final_scroll
+
+	if DisplayServer.get_name() == "headless":
+		_is_restoring_initial_page = false
+	else:
+		set_deferred("_is_restoring_initial_page", false)
 
 
 func scroll_to_page(page_number: int, animate: bool = true) -> void:
 	_stop_momentum()
 	_ensure_initialized()
+	_is_restoring_initial_page = false
 	var clamped_page: int = clampi(page_number, 1, TOTAL_PAGES)
 	var target_y: int = get_target_scroll_for_page(clamped_page)
 
 	_current_page = clamped_page
 	_update_virtualization(_current_page)
 	if progress_manager != null:
-		progress_manager.save_progress(_current_page)
+		progress_manager.save_progress(_current_page, target_y)
 	if navigation_drawer != null:
 		navigation_drawer.set_saved_page(_current_page)
 	page_changed.emit(_current_page)
@@ -478,6 +528,20 @@ func scroll_to_page(page_number: int, animate: bool = true) -> void:
 			_scroll_tween.kill()
 		_scroll_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		_scroll_tween.tween_property(scroll_container, "scroll_vertical", target_y, 0.45)
+
+
+func _get_stream_element_height(ctrl: Control) -> float:
+	if ctrl == null:
+		return 0.0
+	if ctrl is PageCard:
+		var h: float = ctrl.custom_minimum_size.y
+		if h <= 0.0:
+			h = BasePageCard.DESIGN_HEIGHT
+		return h
+	var h: float = maxf(ctrl.custom_minimum_size.y, ctrl.get_combined_minimum_size().y)
+	if h <= 0.0:
+		h = BasePageCard.DESIGN_HEIGHT
+	return h
 
 
 func get_target_scroll_for_page(page_number: int) -> int:
@@ -497,9 +561,7 @@ func get_target_scroll_for_page(page_number: int) -> int:
 			break
 		if child is Control:
 			var ctrl: Control = child as Control
-			var h: float = maxf(ctrl.custom_minimum_size.y, ctrl.size.y)
-			if h <= 0.0:
-				h = BasePageCard.DESIGN_HEIGHT
+			var h: float = _get_stream_element_height(ctrl)
 			offset += h + separation
 	return int(offset)
 
@@ -514,18 +576,29 @@ func get_current_page_number() -> int:
 	var probe_y: float = scroll_y + maxf(viewport_h * 0.35, 120.0)
 
 	var active_page: int = 1
-	for p_num: int in range(1, TOTAL_PAGES + 1):
-		var card: PageCard = _page_cards.get(p_num)
-		if card == null:
-			continue
-		var card_top: float = card.position.y
-		if card_top == 0.0 and p_num > 1:
-			card_top = float(get_target_scroll_for_page(p_num))
+	var accum_y: float = 0.0
+	var separation: float = float(page_container.get_theme_constant("separation")) if page_container != null else 0.0
 
-		if card_top <= probe_y:
-			active_page = p_num
-		else:
-			break
+	if page_container != null:
+		for child: Node in page_container.get_children():
+			if child is Control:
+				var ctrl: Control = child as Control
+				if ctrl is PageCard:
+					var card: PageCard = ctrl as PageCard
+					var p_num: int = card.page_number
+					if accum_y <= probe_y:
+						active_page = p_num
+					else:
+						break
+				var h: float = _get_stream_element_height(ctrl)
+				accum_y += h + separation
+	else:
+		for p_num: int in range(1, TOTAL_PAGES + 1):
+			var card_top: float = float(get_target_scroll_for_page(p_num))
+			if card_top <= probe_y:
+				active_page = p_num
+			else:
+				break
 
 	return active_page
 
@@ -542,13 +615,21 @@ func _on_scroll_value_changed(_value: float) -> void:
 			navigation_drawer.set_saved_page(_current_page)
 		page_changed.emit(_current_page)
 
-		if _save_timer != null and _save_timer.is_inside_tree():
-			_save_timer.start()
+	if _save_timer != null and _save_timer.is_inside_tree():
+		_save_timer.start()
+
+
+func _flush_saved_progress() -> void:
+	if progress_manager == null or not _is_initialized or _is_restoring_initial_page:
+		return
+	if _save_timer != null and _save_timer.is_inside_tree() and not _save_timer.is_stopped():
+		_save_timer.stop()
+	var current_scroll: int = scroll_container.scroll_vertical if scroll_container != null else 0
+	progress_manager.save_progress(_current_page, current_scroll)
 
 
 func _on_save_timer_timeout() -> void:
-	if progress_manager != null:
-		progress_manager.save_progress(_current_page)
+	_flush_saved_progress()
 
 
 func _on_jump_requested(target_page: int) -> void:
@@ -647,9 +728,7 @@ func set_text_size_preset(preset: Variant) -> void:
 		for elem_node: Node in _stream_elements:
 			if elem_node is Control:
 				var elem: Control = elem_node as Control
-				var h: float = maxf(elem.custom_minimum_size.y, elem.size.y)
-				if h <= 0.0:
-					h = BasePageCard.DESIGN_HEIGHT
+				var h: float = _get_stream_element_height(elem)
 				if current_center_y >= accum and current_center_y <= accum + h + sep:
 					anchor_elem = elem
 					anchor_rel_offset = (current_center_y - accum) / maxf(h, 1.0)
@@ -674,9 +753,7 @@ func set_text_size_preset(preset: Variant) -> void:
 		for elem_node: Node in _stream_elements:
 			if elem_node is Control:
 				var elem: Control = elem_node as Control
-				var h: float = maxf(elem.custom_minimum_size.y, elem.size.y)
-				if h <= 0.0:
-					h = BasePageCard.DESIGN_HEIGHT
+				var h: float = _get_stream_element_height(elem)
 				if elem == anchor_elem:
 					var new_target_center: float = new_accum + anchor_rel_offset * h
 					var new_scroll: int = int(round(new_target_center - viewport_h * 0.5))

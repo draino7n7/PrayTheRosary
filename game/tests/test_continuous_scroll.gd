@@ -14,26 +14,46 @@ func _get_loaded_loader() -> RosaryDataLoader:
 	return loader
 
 
+func _clean_user_progress() -> void:
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	progress.clear_progress()
+
+
 func test_reading_progress_manager_persistence() -> void:
 	var test_cfg_path: String = "user://test_reading_progress_temp.cfg"
 	var manager: ReadingProgressManager = ReadingProgressManagerScript.new(test_cfg_path) as ReadingProgressManager
 	manager.clear_progress()
 
-	# 1. Defaults to Page 1 when file does not exist
+	# 1. Defaults to Page 1 and scroll offset -1 when file does not exist
 	assert_false(manager.has_saved_progress(), "New manager should not have saved progress initially")
 	assert_eq(manager.load_progress(), 1, "Default progress should be Page 1")
+	assert_eq(manager.load_scroll_offset(), -1, "Default scroll offset should be -1")
 
-	# 2. Saves valid progress and reloads cleanly
-	assert_true(manager.save_progress(16), "Saving Page 16 should succeed")
+	# 2. Saves valid progress and exact scroll offset and reloads cleanly
+	assert_true(manager.save_progress(16, 2500), "Saving Page 16 with scroll offset 2500 should succeed")
 	assert_true(manager.has_saved_progress(), "Manager should now have saved progress")
 	assert_eq(manager.load_progress(), 16, "Loaded progress should be Page 16")
+	assert_eq(manager.load_scroll_offset(), 2500, "Loaded scroll offset should be 2500")
 
-	# 3. Clamping boundary checks: minimum 1, maximum 50
+	# 3. Omitting or passing negative scroll_vertical resets scroll offset to -1
+	assert_true(manager.save_progress(16, -1), "Saving with scroll_vertical -1 should succeed")
+	assert_eq(manager.load_scroll_offset(), -1, "Scroll offset should be -1 when reset")
+
+	# 4. Clamping boundary checks: minimum 1, maximum 50
 	assert_true(manager.save_progress(-5), "Saving page below 1 should clamp")
 	assert_eq(manager.load_progress(), 1, "Below-min progress should clamp to Page 1")
 
 	assert_true(manager.save_progress(100), "Saving page above 50 should clamp")
 	assert_eq(manager.load_progress(), 50, "Above-max progress should clamp to Page 50")
+
+	# 5. Invalid / corrupted config handling returns Page 1 and offset -1
+	var raw_config: ConfigFile = ConfigFile.new()
+	raw_config.set_value(ReadingProgressManager.SECTION_NAME, ReadingProgressManager.KEY_PAGE_NUMBER, 999)
+	raw_config.set_value(ReadingProgressManager.SECTION_NAME, ReadingProgressManager.KEY_SCROLL_VERTICAL, -100)
+	raw_config.save(test_cfg_path)
+	assert_false(manager.has_saved_progress(), "Corrupted out-of-bounds config should report has_saved_progress false")
+	assert_eq(manager.load_progress(), 1, "Corrupted config out-of-bounds page should fallback to Page 1")
+	assert_eq(manager.load_scroll_offset(), -1, "Negative scroll offset should fallback to -1")
 
 	# Cleanup
 	manager.clear_progress()
@@ -300,7 +320,7 @@ func test_in_stream_jump_bar_connections_in_main() -> void:
 
 
 func test_startup_reading_progress_restoration() -> void:
-	# Save a progress position of Page 20 to test config
+	_clean_user_progress()
 	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
 	progress.save_progress(20)
 
@@ -312,9 +332,8 @@ func test_startup_reading_progress_restoration() -> void:
 	main_node._restore_saved_page(progress.load_progress())
 	assert_eq(main_node.get_current_page(), 20, "Startup restore should set current page to saved page 20")
 
-	# Clean up progress
-	progress.clear_progress()
 	main_node.free()
+	_clean_user_progress()
 
 
 func test_screen_keep_on_guard() -> void:
@@ -1332,6 +1351,140 @@ func test_momentum_scroll_survives_emulated_touch_and_mouse_events() -> void:
 	)
 
 	main_node.free()
+	_clean_user_progress()
+
+
+func test_startup_default_top_cover_fallback() -> void:
+	_clean_user_progress()
+
+	# Scenario 1: Clean/missing progress config starts at Page 1, scroll_vertical == 0
+	var main_1: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_1)
+	main_1._ready()
+
+	assert_eq(main_1.get_current_page(), 1, "Default fallback must start at Page 1")
+	assert_eq(main_1.scroll_container.scroll_vertical, 0, "Default fallback must start with scroll_vertical == 0")
+
+	main_1.free()
+	_clean_user_progress()
+
+	# Scenario 2: Corrupted/out-of-bounds saved progress config on disk falls back to Page 1, scroll_vertical == 0
+	var raw_cfg: ConfigFile = ConfigFile.new()
+	raw_cfg.set_value(ReadingProgressManager.SECTION_NAME, ReadingProgressManager.KEY_PAGE_NUMBER, 999)
+	raw_cfg.set_value(ReadingProgressManager.SECTION_NAME, ReadingProgressManager.KEY_SCROLL_VERTICAL, -500)
+	raw_cfg.save(ReadingProgressManager.DEFAULT_CONFIG_PATH)
+
+	var main_2: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_2)
+	main_2._ready()
+
+	assert_eq(main_2.get_current_page(), 1, "Corrupted config must fallback to Page 1")
+	assert_eq(main_2.scroll_container.scroll_vertical, 0, "Corrupted config must fallback to scroll_vertical == 0")
+
+	main_2.free()
+	_clean_user_progress()
+
+
+func test_startup_no_drift_on_tall_mobile_viewport() -> void:
+	_clean_user_progress()
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	progress.save_progress(10)
+
+	var target_page_10: int = 10
+	var expected_target_scroll: int = -1
+
+	# Simulate 5 consecutive save / launch / restore cycles on a tall mobile viewport (720x1600)
+	for cycle: int in range(5):
+		var main_node: Main = MainScene.instantiate() as Main
+		test_root_window.add_child(main_node)
+		main_node._ensure_initialized()
+		main_node.build_scroll_stream()
+
+		# Simulate tall mobile screen before layout stabilization
+		main_node.scroll_container.set_deferred("size", Vector2(720.0, 1600.0))
+		for child: Node in main_node.page_container.get_children():
+			if child is Control:
+				(child as Control).set_deferred("size", Vector2(720.0, 1600.0))
+
+		main_node._ready()
+
+		var calculated_target: int = main_node.get_target_scroll_for_page(target_page_10)
+		if expected_target_scroll < 0:
+			expected_target_scroll = calculated_target
+		else:
+			assert_eq(
+				calculated_target,
+				expected_target_scroll,
+				"Cycle %d: Target scroll for Page 10 must remain invariant across tall launches" % cycle
+			)
+
+		assert_eq(
+			main_node.get_current_page(),
+			target_page_10,
+			"Cycle %d: Current page must remain strictly on Page 10 without drifting" % cycle
+		)
+
+		# Explicitly flush progress and verify on disk
+		main_node._flush_saved_progress()
+		assert_eq(
+			progress.load_progress(),
+			target_page_10,
+			"Cycle %d: Persisted progress must remain strictly Page 10" % cycle
+		)
+
+		main_node.free()
+
+	_clean_user_progress()
+
+
+func test_exact_scroll_offset_and_lifecycle_persistence() -> void:
+	_clean_user_progress()
+
+	# 1. Launch Main, scroll partway down Page 6 (Joyful 1st mystery)
+	var main_1: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_1)
+	main_1._ready()
+
+	var p6_base_y: int = main_1.get_target_scroll_for_page(6)
+	var exact_offset: int = p6_base_y + 350
+	main_1.scroll_container.scroll_vertical = exact_offset
+	main_1._on_scroll_value_changed(float(exact_offset))
+
+	assert_eq(main_1.get_current_page(), 6, "Active page should be Page 6")
+	assert_eq(main_1.scroll_container.scroll_vertical, exact_offset, "Scroll vertical should match exact offset")
+
+	# 2. Trigger lifecycle NOTIFICATION_APPLICATION_PAUSED
+	main_1._notification(Node.NOTIFICATION_APPLICATION_PAUSED)
+
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	assert_eq(progress.load_progress(), 6, "App pause must immediately persist last_page_number 6")
+	assert_eq(progress.load_scroll_offset(), exact_offset, "App pause must immediately persist last_scroll_vertical")
+
+	# Destroy instance (freeing triggers _exit_tree)
+	main_1.free()
+
+	# 3. Instantiate fresh Main and verify it restores to exact scroll offset
+	var main_2: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_2)
+	main_2._ready()
+
+	assert_eq(main_2.get_current_page(), 6, "New instance must restore to Page 6")
+	assert_eq(main_2.scroll_container.scroll_vertical, exact_offset, "New instance must restore to exact scroll offset")
+
+	# 4. Scroll back to top (Page 1, offset 0) and trigger NOTIFICATION_WM_CLOSE_REQUEST
+	main_2.scroll_container.scroll_vertical = 0
+	main_2._on_scroll_value_changed(0.0)
+	main_2._notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
+
+	assert_eq(progress.load_progress(), 1, "Scrolling back to 0 must persist Page 1 on close")
+	assert_eq(progress.load_scroll_offset(), 0, "Scrolling back to 0 must persist scroll offset 0 on close")
+
+	main_2.free()
+	_clean_user_progress()
+
+
+func cleanup() -> void:
+	_clean_user_progress()
 
 
 
