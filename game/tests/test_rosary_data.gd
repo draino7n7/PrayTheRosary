@@ -845,5 +845,97 @@ func test_references_document_and_agent_rules_exist_and_complete() -> void:
 func test_references_document_completeness_and_book_order() -> void:
 	test_references_document_and_agent_rules_exist_and_complete()
 
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var references_path: String = repo_root.path_join("documents/references.md")
+	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist on disk")
+	var ref_content: String = FileAccess.get_file_as_string(references_path)
+
+	# 1. Zero unescaped parentheses in Markdown link URLs
+	var regex_link: RegEx = RegEx.new()
+	var regex_err: Error = regex_link.compile("\\]\\((https?://[^\\s\\)]+)\\)")
+	assert_eq(regex_err, OK, "Markdown link RegEx should compile successfully")
+	var matches: Array[RegExMatch] = regex_link.search_all(ref_content)
+	assert_true(matches.size() > 50, "references.md must contain markdown links")
+	for m: RegExMatch in matches:
+		var url: String = m.get_string(1)
+		assert_false(
+			url.contains("(") or url.contains(")"),
+			"Markdown link URL must not contain unescaped parentheses: %s" % url
+		)
+
+	var regex_raw_paren: RegEx = RegEx.new()
+	var paren_err: Error = regex_raw_paren.compile("\\]\\(https?://[^\\s\\)]*\\([^\\)]*\\)")
+	assert_eq(paren_err, OK, "Raw parenthesis RegEx should compile successfully")
+	var raw_paren_matches: Array[RegExMatch] = regex_raw_paren.search_all(ref_content)
+	assert_eq(raw_paren_matches.size(), 0, "No markdown links should contain raw unescaped parentheses")
+
+	# 2. Zero insecure http:// links (all links must be https://)
+	var regex_http: RegEx = RegEx.new()
+	var http_err: Error = regex_http.compile("http://[^\\s\\)]+")
+	assert_eq(http_err, OK, "HTTP RegEx should compile successfully")
+	var http_matches: Array[RegExMatch] = regex_http.search_all(ref_content)
+	assert_eq(http_matches.size(), 0, "documents/references.md must not contain any insecure http:// links")
+
+	# 3. None of the 20 obsolete, broken, or mismatched URL substrings
+	var broken_substrings: Array[String] = [
+		"12015.htm",
+		"objects/10207",
+		"objects/30672",
+		"objects/32338",
+		"objektdb/detail/403",
+		"objektdb/detail/1531",
+		"secret-of-the-rosary-5671",
+		"catholictradition.org",
+		"collezione_online/last-supper",
+		"feast-of-our-lady-of-the-rosary.html",
+		"66248332-88b6",
+		"81643c13-a745",
+		"31bc7855-879e",
+		"1bb2d634-118b",
+		"82eb0216-0421",
+		"04259b3f-1002",
+		"d8e137f8-be58",
+		"41262d22-192a",
+		"1da51776-8801",
+		"32415"
+	]
+	for broken: String in broken_substrings:
+		assert_false(
+			ref_content.contains(broken),
+			"documents/references.md must not contain broken/mismatched URL substring: %s" % broken
+		)
+
+	# 4. All verified replacement URL substrings must be present
+	var replacement_substrings: Array[String] = [
+		"18015.htm",
+		"jth015.htm",
+		"13189a.htm",
+		"memorial-of-our-lady-of-the-rosary.html",
+		"objects/29292",
+		"objects/34052",
+		"objects/32172",
+		"the-baptism-of-christ-1522",
+		"christ-on-the-mount-of-olives-187",
+		"collezione-on-line/last-supper",
+		"olv-kerk-museum",
+		"balat.kikirpa.be/object/89054",
+		"balat.kikirpa.be/object/70926",
+		"montfortian.info",
+		"eb5f85ec-f95d",
+		"8b502bfc-bc6d",
+		"971fbc95-3a0d",
+		"8115e55f-004f",
+		"870c8293-1691",
+		"4cc5628b-c77f",
+		"dd47d10a-81f7",
+		"5f39f2cc-0197",
+		"76179d81-beaf"
+	]
+	for rep: String in replacement_substrings:
+		assert_true(
+			ref_content.contains(rep),
+			"documents/references.md must contain verified replacement URL substring: %s" % rep
+		)
+
 
 
