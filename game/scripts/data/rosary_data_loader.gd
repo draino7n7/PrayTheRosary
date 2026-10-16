@@ -113,6 +113,17 @@ func get_spread(spread_number: int) -> Dictionary:
 	return _spreads_by_number.get(spread_number, {})
 
 
+func hydrate_prayer_item(item: Dictionary) -> Dictionary:
+	var hydrated_item: Dictionary = item.duplicate(true)
+	var pid: String = str(hydrated_item.get("prayer_id", ""))
+	var prayer: Dictionary = get_prayer(pid)
+	hydrated_item["prayer"] = prayer
+	hydrated_item["text"] = str(prayer.get("text", ""))
+	hydrated_item["leader_text"] = str(prayer.get("leader_text", ""))
+	hydrated_item["response_text"] = str(prayer.get("response_text", ""))
+	return hydrated_item
+
+
 func get_hydrated_spread(spread_number: int) -> Dictionary:
 	var raw_spread: Dictionary = get_spread(spread_number)
 	if raw_spread.is_empty():
@@ -129,10 +140,7 @@ func get_hydrated_spread(spread_number: int) -> Dictionary:
 		var sequence: Array = mysteries_data.get("decade_prayer_sequence", [])
 		for item: Variant in sequence:
 			if item is Dictionary:
-				var entry: Dictionary = item.duplicate(true)
-				var pid: String = str(entry.get("prayer_id", ""))
-				entry["prayer"] = get_prayer(pid)
-				resolved_prayers.append(entry)
+				resolved_prayers.append(hydrate_prayer_item(item as Dictionary))
 		hydrated["decade_prayers"] = resolved_prayers
 		hydrated["right_page"] = {
 			"page_number": int(mystery.get("right_page_number", spread_number * 2 + 1)),
@@ -144,10 +152,11 @@ func get_hydrated_spread(spread_number: int) -> Dictionary:
 	elif spread_type == "prayer_art_spread":
 		var left_page: Dictionary = hydrated.get("left_page", {})
 		var steps: Array = left_page.get("prayer_steps", [])
+		var hydrated_steps: Array = []
 		for step: Variant in steps:
 			if step is Dictionary:
-				var pid: String = str(step.get("prayer_id", ""))
-				step["prayer"] = get_prayer(pid)
+				hydrated_steps.append(hydrate_prayer_item(step as Dictionary))
+		left_page["prayer_steps"] = hydrated_steps
 	elif spread_type == "credits_spread":
 		var lp_credits: Dictionary = hydrated.get("left_page", {})
 		var left_artworks: Array[Dictionary] = []

@@ -42,8 +42,8 @@ func test_all_canonical_prayers_present() -> void:
 	assert_eq(str(loader.get_prayer("glory_be").get("title", "")), "The Glory Be", "glory_be title must be 'The Glory Be'")
 	assert_eq(
 		str(loader.get_prayer("glory_be").get("text", "")),
-		"Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen.",
-		"glory_be text must match single-sentence wording"
+		"Glory be to the Father, and to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever shall be, world without end. Amen.",
+		"glory_be text must match single-sentence wording with newline separating leader and response"
 	)
 	assert_eq(
 		str(loader.get_prayer("glory_be").get("leader_text", "")),
@@ -505,7 +505,7 @@ func test_glory_be_single_sentence_formatting_and_page_hydration() -> void:
 	var loader: RefCounted = RosaryDataLoaderScript.new()
 	loader.load_all()
 
-	var expected_text: String = "Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen."
+	var expected_text: String = "Glory be to the Father, and to the Son, and to the Holy Spirit,\nas it was in the beginning, is now, and ever shall be, world without end. Amen."
 	var expected_leader: String = "Glory be to the Father, and to the Son, and to the Holy Spirit,"
 	var expected_response: String = "as it was in the beginning, is now, and ever shall be, world without end. Amen."
 
@@ -604,4 +604,91 @@ func test_glory_be_single_sentence_formatting_and_page_hydration() -> void:
 						"Page %d decade prayer glory_be text must match single-sentence wording" % left_page_num
 					)
 		assert_true(found_page_glory_be, "Page %d must contain glory_be in decade_prayers" % left_page_num)
+
+
+func test_all_twelve_prayers_leader_and_response_formatting_and_hydration() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var all_12_ids: Array[String] = [
+		"sign_of_the_cross",
+		"apostles_creed",
+		"our_father",
+		"hail_mary",
+		"hail_mary_faith",
+		"hail_mary_hope",
+		"hail_mary_charity",
+		"glory_be",
+		"fatima_prayer",
+		"hail_holy_queen",
+		"versicle_response",
+		"rosary_concluding_prayer"
+	]
+
+	for pid: String in all_12_ids:
+		var p: Dictionary = loader.get_prayer(pid)
+		assert_false(p.is_empty(), "Prayer '%s' must exist" % pid)
+		assert_true(p.has("leader_text"), "Prayer '%s' must define leader_text" % pid)
+		assert_true(p.has("response_text"), "Prayer '%s' must define response_text" % pid)
+		assert_ne(str(p.get("response_text", "")), "", "Prayer '%s' response_text must not be empty" % pid)
+
+	# 1. Unison Prayers: leader_text == "", response_text == text
+	var unison_ids: Array[String] = ["sign_of_the_cross", "fatima_prayer", "hail_holy_queen"]
+	for pid: String in unison_ids:
+		var p: Dictionary = loader.get_prayer(pid)
+		assert_eq(str(p.get("leader_text", "")), "", "Unison prayer '%s' leader_text must be empty" % pid)
+		assert_eq(str(p.get("text", "")), str(p.get("response_text", "")), "Unison prayer '%s' text must equal response_text" % pid)
+
+	# 2. Split Prayers: non-empty leader_text and response_text, text == leader_text + "\n" + response_text
+	var split_ids: Array[String] = [
+		"apostles_creed",
+		"our_father",
+		"hail_mary",
+		"hail_mary_faith",
+		"hail_mary_hope",
+		"hail_mary_charity",
+		"glory_be",
+		"versicle_response",
+		"rosary_concluding_prayer"
+	]
+	for pid: String in split_ids:
+		var p: Dictionary = loader.get_prayer(pid)
+		var leader: String = str(p.get("leader_text", ""))
+		var response: String = str(p.get("response_text", ""))
+		var expected: String = "%s\n%s" % [leader, response]
+		assert_ne(leader, "", "Split prayer '%s' leader_text must not be empty" % pid)
+		assert_ne(response, "", "Split prayer '%s' response_text must not be empty" % pid)
+		assert_eq(str(p.get("text", "")), expected, "Split prayer '%s' text must be leader + '\\n' + response" % pid)
+
+	# 3. versicle_response: V. and R. prefixes stripped
+	var vr: Dictionary = loader.get_prayer("versicle_response")
+	assert_eq(str(vr.get("leader_text", "")), "Pray for us, O holy Mother of God.", "versicle_response leader_text must not contain 'V. '")
+	assert_eq(str(vr.get("response_text", "")), "That we may be made worthy of the promises of Christ.", "versicle_response response_text must not contain 'R. '")
+	assert_false(str(vr.get("text", "")).contains("V. "), "versicle_response text must not contain 'V. '")
+	assert_false(str(vr.get("text", "")).contains("R. "), "versicle_response text must not contain 'R. '")
+
+	# 4. rosary_concluding_prayer: leader is 'Let us pray.'
+	var rcp: Dictionary = loader.get_prayer("rosary_concluding_prayer")
+	assert_eq(str(rcp.get("leader_text", "")), "Let us pray.", "rosary_concluding_prayer leader_text must be 'Let us pray.'")
+
+	# 5. hydrate_prayer_item helper method validation
+	var sample_item: Dictionary = {"prayer_id": "our_father", "step_number": 3}
+	var hydrated_sample: Dictionary = loader.hydrate_prayer_item(sample_item)
+	assert_true(hydrated_sample.has("leader_text"), "hydrate_prayer_item must include leader_text")
+	assert_true(hydrated_sample.has("response_text"), "hydrate_prayer_item must include response_text")
+	assert_true(hydrated_sample.has("text"), "hydrate_prayer_item must include text")
+	assert_true(hydrated_sample.has("prayer"), "hydrate_prayer_item must include prayer dict")
+	assert_eq(str(hydrated_sample.get("leader_text", "")), str(loader.get_prayer("our_father").get("leader_text", "")))
+	assert_eq(str(hydrated_sample.get("response_text", "")), str(loader.get_prayer("our_father").get("response_text", "")))
+
+	# 6. Page 3 book_layout note validation
+	var p3: Dictionary = loader.get_page(3)
+	var sections: Array = p3.get("sections", [])
+	assert_true(sections.size() >= 1, "Page 3 must have sections")
+	var sec0_body: String = str((sections[0] as Dictionary).get("body", ""))
+	assert_true(
+		sec0_body.contains("spoken by the leader and lines in bold are spoken by everyone together"),
+		"Page 3 How This Book Is Organized must explain leader (regular) and bold group response"
+	)
+
 
