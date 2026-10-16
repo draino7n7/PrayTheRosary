@@ -189,7 +189,7 @@
 				"page_number": 2,
 				"position": "inside_front_cover_verso",
 				"heading": "The History of the Holy Rosary",
-				"subheading": "Origins of the Gospel Prayer of the Church",
+				"subheading": "Origins and Tradition of the Most Holy Rosary",
 				"sections": [
 					{
 						"title": "Monastic Roots & The Marian Psalter",
@@ -197,7 +197,7 @@
 					},
 					{
 						"title": "St. Dominic & Preaching the Mysteries",
-						"body": "In the thirteenth century, tradition holds that the Blessed Virgin Mary entrusted the Rosary to St. Dominic de Guzmán (1170–1221) as a spiritual remedy against heresy—uniting vocal prayer with quiet meditation on the saving events of Christ's life, death, and resurrection. In the fifteenth century, the Carthusian monk Dominic of Prussia and the Dominican friar Blessed Alan de la Roche organized the Marian Psalter into fifteen decades, each paired with a specific Gospel mystery."
+						"body": "In the thirteenth century, tradition holds that the Blessed Virgin Mary entrusted the Rosary to St. Dominic de Guzmán (1170–1221) as a spiritual remedy against heresy—uniting vocal prayer with quiet meditation on the saving events of Christ's life, death, and resurrection. In the fifteenth century, the Carthusian monk Dominic of Prussia and the Dominican friar Blessed Alan de la Roche organized the Marian Psalter (the 150 Hail Marys) into fifteen decades, each paired with a specific Gospel mystery."
 					},
 					{
 						"title": "Pope St. Pius V & The Twenty Mysteries",
@@ -208,7 +208,7 @@
 			"right_page": {
 				"page_number": 3,
 				"position": "recto",
-				"heading": "Structure of the Book & How to Pray",
+				"heading": "Structure of This Book & How to Pray",
 				"subheading": "Praying with Scripture, Prayer, and Sacred Art",
 				"sections": [
 					{
@@ -513,22 +513,17 @@
 						"step_number": 1,
 						"bead_label": "On the Center Medallion",
 						"prayer_id": "hail_holy_queen",
-						"rubric": "After completing the five decades, pray the Hail, Holy Queen (Salve Regina):"
+						"append_prayer_id": "versicle_response",
+						"rubric": "After completing the decades, pray the Hail, Holy Queen (Salve Regina):"
 					},
 					{
 						"step_number": 2,
-						"bead_label": "Versicle & Response",
-						"prayer_id": "versicle_response",
-						"rubric": "Leader and Response:"
-					},
-					{
-						"step_number": 3,
 						"bead_label": "Concluding Collect",
 						"prayer_id": "rosary_concluding_prayer",
 						"rubric": "Conclude with the Rosary Prayer:"
 					},
 					{
-						"step_number": 4,
+						"step_number": 3,
 						"bead_label": "Final Blessing",
 						"prayer_id": "sign_of_the_cross",
 						"rubric": "End by making the Sign of the Cross:"

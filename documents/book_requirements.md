@@ -64,10 +64,11 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 3. **Left-Hand Mystery Prayer Pages (`Even Page Sides 6, 8, 10, ..., 44`):**
    - Self-contained on a single $6" \times 9"$ page so the reader never turns a page mid-decade:
      - Mystery Ordinal Subtitle, Title, and **Fruit of the Mystery**
-     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and clean book, chapter, and verse citation (without repeating a trailing `" (Douay-Rheims)"` suffix on each page, since the `Douay-Rheims / Confraternity Edition of the Bible` is noted once in the front matter on Page Side 3 under *"How This Book Is Organized"* and in the Page Side 49 colophon; includes traditional DRBO book names with modern equivalents where helpful, such as *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*, ordered strictly to match the sequence of quoted verses)
+     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and clean book, chapter, and verse citation (without repeating a trailing `" (Douay-Rheims)"` suffix on each page, since the `Douay-Rheims / Confraternity Edition of the Bible` is noted once in the front matter on Page Side 3 under *"How This Book Is Organized"* and in the Page Side 49 colophon; includes traditional DRBO book names and Psalm numbering with modern equivalents where helpful, such as *Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10*, *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*, ordered strictly to match the sequence of quoted verses)
      - 1–2 sentence Contemplative Meditation
      - Full text of the Decade Prayers (*The Our Father* `1×`, *The Hail Mary* `10×`, *The Glory Be* `1×`, and *The Fatima Prayer* `1×`, using the simplified titles `"The Our Father"` and `"The Glory Be"` without parenthetical `"The Lord's Prayer"` or `"(Doxology)"`)
-4. **Front-Matter Instructional Guide (`Page Side 3`, *Structure of the Book & How to Pray*):**
+4. **Front-Matter Instructional Guide (`Page Side 3`, *Structure of This Book & How to Pray*):**
+   - Page Side 2 features subheading *"Origins and Tradition of the Most Holy Rosary"*.
    - In Section 2 (*"Step-by-Step Guide to Praying the Rosary"*), Step 2 (*"2. The Decades (Tabs J, L, S, G)"*) instructs the reader to pray either the five decades of the day's Mystery set or all four Mystery sets (twenty decades) back-to-back in chronological order (*Joyful, Luminous, Sorrowful, Glorious*) for a complete Rosary.
 
 ---

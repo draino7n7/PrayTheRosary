@@ -35,7 +35,7 @@ The UI is built around a modular page card component architecture designed for t
 - **Specialized Sub-Cards (`game/scenes/ui/pages/`):** Dynamically instantiates the appropriate sub-card component for each page type:
   - `CoverPageCard`: Dedicated top header band with framed Murillo painting below, ensuring text never overlaps the sacred artwork.
   - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels (including the front-matter note citing the Douay-Rheims / Confraternity Edition of the Bible and a step-by-step guide explaining praying either the five decades of the day's Mystery set or all four Mystery sets—twenty decades—in chronological order).
-  - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46) prayer sequences with rubrics.
+  - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46, featuring a 3-step sequence with flowing Versicle & Response beneath the Salve Regina) prayer sequences with rubrics.
   - `MysteryPrayerPageCard`: Decade prayers (*The Our Father*, *The Hail Mary*, *The Glory Be*, *The Fatima Prayer*), fruit badge, clean book/chapter/verse citation, verbatim Douay-Rheims scripture passage, and meditation.
   - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
   - `CreditsPageCard`: Comprehensive museum catalog artwork attributions listed in exact sequential book appearance order across Pages 48 (12 items) and 49 (11 items + Colophon) with non-numbered section/Mystery placement labels (`section_label — title`).

@@ -188,7 +188,7 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_eq(card2.page_number, 2, "Page number must be 2")
 	assert_true(card2.get_sub_card() is FrontMatterPageCard, "Sub card must be FrontMatterPageCard")
 	assert_eq(card2.get_heading_text(), "The History of the Holy Rosary", "Page 2 heading must match")
-	assert_eq(card2.get_subheading_text(), "Origins of the Gospel Prayer of the Church", "Page 2 subheading must match")
+	assert_eq(card2.get_subheading_text(), "Origins and Tradition of the Most Holy Rosary", "Page 2 subheading must match")
 	var fmc2: FrontMatterPageCard = card2.get_sub_card() as FrontMatterPageCard
 	assert_eq(fmc2.get_section_count(), 3, "Page 2 must render 3 historical sections")
 	assert_true(fmc2.subheading_label.get_theme_font_size("font_size") >= 22, "Page 2 subheading font size must be >= 22pt")
@@ -202,7 +202,7 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	_assert_no_visible_page_numbers(card2, 2)
 	card2.free()
 
-	# Page 3: Structure of the Book & How to Pray
+	# Page 3: Structure of This Book & How to Pray
 	var p3: Dictionary = loader.get_page(3)
 	var card3: PageCard = PageCardScene.instantiate() as PageCard
 	test_root_window.add_child(card3)
@@ -210,7 +210,7 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 
 	assert_eq(card3.page_number, 3, "Page number must be 3")
 	assert_true(card3.get_sub_card() is FrontMatterPageCard, "Sub card must be FrontMatterPageCard")
-	assert_eq(card3.get_heading_text(), "Structure of the Book & How to Pray", "Page 3 heading must match")
+	assert_eq(card3.get_heading_text(), "Structure of This Book & How to Pray", "Page 3 heading must match")
 	assert_eq(card3.get_subheading_text(), "Praying with Scripture, Prayer, and Sacred Art", "Page 3 subheading must match")
 	var fmc3: FrontMatterPageCard = card3.get_sub_card() as FrontMatterPageCard
 	assert_eq(fmc3.get_section_count(), 3, "Page 3 must render 3 instructional sections")
@@ -331,49 +331,58 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	assert_true(card46.get_sub_card() is PrayerSequencePageCard, "Sub card must be PrayerSequencePageCard")
 	assert_eq(card46.get_heading_text(), "The Closing Prayers", "Page 46 heading must match")
 	var psc46: PrayerSequencePageCard = card46.get_sub_card() as PrayerSequencePageCard
-	assert_eq(psc46.get_step_count(), 4, "Page 46 must render 4 concluding prayer steps")
+	assert_eq(psc46.get_step_count(), 3, "Page 46 must render 3 concluding prayer steps")
 	assert_true(psc46.subheading_label.get_theme_font_size("font_size") >= 22, "Page 46 subheading font size must be >= 22pt")
 	assert_true(psc46.heading_label.get_theme_font_size("font_size") >= 34, "Page 46 heading font size must be >= 34pt")
 	var p46_text: Label = psc46.steps_container.get_child(0).get_node("PrayerText") as Label
 	assert_true(p46_text.get_theme_font_size("font_size") >= 22, "Page 46 PrayerText font size must be >= 22pt (was 14pt)")
 
-	# Step 1: Hail, Holy Queen (Unison)
+	# Step 1: Hail, Holy Queen (Unison) with Appended Versicle & Response
 	var p46_s1: VBoxContainer = psc46.steps_container.get_child(0) as VBoxContainer
+	var p46_s1_title: Label = p46_s1.get_node("PrayerTitle") as Label
 	var p46_s1_prayer: Label = p46_s1.get_node("PrayerText") as Label
 	var p46_s1_resp: Label = p46_s1.get_node("ResponseText") as Label
+	var p46_s1_vlead: Label = p46_s1.get_node("VersicleLeaderText") as Label
+	var p46_s1_vresp: Label = p46_s1.get_node("VersicleResponseText") as Label
+	assert_not_null(p46_s1_title, "Page 46 Step 1 PrayerTitle must exist")
+	assert_eq(p46_s1_title.text, "Hail, Holy Queen", "Page 46 Step 1 PrayerTitle must be 'Hail, Holy Queen'")
 	assert_false(p46_s1_prayer.visible, "Page 46 Step 1 (Hail Holy Queen) PrayerText must be hidden (unison prayer)")
 	assert_true(p46_s1_resp.visible, "Page 46 Step 1 (Hail Holy Queen) ResponseText must be visible")
 	assert_eq(p46_s1_resp.get_theme_font("font"), font_bold, "Page 46 Step 1 ResponseText must use bold font")
+	assert_not_null(p46_s1_vlead, "Page 46 Step 1 VersicleLeaderText must exist")
+	assert_true(p46_s1_vlead.visible, "Page 46 Step 1 VersicleLeaderText must be visible")
+	assert_eq(p46_s1_vlead.text, "Pray for us, O holy Mother of God.", "Page 46 Step 1 VersicleLeaderText must match")
+	assert_eq(p46_s1_vlead.get_theme_font("font"), font_reg, "Page 46 Step 1 VersicleLeaderText must use regular font")
+	assert_not_null(p46_s1_vresp, "Page 46 Step 1 VersicleResponseText must exist")
+	assert_true(p46_s1_vresp.visible, "Page 46 Step 1 VersicleResponseText must be visible")
+	assert_eq(p46_s1_vresp.text, "That we may be made worthy of the promises of Christ.", "Page 46 Step 1 VersicleResponseText must match")
+	assert_eq(p46_s1_vresp.get_theme_font("font"), font_bold, "Page 46 Step 1 VersicleResponseText must use bold font")
 
-	# Step 2: Versicle & Response (Split)
+	# Step 2: Concluding Rosary Prayer (Split)
 	var p46_s2: VBoxContainer = psc46.steps_container.get_child(1) as VBoxContainer
+	var p46_s2_title: Label = p46_s2.get_node("PrayerTitle") as Label
 	var p46_s2_prayer: Label = p46_s2.get_node("PrayerText") as Label
 	var p46_s2_resp: Label = p46_s2.get_node("ResponseText") as Label
-	assert_true(p46_s2_prayer.visible, "Page 46 Step 2 (Versicle & Response) PrayerText must be visible")
-	assert_eq(p46_s2_prayer.text, "Pray for us, O holy Mother of God.")
+	assert_not_null(p46_s2_title, "Page 46 Step 2 PrayerTitle must exist")
+	assert_eq(p46_s2_title.text, "Concluding Rosary Prayer", "Page 46 Step 2 title must be 'Concluding Rosary Prayer'")
+	assert_true(p46_s2_prayer.visible, "Page 46 Step 2 (Concluding Rosary Prayer) PrayerText must be visible")
+	assert_eq(p46_s2_prayer.text, "Let us pray.")
 	assert_eq(p46_s2_prayer.get_theme_font("font"), font_reg, "Page 46 Step 2 PrayerText must use regular font")
 	assert_true(p46_s2_resp.visible, "Page 46 Step 2 ResponseText must be visible")
-	assert_eq(p46_s2_resp.text, "That we may be made worthy of the promises of Christ.")
+	assert_true(p46_s2_resp.text.begins_with("O God, whose only begotten Son"))
 	assert_eq(p46_s2_resp.get_theme_font("font"), font_bold, "Page 46 Step 2 ResponseText must use bold font")
 
-	# Step 3: Concluding Rosary Prayer (Split)
+	# Step 3: Final Blessing (Unison)
 	var p46_s3: VBoxContainer = psc46.steps_container.get_child(2) as VBoxContainer
+	var p46_s3_title: Label = p46_s3.get_node("PrayerTitle") as Label
 	var p46_s3_prayer: Label = p46_s3.get_node("PrayerText") as Label
 	var p46_s3_resp: Label = p46_s3.get_node("ResponseText") as Label
-	assert_true(p46_s3_prayer.visible, "Page 46 Step 3 (Concluding Rosary Prayer) PrayerText must be visible")
-	assert_eq(p46_s3_prayer.text, "Let us pray.")
-	assert_eq(p46_s3_prayer.get_theme_font("font"), font_reg, "Page 46 Step 3 PrayerText must use regular font")
+	assert_not_null(p46_s3_title, "Page 46 Step 3 PrayerTitle must exist")
+	assert_eq(p46_s3_title.text, "The Sign of the Cross", "Page 46 Step 3 title must be 'The Sign of the Cross'")
+	assert_false(p46_s3_prayer.visible, "Page 46 Step 3 (Sign of Cross) PrayerText must be hidden (unison prayer)")
 	assert_true(p46_s3_resp.visible, "Page 46 Step 3 ResponseText must be visible")
-	assert_true(p46_s3_resp.text.begins_with("O God, whose only begotten Son"))
+	assert_eq(p46_s3_resp.text, "In the name of the Father, and of the Son, and of the Holy Spirit. Amen.")
 	assert_eq(p46_s3_resp.get_theme_font("font"), font_bold, "Page 46 Step 3 ResponseText must use bold font")
-
-	# Step 4: Final Blessing (Unison)
-	var p46_s4: VBoxContainer = psc46.steps_container.get_child(3) as VBoxContainer
-	var p46_s4_prayer: Label = p46_s4.get_node("PrayerText") as Label
-	var p46_s4_resp: Label = p46_s4.get_node("ResponseText") as Label
-	assert_false(p46_s4_prayer.visible, "Page 46 Step 4 (Sign of Cross) PrayerText must be hidden (unison prayer)")
-	assert_true(p46_s4_resp.visible, "Page 46 Step 4 ResponseText must be visible")
-	assert_eq(p46_s4_resp.get_theme_font("font"), font_bold, "Page 46 Step 4 ResponseText must use bold font")
 	_assert_no_visible_page_numbers(card46, 46)
 	card46.free()
 
@@ -727,6 +736,20 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 				total_h += font_bold.get_multiline_string_size(response_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
 			if leader_str != "" and response_str != "":
 				total_h += 3.0
+
+			var v_leader_str: String = str(s.get("versicle_leader_text", ""))
+			var v_resp_str: String = str(s.get("versicle_response_text", ""))
+			var append_pid: String = str(s.get("append_prayer_id", ""))
+			if (v_leader_str == "" and v_resp_str == "") and append_pid != "":
+				var app_p: Dictionary = loader.get_prayer(append_pid)
+				v_leader_str = str(app_p.get("leader_text", ""))
+				v_resp_str = str(app_p.get("response_text", ""))
+
+			if v_leader_str != "":
+				total_h += font_reg.get_multiline_string_size(v_leader_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 3.0
+			if v_resp_str != "":
+				total_h += font_bold.get_multiline_string_size(v_resp_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 3.0
+
 			total_h += 8.0
 	elif sub is MysteryPrayerPageCard:
 		total_h += font_italic.get_height(22) + 4.0

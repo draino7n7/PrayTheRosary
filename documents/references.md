@@ -85,14 +85,14 @@ flowchart TD
 
 - **Page Number:** 2 (Inside Front Cover, Verso)
 - **Heading:** The History of the Holy Rosary
-- **Subheading:** Origins of the Gospel Prayer of the Church
+- **Subheading:** Origins and Tradition of the Most Holy Rosary
 - **Doctrinal & Historical Content:**
   1. **Monastic Roots & The Marian Psalter**:
      - *Summary*: In the early centuries, monks prayed all 150 Psalms of David weekly. Lay brothers and faithful who could not read Latin prayed 150 Pater Nosters, and later 150 Ave Marias counted on knotted cords ('Paternosters'), forming the 'Psalter of the Blessed Virgin Mary'.
      - [Reference 1] Catholic Encyclopedia ("The Rosary"): [New Advent — The Rosary](https://www.newadvent.org/cathen/13184b.htm)
      - [Reference 2] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§1–3, §12): [Vatican Archives — Rosarium Virginis Mariae](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
   2. **St. Dominic & Preaching the Mysteries**:
-     - *Summary*: Tradition holds that Our Lady entrusted the Rosary to St. Dominic de Guzmán (1170–1221) to combat heresy by pairing vocal prayer with quiet meditation on Christ's life, death, and resurrection. Carthusian Dominic of Prussia and Dominican Blessed Alan de la Roche later organized the Marian Psalter into fifteen decades with specific Gospel mysteries.
+     - *Summary*: Tradition holds that Our Lady entrusted the Rosary to St. Dominic de Guzmán (1170–1221) to combat heresy by pairing vocal prayer with quiet meditation on Christ's life, death, and resurrection. Carthusian Dominic of Prussia and Dominican Blessed Alan de la Roche later organized the Marian Psalter (the 150 Hail Marys) into fifteen decades with specific Gospel mysteries.
      - [Reference 1] Pope St. Pius V, Papal Bull *Consueverunt Romani Pontifices* (Sept 17, 1569): [Papal Encyclicals Online — Consueverunt Romani Pontifices](https://www.papalencyclicals.net/pius05/p5consue.htm)
      - [Reference 2] Catholic Encyclopedia: [New Advent — Feast of the Holy Rosary](https://www.newadvent.org/cathen/13189a.htm) and [New Advent — Confraternity of the Holy Rosary](https://www.newadvent.org/cathen/13188b.htm)
      - [Reference 3] Vatican News (Liturgical Feast of Our Lady of the Rosary & Battle of Lepanto 1571): [Vatican News — Memorial of Our Lady of the Rosary](https://www.vaticannews.va/en/liturgical-holidays/memorial-of-our-lady-of-the-rosary.html)
@@ -103,10 +103,10 @@ flowchart TD
 
 ---
 
-### Page 3 — Structure of the Book & How to Pray
+### Page 3 — Structure of This Book & How to Pray
 
 - **Page Number:** 3 (Front Matter, Recto)
-- **Heading:** Structure of the Book & How to Pray
+- **Heading:** Structure of This Book & How to Pray
 - **Subheading:** Praying with Scripture, Prayer, and Sacred Art
 - **Content & Guidelines:**
   1. **How This Book Is Organized**:
@@ -198,7 +198,7 @@ flowchart TD
   - Our Father (`our_father`)
   - 10× Hail Mary (`hail_mary`)
   - Glory Be (`glory_be`)
-  - The Fatima Prayer (`fatima_prayer` / *Oratio Fatimae*): *"O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy. Amen."*
+  - The Fatima Prayer (`fatima_prayer` / *Oratio Fatimae*): *"O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen."*
 - **Primary Source References:**
   - [Reference 1] Douay-Rheims Bible Online (Luke 1): [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
@@ -237,7 +237,7 @@ flowchart TD
 - **Spiritual Fruit:** Love of Neighbor
 - **Scripture Citation:** Luke 1:41–42, 46–47 (Douay-Rheims)
 - **Scripture Text:** *"And it came to pass, that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost: And she cried out with a loud voice, and said: Blessed art thou among women, and blessed is the fruit of thy womb... And Mary said: My soul doth magnify the Lord. And my spirit hath rejoiced in God my Saviour."*
-- **Meditation:** Bearing Christ within her, Mary hastens in charity to serve her cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.
+- **Meditation:** Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Douay-Rheims Bible Online (Luke 1): [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
@@ -276,7 +276,7 @@ flowchart TD
 - **Mystery Title:** The Nativity of Our Lord
 - **Spiritual Fruit:** Poverty of Spirit and Detachment from the World
 - **Scripture Citation:** Luke 2:6–7, 10–11 (Douay-Rheims)
-- **Scripture Text:** *"And it came to pass, that when they were there, her days were accomplished, that she should be delivered. And she brought forth her firstborn son, and wrapped him up in swaddling clothes, and laid him in a manger; because there was no room for them in the inn... Behold, I bring you good tidings of great joy, that shall be to all the people: For, this day, is born to you a Saviour, who is Christ the Lord, in the city of David."*
+- **Scripture Text:** *"And it came to pass, that when they were there, her days were accomplished, that she should be delivered. And she brought forth her firstborn son, and wrapped him up in swaddling clothes, and laid him in a manger; because there was no room for them in the inn... And the angel said to them: Fear not; for, behold, I bring you good tidings of great joy, that shall be to all the people: For, this day, is born to you a Saviour, who is Christ the Lord, in the city of David."*
 - **Meditation:** In the stillness of Bethlehem's night, the Light of the World is born in humble poverty, adored by Mary, Joseph, the angels, and the simple shepherds.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -477,7 +477,7 @@ flowchart TD
 - **Spiritual Fruit:** Repentance and Trust in God
 - **Scripture Citation:** Mark 1:14–15; Matthew 5:3, 8 (Douay-Rheims)
 - **Scripture Text:** *"Jesus came into Galilee, preaching the gospel of the kingdom of God, And saying: The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel... Blessed are the poor in spirit: for theirs is the kingdom of heaven... Blessed are the clean of heart: for they shall see God."*
-- **Meditation:** Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and filial trust in the Father.
+- **Meditation:** Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and childlike trust in the Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Douay-Rheims Bible Online (Mark 1 & Matthew 5): [DRBO.org — Mark 1](https://www.drbo.org/chapter/48001.htm) & [DRBO.org — Matthew 5](https://www.drbo.org/chapter/47005.htm), and [New Advent — Mark 1](https://www.newadvent.org/bible/mar001.htm)
@@ -516,7 +516,7 @@ flowchart TD
 - **Mystery Title:** The Transfiguration
 - **Spiritual Fruit:** Desire for Holiness
 - **Scripture Citation:** Luke 9:29–31, 35 (Douay-Rheims)
-- **Scripture Text:** *"And whilst he prayed, the shape of his countenance was altered, and his raiment became white and glittering. And behold two men were talking with him. And they were Moses and Elias, appearing in majesty... And a voice came out of the cloud, saying: This is my beloved Son; hear him."*
+- **Scripture Text:** *"And whilst he prayed, the shape of his countenance was altered, and his raiment became white and glittering. And behold two men were talking with him. And they were Moses and Elias [Elijah], appearing in majesty... And a voice came out of the cloud, saying: This is my beloved Son; hear him."*
 - **Meditation:** On Mount Tabor, the glory of the Godhead shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -717,7 +717,7 @@ flowchart TD
 - **Spiritual Fruit:** Patience in Trials
 - **Scripture Citation:** John 19:17; Luke 23:26–27 (Douay-Rheims)
 - **Scripture Text:** *"And bearing his own cross, he went forth to that place which is called Calvary... And as they led him away, they laid hold of one Simon of Cyrene, coming from the country; and they laid the cross on him to carry after Jesus. And there followed him a great multitude of people, and of women, who bewailed and lamented him."*
-- **Meditation:** Falling beneath the heavy wood along the Via Dolorosa, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.
+- **Meditation:** Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Douay-Rheims Bible Online (John 19 & Luke 23): [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
@@ -797,7 +797,7 @@ flowchart TD
 - **Spiritual Fruit:** Lively Faith
 - **Scripture Citation:** Mark 16:5–6 (Douay-Rheims)
 - **Scripture Text:** *"And entering into the sepulchre, they saw a young man sitting on the right side, clothed with a white robe: and they were astonished. Who saith to them: Be not affrighted; you seek Jesus of Nazareth, who was crucified: he is risen, he is not here, behold the place where they laid him."*
-- **Meditation:** At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, becoming the firstfruits of eternal life for all who believe in Him.
+- **Meditation:** At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, opening the gates of eternal life to all who believe in Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Douay-Rheims Bible Online (Mark 16): [DRBO.org — Mark 16](https://www.drbo.org/chapter/48016.htm) and [New Advent — Mark 16](https://www.newadvent.org/bible/mar016.htm)
@@ -915,12 +915,12 @@ flowchart TD
 - **Mystery ID:** `glorious_4_assumption`
 - **Mystery Title:** The Assumption of the Blessed Virgin Mary
 - **Spiritual Fruit:** Grace of a Happy Death and True Devotion to Mary
-- **Scripture Citation:** Judith 15:10; Psalm 44:14, 16 (Douay-Rheims)
-- **Scripture Text:** *"Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people... All the glory of the king's daughter is within in golden borders, clothed round about with varieties... They shall be brought with gladness and rejoicing: they shall be brought into the temple of the king."*
+- **Scripture Citation:** Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10 (Douay-Rheims)
+- **Scripture Text:** *"Arise, O Lord, into thy resting place: thou and the ark, which thou hast sanctified... For behold from henceforth all generations shall call me blessed. Because he that is mighty, hath done great things to me; and holy is his name... Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people."*
 - **Meditation:** Having completed the course of her earthly life, the Immaculate Mother of God is taken up body and soul into heavenly glory by the power of her Divine Son.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Judith 15 & Psalm 44): [DRBO.org — Judith 15](https://www.drbo.org/chapter/18015.htm), [New Advent — Judith 15](https://www.newadvent.org/bible/jth015.htm), [DRBO.org — Psalm 44](https://www.drbo.org/chapter/21044.htm), and [New Advent — Psalm 44](https://www.newadvent.org/bible/psa044.htm)
+  - [Reference 1] Douay-Rheims Bible Online (Psalm 131, Luke 1, Judith 15): [DRBO.org — Psalm 131](https://www.drbo.org/chapter/21131.htm), [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm), [DRBO.org — Judith 15](https://www.drbo.org/chapter/18015.htm), and [New Advent — Judith 15](https://www.newadvent.org/bible/jth015.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23) and Pope Pius XII, Apostolic Constitution *Munificentissimus Deus* (Nov 1, 1950, defining the dogma of the Assumption): [Vatican Archives — Munificentissimus Deus](https://www.vatican.va/content/pius-xii/en/apost_constitutions/documents/hf_p-xii_apc_19501101_munificentissimus-deus.html)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -997,13 +997,13 @@ flowchart TD
 - **Prayers in Sequence:**
   1. **Hail, Holy Queen** (`hail_holy_queen` / *Salve Regina*):
      - Unison: *"Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve; to thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary!"*
-  2. **Versicle and Response** (`versicle_response` / *Ora Pro Nobis*):
-     - Leader: *"Pray for us, O holy Mother of God."*
-     - Group: *"That we may be made worthy of the promises of Christ."*
-  3. **Concluding Rosary Prayer** (`rosary_concluding_prayer` / *Deus, Cuius Unigenitus*):
+     - Appended Versicle and Response (`versicle_response` / *Ora Pro Nobis*):
+       - Leader: *"Pray for us, O holy Mother of God."*
+       - Group: *"That we may be made worthy of the promises of Christ."*
+  2. **Concluding Rosary Prayer** (`rosary_concluding_prayer` / *Deus, Cuius Unigenitus*):
      - Leader: *"Let us pray."*
-     - Group: *"O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal life, grant, we beseech Thee, that meditating upon these mysteries of the most holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."*
-  4. **The Sign of the Cross** (`sign_of_the_cross` / *Signum Crucis*):
+     - Group: *"O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal salvation, grant, we beseech Thee, that meditating upon these mysteries of the Most Holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."*
+  3. **The Sign of the Cross** (`sign_of_the_cross` / *Signum Crucis*):
      - Unison: *"In the name of the Father, and of the Son, and of the Holy Spirit. Amen."*
 - **Primary Source References:**
   - [Reference 1] USCCB "How to Pray the Rosary": [USCCB — How to Pray the Rosary](https://www.usccb.org/how-to-pray-the-rosary)

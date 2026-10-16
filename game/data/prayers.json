@@ -74,8 +74,8 @@
 			"title": "The Fatima Prayer",
 			"latin_title": "Oratio Fatimae",
 			"leader_text": "",
-			"response_text": "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy. Amen.",
-			"text": "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy. Amen."
+			"response_text": "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen.",
+			"text": "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen."
 		},
 		"hail_holy_queen": {
 			"id": "hail_holy_queen",
