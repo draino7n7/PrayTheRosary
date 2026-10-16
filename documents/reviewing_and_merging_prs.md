@@ -32,6 +32,7 @@ Before approving or merging any Pull Request, verify the following:
 * [ ] **Logging:** No raw `print()` statements. Uses `print_debug()`, `push_warning()`, or `push_error()`.
 * [ ] **Comments:** Explains the *why*, not the obvious *what*.
 * [ ] **Asset Verification:** Any file paths referenced in configuration files (like `export_presets.cfg` or `project.godot`) or dynamically constructed in GDScript must actually exist on disk.
+* [ ] **Source Verification Ledger (`documents/references.md`):** If the PR touches `game/data/prayers.json`, `game/data/mysteries.json`, `game/data/book_layout.json`, `assets/2D/gimp/attributions.json`, or any sacred text, verify that all prayers, Scripture citations, and artwork metadata match the primary source citations in `documents/references.md`, and confirm that `documents/references.md` has been updated and synchronized per `.agents/rules/references_verification.md`.
 
 ### 3. Testing Verification
 * [ ] **Automated Test Report:** PR body includes evidence that all automated tests pass (`Test Results: X Passed, 0 Failed`).
@@ -88,6 +89,9 @@ The reviewing agent is directly responsible for synchronizing project documentat
 
 ### 3. `README.md`
 * Update if user-facing behavior, controls, rules, or visuals are changed.
+
+### 4. `documents/references.md`
+* Verify that any additions, fixes, or modifications to prayers, Douay-Rheims Scripture verses, historical summaries, or artwork metadata are verified against primary sources and recorded in `documents/references.md` in strict book order per `.agents/rules/references_verification.md`.
 
 ### Committing Documentation Updates
 Always commit documentation updates directly to the feature branch **prior to merging**:
