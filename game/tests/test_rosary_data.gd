@@ -40,6 +40,21 @@ func test_all_canonical_prayers_present() -> void:
 
 	assert_eq(str(loader.get_prayer("our_father").get("title", "")), "The Our Father", "our_father title must be 'The Our Father'")
 	assert_eq(str(loader.get_prayer("glory_be").get("title", "")), "The Glory Be", "glory_be title must be 'The Glory Be'")
+	assert_eq(
+		str(loader.get_prayer("glory_be").get("text", "")),
+		"Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen.",
+		"glory_be text must match single-sentence wording"
+	)
+	assert_eq(
+		str(loader.get_prayer("glory_be").get("leader_text", "")),
+		"Glory be to the Father, and to the Son, and to the Holy Spirit,",
+		"glory_be leader_text must end with a comma"
+	)
+	assert_eq(
+		str(loader.get_prayer("glory_be").get("response_text", "")),
+		"as it was in the beginning, is now, and ever shall be, world without end. Amen.",
+		"glory_be response_text must begin with lowercase 'as it was in the beginning'"
+	)
 
 
 func test_four_mystery_sets_and_twenty_mysteries() -> void:
@@ -484,3 +499,109 @@ func test_page_3_step_by_step_guide_daily_vs_complete_rosary() -> void:
 		sec1_body.contains("all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary"),
 		"Page 3 Step-by-Step Guide must explain praying all four Mystery sets (twenty decades) back-to-back in chronological order"
 	)
+
+
+func test_glory_be_single_sentence_formatting_and_page_hydration() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var expected_text: String = "Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen."
+	var expected_leader: String = "Glory be to the Father, and to the Son, and to the Holy Spirit,"
+	var expected_response: String = "as it was in the beginning, is now, and ever shall be, world without end. Amen."
+
+	var glory_be: Dictionary = loader.get_prayer("glory_be")
+	assert_false(glory_be.is_empty(), "glory_be prayer must exist in prayers.json")
+	assert_eq(
+		str(glory_be.get("text", "")),
+		expected_text,
+		"glory_be.text must format as a single sentence with comma punctuation"
+	)
+	assert_eq(
+		str(glory_be.get("leader_text", "")),
+		expected_leader,
+		"glory_be.leader_text must end with a trailing comma"
+	)
+	assert_eq(
+		str(glory_be.get("response_text", "")),
+		expected_response,
+		"glory_be.response_text must begin with lowercase 'as it was in the beginning' completing the single sentence"
+	)
+
+	# Verify Page 4 Opening Prayers hydration (Spread 2 left page)
+	var spread_2: Dictionary = loader.get_hydrated_spread(2)
+	var s2_steps: Array = spread_2.get("left_page", {}).get("prayer_steps", [])
+	var found_s2_glory_be: bool = false
+	for step_val: Variant in s2_steps:
+		if step_val is Dictionary:
+			var step: Dictionary = step_val
+			if str(step.get("prayer_id", "")) == "glory_be":
+				found_s2_glory_be = true
+				var p_dict: Dictionary = step.get("prayer", {})
+				assert_false(p_dict.is_empty(), "Spread 2 must hydrate glory_be prayer dictionary")
+				assert_eq(str(p_dict.get("text", "")), expected_text, "Spread 2 hydrated glory_be text must match single-sentence wording")
+				assert_eq(str(p_dict.get("leader_text", "")), expected_leader, "Spread 2 hydrated glory_be leader_text must match")
+				assert_eq(str(p_dict.get("response_text", "")), expected_response, "Spread 2 hydrated glory_be response_text must match")
+	assert_true(found_s2_glory_be, "Page 4 (Spread 2) prayer steps must contain glory_be")
+
+	# Verify Page 4 via loader.get_page(4)
+	var p4: Dictionary = loader.get_page(4)
+	var p4_steps: Array = p4.get("prayer_steps", [])
+	var found_p4_glory_be: bool = false
+	for step_val: Variant in p4_steps:
+		if step_val is Dictionary:
+			var step: Dictionary = step_val
+			if str(step.get("prayer_id", "")) == "glory_be":
+				found_p4_glory_be = true
+				var p_dict: Dictionary = step.get("prayer", {})
+				assert_eq(str(p_dict.get("text", "")), expected_text, "Page 4 hydrated glory_be text must match single-sentence wording")
+				assert_eq(str(p_dict.get("leader_text", "")), expected_leader, "Page 4 hydrated glory_be leader_text must match")
+				assert_eq(str(p_dict.get("response_text", "")), expected_response, "Page 4 hydrated glory_be response_text must match")
+	assert_true(found_p4_glory_be, "Page 4 direct lookup must contain glory_be")
+
+	# Verify all 20 Mystery spreads (Spreads 3..22, corresponding to Left Pages 6, 8, ..., 44)
+	for sp_num: int in range(3, 23):
+		var sp: Dictionary = loader.get_hydrated_spread(sp_num)
+		var decade_prayers: Array = sp.get("decade_prayers", [])
+		var found_mystery_glory_be: bool = false
+		for step_val: Variant in decade_prayers:
+			if step_val is Dictionary:
+				var step: Dictionary = step_val
+				if str(step.get("prayer_id", "")) == "glory_be":
+					found_mystery_glory_be = true
+					var p_dict: Dictionary = step.get("prayer", {})
+					assert_false(p_dict.is_empty(), "Spread %d must hydrate glory_be prayer dictionary" % sp_num)
+					assert_eq(
+						str(p_dict.get("text", "")),
+						expected_text,
+						"Spread %d decade prayer glory_be text must match single-sentence wording" % sp_num
+					)
+					assert_eq(
+						str(p_dict.get("leader_text", "")),
+						expected_leader,
+						"Spread %d decade prayer glory_be leader_text must match" % sp_num
+					)
+					assert_eq(
+						str(p_dict.get("response_text", "")),
+						expected_response,
+						"Spread %d decade prayer glory_be response_text must match" % sp_num
+					)
+		assert_true(found_mystery_glory_be, "Spread %d must contain glory_be in decade_prayers" % sp_num)
+
+		# Also check page by number (left page is sp_num * 2)
+		var left_page_num: int = sp_num * 2
+		var page_dict: Dictionary = loader.get_page(left_page_num)
+		var page_decade_prayers: Array = page_dict.get("decade_prayers", [])
+		var found_page_glory_be: bool = false
+		for step_val: Variant in page_decade_prayers:
+			if step_val is Dictionary:
+				var step: Dictionary = step_val
+				if str(step.get("prayer_id", "")) == "glory_be":
+					found_page_glory_be = true
+					var p_dict: Dictionary = step.get("prayer", {})
+					assert_eq(
+						str(p_dict.get("text", "")),
+						expected_text,
+						"Page %d decade prayer glory_be text must match single-sentence wording" % left_page_num
+					)
+		assert_true(found_page_glory_be, "Page %d must contain glory_be in decade_prayers" % left_page_num)
+
