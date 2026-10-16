@@ -121,6 +121,12 @@ func hydrate_prayer_item(item: Dictionary) -> Dictionary:
 	hydrated_item["text"] = str(prayer.get("text", ""))
 	hydrated_item["leader_text"] = str(prayer.get("leader_text", ""))
 	hydrated_item["response_text"] = str(prayer.get("response_text", ""))
+	var append_pid: String = str(hydrated_item.get("append_prayer_id", ""))
+	if append_pid != "":
+		var appended: Dictionary = get_prayer(append_pid)
+		hydrated_item["appended_prayer"] = appended
+		hydrated_item["versicle_leader_text"] = str(appended.get("leader_text", ""))
+		hydrated_item["versicle_response_text"] = str(appended.get("response_text", ""))
 	return hydrated_item
 
 

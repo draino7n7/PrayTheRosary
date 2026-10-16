@@ -272,6 +272,11 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 	var loader: RefCounted = RosaryDataLoaderScript.new()
 	loader.load_all()
 
+	# Joyful 3: Luke 2:6-7, 10-11
+	var j3: Dictionary = loader.get_mystery_by_id("joyful_3_nativity")
+	assert_eq(str(j3.get("scripture_reference", "")), "Luke 2:6–7, 10–11")
+	assert_true(str(j3.get("scripture_text", "")).contains("And the angel said to them: Fear not; for, behold,"), "Joyful 3 Luke 2:10 must contain 'And the angel said to them: Fear not; for, behold,'")
+
 	# Joyful 4: Luke 2:28 bracketed subject
 	var j4: Dictionary = loader.get_mystery_by_id("joyful_4_presentation")
 	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32")
@@ -280,6 +285,7 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 	# Luminous 4: Luke 9:29-31, 35 and verbatim 'hear him.'
 	var l4: Dictionary = loader.get_mystery_by_id("luminous_4_transfiguration")
 	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35")
+	assert_true(str(l4.get("scripture_text", "")).contains("[Elijah]"), "Luminous 4 Luke 9:30 must contain bracketed '[Elijah]'")
 	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son; hear him."), "Luminous 4 Luke 9:35 must end with verbatim DRBO 'hear him.'")
 	assert_false(str(l4.get("scripture_text", "")).contains("hear ye him"), "Luminous 4 must not contain KJV 'hear ye him'")
 
@@ -303,9 +309,12 @@ func test_douay_rheims_citations_and_verbatim_texts() -> void:
 		"And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight."
 	)
 
-	# Glorious 4: Citation order matching passage order (Judith 15:10; Psalm 44:14, 16)
+	# Glorious 4: Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10
 	var g4: Dictionary = loader.get_mystery_by_id("glorious_4_assumption")
-	assert_eq(str(g4.get("scripture_reference", "")), "Judith 15:10; Psalm 44:14, 16")
+	assert_eq(str(g4.get("scripture_reference", "")), "Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10")
+	assert_true(str(g4.get("scripture_text", "")).begins_with("Arise, O Lord, into thy resting place: thou and the ark, which thou hast sanctified..."), "Glorious 4 must begin with Psalm 131:8")
+	assert_true(str(g4.get("scripture_text", "")).contains("For behold from henceforth all generations shall call me blessed."), "Glorious 4 must contain Luke 1:48")
+	assert_true(str(g4.get("scripture_text", "")).ends_with("Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people."), "Glorious 4 must end with Judith 15:10")
 
 	# Glorious 5: Ecclesiasticus (Sirach) 24:7
 	var g5: Dictionary = loader.get_mystery_by_id("glorious_5_coronation")
@@ -936,6 +945,103 @@ func test_references_document_completeness_and_book_order() -> void:
 			ref_content.contains(rep),
 			"documents/references.md must contain verified replacement URL substring: %s" % rep
 		)
+
+
+func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	# 1. Page 2 Subheading and Marian Psalter body text
+	var p2: Dictionary = loader.get_page(2)
+	assert_eq(str(p2.get("subheading", "")), "Origins and Tradition of the Most Holy Rosary", "Page 2 subheading must match")
+	var p2_sections: Array = p2.get("sections", [])
+	assert_eq(p2_sections.size(), 3, "Page 2 must contain 3 sections")
+	var p2_sec1: Dictionary = p2_sections[1] as Dictionary
+	assert_true(
+		str(p2_sec1.get("body", "")).contains("organized the Marian Psalter (the 150 Hail Marys) into fifteen decades"),
+		"Page 2 Section 2 body must contain '(the 150 Hail Marys)'"
+	)
+
+	# 2. Page 3 Heading
+	var p3: Dictionary = loader.get_page(3)
+	assert_eq(str(p3.get("heading", "")), "Structure of This Book & How to Pray", "Page 3 heading must match")
+
+	# 3. Meditations across mysteries
+	var j2: Dictionary = loader.get_mystery_by_id("joyful_2_visitation")
+	assert_eq(
+		str(j2.get("meditation", "")),
+		"Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.",
+		"Joyful 2 meditation must match"
+	)
+
+	var l3: Dictionary = loader.get_mystery_by_id("luminous_3_proclamation")
+	assert_eq(
+		str(l3.get("meditation", "")),
+		"Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and childlike trust in the Father.",
+		"Luminous 3 meditation must match"
+	)
+
+	var s4: Dictionary = loader.get_mystery_by_id("sorrowful_4_carrying_cross")
+	assert_eq(
+		str(s4.get("meditation", "")),
+		"Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.",
+		"Sorrowful 4 meditation must match"
+	)
+
+	var g1: Dictionary = loader.get_mystery_by_id("glorious_1_resurrection")
+	assert_eq(
+		str(g1.get("meditation", "")),
+		"At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, opening the gates of eternal life to all who believe in Him.",
+		"Glorious 1 meditation must match"
+	)
+
+	# 4. Fatima Prayer in prayers.json
+	var fatima: Dictionary = loader.get_prayer("fatima_prayer")
+	var expected_fatima: String = "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen."
+	assert_eq(str(fatima.get("response_text", "")), expected_fatima, "fatima_prayer response_text must use 'in most need'")
+	assert_eq(str(fatima.get("text", "")), expected_fatima, "fatima_prayer text must use 'in most need'")
+
+	# 5. Page 46 Closing Prayers structure and hydration
+	var spread_23: Dictionary = loader.get_hydrated_spread(23)
+	var p46_steps: Array = spread_23.get("left_page", {}).get("prayer_steps", [])
+	assert_eq(p46_steps.size(), 3, "Page 46 must have exactly 3 prayer steps")
+
+	var step1: Dictionary = p46_steps[0] as Dictionary
+	assert_eq(str(step1.get("prayer_id", "")), "hail_holy_queen", "Step 1 must be hail_holy_queen")
+	assert_eq(str(step1.get("append_prayer_id", "")), "versicle_response", "Step 1 must have append_prayer_id == 'versicle_response'")
+	assert_eq(str(step1.get("rubric", "")), "After completing the decades, pray the Hail, Holy Queen (Salve Regina):", "Step 1 rubric must match")
+	assert_eq(str(step1.get("versicle_leader_text", "")), "Pray for us, O holy Mother of God.", "Step 1 must hydrate versicle_leader_text")
+	assert_eq(str(step1.get("versicle_response_text", "")), "That we may be made worthy of the promises of Christ.", "Step 1 must hydrate versicle_response_text")
+	assert_false(step1.get("appended_prayer", {}).is_empty(), "Step 1 must hydrate appended_prayer")
+
+	var step2: Dictionary = p46_steps[1] as Dictionary
+	assert_eq(int(step2.get("step_number", 0)), 2, "Step 2 step_number must be 2")
+	assert_eq(str(step2.get("prayer_id", "")), "rosary_concluding_prayer", "Step 2 must be rosary_concluding_prayer")
+
+	var step3: Dictionary = p46_steps[2] as Dictionary
+	assert_eq(int(step3.get("step_number", 0)), 3, "Step 3 step_number must be 3")
+	assert_eq(str(step3.get("prayer_id", "")), "sign_of_the_cross", "Step 3 must be sign_of_the_cross")
+
+	# Direct page 46 lookup
+	var p46: Dictionary = loader.get_page(46)
+	var direct_p46_steps: Array = p46.get("prayer_steps", [])
+	assert_eq(direct_p46_steps.size(), 3, "Direct lookup Page 46 must have 3 steps")
+	var dir_s1: Dictionary = direct_p46_steps[0] as Dictionary
+	assert_eq(str(dir_s1.get("versicle_leader_text", "")), "Pray for us, O holy Mother of God.")
+	assert_eq(str(dir_s1.get("versicle_response_text", "")), "That we may be made worthy of the promises of Christ.")
+
+	# 6. references.md verification
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var ref_content: String = FileAccess.get_file_as_string(repo_root.path_join("documents/references.md"))
+	assert_true(ref_content.contains("Origins and Tradition of the Most Holy Rosary"))
+	assert_true(ref_content.contains("organized the Marian Psalter (the 150 Hail Marys) into fifteen decades"))
+	assert_true(ref_content.contains("Structure of This Book & How to Pray"))
+	assert_true(ref_content.contains("especially those in most need of Thy mercy"))
+	assert_true(ref_content.contains("https://www.drbo.org/chapter/21131.htm"))
+	assert_true(ref_content.contains("https://www.drbo.org/chapter/49001.htm"))
+	assert_true(ref_content.contains("https://www.drbo.org/chapter/18015.htm"))
+	assert_true(ref_content.contains("https://www.newadvent.org/bible/jth015.htm"))
+
 
 
 

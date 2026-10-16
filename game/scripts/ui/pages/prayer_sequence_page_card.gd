@@ -190,6 +190,46 @@ func _apply_page_data() -> void:
 				resp_lbl.visible = false
 				step_vbox.add_child(resp_lbl)
 
+			var v_leader_str: String = str(step.get("versicle_leader_text", ""))
+			var v_resp_str: String = str(step.get("versicle_response_text", ""))
+			var append_pid: String = str(step.get("append_prayer_id", ""))
+			if (v_leader_str == "" and v_resp_str == "") and append_pid != "" and data_loader != null:
+				var app_p: Dictionary = data_loader.get_prayer(append_pid)
+				v_leader_str = str(app_p.get("leader_text", ""))
+				v_resp_str = str(app_p.get("response_text", ""))
+
+			if v_leader_str != "":
+				var v_lead_lbl: Label = Label.new()
+				v_lead_lbl.name = "VersicleLeaderText"
+				v_lead_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				v_lead_lbl.text = v_leader_str
+				if font_reg != null:
+					v_lead_lbl.add_theme_font_override("font", font_reg)
+				v_lead_lbl.add_theme_font_size_override("font_size", body_font_size)
+				v_lead_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+				v_lead_lbl.add_theme_constant_override("line_spacing", 2)
+				step_vbox.add_child(v_lead_lbl)
+				if font_reg != null:
+					var vl_lines: int = int(ceilf(font_reg.get_multiline_string_size(v_leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+					step_h += font_reg.get_multiline_string_size(v_leader_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, vl_lines - 1) * 2)
+					visible_count += 1
+
+			if v_resp_str != "":
+				var v_resp_lbl: Label = Label.new()
+				v_resp_lbl.name = "VersicleResponseText"
+				v_resp_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				v_resp_lbl.text = v_resp_str
+				if font_bold != null:
+					v_resp_lbl.add_theme_font_override("font", font_bold)
+				v_resp_lbl.add_theme_font_size_override("font_size", body_font_size)
+				v_resp_lbl.add_theme_color_override("font_color", COLOR_CHARCOAL)
+				v_resp_lbl.add_theme_constant_override("line_spacing", 2)
+				step_vbox.add_child(v_resp_lbl)
+				if font_bold != null:
+					var vr_lines: int = int(ceilf(font_bold.get_multiline_string_size(v_resp_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_bold.get_height(body_font_size))))
+					step_h += font_bold.get_multiline_string_size(v_resp_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, vr_lines - 1) * 2)
+					visible_count += 1
+
 			if visible_count > 1:
 				step_h += float((visible_count - 1) * 3)
 
