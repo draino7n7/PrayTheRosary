@@ -77,3 +77,21 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 - **Immutable Original Downloads:** All 23 high-resolution archival master files are stored in `assets/2D/gimp/original_downloads/` and cataloged in `assets/2D/gimp/attributions.json` in exact sequential order of appearance in the book (with `"closing_prayers"` ordered last after `"glorious_5_coronation"`), maintaining complete museum `inventory_number`, `original_dimensions`, `creation_date`, `current_location`, and non-numbered placement `section_label` records synchronized with `game/data/mysteries.json`, `game/data/book_layout.json`, and `RosaryDataLoader`.
 - **Print Prep Guidelines:** Any print-ready CMYK/300-DPI exports or GIMP `.xcf` working files must be saved in `assets/2D/gimp/` (outside `original_downloads/`), leaving the 23 files in `assets/2D/gimp/original_downloads/` untouched.
+
+---
+
+## 5. Affinity Publishing & Prepress Workflow (`assets/Affinity/`)
+
+All editable layout files, fonts, and press-ready exports for the 50-page spiral-bound book live in `assets/Affinity/` (tracked via Git LFS):
+
+- **Master Affinity Project (`assets/Affinity/PrayTheRosary.af`):**
+  - Editable 50-page **Affinity** (`Layout` mode) document (`6.0" × 9.0"` trim size, `0.125"` bleed on all 4 sides, Facing Pages starting on Right, `CMYK/8` — `U.S. Web Coated (SWOP) v2`, `300 DPI`).
+  - **Spiral-Binding Gutter Margins:** Every interior page (`Pages 2–49`) reserves a **`0.625"` (`5/8"`) Inner Margin** along the punched spine edge (`Left` on Odd/Right-hand pages; `Right` on Even/Left-hand pages) and **`0.50"` (`1/2"`)** on the Outer, Top, and Bottom edges so twin-loop wire-o punching (`~0.375"` depth) never encroaches on gold borders or typography.
+- **Press-Ready 50-Page PDF (`assets/Affinity/PrayTheRosary.pdf`):**
+  - Exported from Affinity using **`PDF (press ready)`** with **`Area: All Pages`** (50 individual `6.25" × 9.25"` pages with `0.125"` bleed included and `6.00" × 9.00"` `TrimBox`), **`Include bleed: ON`**, **`Include printers marks: OFF`**, **`Convert image color spaces: ON`**, and **`Embed Fonts: All Fonts`**.
+- **Required Font Installation (`assets/Affinity/fonts/`):**
+  - Before opening `assets/Affinity/PrayTheRosary.af`, install all four **`EB Garamond Book`** fonts (`EBGaramondBook-Regular.ttf`, `EBGaramondBook-Bold.ttf`, `EBGaramondBook-Italic.ttf`, `EBGaramondBook-BoldItalic.ttf`).
+  - These fonts are custom-packaged from `EB Garamond` with OpenType terminal swash features (`fina`, `init`, `swsh`, `calt`, `dlig`, `hlig`) stripped so Affinity never substitutes long-tailed word-final `e` glyphs (`e.fina`).
+- **Automated PDF Layout Generator (`assets/Affinity/build_affinity_pdf.py`):**
+  - Rebuilds the 50-page vector PDF directly from `game/data/*.json` and `assets/2D/gimp/original_downloads/` via `python assets/Affinity/build_affinity_pdf.py`.
+

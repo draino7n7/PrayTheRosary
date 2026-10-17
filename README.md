@@ -74,11 +74,25 @@ To get started with OGS:
 
 ---
 
+## Print Book & Affinity Layout (`assets/Affinity/`)
+
+The repository includes the complete 50-page, 6" × 9" spiral-bound print edition layout and prepress pipeline in `assets/Affinity/`:
+- **Print-Ready 50-Page PDF (`assets/Affinity/PrayTheRosary.pdf`):** 300 DPI, CMYK/8 (`U.S. Web Coated (SWOP) v2`) press-ready PDF with `0.125"` full bleed (`6.25" × 9.25"` bleed box, `6.0" × 9.0"` trim box) and an alternating `0.625"` inner spiral-binding safety margin (`0.50"` outer/top/bottom margins).
+- **Editable Affinity Project (`assets/Affinity/PrayTheRosary.af`):** Native multi-page Affinity project (`Layout` mode) with Facing Pages, editable text frames, vector gold borders, and embedded 300-DPI master paintings.
+- **Print Book Fonts (`assets/Affinity/fonts/`):** Bundles the four `EBGaramondBook-*.ttf` (`Regular`, `Bold`, `Italic`, `BoldItalic`) font files with OpenType terminal/initial swash features (`fina`, `init`, `swsh`) stripped so Affinity renders clean, standard italic letterforms.
+  - **Before opening `PrayTheRosary.af` in Affinity:** Install all four `EBGaramondBook-*.ttf` fonts from `assets/Affinity/fonts/` onto your system so Affinity detects the exact font family without substitution.
+- **Automated Starter PDF Generator (`assets/Affinity/build_affinity_pdf.py`):** Python script (`reportlab` + `Pillow`) that rebuilds the 50-page starter PDF directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, and `assets/2D/gimp/original_downloads/`:
+  ```powershell
+  python assets/Affinity/build_affinity_pdf.py
+  ```
+
+---
+
 ## Documentation & Specifications
 
 Key architecture specifications, theological references, and testing standards:
 - **[Application Requirements (`documents/requirements.md`)](documents/requirements.md):** Comprehensive digital application specifications, continuous scroll architecture, typography presets, and testing standards.
-- **[Print Book Requirements (`documents/book_requirements.md`)](documents/book_requirements.md):** Specifications for the physical 6" × 9" spiral-bound print edition.
+- **[Print Book Requirements (`documents/book_requirements.md`)](documents/book_requirements.md):** Specifications for the physical 6" × 9" spiral-bound print edition and Affinity prepress workflow.
 - **[Canonical References Guide (`documents/references.md`)](documents/references.md):** Complete primary source citations and verification ledger for all 50 physical pages, 12 prayers, 20 mysteries, Douay-Rheims Scripture verses, and 23 fine art masterpieces.
 - **[Manual Testing Guide (`documents/manual_testing.md`)](documents/manual_testing.md):** Test suites for manual validation, accessibility testing, and typography verification.
 - **[AI Agent Rules (`.agents/rules/references_verification.md`)](.agents/rules/references_verification.md):** Verification protocols and rules governing modifications to sacred text, prayers, and artwork attributions.
