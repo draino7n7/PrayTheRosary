@@ -56,6 +56,56 @@ func test_navigation_drawer_scene_structure() -> void:
 	drawer.free()
 
 
+func test_navigation_drawer_font_fallbacks() -> void:
+	var drawer: NavigationDrawer = _create_nav_drawer()
+	var symbol_font_path: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
+	var expected_symbol_font: Font = load(symbol_font_path) as Font
+	assert_not_null(expected_symbol_font, "Symbol fallback font must load cleanly")
+
+	assert_not_null(drawer._font_bold, "drawer._font_bold must be loaded")
+	assert_not_null(drawer._font_regular, "drawer._font_regular must be loaded")
+	assert_not_null(drawer._font_italic, "drawer._font_italic must be loaded")
+
+	var font_checks: Array[Dictionary] = [
+		{"name": "_font_bold", "font": drawer._font_bold},
+		{"name": "_font_regular", "font": drawer._font_regular},
+		{"name": "_font_italic", "font": drawer._font_italic}
+	]
+
+	for item: Dictionary in font_checks:
+		var font_name: String = str(item.get("name", ""))
+		var font_obj: Font = item.get("font") as Font
+		assert_not_null(font_obj, "%s must not be null" % font_name)
+		if font_obj == null:
+			continue
+
+		var has_symbols: bool = false
+		for fb: Font in font_obj.fallbacks:
+			if fb != null and (fb == expected_symbol_font or fb.resource_path == symbol_font_path):
+				has_symbols = true
+				break
+		assert_true(has_symbols, "NavigationDrawer %s must have NotoSansSymbols-Regular.ttf in fallbacks" % font_name)
+		assert_true(font_obj.has_char(0x2630), "%s must support ☰ (U+2630)" % font_name)
+		assert_true(font_obj.has_char(0x2715), "%s must support ✕ (U+2715)" % font_name)
+		assert_true(font_obj.has_char(0x25B8), "%s must support ▸ (U+25B8)" % font_name)
+		assert_true(font_obj.has_char(0x25BE), "%s must support ▾ (U+25BE)" % font_name)
+		assert_true(font_obj.has_char(0x2605), "%s must support ★ (U+2605)" % font_name)
+
+	var float_btn: Button = drawer.get_floating_button()
+	assert_not_null(float_btn, "Floating button must exist")
+	var float_font: Font = float_btn.get_theme_font("font")
+	assert_not_null(float_font, "Floating button font must exist")
+	assert_true(float_font.has_char(0x2630), "Floating button font must resolve ☰ (U+2630)")
+
+	var close_btn: Button = drawer.get_close_button()
+	assert_not_null(close_btn, "Close button must exist")
+	var close_font: Font = close_btn.get_theme_font("font")
+	assert_not_null(close_font, "Close button font must exist")
+	assert_true(close_font.has_char(0x2715), "Close button font must resolve ✕ (U+2715)")
+
+	drawer.free()
+
+
 func test_navigation_drawer_open_close_toggle() -> void:
 	var drawer: NavigationDrawer = _create_nav_drawer()
 
