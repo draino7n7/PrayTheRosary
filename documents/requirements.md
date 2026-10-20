@@ -55,13 +55,26 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
   - Warm Ivory Body Text (`#F7F2E7`)
 
 ### 2.2 Typography & Theme (`game/assets/fonts/`, `game/resources/rosary_theme.tres`)
-- **Bundled Fonts:** **EB Garamond** (SIL Open Font License 1.1, license bundled at `game/assets/fonts/OFL.txt`) is bundled in `game/assets/fonts/` with all 4 core weights:
-  - `EBGaramond-Regular.ttf`
-  - `EBGaramond-Bold.ttf`
-  - `EBGaramond-Italic.ttf`
-  - `EBGaramond-BoldItalic.ttf`
+- **Bundled Fonts:**
+  - **EB Garamond** (SIL Open Font License 1.1, license bundled at `game/assets/fonts/OFL.txt`) is bundled in `game/assets/fonts/` with all 4 core weights:
+    - `EBGaramond-Regular.ttf`
+    - `EBGaramond-Bold.ttf`
+    - `EBGaramond-Italic.ttf`
+    - `EBGaramond-BoldItalic.ttf`
+  - **Noto Sans Symbols** (`NotoSansSymbols-Regular.ttf`, SIL Open Font License 1.1) is bundled in `game/assets/fonts/` as a dedicated symbol fallback font to ensure universal cross-platform rendering of Unicode UI symbols on sandboxed platforms (specifically Web / HTML5 WASM exports where host OS system fallback fonts cannot be queried). Provides full glyph coverage for:
+    - `☰` (`U+2630` Trigram for Heaven): pinned navigation drawer menu button (`FloatingButton`)
+    - `✕` (`U+2715` Multiplication X): drawer header close button (`CloseButton`)
+    - `▸` (`U+25B8` Black Right-Pointing Small Triangle): collapsed mystery set accordion disclosure arrows
+    - `▾` (`U+25BE` Black Down-Pointing Small Triangle): expanded mystery set accordion disclosure arrows
+    - `★` (`U+2605` Black Star): liturgical `"★ Today"` drawer badge and in-stream jump bar `"★ Recommended Today"` button
+- **Font Fallbacks & Layout Metric Preservation:**
+  - `NotoSansSymbols-Regular.ttf` is attached as a fallback font across:
+    1. Base font import files (`res://assets/fonts/EBGaramond-*.ttf.import` in `fallbacks` array)
+    2. Theme resources (`res://resources/rosary_theme.tres` and `res://assets/themes/rosary_theme.tres`) via `FontVariation` sub-resources wrapping EB Garamond base fonts with `NotoSansSymbols-Regular.ttf` in their `fallbacks` array for `default_font`, `Button/fonts/font`, `Label/fonts/font`, and `RichTextLabel/fonts/*`
+    3. Programmatic UI component loaders in `NavigationDrawer._load_fonts()` and `InStreamJumpBar._ensure_recommended_font()`
+  - **Layout Metric Invariance:** `EB Garamond` strictly remains the primary typeface for all text. The fallback font is invoked exclusively for characters missing in EB Garamond. All Latin line heights, string width measurements, book page content height calculations (`_calculate_page_content_required_height`), and dynamic vertical card elongation thresholds are 100% preserved without any alteration or vertical overflow.
 - **Application Theme:** The canonical Godot `Theme` resource is located at `res://resources/rosary_theme.tres` (mirrored at `res://assets/themes/rosary_theme.tres` and configured globally in `project.godot` via `[gui] theme/custom` and `theme/custom_font`). It defines:
-  - Default font: `EBGaramond-Regular.ttf` (size 20).
+  - Default font: `FontVariation_regular` wrapping `EBGaramond-Regular.ttf` with `NotoSansSymbols-Regular.ttf` fallback (size 20).
   - Complete `RosaryPalette` color table (`parchment` `#FAF6EE`, `charcoal` `#1E1815`, `crimson` `#6B1D21`, `umber` `#5C4338`, `gold` `#B89130`, `ambient_espresso` `#141010`, `cover_crimson` `#4A1215`, `warm_gold` `#D4AF37`, `ivory_text` `#F7F2E7`).
   - Styled controls for `Label`, `RichTextLabel` (normal, bold, italics fonts), `Button` (interactive flat styleboxes with gold accents across normal, hover, pressed, focus, and disabled states), `PanelContainer` (parchment background with 2px gold border), and `ScrollContainer` (transparent empty stylebox for seamless vertical scrolling).
 

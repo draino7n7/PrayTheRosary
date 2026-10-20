@@ -28,6 +28,7 @@ const COLOR_UMBER: Color = Color(0.3608, 0.2627, 0.2196, 1.0)         # #5C4338
 const FONT_BOLD_PATH: String = "res://assets/fonts/EBGaramond-Bold.ttf"
 const FONT_REGULAR_PATH: String = "res://assets/fonts/EBGaramond-Regular.ttf"
 const FONT_ITALIC_PATH: String = "res://assets/fonts/EBGaramond-Italic.ttf"
+const FONT_SYMBOLS_PATH: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
 
 const LANDMARKS_TOP: Array[Dictionary] = [
 	{"id": "front_cover", "label": "Front Cover (Page 1)", "page": 1},
@@ -115,6 +116,7 @@ var _decade_buttons_by_page: Dictionary = {}     # int -> Button
 var _font_bold: Font = null
 var _font_regular: Font = null
 var _font_italic: Font = null
+var _font_symbols: Font = null
 var _anim_tween: Tween = null
 var _is_built: bool = false
 
@@ -161,17 +163,39 @@ func _ensure_dependencies() -> void:
 
 
 func _load_fonts() -> void:
+	if ResourceLoader.exists(FONT_SYMBOLS_PATH):
+		_font_symbols = load(FONT_SYMBOLS_PATH) as Font
+
 	if ResourceLoader.exists(FONT_BOLD_PATH):
-		_font_bold = load(FONT_BOLD_PATH) as Font
+		var base_bold: Font = load(FONT_BOLD_PATH) as Font
+		var fv_bold: FontVariation = FontVariation.new()
+		fv_bold.base_font = base_bold
+		if _font_symbols != null:
+			fv_bold.fallbacks = [_font_symbols]
+		_font_bold = fv_bold
+
 	if ResourceLoader.exists(FONT_REGULAR_PATH):
-		_font_regular = load(FONT_REGULAR_PATH) as Font
+		var base_reg: Font = load(FONT_REGULAR_PATH) as Font
+		var fv_reg: FontVariation = FontVariation.new()
+		fv_reg.base_font = base_reg
+		if _font_symbols != null:
+			fv_reg.fallbacks = [_font_symbols]
+		_font_regular = fv_reg
+
 	if ResourceLoader.exists(FONT_ITALIC_PATH):
-		_font_italic = load(FONT_ITALIC_PATH) as Font
+		var base_ita: Font = load(FONT_ITALIC_PATH) as Font
+		var fv_ita: FontVariation = FontVariation.new()
+		fv_ita.base_font = base_ita
+		if _font_symbols != null:
+			fv_ita.fallbacks = [_font_symbols]
+		_font_italic = fv_ita
 
 
 func _resolve_nodes() -> void:
 	if floating_button == null:
 		floating_button = get_node_or_null("FloatingButton") as Button
+	if floating_button != null and _font_bold != null:
+		floating_button.add_theme_font_override("font", _font_bold)
 	if drawer_overlay == null:
 		drawer_overlay = get_node_or_null("DrawerOverlay") as Control
 	if scrim == null:
@@ -180,6 +204,8 @@ func _resolve_nodes() -> void:
 		drawer_panel = get_node_or_null("DrawerOverlay/DrawerPanel") as PanelContainer
 	if close_button == null:
 		close_button = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/CloseButton") as Button
+	if close_button != null and _font_bold != null:
+		close_button.add_theme_font_override("font", _font_bold)
 	if drawer_scroll == null:
 		drawer_scroll = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll") as ScrollContainer
 	if drawer_scroll != null:
@@ -785,6 +811,22 @@ func get_mystery_button_by_page(page_number: int) -> Button:
 func get_first_page_for_mystery_set(set_id: String) -> int:
 	var info: Dictionary = _get_mystery_set_info(set_id)
 	return int(info.get("first_page", 6))
+
+
+func get_font_bold() -> Font:
+	return _font_bold
+
+
+func get_font_regular() -> Font:
+	return _font_regular
+
+
+func get_font_italic() -> Font:
+	return _font_italic
+
+
+func get_font_symbols() -> Font:
+	return _font_symbols
 
 
 # --- Internal Signal Handlers ---

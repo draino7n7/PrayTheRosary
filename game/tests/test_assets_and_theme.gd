@@ -82,6 +82,74 @@ func test_bundled_serif_fonts_exist_and_load() -> void:
 		assert_not_null(font, "Font file must load cleanly as FontFile: %s" % font_path)
 
 
+func test_bundled_symbol_fallback_font_and_glyph_coverage() -> void:
+	var font_path: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
+	assert_true(FileAccess.file_exists(font_path), "Symbol font file must exist on disk: %s" % font_path)
+	assert_true(ResourceLoader.exists(font_path), "Symbol font resource must exist: %s" % font_path)
+
+	var font: FontFile = load(font_path) as FontFile
+	assert_not_null(font, "NotoSansSymbols-Regular must load cleanly as a valid FontFile")
+	if font == null:
+		return
+
+	# Assert glyph coverage for all 5 required Unicode symbols:
+	assert_true(font.has_char(0x2630), "NotoSansSymbols must support ☰ (U+2630 Trigram for Heaven)")
+	assert_true(font.has_char(0x2715), "NotoSansSymbols must support ✕ (U+2715 Multiplication X)")
+	assert_true(font.has_char(0x25B8), "NotoSansSymbols must support ▸ (U+25B8 Black Right-Pointing Small Triangle)")
+	assert_true(font.has_char(0x25BE), "NotoSansSymbols must support ▾ (U+25BE Black Down-Pointing Small Triangle)")
+	assert_true(font.has_char(0x2605), "NotoSansSymbols must support ★ (U+2605 Black Star)")
+
+
+func test_rosary_theme_font_fallbacks() -> void:
+	var theme_paths: Array[String] = [
+		"res://resources/rosary_theme.tres",
+		"res://assets/themes/rosary_theme.tres"
+	]
+	var symbol_font_path: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
+	var expected_symbol_font: Font = load(symbol_font_path) as Font
+	assert_not_null(expected_symbol_font, "Symbol fallback font must load cleanly")
+
+	for t_path: String in theme_paths:
+		assert_true(FileAccess.file_exists(t_path), "Theme file must exist: %s" % t_path)
+		var theme: Theme = load(t_path) as Theme
+		assert_not_null(theme, "Theme must load cleanly: %s" % t_path)
+		if theme == null:
+			continue
+
+		var fonts_to_check: Array[Dictionary] = [
+			{"name": "default_font", "font": theme.default_font},
+			{"name": "Button.font", "font": theme.get_font("font", "Button")},
+			{"name": "Label.font", "font": theme.get_font("font", "Label")},
+			{"name": "RichTextLabel.normal_font", "font": theme.get_font("normal_font", "RichTextLabel")},
+			{"name": "RichTextLabel.bold_font", "font": theme.get_font("bold_font", "RichTextLabel")},
+			{"name": "RichTextLabel.italics_font", "font": theme.get_font("italics_font", "RichTextLabel")},
+			{"name": "RichTextLabel.bold_italics_font", "font": theme.get_font("bold_italics_font", "RichTextLabel")}
+		]
+
+		for item: Dictionary in fonts_to_check:
+			var font_item: Font = item.get("font") as Font
+			var font_name: String = str(item.get("name", ""))
+			assert_not_null(font_item, "Theme %s must have %s configured" % [t_path, font_name])
+			if font_item == null:
+				continue
+
+			var fallbacks: Array[Font] = font_item.fallbacks
+			assert_true(fallbacks.size() > 0, "Theme %s font %s must have fallbacks defined" % [t_path, font_name])
+			var has_symbols_fallback: bool = false
+			for fb: Font in fallbacks:
+				if fb != null and (fb == expected_symbol_font or fb.resource_path == symbol_font_path):
+					has_symbols_fallback = true
+					break
+			assert_true(has_symbols_fallback, "Theme %s font %s fallbacks must contain NotoSansSymbols-Regular.ttf" % [t_path, font_name])
+
+			# Verify glyph coverage through the fallback
+			assert_true(font_item.has_char(0x2630), "%s (%s) must resolve ☰ (U+2630) via fallback" % [font_name, t_path])
+			assert_true(font_item.has_char(0x2715), "%s (%s) must resolve ✕ (U+2715) via fallback" % [font_name, t_path])
+			assert_true(font_item.has_char(0x25B8), "%s (%s) must resolve ▸ (U+25B8) via fallback" % [font_name, t_path])
+			assert_true(font_item.has_char(0x25BE), "%s (%s) must resolve ▾ (U+25BE) via fallback" % [font_name, t_path])
+			assert_true(font_item.has_char(0x2605), "%s (%s) must resolve ★ (U+2605) via fallback" % [font_name, t_path])
+
+
 func test_rosary_theme_resource() -> void:
 	var theme_paths: Array[String] = [
 		"res://resources/rosary_theme.tres",

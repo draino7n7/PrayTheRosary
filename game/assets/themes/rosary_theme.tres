@@ -4,6 +4,23 @@
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_l1dgw"]
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-BoldItalic.ttf" id="3_73wsc"]
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="4_btsl2"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSymbols-Regular.ttf" id="5_symbols"]
+
+[sub_resource type="FontVariation" id="FontVariation_regular"]
+base_font = ExtResource("1_r6uga")
+fallbacks = Array[Font]([ExtResource("5_symbols")])
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+base_font = ExtResource("2_l1dgw")
+fallbacks = Array[Font]([ExtResource("5_symbols")])
+
+[sub_resource type="FontVariation" id="FontVariation_bold_italics"]
+base_font = ExtResource("3_73wsc")
+fallbacks = Array[Font]([ExtResource("5_symbols")])
+
+[sub_resource type="FontVariation" id="FontVariation_italics"]
+base_font = ExtResource("4_btsl2")
+fallbacks = Array[Font]([ExtResource("5_symbols")])
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i5dsa"]
 content_margin_left = 14.0
@@ -104,7 +121,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cohrs"]
 
 [resource]
-default_font = ExtResource("1_r6uga")
+default_font = SubResource("FontVariation_regular")
 default_font_size = 20
 Button/colors/font_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
 Button/colors/font_disabled_color = Color(0.36078432, 0.2627451, 0.21960784, 0.5)
@@ -112,7 +129,7 @@ Button/colors/font_focus_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
 Button/colors/font_hover_color = Color(0.41960785, 0.11372549, 0.12941177, 1)
 Button/colors/font_pressed_color = Color(0.2901961, 0.07058824, 0.08235294, 1)
 Button/font_sizes/font_size = 18
-Button/fonts/font = ExtResource("1_r6uga")
+Button/fonts/font = SubResource("FontVariation_regular")
 Button/styles/disabled = SubResource("StyleBoxFlat_i5dsa")
 Button/styles/focus = SubResource("StyleBoxFlat_554pw")
 Button/styles/hover = SubResource("StyleBoxFlat_eow5l")
@@ -134,16 +151,16 @@ Label/colors/parchment_color = Color(0.98039216, 0.9647059, 0.93333334, 1)
 Label/colors/subheading_color = Color(0.36078432, 0.2627451, 0.21960784, 1)
 Label/colors/umber_color = Color(0.36078432, 0.2627451, 0.21960784, 1)
 Label/font_sizes/font_size = 20
-Label/fonts/font = ExtResource("1_r6uga")
+Label/fonts/font = SubResource("FontVariation_regular")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_o1suk")
 RichTextLabel/colors/default_color = Color(0.11764706, 0.09411765, 0.08235294, 1)
 RichTextLabel/font_sizes/bold_font_size = 20
 RichTextLabel/font_sizes/italics_font_size = 20
 RichTextLabel/font_sizes/normal_font_size = 20
-RichTextLabel/fonts/bold_font = ExtResource("2_l1dgw")
-RichTextLabel/fonts/bold_italics_font = ExtResource("3_73wsc")
-RichTextLabel/fonts/italics_font = ExtResource("4_btsl2")
-RichTextLabel/fonts/normal_font = ExtResource("1_r6uga")
+RichTextLabel/fonts/bold_font = SubResource("FontVariation_bold")
+RichTextLabel/fonts/bold_italics_font = SubResource("FontVariation_bold_italics")
+RichTextLabel/fonts/italics_font = SubResource("FontVariation_italics")
+RichTextLabel/fonts/normal_font = SubResource("FontVariation_regular")
 RosaryPalette/colors/ambient_espresso = Color(0.078431375, 0.0627451, 0.0627451, 1)
 RosaryPalette/colors/charcoal = Color(0.11764706, 0.09411765, 0.08235294, 1)
 RosaryPalette/colors/cover_crimson = Color(0.2901961, 0.07058824, 0.08235294, 1)

@@ -19,6 +19,7 @@ data_*/
 
 # Import cache/generated files
 *.import
+!game/assets/fonts/*.import
 
 # OS generated files
 .DS_Store

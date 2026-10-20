@@ -464,3 +464,24 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Automated test suite completes with 0 failures (`8960+ passed`).
   - Hyperlinks render and navigate correctly in standard Markdown parsers without broken parentheses or insecure protocols.
+
+## Test 12.0: Web Export & Cross-Platform Unicode Symbol Fallback Rendering
+
+### TC-WEB-01: Web / HTML5 Export Symbol Rendering Verification
+- **Step 1:** Export the project using the Web preset (`game/export_presets.cfg` `preset.1`) or launch a Godot Web export in a modern browser (Chrome/Edge/Firefox/Safari).
+- **Step 2:** Observe the top-right pinned floating navigation button.
+- **Expected:** The hamburger menu symbol `☰` (`U+2630`) renders crisply in bold serif font without missing-glyph tofu boxes (`□`) or blank spaces.
+- **Step 3:** Click the floating button to open the Navigation Drawer.
+- **Step 4:** Inspect the drawer header close button, the four mystery set accordion headers, and the liturgical recommendation badge.
+- **Expected:**
+  - Close button renders multiplication symbol `✕` (`U+2715`) crisply.
+  - Collapsed mystery set accordion rows display right-pointing disclosure arrow `▸` (`U+25B8`).
+  - Expanding an accordion toggles the arrow to down-pointing triangle `▾` (`U+25BE`).
+  - Today's canonically recommended mystery set displays the antique gold liturgical badge `[★ Today]` with a sharp star symbol `★` (`U+2605`).
+- **Step 5:** Close the drawer, navigate/scroll past Page 5 to the in-stream jump bar, and inspect the mystery set jump buttons.
+- **Expected:** Today's recommended mystery set button displays `★ Recommended Today` with a sharp star icon `★` (`U+2605`) instead of a tofu box.
+- **Step 6:** Inspect standard page cards (Page 1 Front Cover through Page 50 Back Cover) across all three text size presets (`Normal`, `Mobile`, `Extra Large`).
+- **Expected:**
+  - EB Garamond Latin text line heights, margins, and card height calculations remain completely unaffected.
+  - Zero layout regressions, text clipping, or unexpected vertical overflow across all 50 pages.
+

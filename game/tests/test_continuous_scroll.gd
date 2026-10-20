@@ -90,8 +90,19 @@ func test_in_stream_jump_bar_standalone_post_opening_prayers() -> void:
 	for i: int in range(4):
 		if jump_bar.is_recommended_button(i):
 			found_rec_button = true
+			var btn: Button = jump_bar.get_button_node(i)
+			assert_not_null(btn, "Recommended button node must exist")
+			assert_true(btn.text.contains("★"), "Recommended button text must contain star symbol")
+			var btn_font: Font = btn.get_theme_font("font")
+			assert_not_null(btn_font, "Recommended button font override must be set")
+			assert_true(btn_font.has_char(0x2605), "Recommended button font must resolve ★ (U+2605)")
 			break
 	assert_true(found_rec_button, "Exactly one mystery set button must be marked as today's recommendation (%s)" % today_rec)
+
+	var rec_font: Font = jump_bar.get_recommended_font()
+	assert_not_null(rec_font, "InStreamJumpBar recommended font must be configured")
+	if rec_font != null:
+		assert_true(rec_font.has_char(0x2605), "InStreamJumpBar recommended font must resolve ★ (U+2605)")
 
 	# Verify signal emission on button press
 	var emitted_page: Array[int] = [-1]

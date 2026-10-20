@@ -15,6 +15,9 @@ const COLOR_PARCHMENT: Color = Color(0.9804, 0.9647, 0.9333, 1.0) # #FAF6EE
 const COLOR_CHARCOAL: Color = Color(0.1176, 0.0941, 0.0824, 1.0) # #1E1815
 const COLOR_UMBER: Color = Color(0.3608, 0.2627, 0.2196, 1.0)   # #5C4338
 
+const FONT_REGULAR_PATH: String = "res://assets/fonts/EBGaramond-Regular.ttf"
+const FONT_SYMBOLS_PATH: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
+
 var separator_data: Dictionary = {}
 var separator_id: String = ""
 var separator_type: String = ""
@@ -25,6 +28,7 @@ var recommended_mystery_set: String = ""
 var _target_pages: Array[int] = []
 var _button_nodes: Array[Button] = []
 var _is_recommended_flags: Array[bool] = []
+var _font_recommended: Font = null
 
 @onready var prompt_label: Label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/PromptLabel") as Label
 @onready var buttons_container: VBoxContainer = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer") as VBoxContainer
@@ -205,6 +209,28 @@ func _apply_recommended_button_style(btn: Button) -> void:
 	btn.add_theme_color_override("font_color", COLOR_CRIMSON)
 	btn.add_theme_color_override("font_hover_color", COLOR_CHARCOAL)
 	btn.add_theme_font_size_override("font_size", 20)
+	var rec_font: Font = _ensure_recommended_font()
+	if rec_font != null:
+		btn.add_theme_font_override("font", rec_font)
+
+
+func _ensure_recommended_font() -> Font:
+	if _font_recommended != null:
+		return _font_recommended
+	if ResourceLoader.exists(FONT_REGULAR_PATH):
+		var base_font: Font = load(FONT_REGULAR_PATH) as Font
+		var fv: FontVariation = FontVariation.new()
+		fv.base_font = base_font
+		if ResourceLoader.exists(FONT_SYMBOLS_PATH):
+			var sym_font: Font = load(FONT_SYMBOLS_PATH) as Font
+			if sym_font != null:
+				fv.fallbacks = [sym_font]
+		_font_recommended = fv
+	return _font_recommended
+
+
+func get_recommended_font() -> Font:
+	return _ensure_recommended_font()
 
 
 func _apply_closing_button_style(btn: Button) -> void:
@@ -237,6 +263,12 @@ func _apply_closing_button_style(btn: Button) -> void:
 
 func get_button_count() -> int:
 	return _button_nodes.size()
+
+
+func get_button_node(index: int) -> Button:
+	if index >= 0 and index < _button_nodes.size():
+		return _button_nodes[index]
+	return null
 
 
 func get_target_page_for_button(index: int) -> int:
