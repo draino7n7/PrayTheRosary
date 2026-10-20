@@ -115,6 +115,13 @@ git worktree add .worktrees/issue-21 -b feature/issue-21-absent-color-red
    * Do not write redundant comments stating the obvious.
    * Document the *intent*, *assumptions*, or mathematical/algorithmic logic.
    * Every autoload and major script must contain a header docstring explaining its domain responsibility.
+6. **Font Fallbacks & Unicode UI Symbols (Cross-Platform / Web Export):**
+   * When UI controls display Unicode symbols (such as hamburger menu `☰`, close `✕`, disclosure arrows `▸` / `▾`, or stars `★`), NEVER replace the primary serif font (`EB Garamond`) with a `SystemFont` or change font metrics globally, as doing so breaks book page layout metrics, text line heights, and margin auto-fitting.
+   * On Web / HTML5 (WASM), browser sandboxing prevents Godot from querying host OS system fallback fonts, causing missing glyphs to render as tofu boxes (`□`).
+   * Always bundle an open-source OFL symbol font (`NotoSansSymbols-Regular.ttf`) and configure it strictly as a **fallback**:
+     - In `.import` files: add `NotoSansSymbols-Regular.ttf` to `fallbacks` of the primary font.
+     - In theme resources (`rosary_theme.tres`): wrap base fonts using `FontVariation` sub-resources with `fallbacks = [NotoSansSymbols]`.
+     - In programmatic UI loaders: wrap base fonts in a `FontVariation` and assign `fv.fallbacks = [font_symbols]`.
 
 ---
 
