@@ -193,7 +193,7 @@ flowchart TD
 - **Spiritual Fruit:** Humility
 - **Scripture Citation:** Luke 1:28, 38
 - **Scripture Text:** *"And upon entering, the Angel said to her: \"Hail, full of grace. The Lord is with you. Blessed are you among women.\"... Then Mary said: \"Behold, I am the handmaid of the Lord. Let it be done to me according to your word.\""*
-- **Meditation:** With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the overshadowing of the Holy Spirit.
+- **Meditation:** With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit.
 - **Decade Prayers:**
   - Our Father (`our_father`)
   - 10× Hail Mary (`hail_mary`)
@@ -397,7 +397,7 @@ flowchart TD
 - **Spiritual Fruit:** Openness to the Holy Spirit
 - **Scripture Citation:** Matthew 3:16–17
 - **Scripture Text:** *"And Jesus, having been baptized, ascended from the water immediately, and behold, the heavens were opened to him. And he saw the Spirit of God descending like a dove, and alighting on him. And behold, there was a voice from heaven, saying: \"This is my beloved Son, in whom I am well pleased.\""*
-- **Meditation:** Descending into the waters of the Jordan to sanctify them, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.
+- **Meditation:** Descending into the River Jordan to sanctify the waters of Baptism, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (Matthew 3): [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Matthew 3](https://www.drbo.org/chapter/47003.htm) and [New Advent — Matthew 3](https://www.newadvent.org/bible/mat003.htm)
@@ -517,7 +517,7 @@ flowchart TD
 - **Spiritual Fruit:** Desire for Holiness
 - **Scripture Citation:** Luke 9:29–31, 35
 - **Scripture Text:** *"And while he was praying, the appearance of his countenance was altered, and his vestment became white and shining. And behold, two men were talking with him. And these were Moses and Elijah, appearing in majesty... And a voice came from the cloud, saying: \"This is my beloved Son. Listen to him.\""*
-- **Meditation:** On Mount Tabor, the glory of the Godhead shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
+- **Meditation:** Upon the holy mountain, the divine glory of God shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (Luke 9): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 9](https://www.drbo.org/chapter/49009.htm) and [New Advent — Luke 9](https://www.newadvent.org/bible/luk009.htm)
@@ -557,7 +557,7 @@ flowchart TD
 - **Spiritual Fruit:** Adoration
 - **Scripture Citation:** Matthew 26:26–28
 - **Scripture Text:** *"Now while they were eating the meal, Jesus took bread, and he blessed and broke and gave it to his disciples, and he said: \"Take and eat. This is my body.\" And taking the chalice, he gave thanks. And he gave it to them, saying: \"Drink from this, all of you. For this is my blood of the new covenant, which shall be shed for many as a remission of sins.\""*
-- **Meditation:** Having loved His own unto the end, Christ offers His Body and Blood under the appearances of bread and wine to remain with His Church forever.
+- **Meditation:** Having loved His own unto the end, Christ offers His Body, Blood, Soul, and Divinity, under the appearances of bread and wine, to remain truly, really, and substantially present with His Church forever.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (Matthew 26): [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Matthew 26](https://www.drbo.org/chapter/47026.htm) and [New Advent — Matthew 26](https://www.newadvent.org/bible/mat026.htm)
@@ -637,7 +637,7 @@ flowchart TD
 - **Spiritual Fruit:** Mortification
 - **Scripture Citation:** John 19:1; Isaiah 53:5
 - **Scripture Text:** *"Therefore, Pilate then took Jesus into custody and scourged him... But he himself was wounded because of our iniquities. He was bruised because of our wickedness. The discipline of our peace was upon him. And by his wounds, we are healed."*
-- **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for the sins of the flesh and to heal our wounded nature.
+- **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins and to heal our wounded human nature.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (John 19 & Isaiah 53): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [SacredBible.org — Isaiah](https://www.sacredbible.org/catholic/OT-27_Isaiah.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Isaias 53](https://www.drbo.org/chapter/27053.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
@@ -717,7 +717,7 @@ flowchart TD
 - **Spiritual Fruit:** Patience
 - **Scripture Citation:** John 19:17; Luke 23:26–27
 - **Scripture Text:** *"And carrying his own cross, he went forth to the place which is called Calvary... And as they were leading him away, they apprehended a certain one, Simon of Cyrene, as he was returning from the countryside. And they imposed the cross on him to carry after Jesus. Then a great crowd of people followed him, with women who were mourning and lamenting him."*
-- **Meditation:** Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.
+- **Meditation:** Falling beneath the heavy wood along the way to Calvary, Christ exchanges a look of piercing love with His grieving Mother, inviting us to take up our daily cross after Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (John 19 & Luke 23): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)

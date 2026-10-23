@@ -1001,7 +1001,7 @@ func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() 
 	var s4: Dictionary = loader.get_mystery_by_id("sorrowful_4_carrying_cross")
 	assert_eq(
 		str(s4.get("meditation", "")),
-		"Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.",
+		"Falling beneath the heavy wood along the way to Calvary, Christ exchanges a look of piercing love with His grieving Mother, inviting us to take up our daily cross after Him.",
 		"Sorrowful 4 meditation must match"
 	)
 
@@ -1147,4 +1147,42 @@ func test_standardized_usccb_spiritual_fruits() -> void:
 			expected_fruits[mystery_id],
 			"Mystery '%s' fruit must match standardized USCCB virtue '%s'" % [mystery_id, expected_fruits[mystery_id]]
 		)
+
+
+func test_issue_55_refined_mystery_reflections_and_canonical_ledger() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var expected_reflections: Dictionary = {
+		"joyful_1_annunciation": "With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit.",
+		"luminous_1_baptism": "Descending into the River Jordan to sanctify the waters of Baptism, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.",
+		"luminous_4_transfiguration": "Upon the holy mountain, the divine glory of God shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.",
+		"luminous_5_eucharist": "Having loved His own unto the end, Christ offers His Body, Blood, Soul, and Divinity, under the appearances of bread and wine, to remain truly, really, and substantially present with His Church forever.",
+		"sorrowful_2_scourging": "Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins and to heal our wounded human nature.",
+		"sorrowful_4_carrying_cross": "Falling beneath the heavy wood along the way to Calvary, Christ exchanges a look of piercing love with His grieving Mother, inviting us to take up our daily cross after Him."
+	}
+
+	# 1. Assert all 6 updated meditations in mysteries.json
+	for mystery_id: String in expected_reflections.keys():
+		var mystery: Dictionary = loader.get_mystery_by_id(mystery_id)
+		assert_false(mystery.is_empty(), "Mystery '%s' must exist" % mystery_id)
+		assert_eq(
+			str(mystery.get("meditation", "")),
+			expected_reflections[mystery_id],
+			"Mystery '%s' meditation must match refined reflection" % mystery_id
+		)
+
+	# 2. Assert all 6 updated - **Meditation:** entries in documents/references.md
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var references_path: String = repo_root.path_join("documents/references.md")
+	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist on disk")
+	var ref_content: String = FileAccess.get_file_as_string(references_path)
+
+	for mystery_id: String in expected_reflections.keys():
+		var expected_line: String = "- **Meditation:** %s" % expected_reflections[mystery_id]
+		assert_true(
+			ref_content.contains(expected_line),
+			"documents/references.md must contain exact meditation line '%s' for '%s'" % [expected_line, mystery_id]
+		)
+
 
