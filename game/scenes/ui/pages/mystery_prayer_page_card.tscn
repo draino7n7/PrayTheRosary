@@ -146,7 +146,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
 theme_override_fonts/font = ExtResource("2_font_bold")
 theme_override_font_sizes/font_size = 17
-text = "Luke 1:28, 38 (Douay-Rheims)"
+text = "Luke 1:28, 38"
 autowrap_mode = 3
 
 [node name="ScriptureTextLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ScriptureContainer/ScriptureVBox"]
@@ -155,7 +155,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 22
-text = "“And the angel being come in, said unto her: Hail, full of grace...”"
+text = "“And upon entering, the Angel said to her: Hail, full of grace...”"
 autowrap_mode = 3
 
 [node name="MeditationLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer"]

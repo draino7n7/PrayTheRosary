@@ -221,8 +221,8 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_true(sec_title3.get_theme_font_size("font_size") >= 23, "Page 3 section title font size must be >= 23pt (was 21pt)")
 	assert_true(sec_body3.get_theme_font_size("font_size") >= 20, "Page 3 section body font size must be >= 20pt (was 16pt)")
 	assert_true(
-		sec_body3.text.contains("(taken from the Douay-Rheims / Confraternity Edition of the Bible)"),
-		"Page 3 'How This Book Is Organized' must note the Douay-Rheims / Confraternity Edition of the Bible"
+		sec_body3.text.contains("(taken from the Catholic Public Domain Version of the Bible)"),
+		"Page 3 'How This Book Is Organized' must note the Catholic Public Domain Version of the Bible"
 	)
 	var sec1_title3: Label = fmc3.sections_container.get_child(1).get_node("SectionTitle") as Label
 	var sec1_body3: Label = fmc3.sections_container.get_child(1).get_node("SectionBody") as Label
@@ -620,6 +620,10 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_eq(String(last_item49.name), "Attribution_closing_prayers", "Final credit entry on Page 49 must be Attribution_closing_prayers")
 
 	assert_true(cpc49.scripture_notice_label.get_theme_font_size("font_size") >= 13, "Colophon scripture notice must be >= 13pt (was 12pt)")
+	assert_true(
+		cpc49.scripture_notice_label.text.contains("Catholic Public Domain Version (CPDV)"),
+		"Colophon scripture notice must cite Catholic Public Domain Version (CPDV)"
+	)
 	assert_true(cpc49.colophon_notice_label.get_theme_font_size("font_size") >= 13, "Colophon artwork notice must be >= 13pt (was 11pt)")
 	_assert_no_visible_page_numbers(card49, 49)
 	card49.free()

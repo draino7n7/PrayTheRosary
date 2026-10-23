@@ -19,7 +19,7 @@
      - `game/data/mysteries.json` (mysteries, spiritual fruits, Scripture citations and texts)
      - `game/data/book_layout.json` (50-page sequence, historical text, front matter, colophon, back cover)
      - `assets/2D/gimp/attributions.json` (master artwork metadata, inventory numbers, holding institutions)
-   - You **MUST** consult this document to verify accuracy against the cited primary sources (Vatican archives, USCCB, Douay-Rheims Bible Online, museum collection catalogs).
+    - You **MUST** consult this document to verify accuracy against the cited primary sources (Vatican archives, USCCB, Catholic Public Domain Version via SacredBible.org / GitHub cpdv, Douay-Rheims Bible Online, museum collection catalogs).
 
 2. **Synchronization Requirement**:
    - Any approved addition, alteration, or correction to prayers, Scripture verses, historical summaries, or artwork metadata MUST be simultaneously recorded and cited in this document with verifiable external URLs.
@@ -33,7 +33,7 @@
 
 4. **Primary Authority Hierarchy**:
    - **Catholic Liturgy & Doctrine**: Holy See / Vatican Archives (`vatican.va`), Catechism of the Catholic Church (*CCC*), Papal Encyclicals, USCCB (`usccb.org`).
-   - **Sacred Scripture**: Douay-Rheims Bible (Challoner Revision, 1749–1752, public domain) via Douay-Rheims Bible Online (`drbo.org`).
+   - **Sacred Scripture**: Catholic Public Domain Version (CPDV, Ronald L. Conte Jr., 2009 Original Edition, public domain) via [SacredBible.org](https://www.sacredbible.org/) and [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference to Douay-Rheims Bible (Challoner Revision) via [DRBO.org](https://www.drbo.org/).
    - **Sacred Art**: Holding Museum Official Collection Catalogs (Museo del Prado, Kunsthistorisches Museum, National Gallery London, National Gallery of Art Washington, Gallerie dell'Accademia, Pinacoteca di Brera, Hermitage, MFA Boston, Nelson-Atkins, Princeton University Art Museum) and Wikimedia Commons public-domain archival masters.
 
 ---
@@ -43,7 +43,7 @@
 ```mermaid
 flowchart TD
     P1["Page 1: Front Cover<br>Murillo, Virgin of the Rosary"] --> P2["Page 2: History of the Rosary<br>Monastic Roots, St. Dominic, St. Pius V"]
-    P2 --> P3["Page 3: Structure & Guide<br>Douay-Rheims, Leader/Response, Schedule"]
+    P2 --> P3["Page 3: Structure & Guide<br>CPDV Scripture, Leader/Response, Schedule"]
     P3 --> P4["Page 4: Opening Prayers<br>Sign of Cross, Creed, Our Father, Hail Marys, Glory Be"]
     P4 --> P5["Page 5: Opening Art<br>El Greco, The Holy Trinity"]
     P5 --> P6_15["Pages 6–15: Joyful Mysteries<br>1st–5th Joyful (Scripture & Sacred Art)"]
@@ -110,11 +110,11 @@ flowchart TD
 - **Subheading:** Praying with Scripture, Prayer, and Sacred Art
 - **Content & Guidelines:**
   1. **How This Book Is Organized**:
-     - Left Page (Word & Prayer): Mystery title, spiritual fruit, Douay-Rheims Scripture passage, meditation, and complete decade prayers.
+     - Left Page (Word & Prayer): Mystery title, spiritual fruit, Catholic Public Domain Version (CPDV) Scripture passage, meditation, and complete decade prayers.
      - Right Page (Visual Contemplation): Masterpiece artwork and top header.
      - Six Index Tabs: `O` (Opening Prayers), `J` (Joyful), `L` (Luminous), `S` (Sorrowful), `G` (Glorious), `C` (Closing Prayers).
      - Leader & Group Response: Lines in regular type spoken by the leader; lines in bold spoken by the group together.
-     - [Reference 1] Douay-Rheims Bible Online (Public Domain Challoner Revision): [DRBO.org](https://www.drbo.org/)
+     - [Reference 1] Catholic Public Domain Version (CPDV) of the Holy Bible: [SacredBible.org](https://www.sacredbible.org/), [SacredBible.org Catholic Edition](https://www.sacredbible.org/catholic/index.htm), and [GitHub Repository draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org](https://www.drbo.org/)
      - [Reference 2] USCCB "How to Pray the Rosary": [USCCB — How to Pray the Rosary](https://www.usccb.org/how-to-pray-the-rosary)
   2. **Step-by-Step Guide to Praying the Rosary**:
      - Daily 5 Decades (praying the mystery set appointed for the day) vs. Complete 20-Decade Rosary (praying Joyful, Luminous, Sorrowful, and Glorious back-to-back in chronological order).
@@ -191,8 +191,8 @@ flowchart TD
 - **Mystery ID:** `joyful_1_annunciation`
 - **Mystery Title:** The Annunciation
 - **Spiritual Fruit:** Humility
-- **Scripture Citation:** Luke 1:28, 38 (Douay-Rheims)
-- **Scripture Text:** *"And the angel being come in, said unto her: Hail, full of grace, the Lord is with thee: blessed art thou among women... And Mary said: Behold the handmaid of the Lord; be it done to me according to thy word."*
+- **Scripture Citation:** Luke 1:28, 38
+- **Scripture Text:** *"And upon entering, the Angel said to her: \"Hail, full of grace. The Lord is with you. Blessed are you among women.\"... Then Mary said: \"Behold, I am the handmaid of the Lord. Let it be done to me according to your word.\""*
 - **Meditation:** With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the overshadowing of the Holy Spirit.
 - **Decade Prayers:**
   - Our Father (`our_father`)
@@ -200,7 +200,7 @@ flowchart TD
   - Glory Be (`glory_be`)
   - The Fatima Prayer (`fatima_prayer` / *Oratio Fatimae*): *"O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen."*
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 1): [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 1): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican Congregation for the Doctrine of the Faith, *The Message of Fatima* (Fatima Prayer origin July 13, 1917): [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -235,12 +235,12 @@ flowchart TD
 - **Mystery ID:** `joyful_2_visitation`
 - **Mystery Title:** The Visitation
 - **Spiritual Fruit:** Love of Neighbor
-- **Scripture Citation:** Luke 1:41–42, 46–47 (Douay-Rheims)
-- **Scripture Text:** *"And it came to pass, that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost: And she cried out with a loud voice, and said: Blessed art thou among women, and blessed is the fruit of thy womb... And Mary said: My soul doth magnify the Lord. And my spirit hath rejoiced in God my Saviour."*
+- **Scripture Citation:** Luke 1:41–42, 46–47
+- **Scripture Text:** *"And it happened that, as Elizabeth heard the greeting of Mary, the infant leaped in her womb, and Elizabeth was filled with the Holy Spirit. And she cried out with a loud voice and said: \"Blessed are you among women, and blessed is the fruit of your womb.\"... And Mary said: \"My soul magnifies the Lord. And my spirit leaps for joy in God my Savior.\""*
 - **Meditation:** Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 1): [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 1): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm) and [New Advent — Luke 1](https://www.newadvent.org/bible/luk001.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -275,12 +275,12 @@ flowchart TD
 - **Mystery ID:** `joyful_3_nativity`
 - **Mystery Title:** The Nativity of Our Lord
 - **Spiritual Fruit:** Poverty of Spirit and Detachment from the World
-- **Scripture Citation:** Luke 2:6–7, 10–11 (Douay-Rheims)
-- **Scripture Text:** *"And it came to pass, that when they were there, her days were accomplished, that she should be delivered. And she brought forth her firstborn son, and wrapped him up in swaddling clothes, and laid him in a manger; because there was no room for them in the inn... And the angel said to them: Fear not; for, behold, I bring you good tidings of great joy, that shall be to all the people: For, this day, is born to you a Saviour, who is Christ the Lord, in the city of David."*
+- **Scripture Citation:** Luke 2:6–7, 10–11
+- **Scripture Text:** *"Then it happened that, while they were there, the days were completed, so that she would give birth. And she brought forth her firstborn son. And she wrapped him in swaddling clothes and laid him in a manger, because there was no room for them at the inn... And the Angel said to them: \"Do not be afraid. For, behold, I proclaim to you a great joy, which will be for all the people. For today a Savior has been born for you in the city of David: he is Christ the Lord.\""*
 - **Meditation:** In the stillness of Bethlehem's night, the Light of the World is born in humble poverty, adored by Mary, Joseph, the angels, and the simple shepherds.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 2): [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 2): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -315,12 +315,12 @@ flowchart TD
 - **Mystery ID:** `joyful_4_presentation`
 - **Mystery Title:** The Presentation of Jesus in the Temple
 - **Spiritual Fruit:** Obedience and Purity
-- **Scripture Citation:** Luke 2:22, 28–32 (Douay-Rheims)
-- **Scripture Text:** *"And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord... [Then Simeon] took him into his arms, and blessed God, and said: Now thou dost dismiss thy servant, O Lord, according to thy word in peace; Because my eyes have seen thy salvation, Which thou hast prepared before the face of all peoples: A light to the revelation of the Gentiles, and the glory of thy people Israel."*
+- **Scripture Citation:** Luke 2:22, 28–32
+- **Scripture Text:** *"And after the days of her purification were fulfilled, according to the law of Moses, they brought him to Jerusalem, in order to present him to the Lord... [Then Simeon] took him up, into his arms, and he blessed God and said: \"Now you may dismiss your servant in peace, O Lord, according to your word. For my eyes have seen your salvation, which you have prepared before the face of all peoples: the light of revelation to the nations and the glory of your people Israel.\""*
 - **Meditation:** In loving obedience to the Law of the Lord, Mary and Joseph offer the Infant Jesus in the Temple, where righteous Simeon recognizes the promised Redeemer.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 2): [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 2): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -355,12 +355,12 @@ flowchart TD
 - **Mystery ID:** `joyful_5_finding_in_temple`
 - **Mystery Title:** The Finding of Jesus in the Temple
 - **Spiritual Fruit:** Joy in Finding Jesus and True Piety
-- **Scripture Citation:** Luke 2:46–47, 49, 51 (Douay-Rheims)
-- **Scripture Text:** *"And it came to pass, that, after three days, they found him in the temple, sitting in the midst of the doctors, hearing them, and asking them questions. And all that heard him were astonished at his wisdom and his answers... And he said to them: How is it that you sought me? did you not know, that I must be about my father's business?... And his mother kept all these words in her heart."*
+- **Scripture Citation:** Luke 2:46–47, 49, 51
+- **Scripture Text:** *"And it happened that, after three days, they found him in the temple, sitting in the midst of the doctors, listening to them and questioning them. And all who listened to him were astonished over his prudence and his responses... And he said to them: \"How is it that you were seeking me? For did you not know that it is necessary for me to be in these things which are of my Father?\"... And his mother kept all these words in her heart."*
 - **Meditation:** After three days of sorrowful searching, Mary and Joseph rejoice to find the twelve-year-old Jesus in His Father's house, illuminating the teachers of Israel with divine wisdom.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 2): [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 2): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 2](https://www.drbo.org/chapter/49002.htm) and [New Advent — Luke 2](https://www.newadvent.org/bible/luk002.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§20): [Vatican Archives — Rosarium Virginis Mariae §20](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Joyful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -395,12 +395,12 @@ flowchart TD
 - **Mystery ID:** `luminous_1_baptism`
 - **Mystery Title:** The Baptism of Jesus in the Jordan
 - **Spiritual Fruit:** Openness to the Holy Spirit
-- **Scripture Citation:** Matthew 3:16–17 (Douay-Rheims)
-- **Scripture Text:** *"And Jesus being baptized, forthwith came out of the water: and lo, the heavens were opened to him: and he saw the Spirit of God descending as a dove, and coming upon him. And behold a voice from heaven, saying: This is my beloved Son, in whom I am well pleased."*
+- **Scripture Citation:** Matthew 3:16–17
+- **Scripture Text:** *"And Jesus, having been baptized, ascended from the water immediately, and behold, the heavens were opened to him. And he saw the Spirit of God descending like a dove, and alighting on him. And behold, there was a voice from heaven, saying: \"This is my beloved Son, in whom I am well pleased.\""*
 - **Meditation:** Descending into the waters of the Jordan to sanctify them, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Matthew 3): [DRBO.org — Matthew 3](https://www.drbo.org/chapter/47003.htm) and [New Advent — Matthew 3](https://www.newadvent.org/bible/mat003.htm)
+  - [Reference 1] Catholic Public Domain Version (Matthew 3): [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Matthew 3](https://www.drbo.org/chapter/47003.htm) and [New Advent — Matthew 3](https://www.newadvent.org/bible/mat003.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§21): [Vatican Archives — Rosarium Virginis Mariae §21](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Luminous Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -435,12 +435,12 @@ flowchart TD
 - **Mystery ID:** `luminous_2_wedding_at_cana`
 - **Mystery Title:** The Wedding Feast at Cana
 - **Spiritual Fruit:** To Jesus through Mary
-- **Scripture Citation:** John 2:3–5, 11 (Douay-Rheims)
-- **Scripture Text:** *"And the wine failing, the mother of Jesus saith to him: They have no wine. And Jesus saith to her: Woman, what is that to me and to thee? my hour is not yet come. His mother saith to the waiters: Whatsoever he shall say to you, do ye... This beginning of miracles did Jesus in Cana of Galilee; and manifested his glory, and his disciples believed in him."*
+- **Scripture Citation:** John 2:3–5, 11
+- **Scripture Text:** *"And when the wine was failing, the mother of Jesus said to him, \"They have no wine.\" And Jesus said to her: \"What is that to me and to you, woman? My hour has not yet arrived.\" His mother said to the servants, \"Do whatever he tells you.\"... This was the beginning of the signs that Jesus accomplished in Cana of Galilee, and it manifested his glory, and his disciples believed in him."*
 - **Meditation:** At the compassionate intercession of His Mother, Christ changes water into the choicest wine, awakening faith in the hearts of His disciples.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (John 2): [DRBO.org — John 2](https://www.drbo.org/chapter/50002.htm) and [New Advent — John 2](https://www.newadvent.org/bible/joh002.htm)
+  - [Reference 1] Catholic Public Domain Version (John 2): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 2](https://www.drbo.org/chapter/50002.htm) and [New Advent — John 2](https://www.newadvent.org/bible/joh002.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§21): [Vatican Archives — Rosarium Virginis Mariae §21](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Luminous Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -475,12 +475,12 @@ flowchart TD
 - **Mystery ID:** `luminous_3_proclamation`
 - **Mystery Title:** The Proclamation of the Kingdom of God
 - **Spiritual Fruit:** Repentance and Trust in God
-- **Scripture Citation:** Mark 1:14–15; Matthew 5:3, 8 (Douay-Rheims)
-- **Scripture Text:** *"Jesus came into Galilee, preaching the gospel of the kingdom of God, And saying: The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel... Blessed are the poor in spirit: for theirs is the kingdom of heaven... Blessed are the clean of heart: for they shall see God."*
+- **Scripture Citation:** Mark 1:14–15; Matthew 5:3, 8
+- **Scripture Text:** *"Jesus went into Galilee, preaching the Gospel of the kingdom of God, and saying: \"For the time has been fulfilled and the kingdom of God has drawn near. Repent and believe in the Gospel.\"... Blessed are the poor in spirit, for theirs is the kingdom of heaven... Blessed are the pure in heart, for they shall see God."*
 - **Meditation:** Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and childlike trust in the Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Mark 1 & Matthew 5): [DRBO.org — Mark 1](https://www.drbo.org/chapter/48001.htm) & [DRBO.org — Matthew 5](https://www.drbo.org/chapter/47005.htm), and [New Advent — Mark 1](https://www.newadvent.org/bible/mar001.htm)
+  - [Reference 1] Catholic Public Domain Version (Mark 1 & Matthew 5): [SacredBible.org — Mark](https://www.sacredbible.org/catholic/NT-02_Mark.htm), [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Mark 1](https://www.drbo.org/chapter/48001.htm) & [DRBO.org — Matthew 5](https://www.drbo.org/chapter/47005.htm), and [New Advent — Mark 1](https://www.newadvent.org/bible/mar001.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§21): [Vatican Archives — Rosarium Virginis Mariae §21](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Luminous Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -515,12 +515,12 @@ flowchart TD
 - **Mystery ID:** `luminous_4_transfiguration`
 - **Mystery Title:** The Transfiguration
 - **Spiritual Fruit:** Desire for Holiness
-- **Scripture Citation:** Luke 9:29–31, 35 (Douay-Rheims)
-- **Scripture Text:** *"And whilst he prayed, the shape of his countenance was altered, and his raiment became white and glittering. And behold two men were talking with him. And they were Moses and Elias [Elijah], appearing in majesty... And a voice came out of the cloud, saying: This is my beloved Son; hear him."*
+- **Scripture Citation:** Luke 9:29–31, 35
+- **Scripture Text:** *"And while he was praying, the appearance of his countenance was altered, and his vestment became white and shining. And behold, two men were talking with him. And these were Moses and Elijah, appearing in majesty... And a voice came from the cloud, saying: \"This is my beloved Son. Listen to him.\""*
 - **Meditation:** On Mount Tabor, the glory of the Godhead shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 9): [DRBO.org — Luke 9](https://www.drbo.org/chapter/49009.htm) and [New Advent — Luke 9](https://www.newadvent.org/bible/luk009.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 9): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 9](https://www.drbo.org/chapter/49009.htm) and [New Advent — Luke 9](https://www.newadvent.org/bible/luk009.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§21): [Vatican Archives — Rosarium Virginis Mariae §21](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Luminous Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -555,12 +555,12 @@ flowchart TD
 - **Mystery ID:** `luminous_5_eucharist`
 - **Mystery Title:** The Institution of the Eucharist
 - **Spiritual Fruit:** Adoration and Gratitude for the Most Blessed Sacrament
-- **Scripture Citation:** Matthew 26:26–28 (Douay-Rheims)
-- **Scripture Text:** *"And whilst they were at supper, Jesus took bread, and blessed, and broke: and gave to his disciples, and said: Take ye, and eat. This is my body. And taking the chalice, he gave thanks, and gave to them, saying: Drink ye all of this. For this is my blood of the new testament, which shall be shed for many unto remission of sins."*
+- **Scripture Citation:** Matthew 26:26–28
+- **Scripture Text:** *"Now while they were eating the meal, Jesus took bread, and he blessed and broke and gave it to his disciples, and he said: \"Take and eat. This is my body.\" And taking the chalice, he gave thanks. And he gave it to them, saying: \"Drink from this, all of you. For this is my blood of the new covenant, which shall be shed for many as a remission of sins.\""*
 - **Meditation:** Having loved His own unto the end, Christ offers His Body and Blood under the appearances of bread and wine to remain with His Church forever.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Matthew 26): [DRBO.org — Matthew 26](https://www.drbo.org/chapter/47026.htm) and [New Advent — Matthew 26](https://www.newadvent.org/bible/mat026.htm)
+  - [Reference 1] Catholic Public Domain Version (Matthew 26): [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Matthew 26](https://www.drbo.org/chapter/47026.htm) and [New Advent — Matthew 26](https://www.newadvent.org/bible/mat026.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§21): [Vatican Archives — Rosarium Virginis Mariae §21](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Luminous Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -595,12 +595,12 @@ flowchart TD
 - **Mystery ID:** `sorrowful_1_agony`
 - **Mystery Title:** The Agony in the Garden
 - **Spiritual Fruit:** Contrition for Sin and Conformity to God's Will
-- **Scripture Citation:** Luke 22:41–44 (Douay-Rheims)
-- **Scripture Text:** *"And he was withdrawn away from them a stone's cast; and kneeling down, he prayed, Saying: Father, if thou wilt, remove this chalice from me: but yet not my will, but thine be done. And there appeared to him an angel from heaven, strengthening him. And being in an agony, he prayed the longer. And his sweat became as drops of blood, trickling down upon the ground."*
+- **Scripture Citation:** Luke 22:41–44
+- **Scripture Text:** *"And he was separated from them about a stone's throw. And kneeling down, he prayed, saying: \"Father, if you are willing, take this chalice away from me. Yet let not my will, but yours, be done.\" And an Angel appeared to him from heaven, strengthening him. And being in agony, he prayed more intensely; and his sweat became like drops of blood, running down forward upon the ground."*
 - **Meditation:** In the dark stillness of Gethsemane, Christ bears the weight of every human sin, uniting His sacred heart to the Father's redemptive will.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 22): [DRBO.org — Luke 22](https://www.drbo.org/chapter/49022.htm) and [New Advent — Luke 22](https://www.newadvent.org/bible/luk022.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 22): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 22](https://www.drbo.org/chapter/49022.htm) and [New Advent — Luke 22](https://www.newadvent.org/bible/luk022.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§22): [Vatican Archives — Rosarium Virginis Mariae §22](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Sorrowful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -635,12 +635,12 @@ flowchart TD
 - **Mystery ID:** `sorrowful_2_scourging`
 - **Mystery Title:** The Scourging at the Pillar
 - **Spiritual Fruit:** Purity and Mortification of the Senses
-- **Scripture Citation:** John 19:1; Isaias (Isaiah) 53:5 (Douay-Rheims)
-- **Scripture Text:** *"Then therefore Pilate took Jesus, and scourged him... But he was wounded for our iniquities, he was bruised for our sins: the chastisement of our peace was upon him, and by his bruises we are healed."*
+- **Scripture Citation:** John 19:1; Isaiah 53:5
+- **Scripture Text:** *"Therefore, Pilate then took Jesus into custody and scourged him... But he himself was wounded because of our iniquities. He was bruised because of our wickedness. The discipline of our peace was upon him. And by his wounds, we are healed."*
 - **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for the sins of the flesh and to heal our wounded nature.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (John 19 & Isaias 53): [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Isaias 53](https://www.drbo.org/chapter/27053.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
+  - [Reference 1] Catholic Public Domain Version (John 19 & Isaiah 53): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [SacredBible.org — Isaiah](https://www.sacredbible.org/catholic/OT-27_Isaiah.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Isaias 53](https://www.drbo.org/chapter/27053.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§22): [Vatican Archives — Rosarium Virginis Mariae §22](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Sorrowful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -675,12 +675,12 @@ flowchart TD
 - **Mystery ID:** `sorrowful_3_crowning_with_thorns`
 - **Mystery Title:** The Crowning with Thorns
 - **Spiritual Fruit:** Moral Courage and Reign of Christ in Our Hearts
-- **Scripture Citation:** Matthew 27:28–30 (Douay-Rheims)
-- **Scripture Text:** *"And stripping him, they put a scarlet cloak about him. And platting a crown of thorns, they put it upon his head, and a reed in his right hand. And bowing the knee before him, they mocked him, saying: Hail, King of the Jews. And spitting upon him, they took the reed, and struck his head."*
+- **Scripture Citation:** Matthew 27:28–30
+- **Scripture Text:** *"And stripping him, they put a scarlet cloak around him. And plaiting a crown of thorns, they placed it on his head, with a reed in his right hand. And genuflecting before him, they mocked him, saying, \"Hail, King of the Jews.\" And spitting on him, they took the reed and struck his head."*
 - **Meditation:** Crowned with sharp thorns and mocked by soldiers, the true King of Kings teaches us meekness and courage when enduring the world's contempt.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Matthew 27): [DRBO.org — Matthew 27](https://www.drbo.org/chapter/47027.htm) and [New Advent — Matthew 27](https://www.newadvent.org/bible/mat027.htm)
+  - [Reference 1] Catholic Public Domain Version (Matthew 27): [SacredBible.org — Matthew](https://www.sacredbible.org/catholic/NT-01_Matthew.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Matthew 27](https://www.drbo.org/chapter/47027.htm) and [New Advent — Matthew 27](https://www.newadvent.org/bible/mat027.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§22): [Vatican Archives — Rosarium Virginis Mariae §22](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Sorrowful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -715,12 +715,12 @@ flowchart TD
 - **Mystery ID:** `sorrowful_4_carrying_cross`
 - **Mystery Title:** The Carrying of the Cross
 - **Spiritual Fruit:** Patience in Trials
-- **Scripture Citation:** John 19:17; Luke 23:26–27 (Douay-Rheims)
-- **Scripture Text:** *"And bearing his own cross, he went forth to that place which is called Calvary... And as they led him away, they laid hold of one Simon of Cyrene, coming from the country; and they laid the cross on him to carry after Jesus. And there followed him a great multitude of people, and of women, who bewailed and lamented him."*
+- **Scripture Citation:** John 19:17; Luke 23:26–27
+- **Scripture Text:** *"And carrying his own cross, he went forth to the place which is called Calvary... And as they were leading him away, they apprehended a certain one, Simon of Cyrene, as he was returning from the countryside. And they imposed the cross on him to carry after Jesus. Then a great crowd of people followed him, with women who were mourning and lamenting him."*
 - **Meditation:** Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (John 19 & Luke 23): [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
+  - [Reference 1] Catholic Public Domain Version (John 19 & Luke 23): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§22): [Vatican Archives — Rosarium Virginis Mariae §22](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Sorrowful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -755,12 +755,12 @@ flowchart TD
 - **Mystery ID:** `sorrowful_5_crucifixion`
 - **Mystery Title:** The Crucifixion and Death of Our Lord
 - **Spiritual Fruit:** Forgiveness of Injuries and Perseverance in Faith
-- **Scripture Citation:** Luke 23:33–34, 46 (Douay-Rheims)
-- **Scripture Text:** *"And when they were come to the place which is called Calvary, they crucified him there... And Jesus said: Father, forgive them, for they know not what they do... And Jesus crying out with a loud voice, said: Father, into thy hands I commend my spirit. And saying this, he gave up the ghost."*
+- **Scripture Citation:** Luke 23:33–34, 46
+- **Scripture Text:** *"And when they arrived at the place that is called Calvary, they crucified him there... Then Jesus said, \"Father, forgive them. For they know not what they do.\"... And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\" And upon saying this, he expired."*
 - **Meditation:** Raised upon the Cross of Calvary, Christ pardons His executioners, entrusts us to His Blessed Mother, and pours forth His last breath for the salvation of souls.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 23): [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm) and [New Advent — Luke 23](https://www.newadvent.org/bible/luk023.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 23): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 23](https://www.drbo.org/chapter/49023.htm) and [New Advent — Luke 23](https://www.newadvent.org/bible/luk023.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§22): [Vatican Archives — Rosarium Virginis Mariae §22](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Sorrowful Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -795,12 +795,12 @@ flowchart TD
 - **Mystery ID:** `glorious_1_resurrection`
 - **Mystery Title:** The Resurrection of Our Lord
 - **Spiritual Fruit:** Lively Faith
-- **Scripture Citation:** Mark 16:5–6 (Douay-Rheims)
-- **Scripture Text:** *"And entering into the sepulchre, they saw a young man sitting on the right side, clothed with a white robe: and they were astonished. Who saith to them: Be not affrighted; you seek Jesus of Nazareth, who was crucified: he is risen, he is not here, behold the place where they laid him."*
+- **Scripture Citation:** Mark 16:5–6
+- **Scripture Text:** *"And upon entering the tomb, they saw a young man sitting on the right side, covered with a white robe, and they were astonished. And he said to them, \"Do not become frightened. You are seeking Jesus of Nazareth, the Crucified One. He has risen. He is not here. Behold, the place where they laid him.\""*
 - **Meditation:** At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, opening the gates of eternal life to all who believe in Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Mark 16): [DRBO.org — Mark 16](https://www.drbo.org/chapter/48016.htm) and [New Advent — Mark 16](https://www.newadvent.org/bible/mar016.htm)
+  - [Reference 1] Catholic Public Domain Version (Mark 16): [SacredBible.org — Mark](https://www.sacredbible.org/catholic/NT-02_Mark.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Mark 16](https://www.drbo.org/chapter/48016.htm) and [New Advent — Mark 16](https://www.newadvent.org/bible/mar016.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23): [Vatican Archives — Rosarium Virginis Mariae §23](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Glorious Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -835,12 +835,12 @@ flowchart TD
 - **Mystery ID:** `glorious_2_ascension`
 - **Mystery Title:** The Ascension of Our Lord into Heaven
 - **Spiritual Fruit:** Christian Hope and Desire for Heaven
-- **Scripture Citation:** Luke 24:50–52; Acts 1:9 (Douay-Rheims)
-- **Scripture Text:** *"And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight."*
+- **Scripture Citation:** Luke 24:50–52; Acts 1:9
+- **Scripture Text:** *"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven. And worshiping, they returned to Jerusalem with great joy... And when he had said these things, while they were watching, he was lifted up, and a cloud took him from their sight."*
 - **Meditation:** Forty days after His Resurrection, Christ ascends from the Mount of Olives to the right hand of the Father, preparing a place for us in our heavenly homeland.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Luke 24 & Acts 1): [DRBO.org — Luke 24](https://www.drbo.org/chapter/49024.htm) & [DRBO.org — Acts 1](https://www.drbo.org/chapter/51001.htm), and [New Advent — Luke 24](https://www.newadvent.org/bible/luk024.htm)
+  - [Reference 1] Catholic Public Domain Version (Luke 24 & Acts 1): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [SacredBible.org — Acts](https://www.sacredbible.org/catholic/NT-05_Acts.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 24](https://www.drbo.org/chapter/49024.htm) & [DRBO.org — Acts 1](https://www.drbo.org/chapter/51001.htm), and [New Advent — Luke 24](https://www.newadvent.org/bible/luk024.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23): [Vatican Archives — Rosarium Virginis Mariae §23](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Glorious Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -875,12 +875,12 @@ flowchart TD
 - **Mystery ID:** `glorious_3_pentecost`
 - **Mystery Title:** The Descent of the Holy Spirit
 - **Spiritual Fruit:** Love of God and Gifts of the Holy Spirit
-- **Scripture Citation:** Acts 1:14; 2:1–4 (Douay-Rheims)
-- **Scripture Text:** *"All these were persevering with one mind in prayer with the women, and Mary the mother of Jesus... And when the days of the Pentecost were accomplished, they were all together in one place: And suddenly there came a sound from heaven, as of a mighty wind coming, and it filled the whole house where they were sitting. And there appeared to them parted tongues as it were of fire, and it sat upon every one of them: And they were all filled with the Holy Ghost."*
+- **Scripture Citation:** Acts 1:14; 2:1–4
+- **Scripture Text:** *"All these were persevering with one accord in prayer with the women, and with Mary, the mother of Jesus, and with his brothers... And when the days of Pentecost were completed, they were all together in the same place. And suddenly, there came a sound from heaven, like that of a wind approaching violently, and it filled the entire house where they were sitting. And there appeared to them separate tongues, as if of fire, which settled upon each one of them. And they were all filled with the Holy Spirit."*
 - **Meditation:** Gathered in prayer around the Virgin Mary in the Upper Room, the Apostles receive the fire of the Holy Spirit and go forth boldly to preach the Gospel to all nations.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Acts 1 & 2): [DRBO.org — Acts 1](https://www.drbo.org/chapter/51001.htm) & [DRBO.org — Acts 2](https://www.drbo.org/chapter/51002.htm), and [New Advent — Acts 2](https://www.newadvent.org/bible/act002.htm)
+  - [Reference 1] Catholic Public Domain Version (Acts 1 & 2): [SacredBible.org — Acts](https://www.sacredbible.org/catholic/NT-05_Acts.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Acts 1](https://www.drbo.org/chapter/51001.htm) & [DRBO.org — Acts 2](https://www.drbo.org/chapter/51002.htm), and [New Advent — Acts 2](https://www.newadvent.org/bible/act002.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23): [Vatican Archives — Rosarium Virginis Mariae §23](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html) and [USCCB — Glorious Mysteries](https://www.usccb.org/how-to-pray-the-rosary)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -915,12 +915,12 @@ flowchart TD
 - **Mystery ID:** `glorious_4_assumption`
 - **Mystery Title:** The Assumption of the Blessed Virgin Mary
 - **Spiritual Fruit:** Grace of a Happy Death and True Devotion to Mary
-- **Scripture Citation:** Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10 (Douay-Rheims)
-- **Scripture Text:** *"Arise, O Lord, into thy resting place: thou and the ark, which thou hast sanctified... For behold from henceforth all generations shall call me blessed. Because he that is mighty, hath done great things to me; and holy is his name... Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people."*
+- **Scripture Citation:** Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10
+- **Scripture Text:** *"Rise up, O Lord, into your resting place. You and the ark of your sanctification... For behold, from this time, all generations shall call me blessed. For he who is great has done great things for me, and holy is his name... You are the glory of Jerusalem, you are the joy of Israel, you are the honor of our people."*
 - **Meditation:** Having completed the course of her earthly life, the Immaculate Mother of God is taken up body and soul into heavenly glory by the power of her Divine Son.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Psalm 131, Luke 1, Judith 15): [DRBO.org — Psalm 131](https://www.drbo.org/chapter/21131.htm), [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm), [DRBO.org — Judith 15](https://www.drbo.org/chapter/18015.htm), and [New Advent — Judith 15](https://www.newadvent.org/bible/jth015.htm)
+  - [Reference 1] Catholic Public Domain Version (Psalms 131, Luke 1, Judith 15): [SacredBible.org — Psalms](https://www.sacredbible.org/catholic/OT-21_Psalms.htm), [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [SacredBible.org — Judith](https://www.sacredbible.org/catholic/OT-18_Judith.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Psalm 131](https://www.drbo.org/chapter/21131.htm), [DRBO.org — Luke 1](https://www.drbo.org/chapter/49001.htm), [DRBO.org — Judith 15](https://www.drbo.org/chapter/18015.htm), and [New Advent — Judith 15](https://www.newadvent.org/bible/jth015.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23) and Pope Pius XII, Apostolic Constitution *Munificentissimus Deus* (Nov 1, 1950, defining the dogma of the Assumption): [Vatican Archives — Munificentissimus Deus](https://www.vatican.va/content/pius-xii/en/apost_constitutions/documents/hf_p-xii_apc_19501101_munificentissimus-deus.html)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -955,12 +955,12 @@ flowchart TD
 - **Mystery ID:** `glorious_5_coronation`
 - **Mystery Title:** The Coronation of the Blessed Virgin Mary
 - **Spiritual Fruit:** Trust in Mary's Intercession and Final Perseverance
-- **Scripture Citation:** Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7 (Douay-Rheims)
-- **Scripture Text:** *"And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars... I dwelt in the highest places, and my throne is in a pillar of a cloud."*
+- **Scripture Citation:** Revelation 12:1; Sirach 24:7
+- **Scripture Text:** *"And a great sign appeared in heaven: a woman clothed with the sun, and the moon was under her feet, and on her head was a crown of twelve stars... I lived in the highest places, and my throne is in the pillar of a cloud."*
 - **Meditation:** Exalted above all choirs of angels, the Blessed Virgin Mary is crowned Queen of Heaven and Earth by the Most Holy Trinity, reigning forever as our Mother and Advocate.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
-  - [Reference 1] Douay-Rheims Bible Online (Apocalypse 12 & Ecclesiasticus 24): [DRBO.org — Apocalypse 12](https://www.drbo.org/chapter/73012.htm) & [DRBO.org — Ecclesiasticus 24](https://www.drbo.org/chapter/26024.htm), and [New Advent — Apocalypse 12](https://www.newadvent.org/bible/rev012.htm)
+  - [Reference 1] Catholic Public Domain Version (Revelation 12 & Sirach 24): [SacredBible.org — Revelation](https://www.sacredbible.org/catholic/NT-27_Apocalypse.htm), [SacredBible.org — Sirach](https://www.sacredbible.org/catholic/OT-26_Sirach.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Apocalypse 12](https://www.drbo.org/chapter/73012.htm) & [DRBO.org — Ecclesiasticus 24](https://www.drbo.org/chapter/26024.htm), and [New Advent — Apocalypse 12](https://www.newadvent.org/bible/rev012.htm)
   - [Reference 2] Pope St. John Paul II, *Rosarium Virginis Mariae* (§23) and Pope Pius XII, Encyclical *Ad Caeli Reginam* (Oct 11, 1954, on the Queenship of Mary): [Vatican Archives — Ad Caeli Reginam](https://www.vatican.va/content/pius-xii/en/encyclicals/documents/hf_p-xii_enc_11101954_ad-caeli-reginam.html)
   - [Reference 3] Vatican CDF *The Message of Fatima*: [Vatican CDF — The Message of Fatima](https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html)
 
@@ -1078,11 +1078,11 @@ flowchart TD
   22. Spread 22 (Page 45): Diego Velázquez, *The Coronation of the Virgin* (Museo del Prado `P01168`)
   23. Spread 23 (Page 47): Bartolomé Esteban Murillo, *The Immaculate Conception of Los Venerables* (Museo del Prado `P02809`)
 - **Colophon Legal & Public Domain Notices:**
-  - *Scripture Notice*: Scripture quotations are taken from the Douay-Rheims Bible (Challoner Revision), which is in the public domain.
+  - *Scripture Notice*: Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain.
   - *Artwork Notice*: All twenty-three paintings reproduced in this volume are public-domain masterworks (PD-Art / CC0) courtesy of their respective holding museums, cathedrals, and archival collections.
 - **Primary Source References:**
   - [Reference 1] Repository Master Attributions Catalog: `assets/2D/gimp/attributions.json`
-  - [Reference 2] Douay-Rheims Bible Online (Challoner Revision): [DRBO.org](https://www.drbo.org/)
+  - [Reference 2] Catholic Public Domain Version: [SacredBible.org](https://www.sacredbible.org/) and [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference Douay-Rheims Bible Online (Challoner Revision): [DRBO.org](https://www.drbo.org/)
   - [Reference 3] Complete Institutional Catalogs as detailed on Pages 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, and 47.
 
 ---

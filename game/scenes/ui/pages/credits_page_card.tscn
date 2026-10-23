@@ -114,7 +114,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
 theme_override_fonts/font = ExtResource("3_font_italic")
 theme_override_font_sizes/font_size = 13
-text = "Scripture quotations are taken from the Douay-Rheims Bible (Challoner Revision), which is in the public domain."
+text = "Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain."
 autowrap_mode = 3
 
 [node name="ColophonNoticeLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ColophonContainer"]
