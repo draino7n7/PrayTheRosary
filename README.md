@@ -19,7 +19,7 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 ---
 
 - **Classical Typography & Symbol Fallbacks (`game/assets/fonts/`):**
-  - **EB Garamond** (SIL Open Font License 1.1) across Regular, Bold, Italic, and BoldItalic weights provides elegant Renaissance serif typography for all Latin text, prayers, scriptures, and headings.
+  - **EB Garamond** (SIL Open Font License 1.1) provides elegant Renaissance serif typography for all Latin text, prayers, scriptures, and headings, standardizing on crisp, upright regular (`EB Garamond Regular`) and bold (`EB Garamond Bold`) typography across all 50 pages for maximum legibility and reading comfort across all screen sizes (with italic styles retained in asset bundles and theme fallbacks).
   - **Noto Sans Symbols** (`NotoSansSymbols-Regular.ttf`, SIL Open Font License 1.1) is bundled as a cross-platform fallback font for sandboxed Web / HTML5 exports, ensuring crisp, tofu-free rendering of Unicode UI glyphs (`☰`, `✕`, `▸`, `▾`, `★`) while 100% preserving EB Garamond's Latin line heights and layout metrics.
 - **Runtime Sacred Art Textures (`game/assets/images/`):** Contains 23 optimized runtime `.webp` textures generated from archival public-domain masterpieces in `assets/2D/gimp/original_downloads/` (quality 85, max height 1800px, aspect ratio strictly preserved).
 - **Application Theme (`game/resources/rosary_theme.tres`):** Canonical Godot theme configured with an illuminated manuscript palette featuring warm ivory parchment (`#FAF6EE`), Marian crimson headers (`#6B1D21`), deep charcoal text (`#1E1815`), warm umber rubrics (`#5C4338`), and antique gold borders (`#B89130`).

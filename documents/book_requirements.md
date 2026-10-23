@@ -52,7 +52,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
   - **Back Cover:** Deep Baroque Crimson (`#4A1215` / `#2A090B`) background with warm gold (`#D4AF37`) borders and ivory (`#F7F2E7`) typography featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel quote from *The Secret of the Rosary* (25th Rose).
 
 ### 3.2 Typography
-- Classical serif typeface family (**Cormorant Garamond** or **EB Garamond**, Regular, Bold, and Italic weights) used consistently across all headings, Catholic Public Domain Version (CPDV) Scripture readings, meditations, and prayers.
+- Classical serif typeface family (**Cormorant Garamond** or **EB Garamond**, Regular and Bold weights) used consistently across all headings, Catholic Public Domain Version (CPDV) Scripture readings, meditations, rubrics, and prayers. Across all 50 screen and print-facing book pages, typography standardizes on crisp, upright serif typography (`Regular` and `Bold`), eliminating italic slant for enhanced reading clarity, visual weight balance, and optimal print/screen legibility.
 
 ### 3.3 Editorial & Contemplative Layout Rules
 1. **No Numerical Page Numbers:**
