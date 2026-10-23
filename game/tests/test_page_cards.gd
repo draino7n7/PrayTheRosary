@@ -651,6 +651,8 @@ func test_page_50_back_cover_card() -> void:
 	assert_true(bcc.synopsis_label.get_theme_font_size("font_size") >= 18, "Back cover synopsis font size must be >= 18pt (was 15pt)")
 	assert_true(bcc.counsel_quote_label.get_theme_font_size("font_size") >= 20, "Back cover counsel quote font size must be >= 20pt (was 16pt)")
 	assert_true(bcc.counsel_quote_label.text.contains("become a formal heretic or be led astray by the devil."), "Back cover counsel quote must include full verbatim Montfort text")
+	assert_true(bcc.epigraph_container is PanelContainer, "Epigraph container must be a PanelContainer callout box")
+	assert_true(bcc.counsel_container is PanelContainer, "Counsel container must be a PanelContainer callout box")
 
 	_assert_no_visible_page_numbers(card, 50)
 	card.free()
@@ -684,13 +686,12 @@ func test_all_fifty_pages_hydrate_cleanly() -> void:
 
 func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictionary, loader: RosaryDataLoader) -> float:
 	var font_bold: Font = load("res://assets/fonts/EBGaramond-Bold.ttf") as Font
-	var font_italic: Font = load("res://assets/fonts/EBGaramond-Italic.ttf") as Font
 	var font_reg: Font = load("res://assets/fonts/EBGaramond-Regular.ttf") as Font
 	var width: float = 656.0 # 720 - 64 margins
 	var total_h: float = 64.0 # 32 top + 32 bottom margins
 
 	if sub is FrontMatterPageCard:
-		total_h += font_italic.get_height(22) + 6.0
+		total_h += font_reg.get_height(22) + 6.0
 		total_h += font_bold.get_height(34) + 6.0
 		total_h += 2.0 + 20.0
 		var sections: Array = p_data.get("sections", [])
@@ -707,7 +708,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 				total_h += font_reg.get_multiline_string_size(str(s.get("body", "")), HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y
 				total_h += 16.0
 	elif sub is PrayerSequencePageCard:
-		total_h += font_italic.get_height(22) + 4.0
+		total_h += font_reg.get_height(22) + 4.0
 		total_h += font_bold.get_height(34) + 4.0
 		total_h += 2.0 + 14.0
 		var steps: Array = p_data.get("prayer_steps", [])
@@ -723,7 +724,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			var rubric: String = str(s.get("rubric", ""))
 			var rtext: String = "[%s] %s" % [bead, rubric] if bead != "" else rubric
 			if rtext != "":
-				total_h += font_italic.get_multiline_string_size(rtext, HORIZONTAL_ALIGNMENT_LEFT, width, rubric_sz).y + 3.0
+				total_h += font_reg.get_multiline_string_size(rtext, HORIZONTAL_ALIGNMENT_LEFT, width, rubric_sz).y + 3.0
 			var p: Dictionary = s.get("prayer", {})
 			if p.is_empty():
 				p = loader.get_prayer(str(s.get("prayer_id", "")))
@@ -756,9 +757,9 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 
 			total_h += 8.0
 	elif sub is MysteryPrayerPageCard:
-		total_h += font_italic.get_height(22) + 4.0
+		total_h += font_reg.get_height(22) + 4.0
 		total_h += font_bold.get_height(34) + 4.0
-		total_h += font_italic.get_height(18) + 8.0 + 4.0
+		total_h += font_reg.get_height(18) + 8.0 + 4.0
 		total_h += 2.0 + 10.0
 		var mys: Dictionary = p_data.get("mystery", {})
 		var scrip_str: String = str(mys.get("scripture_text", ""))
@@ -775,7 +776,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			body_sz = 23
 		var rubric_sz: int = 17 if body_sz <= 21 else 18
 		total_h += font_bold.get_height(17) + 2.0
-		total_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
+		total_h += font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
 		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 10.0
 		var dec: Array = p_data.get("decade_prayers", [])
 		for p_item_val: Variant in dec:
@@ -800,7 +801,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			total_h += 8.0
 	elif sub is CreditsPageCard:
 		total_h = 44.0 # 22 top + 22 bottom margins
-		total_h += font_italic.get_height(22) + 2.0
+		total_h += font_reg.get_height(22) + 2.0
 		total_h += font_bold.get_height(34) + 2.0
 		total_h += 2.0 + 6.0
 		var artworks: Array = p_data.get("attributions", [])
@@ -826,20 +827,22 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 		var colophon: Dictionary = p_data.get("colophon", {})
 		if not colophon.is_empty():
 			total_h += 6.0 + 1.0 + 3.0
-			total_h += font_italic.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 13).y + 3.0
+			total_h += font_reg.get_multiline_string_size(str(colophon.get("scripture_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 13).y + 3.0
 			total_h += font_reg.get_multiline_string_size(str(colophon.get("artwork_notice", "")), HORIZONTAL_ALIGNMENT_LEFT, width, 13).y
 	elif sub is BackCoverPageCard:
 		var inner_w: float = 720.0 - (12.0 + 22.0) * 2.0
-		total_h = (12.0 + 26.0) * 2.0
+		total_h = (12.0 + 20.0) * 2.0
 		total_h += font_bold.get_height(38) + 8.0
-		total_h += font_italic.get_multiline_string_size("A Contemplative Visual Guide to the Twenty Mysteries", HORIZONTAL_ALIGNMENT_CENTER, inner_w, 22).y + 8.0
+		total_h += font_reg.get_multiline_string_size("A Contemplative Visual Guide to the Twenty Mysteries", HORIZONTAL_ALIGNMENT_CENTER, inner_w, 22).y + 8.0
 		total_h += 2.0 + 24.0
 		var epi: Dictionary = p_data.get("epigraph", {})
-		total_h += font_italic.get_multiline_string_size("“%s”" % str(epi.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 22).y + 6.0
+		total_h += 24.0 # Callout box padding
+		total_h += font_reg.get_multiline_string_size("“%s”" % str(epi.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w - 28.0, 22).y + 6.0
 		total_h += font_reg.get_height(17) + 24.0
 		total_h += font_reg.get_multiline_string_size(str(p_data.get("synopsis", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 20).y + 24.0
 		var coun: Dictionary = p_data.get("marian_counsel", {})
-		total_h += font_italic.get_multiline_string_size("“%s”" % str(coun.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w, 22).y + 6.0
+		total_h += 24.0 # Callout box padding
+		total_h += font_reg.get_multiline_string_size("“%s”" % str(coun.get("quote", "")), HORIZONTAL_ALIGNMENT_LEFT, inner_w - 28.0, 22).y + 6.0
 		total_h += font_reg.get_height(17)
 	else:
 		total_h = 1080.0
@@ -855,6 +858,46 @@ func _assert_no_visible_page_numbers(node: Node, page_num: int) -> void:
 			assert_true(false, "Found visible page number label displaying '%s'" % text)
 	for child: Node in node.get_children():
 		_assert_no_visible_page_numbers(child, page_num)
+
+
+func _assert_no_italic_fonts_in_labels(node: Node, page_num: int) -> void:
+	if node is Label:
+		var lbl: Label = node as Label
+		var font: Font = null
+		if lbl.has_theme_font_override("font"):
+			font = lbl.get_theme_font("font")
+		elif lbl.get_theme_font("font") != null:
+			font = lbl.get_theme_font("font")
+
+		if font != null:
+			var path: String = font.resource_path
+			assert_false(path.ends_with("EBGaramond-Italic.ttf"), "Page %d Label '%s' must not use EBGaramond-Italic.ttf (found %s)" % [page_num, lbl.name, path])
+			assert_false(path.ends_with("EBGaramond-BoldItalic.ttf"), "Page %d Label '%s' must not use EBGaramond-BoldItalic.ttf (found %s)" % [page_num, lbl.name, path])
+			if font is FontVariation:
+				var fv: FontVariation = font as FontVariation
+				if fv.base_font != null:
+					var bpath: String = fv.base_font.resource_path
+					assert_false(bpath.ends_with("EBGaramond-Italic.ttf"), "Page %d Label '%s' FontVariation must not use EBGaramond-Italic.ttf" % [page_num, lbl.name])
+					assert_false(bpath.ends_with("EBGaramond-BoldItalic.ttf"), "Page %d Label '%s' FontVariation must not use EBGaramond-BoldItalic.ttf" % [page_num, lbl.name])
+	for child: Node in node.get_children():
+		_assert_no_italic_fonts_in_labels(child, page_num)
+
+
+func test_no_italic_fonts_across_all_fifty_pages() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var all_pages: Array[Dictionary] = loader.get_all_pages()
+	assert_eq(all_pages.size(), 50, "Loader must return exactly 50 sequential pages")
+
+	for i: int in range(all_pages.size()):
+		var p_data: Dictionary = all_pages[i]
+		var page_num: int = i + 1
+		var card: PageCard = PageCardScene.instantiate() as PageCard
+		test_root_window.add_child(card)
+		card.bind_page_data(p_data, loader)
+
+		_assert_no_italic_fonts_in_labels(card, page_num)
+
+		card.free()
 
 
 func test_dynamic_text_size_presets_font_scaling() -> void:

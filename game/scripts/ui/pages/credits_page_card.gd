@@ -80,7 +80,6 @@ func _apply_page_data() -> void:
 				artworks.append(art_dict)
 
 	var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
 	var sum_art_heights: float = 0.0
@@ -159,9 +158,9 @@ func _apply_page_data() -> void:
 				scripture_notice_label.text = sn_text
 				scripture_notice_label.add_theme_font_size_override("font_size", notice_font_size)
 				scripture_notice_label.add_theme_constant_override("line_spacing", -1)
-				if font_italic != null:
-					var sn_lines: int = int(ceilf(font_italic.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_italic.get_height(notice_font_size))))
-					colophon_h += font_italic.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, sn_lines - 1)) + 3.0
+				if font_reg != null:
+					var sn_lines: int = int(ceilf(font_reg.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_reg.get_height(notice_font_size))))
+					colophon_h += font_reg.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, sn_lines - 1)) + 3.0
 			if colophon_notice_label != null:
 				colophon_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				var cn_text: String = str(colophon.get("artwork_notice", ""))
@@ -173,8 +172,8 @@ func _apply_page_data() -> void:
 					colophon_h += font_reg.get_multiline_string_size(cn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, cn_lines - 1))
 
 	var header_h: float = 0.0
-	if font_italic != null:
-		header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 2.0
+	if font_reg != null:
+		header_h += font_reg.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 2.0
 	if font_bold != null:
 		header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 2.0
 	header_h += 2.0 # Divider

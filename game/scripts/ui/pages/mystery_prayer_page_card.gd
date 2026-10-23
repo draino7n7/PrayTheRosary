@@ -78,7 +78,6 @@ func _apply_page_data() -> void:
 			citation_font_size = 17
 
 	var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-	var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 	var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
 	var sub_text: String = str(page_data.get("subheading", mys.get("ordinal_label", "")))
@@ -106,8 +105,8 @@ func _apply_page_data() -> void:
 		var badge_margin_h: float = 28.0
 		var max_fruit_label_w: float = available_badge_w - badge_margin_h
 		var unwrapped_fruit_w: float = 0.0
-		if font_italic != null:
-			unwrapped_fruit_w = font_italic.get_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, -1, fruit_font_size).x
+		if font_reg != null:
+			unwrapped_fruit_w = font_reg.get_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, -1, fruit_font_size).x
 		else:
 			unwrapped_fruit_w = float(fruit_str.length() * fruit_font_size) * 0.6
 		var target_label_w: float = ceilf(minf(unwrapped_fruit_w, max_fruit_label_w))
@@ -232,20 +231,20 @@ func _apply_page_data() -> void:
 			decade_prayers_container.add_child(p_vbox)
 
 	var header_h: float = 0.0
-	if font_italic != null:
-		header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
+	if font_reg != null:
+		header_h += font_reg.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 	if font_bold != null:
 		header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
-	if font_italic != null:
-		header_h += font_italic.get_multiline_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, 628.0, fruit_font_size).y + 8.0 + 4.0
+	if font_reg != null:
+		header_h += font_reg.get_multiline_string_size(fruit_str, HORIZONTAL_ALIGNMENT_CENTER, 628.0, fruit_font_size).y + 8.0 + 4.0
 	header_h += 2.0 # Divider
 
 	var scripture_h: float = 8.0 # ScriptureContainer StyleBox margins
 	if font_bold != null:
 		scripture_h += font_bold.get_multiline_string_size(cite_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, citation_font_size).y + 2.0
-	if font_italic != null:
-		var scrip_lines: int = int(ceilf(font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y / float(font_italic.get_height(body_font_size))))
-		scripture_h += font_italic.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + (maxi(0, scrip_lines - 1) * 2)
+	if font_reg != null:
+		var scrip_lines: int = int(ceilf(font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+		scripture_h += font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + (maxi(0, scrip_lines - 1) * 2)
 
 	var meditation_h: float = 0.0
 	if font_reg != null:

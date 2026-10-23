@@ -9,9 +9,9 @@ This document outlines the strict manual testing procedures required before any 
 ## Test 2.0: Typography & Font Rendering
 - **Step 1:** Launch the application and observe any visible text (`Label`, `RichTextLabel`, and `Button` controls).
 - **Expected:** 
-  - Text renders using **EB Garamond** serif font across Regular, Bold, and Italic styles.
+  - Text renders using **EB Garamond** serif font across Regular and Bold styles (with Italic available in asset/theme fallbacks, but unused on page cards).
   - Characters appear crisp and legible without blurring, pixelation, distortion, or clipping at native and scaled resolutions.
-  - Standard page card headers satisfy minimum font thresholds: `SubheadingLabel` $\ge 22\text{pt}$ (Garamond italic) and `HeadingLabel` $\ge 34\text{pt}$ (Garamond bold; $38\text{pt}$ on Cover and Back Cover).
+  - Standard page card headers satisfy minimum font thresholds: `SubheadingLabel` $\ge 22\text{pt}$ (Garamond regular) and `HeadingLabel` $\ge 34\text{pt}$ (Garamond bold; $38\text{pt}$ on Cover and Back Cover).
   - Body text is maximized to fill card height without vertical overflow or internal scrolling (`required_height \le 1080.0\text{px}`).
 
 ## Test 3.0: Theme & Palette Consistency
@@ -38,7 +38,7 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Front Cover card renders using a structured vertical layout (`VBoxContainer`) with standardized 32px outer margins.
   - Title elements are housed in a dedicated Top Header Band styled in deep Baroque crimson (`#4A1215` / `#2A090B`) with an antique gold border (`#D4AF37`).
-  - Title **"PRAY THE ROSARY"** displays in warm gold serif typography at 38pt bold (`#D4AF37`), subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory at 22pt italic (`#F7F2E7`), separated by an ornamental gold divider line.
+  - Title **"PRAY THE ROSARY"** displays in warm gold serif typography at 38pt bold (`#D4AF37`), subtitle *"A Contemplative Visual Guide to the Twenty Mysteries"* in warm ivory at 22pt regular (`EBGaramond-Regular.ttf`, `#F7F2E7`), separated by an ornamental gold divider line.
   - Bartolomé Esteban Murillo's *The Virgin of the Rosary* (`cover.webp`) renders centered in an antique gold framed artwork container strictly below the header band (`expand_mode = EXPAND_IGNORE_SIZE`, `stretch_mode = STRETCH_KEEP_ASPECT_CENTERED`).
   - Zero text or typography elements overlap any portion of the painting (the Virgin Mary, the Christ Child, the rosary, and halo remain completely unobstructed).
   - Strictly no numerical page numbers appear.
@@ -47,7 +47,7 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect Page 2 (*The History of the Holy Rosary*) and Page 3 (*Structure of This Book & How to Pray*).
 - **Expected:**
   - Standardized 32px uniform margins (`margin_left`, `margin_right`, `margin_top`, `margin_bottom`).
-  - 22pt italic subheading, 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
+  - 22pt regular subheading (`EBGaramond-Regular.ttf` in Warm Umber `#5C4338`), 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
   - Page 2 displays subheading *"Origins and Tradition of the Most Holy Rosary"*.
   - Calibrated typography auto-fitting based on character density (`total_chars <= 1650`):
     - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
@@ -64,7 +64,7 @@ This document outlines the strict manual testing procedures required before any 
 ### TC-PAGE-03: Prayer Sequence Cards (`Pages 4 & 46`)
 - **Step 1:** Inspect Page 4 (*The Opening Prayers*) and Page 46 (*The Closing Prayers*).
 - **Expected:**
-  - Standardized 32px uniform margins, 22pt italic subheading, and 34pt bold heading.
+  - Standardized 32px uniform margins, 22pt regular subheading, and 34pt bold heading. Prayer step rubrics render in 16–18pt upright regular typography (`EBGaramond-Regular.ttf`) in Warm Umber (`#5C4338`).
   - Page 4 displays exactly 5 introductory prayer steps formatted with 20pt prayer titles, 16pt rubrics, and 19pt body text, using the simplified titles `"The Our Father"` (Step 3) and `"The Glory Be"` (Step 5) without `"The Lord's Prayer"` or `"(Doxology)"`:
     - *The Sign of the Cross* renders entirely in bold-weight serif (`EBGaramond-Bold.ttf`) as a unison prayer.
     - *The Apostles' Creed*, *The Our Father*, three *Hail Marys for Faith, Hope, and Charity*, and *The Glory Be* render with regular leader text (`EBGaramond-Regular.ttf`) and bold group response (`EBGaramond-Bold.ttf`) stacked vertically on separate lines.
@@ -80,13 +80,13 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect all 20 Mystery Prayer Cards.
 - **Expected:**
   - Standardized 32px uniform margins.
-  - Header displays 22pt italic mystery ordinal (e.g., *The First Joyful Mystery*), 34pt bold title (e.g., **The Annunciation**), and 18pt italic fruit badge (*Fruit of the Mystery: <Virtue>*) in antique gold pill box.
+  - Header displays 22pt regular mystery ordinal (e.g., *The First Joyful Mystery* in Warm Umber `#5C4338`), 34pt bold title (e.g., **The Annunciation**), and 18pt regular fruit badge (*Fruit of the Mystery: <Virtue>*) in antique gold pill box.
   - Verify that each Mystery Prayer Card renders its standardized concise traditional USCCB spiritual fruit:
     - **Joyful Mysteries:** Page 6 (*Humility*), Page 8 (*Love of Neighbor*), Page 10 (*Poverty*), Page 12 (*Purity of Heart and Body*), Page 14 (*Devotion to Jesus*).
     - **Luminous Mysteries:** Page 16 (*Openness to the Holy Spirit*), Page 18 (*To Jesus through Mary*), Page 20 (*Conversion*), Page 22 (*Desire for Holiness*), Page 24 (*Adoration*).
     - **Sorrowful Mysteries:** Page 26 (*Obedience to God's Will*), Page 28 (*Mortification*), Page 30 (*Courage*), Page 32 (*Patience*), Page 34 (*Sorrow for Our Sins*).
     - **Glorious Mysteries:** Page 36 (*Faith*), Page 38 (*Hope*), Page 40 (*Wisdom*), Page 42 (*Devotion to Mary*), Page 44 (*Grace of a Happy Death*).
-  - Scripture citation renders at 17pt bold with a gold vertical accent bar (displaying clean book, chapter, and verse citations without any trailing `" (CPDV)"` suffix), and scripture reading renders at 18–20pt italic.
+  - Scripture citation renders at 17pt bold with a gold vertical accent bar (displaying clean book, chapter, and verse citations without any trailing `" (CPDV)"` suffix), and scripture reading renders at 18–20pt regular serif (`EBGaramond-Regular.ttf`) enclosed in a gold-bordered container.
   - Verify canonical Catholic Public Domain Version (CPDV) citations, verbatim scripture passages, and contemplative meditations:
     - **Joyful 1 (`Page 6`):** Contemplative meditation reads: `"With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit."`
     - **Joyful 2 (`Page 8`):** Contemplative meditation reads: `"Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist."`
@@ -115,17 +115,17 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect all 22 Artwork Cards (Opening, 20 Mysteries, Closing).
 - **Expected:**
   - Standardized 32px uniform margins.
-  - Top header band displays the mystery ordinal subheading at 22pt italic and mystery title at 34pt bold.
+  - Top header band displays the mystery ordinal subheading at 22pt regular serif (`EBGaramond-Regular.ttf`) and mystery title at 34pt bold.
   - Painting renders centered inside the antique gold border (`#B89130`) preserving original aspect ratio.
   - Strictly **NO captions** (artist, museum, date) and **NO numerical page numbers** appear on the artwork card.
 
 ### TC-PAGE-06: Credits & Back Cover Cards (`Pages 48, 49, & 50`)
 - **Step 1:** Inspect Pages 48 and 49 (*Sacred Artwork Credits Parts I & II*) and Page 50 (*Back Cover*).
 - **Expected:**
-  - 32px horizontal / 22px vertical margins, 22pt italic subheading, and 34pt bold heading on Pages 48 and 49.
+  - 32px horizontal / 22px vertical margins, 22pt regular subheading, and 34pt bold heading on Pages 48 and 49.
   - Page 48 (`"Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries"`) lists 12 attributions in exact sequential book appearance order (Front Cover, Opening Prayers, Joyful Mysteries 1–5, and Luminous Mysteries 1–5) at 16pt bold title (`"%s — %s" % [section_label, art_title]`, with `AUTOWRAP_WORD_SMART` and zero page numbers) and 14pt regular details with natural item heights (`art_vbox` using `Control.SIZE_FILL` without `SIZE_EXPAND`) and dynamically calculated uniform separation on `credits_container`, including updated creation dates for Ricci's *The Marriage at Cana* (`c. 1712–1715`) and Rubens's *The Last Supper* (`1631–1632`).
-  - Page 49 (`"Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources"`) lists 11 attributions in exact sequential book appearance order (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, and Closing Prayers last, ending with `"Closing Prayers — The Immaculate Conception of Los Venerables (Inmaculada de Soult)"`) at 16pt bold title (`"%s — %s" % [section_label, art_title]`) and 14pt regular details—including Maíno's *Pentecost* (`1612–1614`), Murillo's *The Assumption of the Virgin* at `State Hermitage Museum, St. Petersburg, Russia`, and Velázquez's *The Coronation of the Virgin* (`c. 1635–1636`)—plus the Catholic Public Domain Version (CPDV) Scripture notice (13pt italic) and museum colophon (13pt regular) with natural item heights (`Control.SIZE_FILL`), dynamically calculated uniform separation on `credits_container`, and zero clipping or vertical overflow.
-  - Page 50 displays deep Baroque crimson (`#4A1215`) card with 38pt title in warm gold, 22pt italic subtitle, 22pt epigraphs with 17pt attributions (including St. Louis Marie de Montfort's full verbatim Marian counsel: *"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood."*), 20pt body synopsis, natural block heights (`Control.SIZE_FILL` without `SIZE_EXPAND`), and dynamically calculated uniform vertical separation (~158px inter-block separation on Normal preset) across `main_vbox` with zero vertical overflow.
+  - Page 49 (`"Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources"`) lists 11 attributions in exact sequential book appearance order (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, and Closing Prayers last, ending with `"Closing Prayers — The Immaculate Conception of Los Venerables (Inmaculada de Soult)"`) at 16pt bold title (`"%s — %s" % [section_label, art_title]`) and 14pt regular details—including Maíno's *Pentecost* (`1612–1614`), Murillo's *The Assumption of the Virgin* at `State Hermitage Museum, St. Petersburg, Russia`, and Velázquez's *The Coronation of the Virgin* (`c. 1635–1636`)—plus the Catholic Public Domain Version (CPDV) Scripture notice (13pt regular in `EBGaramond-Regular.ttf`, matching the colophon notice) and museum colophon (13pt regular) with natural item heights (`Control.SIZE_FILL`), dynamically calculated uniform separation on `credits_container`, and zero clipping or vertical overflow.
+  - Page 50 displays deep Baroque crimson (`#4A1215`) card with 38pt title in warm gold, 22pt regular subtitle in warm ivory (`EBGaramond-Regular.ttf`), Pope St. John Paul II's epigraph in 22pt regular with 17pt attribution enclosed in a subtle gold-bordered callout box (`PanelContainer` with `1px` gold border `#D4AF37` at `0.55` alpha, subtle deep crimson fill `#380D10`, and `14px/12px` padding), 20pt body synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary* (25th Rose) in 22pt regular with 17pt attribution enclosed in a matching gold-bordered callout box, natural block heights (`Control.SIZE_FILL` without `SIZE_EXPAND`), and dynamically calculated uniform vertical separation (~158px inter-block separation on Normal preset) across `main_vbox` with zero vertical overflow.
 
 ## Test 6.0: Continuous 50-Page Vertical Scroll, Jump Bars & Reading Progress
 
