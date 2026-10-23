@@ -274,7 +274,7 @@ flowchart TD
 - **Page Number:** 10 (Verso)
 - **Mystery ID:** `joyful_3_nativity`
 - **Mystery Title:** The Nativity of Our Lord
-- **Spiritual Fruit:** Poverty of Spirit and Detachment from the World
+- **Spiritual Fruit:** Poverty
 - **Scripture Citation:** Luke 2:6–7, 10–11
 - **Scripture Text:** *"Then it happened that, while they were there, the days were completed, so that she would give birth. And she brought forth her firstborn son. And she wrapped him in swaddling clothes and laid him in a manger, because there was no room for them at the inn... And the Angel said to them: \"Do not be afraid. For, behold, I proclaim to you a great joy, which will be for all the people. For today a Savior has been born for you in the city of David: he is Christ the Lord.\""*
 - **Meditation:** In the stillness of Bethlehem's night, the Light of the World is born in humble poverty, adored by Mary, Joseph, the angels, and the simple shepherds.
@@ -314,7 +314,7 @@ flowchart TD
 - **Page Number:** 12 (Verso)
 - **Mystery ID:** `joyful_4_presentation`
 - **Mystery Title:** The Presentation of Jesus in the Temple
-- **Spiritual Fruit:** Obedience and Purity
+- **Spiritual Fruit:** Purity of Heart and Body
 - **Scripture Citation:** Luke 2:22, 28–32
 - **Scripture Text:** *"And after the days of her purification were fulfilled, according to the law of Moses, they brought him to Jerusalem, in order to present him to the Lord... [Then Simeon] took him up, into his arms, and he blessed God and said: \"Now you may dismiss your servant in peace, O Lord, according to your word. For my eyes have seen your salvation, which you have prepared before the face of all peoples: the light of revelation to the nations and the glory of your people Israel.\""*
 - **Meditation:** In loving obedience to the Law of the Lord, Mary and Joseph offer the Infant Jesus in the Temple, where righteous Simeon recognizes the promised Redeemer.
@@ -354,7 +354,7 @@ flowchart TD
 - **Page Number:** 14 (Verso)
 - **Mystery ID:** `joyful_5_finding_in_temple`
 - **Mystery Title:** The Finding of Jesus in the Temple
-- **Spiritual Fruit:** Joy in Finding Jesus and True Piety
+- **Spiritual Fruit:** Devotion to Jesus
 - **Scripture Citation:** Luke 2:46–47, 49, 51
 - **Scripture Text:** *"And it happened that, after three days, they found him in the temple, sitting in the midst of the doctors, listening to them and questioning them. And all who listened to him were astonished over his prudence and his responses... And he said to them: \"How is it that you were seeking me? For did you not know that it is necessary for me to be in these things which are of my Father?\"... And his mother kept all these words in her heart."*
 - **Meditation:** After three days of sorrowful searching, Mary and Joseph rejoice to find the twelve-year-old Jesus in His Father's house, illuminating the teachers of Israel with divine wisdom.
@@ -474,7 +474,7 @@ flowchart TD
 - **Page Number:** 20 (Verso)
 - **Mystery ID:** `luminous_3_proclamation`
 - **Mystery Title:** The Proclamation of the Kingdom of God
-- **Spiritual Fruit:** Repentance and Trust in God
+- **Spiritual Fruit:** Conversion
 - **Scripture Citation:** Mark 1:14–15; Matthew 5:3, 8
 - **Scripture Text:** *"Jesus went into Galilee, preaching the Gospel of the kingdom of God, and saying: \"For the time has been fulfilled and the kingdom of God has drawn near. Repent and believe in the Gospel.\"... Blessed are the poor in spirit, for theirs is the kingdom of heaven... Blessed are the pure in heart, for they shall see God."*
 - **Meditation:** Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and childlike trust in the Father.
@@ -554,7 +554,7 @@ flowchart TD
 - **Page Number:** 24 (Verso)
 - **Mystery ID:** `luminous_5_eucharist`
 - **Mystery Title:** The Institution of the Eucharist
-- **Spiritual Fruit:** Adoration and Gratitude for the Most Blessed Sacrament
+- **Spiritual Fruit:** Adoration
 - **Scripture Citation:** Matthew 26:26–28
 - **Scripture Text:** *"Now while they were eating the meal, Jesus took bread, and he blessed and broke and gave it to his disciples, and he said: \"Take and eat. This is my body.\" And taking the chalice, he gave thanks. And he gave it to them, saying: \"Drink from this, all of you. For this is my blood of the new covenant, which shall be shed for many as a remission of sins.\""*
 - **Meditation:** Having loved His own unto the end, Christ offers His Body and Blood under the appearances of bread and wine to remain with His Church forever.
@@ -594,7 +594,7 @@ flowchart TD
 - **Page Number:** 26 (Verso, Tab S)
 - **Mystery ID:** `sorrowful_1_agony`
 - **Mystery Title:** The Agony in the Garden
-- **Spiritual Fruit:** Contrition for Sin and Conformity to God's Will
+- **Spiritual Fruit:** Obedience to God's Will
 - **Scripture Citation:** Luke 22:41–44
 - **Scripture Text:** *"And he was separated from them about a stone's throw. And kneeling down, he prayed, saying: \"Father, if you are willing, take this chalice away from me. Yet let not my will, but yours, be done.\" And an Angel appeared to him from heaven, strengthening him. And being in agony, he prayed more intensely; and his sweat became like drops of blood, running down forward upon the ground."*
 - **Meditation:** In the dark stillness of Gethsemane, Christ bears the weight of every human sin, uniting His sacred heart to the Father's redemptive will.
@@ -634,7 +634,7 @@ flowchart TD
 - **Page Number:** 28 (Verso)
 - **Mystery ID:** `sorrowful_2_scourging`
 - **Mystery Title:** The Scourging at the Pillar
-- **Spiritual Fruit:** Purity and Mortification of the Senses
+- **Spiritual Fruit:** Mortification
 - **Scripture Citation:** John 19:1; Isaiah 53:5
 - **Scripture Text:** *"Therefore, Pilate then took Jesus into custody and scourged him... But he himself was wounded because of our iniquities. He was bruised because of our wickedness. The discipline of our peace was upon him. And by his wounds, we are healed."*
 - **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for the sins of the flesh and to heal our wounded nature.
@@ -674,7 +674,7 @@ flowchart TD
 - **Page Number:** 30 (Verso)
 - **Mystery ID:** `sorrowful_3_crowning_with_thorns`
 - **Mystery Title:** The Crowning with Thorns
-- **Spiritual Fruit:** Moral Courage and Reign of Christ in Our Hearts
+- **Spiritual Fruit:** Courage
 - **Scripture Citation:** Matthew 27:28–30
 - **Scripture Text:** *"And stripping him, they put a scarlet cloak around him. And plaiting a crown of thorns, they placed it on his head, with a reed in his right hand. And genuflecting before him, they mocked him, saying, \"Hail, King of the Jews.\" And spitting on him, they took the reed and struck his head."*
 - **Meditation:** Crowned with sharp thorns and mocked by soldiers, the true King of Kings teaches us meekness and courage when enduring the world's contempt.
@@ -714,7 +714,7 @@ flowchart TD
 - **Page Number:** 32 (Verso)
 - **Mystery ID:** `sorrowful_4_carrying_cross`
 - **Mystery Title:** The Carrying of the Cross
-- **Spiritual Fruit:** Patience in Trials
+- **Spiritual Fruit:** Patience
 - **Scripture Citation:** John 19:17; Luke 23:26–27
 - **Scripture Text:** *"And carrying his own cross, he went forth to the place which is called Calvary... And as they were leading him away, they apprehended a certain one, Simon of Cyrene, as he was returning from the countryside. And they imposed the cross on him to carry after Jesus. Then a great crowd of people followed him, with women who were mourning and lamenting him."*
 - **Meditation:** Falling beneath the heavy wood along the sorrowful way to Calvary, Christ exchanges a look of piercing love with His sorrowful Mother, inviting us to take up our daily cross after Him.
@@ -754,7 +754,7 @@ flowchart TD
 - **Page Number:** 34 (Verso)
 - **Mystery ID:** `sorrowful_5_crucifixion`
 - **Mystery Title:** The Crucifixion and Death of Our Lord
-- **Spiritual Fruit:** Forgiveness of Injuries and Perseverance in Faith
+- **Spiritual Fruit:** Sorrow for Our Sins
 - **Scripture Citation:** Luke 23:33–34, 46
 - **Scripture Text:** *"And when they arrived at the place that is called Calvary, they crucified him there... Then Jesus said, \"Father, forgive them. For they know not what they do.\"... And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\" And upon saying this, he expired."*
 - **Meditation:** Raised upon the Cross of Calvary, Christ pardons His executioners, entrusts us to His Blessed Mother, and pours forth His last breath for the salvation of souls.
@@ -794,7 +794,7 @@ flowchart TD
 - **Page Number:** 36 (Verso, Tab G)
 - **Mystery ID:** `glorious_1_resurrection`
 - **Mystery Title:** The Resurrection of Our Lord
-- **Spiritual Fruit:** Lively Faith
+- **Spiritual Fruit:** Faith
 - **Scripture Citation:** Mark 16:5–6
 - **Scripture Text:** *"And upon entering the tomb, they saw a young man sitting on the right side, covered with a white robe, and they were astonished. And he said to them, \"Do not become frightened. You are seeking Jesus of Nazareth, the Crucified One. He has risen. He is not here. Behold, the place where they laid him.\""*
 - **Meditation:** At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, opening the gates of eternal life to all who believe in Him.
@@ -834,7 +834,7 @@ flowchart TD
 - **Page Number:** 38 (Verso)
 - **Mystery ID:** `glorious_2_ascension`
 - **Mystery Title:** The Ascension of Our Lord into Heaven
-- **Spiritual Fruit:** Christian Hope and Desire for Heaven
+- **Spiritual Fruit:** Hope
 - **Scripture Citation:** Luke 24:50–52; Acts 1:9
 - **Scripture Text:** *"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven. And worshiping, they returned to Jerusalem with great joy... And when he had said these things, while they were watching, he was lifted up, and a cloud took him from their sight."*
 - **Meditation:** Forty days after His Resurrection, Christ ascends from the Mount of Olives to the right hand of the Father, preparing a place for us in our heavenly homeland.
@@ -874,7 +874,7 @@ flowchart TD
 - **Page Number:** 40 (Verso)
 - **Mystery ID:** `glorious_3_pentecost`
 - **Mystery Title:** The Descent of the Holy Spirit
-- **Spiritual Fruit:** Love of God and Gifts of the Holy Spirit
+- **Spiritual Fruit:** Wisdom
 - **Scripture Citation:** Acts 1:14; 2:1–4
 - **Scripture Text:** *"All these were persevering with one accord in prayer with the women, and with Mary, the mother of Jesus, and with his brothers... And when the days of Pentecost were completed, they were all together in the same place. And suddenly, there came a sound from heaven, like that of a wind approaching violently, and it filled the entire house where they were sitting. And there appeared to them separate tongues, as if of fire, which settled upon each one of them. And they were all filled with the Holy Spirit."*
 - **Meditation:** Gathered in prayer around the Virgin Mary in the Upper Room, the Apostles receive the fire of the Holy Spirit and go forth boldly to preach the Gospel to all nations.
@@ -914,7 +914,7 @@ flowchart TD
 - **Page Number:** 42 (Verso)
 - **Mystery ID:** `glorious_4_assumption`
 - **Mystery Title:** The Assumption of the Blessed Virgin Mary
-- **Spiritual Fruit:** Grace of a Happy Death and True Devotion to Mary
+- **Spiritual Fruit:** Devotion to Mary
 - **Scripture Citation:** Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10
 - **Scripture Text:** *"Rise up, O Lord, into your resting place. You and the ark of your sanctification... For behold, from this time, all generations shall call me blessed. For he who is great has done great things for me, and holy is his name... You are the glory of Jerusalem, you are the joy of Israel, you are the honor of our people."*
 - **Meditation:** Having completed the course of her earthly life, the Immaculate Mother of God is taken up body and soul into heavenly glory by the power of her Divine Son.
@@ -954,7 +954,7 @@ flowchart TD
 - **Page Number:** 44 (Verso)
 - **Mystery ID:** `glorious_5_coronation`
 - **Mystery Title:** The Coronation of the Blessed Virgin Mary
-- **Spiritual Fruit:** Trust in Mary's Intercession and Final Perseverance
+- **Spiritual Fruit:** Grace of a Happy Death
 - **Scripture Citation:** Revelation 12:1; Sirach 24:7
 - **Scripture Text:** *"And a great sign appeared in heaven: a woman clothed with the sun, and the moon was under her feet, and on her head was a crown of twelve stars... I lived in the highest places, and my throne is in the pillar of a cloud."*
 - **Meditation:** Exalted above all choirs of angels, the Blessed Virgin Mary is crowned Queen of Heaven and Earth by the Most Holy Trinity, reigning forever as our Mother and Advocate.
