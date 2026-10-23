@@ -285,28 +285,31 @@ This document outlines the strict manual testing procedures required before any 
 
 ## Test 9.0: Global Dynamic Text Sizing & Accessibility Reader Controls
 
-### TC-TEXT-01: 'Aa' Reader Button UI & Preset Cycling
+### TC-TEXT-01: Dual-Sized 'AA' Reader Button UI & Dynamic Preset Feedback Toast
 - **Step 1:** Launch the application (`godot --path game`) and observe the top-left corner of the viewport.
 - **Expected:**
-  - A persistent, unobtrusive floating button labeled `"Aa"` ($52\times 52\text{px}$) is visible at offset $(18, 18)$ on CanvasLayer 10.
-  - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, subtle drop shadow, and deep charcoal bold Garamond typography (`#1E1815`) at 24pt.
-- **Step 2:** Click or tap the `"Aa"` button once.
+  - A persistent, unobtrusive floating button ($52\times 52\text{px}$) is visible at offset $(18, 18)$ on CanvasLayer 10.
+  - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, and subtle drop shadow.
+  - **Dual-Sized 'AA' Icon:** Rather than a uniform single "Aa" label, the button displays two side-by-side capital 'A's (`SmallALabel` at 16pt bold on the left, `LargeALabel` at 26pt bold on the right) centered in an `IconHBox` with 1px separation.
+  - **Color State Transitions:** The 'AA' labels render in Deep Charcoal (`#1E1815`) in the normal state, and shift to Sacred Crimson (`#6B1D21`) on mouse hover and button press, matching the button's gold-to-crimson border transitions.
+- **Step 2:** Click or tap the dual-sized `"AA"` button once.
 - **Expected:**
   - Text size preset switches from `Normal` to `Mobile`.
-  - A top-centered toast banner appears with text: `"Text Size: Mobile"`.
-  - The toast smoothly fades out after ~1.2 seconds.
-- **Step 3:** Click or tap the `"Aa"` button a second time.
+  - A top-centered toast banner (`PresetToast`) appears with text `"Text Size: Mobile"` dynamically rendered at **30pt** font size.
+  - The toast smoothly auto-resizes (`reset_size()`) and maintains horizontal centering without text clipping, lingering for ~1.2s before fading out over 0.4s.
+- **Step 3:** Click or tap the dual-sized `"AA"` button a second time.
 - **Expected:**
   - Text size preset switches from `Mobile` to `Extra Large`.
-  - A top-centered toast banner appears with text: `"Text Size: Extra Large"`.
-  - The toast smoothly fades out after ~1.2 seconds.
-- **Step 4:** Click or tap the `"Aa"` button a third time.
+  - A top-centered toast banner appears with text `"Text Size: Extra Large"` dynamically rendered at **38pt** font size.
+  - The toast smoothly expands to fit the larger text, remains centered horizontally without clipping, and fades out after ~1.2s.
+- **Step 4:** Click or tap the dual-sized `"AA"` button a third time.
 - **Expected:**
   - Text size preset wraps sequentially back to `Normal`.
-  - A top-centered toast banner appears with text: `"Text Size: Normal"`.
+  - A top-centered toast banner appears with text `"Text Size: Normal"` dynamically rendered at **22pt** font size.
+  - The toast scales down smoothly, remains centered horizontally, and fades out after ~1.2s.
 - **Step 5:** Open the navigation drawer (top-right `☰` button).
 - **Expected:**
-  - While the navigation drawer is open, clicking or tapping on the `"Aa"` button area does not cycle text size presets (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`).
+  - While the navigation drawer is open, clicking or tapping on the `"AA"` button area does not cycle text size presets (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`).
   - Closing the drawer restores normal interactivity (`MOUSE_FILTER_STOP`).
 
 ### TC-TEXT-02: Text Size Scaling & Dynamic Card Elongation
@@ -315,12 +318,12 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Card height fits cleanly within the standard $720\times 1080$ ($2:3$) portrait dimensions.
   - No text is truncated or clipped; no internal scrollbars appear.
-- **Step 3:** Tap the `"Aa"` button to switch to the `Mobile` preset.
+- **Step 3:** Tap the `"AA"` reader button to switch to the `Mobile` preset.
 - **Expected:**
   - Headings, subheadings, fruit badges, scripture citations, prayer titles, rubrics, and body text visibly increase in size (e.g. body text scales from ~22pt to ~31–33pt).
   - The card dynamically expands vertically beyond 1080px (`custom_minimum_size.y > 1080px`) to comfortably accommodate the larger typography.
   - All text remains fully visible without truncation or internal scrollbars.
-- **Step 4:** Tap the `"Aa"` button to switch to the `Extra Large` preset.
+- **Step 4:** Tap the `"AA"` reader button to switch to the `Extra Large` preset.
 - **Expected:**
   - Typography scales further (e.g. body text scales to ~40–44pt, headings up to 44pt).
   - The card elongates even further vertically to accommodate the high-visibility typography.
@@ -336,13 +339,13 @@ This document outlines the strict manual testing procedures required before any 
 
 ### TC-TEXT-04: Viewport Scroll Anchor Stability
 - **Step 1:** Scroll into the middle of a mystery prayer card (e.g. Page 26 *The Agony in the Garden*) so that the meditation or decade prayers are centered in the viewport.
-- **Step 2:** Tap the `"Aa"` button to change the text size preset (`Normal` -> `Mobile` -> `Extra Large`).
+- **Step 2:** Tap the `"AA"` reader button to change the text size preset (`Normal` -> `Mobile` -> `Extra Large`).
 - **Expected:**
   - As the text-heavy cards expand or shrink throughout the stream, the viewport scroll position smoothly re-anchors to keep the currently viewed content centered in the viewport.
   - The user does not jump disorientingly to the top or bottom of the book, nor lose their place within the decade.
 
 ### TC-TEXT-05: Preset Persistence Across Restarts
-- **Step 1:** Tap the `"Aa"` button to select `Mobile` or `Extra Large` preset.
+- **Step 1:** Tap the `"AA"` reader button to select `Mobile` or `Extra Large` preset.
 - **Step 2:** Close the application completely.
 - **Step 3:** Relaunch the application (`godot --path game`).
 - **Expected:**
@@ -350,7 +353,7 @@ This document outlines the strict manual testing procedures required before any 
   - Text-heavy cards immediately render with the chosen font scaling without requiring the user to cycle presets again.
 
 ### TC-TEXT-06: Strict 720px Card Width Constraint & Header/FruitBadge Text Wrapping Across Presets
-- **Step 1:** Tap the `"Aa"` button to switch to the `Extra Large` text preset.
+- **Step 1:** Tap the `"AA"` reader button to switch to the `Extra Large` text preset.
 - **Step 2:** Scroll through the continuous stream and inspect text cards with titles and fruit tags:
   - Page 8 (The Second Joyful Mystery: *The Visitation* / *Fruit of the Mystery: Love of Neighbor*).
   - Page 10 (The Third Joyful Mystery: *The Nativity* / *Fruit of the Mystery: Poverty*).
@@ -431,7 +434,7 @@ This document outlines the strict manual testing procedures required before any 
 
 ### TC-LEAD-04: Typography Scaling Across Text Presets for Leader and Response
 - **Step 1:** Navigate to Page 4, Page 6, or Page 46.
-- **Step 2:** Cycle the "Aa" reader button from `Normal` to `Mobile` and then `Extra Large`.
+- **Step 2:** Cycle the dual-sized `"AA"` reader button from `Normal` to `Mobile` and then `Extra Large`.
 - **Expected:**
   - Both leader (`PrayerText`, `VersicleLeaderText`) and response (`ResponseText`, `VersicleResponseText`) labels scale uniformly using identical point sizes across all presets.
   - Line breaks and vertical spacing between leader and response remain crisp and proportional.
@@ -494,4 +497,8 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - EB Garamond Latin text line heights, margins, and card height calculations remain completely unaffected.
   - Zero layout regressions, text clipping, or unexpected vertical overflow across all 50 pages.
+- **Step 7:** Observe the top-left floating reader button and cycle text presets via the dual-sized `'AA'` button.
+- **Expected:**
+  - The dual-sized `'AA'` icon (`SmallALabel` at 16pt, `LargeALabel` at 26pt) renders crisply with clean baseline alignment inside the 52×52px button.
+  - Preset feedback toasts dynamically resize and preserve horizontal centering (`22pt` for Normal, `30pt` for Mobile, `38pt` for Extra Large) without clipping or visual drift.
 

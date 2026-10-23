@@ -10,6 +10,8 @@ const TOTAL_PAGES: int = 50
 const ARTWORK_BUFFER_PAGES: int = 4
 const WHEEL_SCROLL_STEP: int = 80
 const COLOR_AMBIENT_ESPRESSO: Color = Color(0.0784314, 0.0627451, 0.0627451, 1.0) # #141010
+const COLOR_DEEP_CHARCOAL: Color = Color(0.117647, 0.0941176, 0.0823529, 1.0) # #1E1815
+const COLOR_SACRED_CRIMSON: Color = Color(0.419608, 0.113725, 0.129412, 1.0) # #6B1D21
 
 const MIN_FLICK_VELOCITY: float = 100.0
 const MOMENTUM_STOP_VELOCITY: float = 12.0
@@ -49,6 +51,9 @@ var _toast_tween: Tween = null
 @onready var navigation_drawer: NavigationDrawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
 @onready var reader_layer: CanvasLayer = get_node_or_null("ReaderCanvasLayer") as CanvasLayer
 @onready var reader_button: Button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+@onready var icon_hbox: HBoxContainer = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox") as HBoxContainer
+@onready var small_a_label: Label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/SmallALabel") as Label
+@onready var large_a_label: Label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/LargeALabel") as Label
 @onready var preset_toast: PanelContainer = get_node_or_null("ReaderCanvasLayer/PresetToast") as PanelContainer
 @onready var toast_label: Label = get_node_or_null("ReaderCanvasLayer/PresetToast/ToastLabel") as Label
 
@@ -349,6 +354,12 @@ func _ensure_initialized() -> void:
 		reader_layer = get_node_or_null("ReaderCanvasLayer") as CanvasLayer
 	if reader_button == null:
 		reader_button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+	if icon_hbox == null:
+		icon_hbox = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox") as HBoxContainer
+	if small_a_label == null:
+		small_a_label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/SmallALabel") as Label
+	if large_a_label == null:
+		large_a_label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/LargeALabel") as Label
 	if preset_toast == null:
 		preset_toast = get_node_or_null("ReaderCanvasLayer/PresetToast") as PanelContainer
 	if toast_label == null:
@@ -371,8 +382,47 @@ func _ensure_initialized() -> void:
 
 func _setup_reader_controls() -> void:
 	_ensure_initialized()
-	if reader_button != null and not reader_button.pressed.is_connected(_on_reader_button_pressed):
-		reader_button.pressed.connect(_on_reader_button_pressed)
+	if reader_button != null:
+		if not reader_button.pressed.is_connected(_on_reader_button_pressed):
+			reader_button.pressed.connect(_on_reader_button_pressed)
+		if not reader_button.mouse_entered.is_connected(_on_reader_button_mouse_entered):
+			reader_button.mouse_entered.connect(_on_reader_button_mouse_entered)
+		if not reader_button.mouse_exited.is_connected(_on_reader_button_mouse_exited):
+			reader_button.mouse_exited.connect(_on_reader_button_mouse_exited)
+		if not reader_button.button_down.is_connected(_on_reader_button_down):
+			reader_button.button_down.connect(_on_reader_button_down)
+		if not reader_button.button_up.is_connected(_on_reader_button_up):
+			reader_button.button_up.connect(_on_reader_button_up)
+	_update_reader_icon_color(COLOR_DEEP_CHARCOAL)
+
+
+func _update_reader_icon_color(color: Color) -> void:
+	if small_a_label != null:
+		small_a_label.add_theme_color_override("font_color", color)
+	if large_a_label != null:
+		large_a_label.add_theme_color_override("font_color", color)
+
+
+func _on_reader_button_mouse_entered() -> void:
+	_update_reader_icon_color(COLOR_SACRED_CRIMSON)
+
+
+func _on_reader_button_mouse_exited() -> void:
+	if reader_button != null and reader_button.button_pressed:
+		_update_reader_icon_color(COLOR_SACRED_CRIMSON)
+	else:
+		_update_reader_icon_color(COLOR_DEEP_CHARCOAL)
+
+
+func _on_reader_button_down() -> void:
+	_update_reader_icon_color(COLOR_SACRED_CRIMSON)
+
+
+func _on_reader_button_up() -> void:
+	if reader_button != null and reader_button.is_hovered():
+		_update_reader_icon_color(COLOR_SACRED_CRIMSON)
+	else:
+		_update_reader_icon_color(COLOR_DEEP_CHARCOAL)
 
 
 func _setup_navigation_drawer() -> void:
@@ -689,14 +739,20 @@ func _show_preset_feedback(preset: String) -> void:
 	if preset_toast == null or toast_label == null:
 		return
 	var display_name: String = "Normal"
+	var font_size: int = 22
 	match preset:
 		BasePageCard.PRESET_MOBILE:
 			display_name = "Mobile"
+			font_size = 30
 		BasePageCard.PRESET_EXTRA_LARGE:
 			display_name = "Extra Large"
+			font_size = 38
 		_:
 			display_name = "Normal"
+			font_size = 22
 	toast_label.text = "Text Size: %s" % display_name
+	toast_label.add_theme_font_size_override("font_size", font_size)
+	preset_toast.reset_size()
 	preset_toast.visible = true
 	preset_toast.modulate.a = 1.0
 
@@ -773,6 +829,24 @@ func get_reader_button() -> Button:
 	if reader_button == null:
 		reader_button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
 	return reader_button
+
+
+func get_reader_icon_hbox() -> HBoxContainer:
+	if icon_hbox == null:
+		icon_hbox = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox") as HBoxContainer
+	return icon_hbox
+
+
+func get_reader_small_a_label() -> Label:
+	if small_a_label == null:
+		small_a_label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/SmallALabel") as Label
+	return small_a_label
+
+
+func get_reader_large_a_label() -> Label:
+	if large_a_label == null:
+		large_a_label = get_node_or_null("ReaderCanvasLayer/ReaderButton/IconHBox/LargeALabel") as Label
+	return large_a_label
 
 
 # Public inspector accessors for automated testing & QA:

@@ -924,10 +924,42 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 	assert_eq(reader_btn.custom_minimum_size, Vector2(52, 52), "Reader button custom_minimum_size must be 52x52")
 
 	# 3. Label and styling attributes
-	assert_eq(reader_btn.text, "Aa", "Reader button text must be 'Aa'")
+	assert_eq(reader_btn.text, "", "Reader button text must be empty string")
 	assert_eq(reader_btn.mouse_filter, Control.MOUSE_FILTER_STOP, "Reader button must stop mouse within its bounds")
 
-	# 4. Preset cycling: Normal -> Mobile -> Extra Large -> Normal
+	var icon_box: HBoxContainer = reader_btn.get_node_or_null("IconHBox") as HBoxContainer
+	assert_not_null(icon_box, "Reader button must contain child IconHBox")
+	var small_lbl: Label = reader_btn.get_node_or_null("IconHBox/SmallALabel") as Label
+	var large_lbl: Label = reader_btn.get_node_or_null("IconHBox/LargeALabel") as Label
+	assert_not_null(small_lbl, "Reader button must contain SmallALabel")
+	assert_not_null(large_lbl, "Reader button must contain LargeALabel")
+	assert_eq(small_lbl.text, "A", "SmallALabel text must be 'A'")
+	assert_eq(large_lbl.text, "A", "LargeALabel text must be 'A'")
+	assert_eq(small_lbl.get_theme_font_size("font_size"), 16, "SmallALabel font size must be 16pt")
+	assert_eq(large_lbl.get_theme_font_size("font_size"), 26, "LargeALabel font size must be 26pt")
+	assert_true(small_lbl.get_theme_font_size("font_size") < large_lbl.get_theme_font_size("font_size"), "SmallALabel font size must be strictly smaller than LargeALabel font size (16pt vs 26pt)")
+
+	# 4. Color state shifts (Deep Charcoal #1E1815 -> Sacred Crimson #6B1D21 on hover/press)
+	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Initial small A font color must be Deep Charcoal")
+	assert_eq(large_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Initial large A font color must be Deep Charcoal")
+
+	main_node._on_reader_button_mouse_entered()
+	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_SACRED_CRIMSON, "Hovered small A font color must shift to Sacred Crimson")
+	assert_eq(large_lbl.get_theme_color("font_color"), Main.COLOR_SACRED_CRIMSON, "Hovered large A font color must shift to Sacred Crimson")
+
+	main_node._on_reader_button_mouse_exited()
+	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Unhovered small A font color must restore to Deep Charcoal")
+	assert_eq(large_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Unhovered large A font color must restore to Deep Charcoal")
+
+	main_node._on_reader_button_down()
+	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_SACRED_CRIMSON, "Pressed small A font color must shift to Sacred Crimson")
+	assert_eq(large_lbl.get_theme_color("font_color"), Main.COLOR_SACRED_CRIMSON, "Pressed large A font color must shift to Sacred Crimson")
+
+	main_node._on_reader_button_up()
+	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Released small A font color must restore to Deep Charcoal")
+	assert_eq(large_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Released large A font color must restore to Deep Charcoal")
+
+	# 5. Preset cycling: Normal -> Mobile -> Extra Large -> Normal
 	main_node.set_text_size_preset("normal")
 	assert_eq(main_node.get_text_size_preset(), "normal", "Initial preset should be 'normal'")
 
@@ -936,16 +968,22 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 	assert_eq(main_node.get_text_size_preset(), "mobile", "Current preset must be 'mobile'")
 	assert_true(main_node.preset_toast.visible, "Preset toast feedback must become visible upon cycling")
 	assert_true(main_node.toast_label.text.contains("Mobile"), "Toast label must indicate Mobile preset")
+	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 30, "Toast label font size must be 30pt for Mobile preset")
 
 	var next2: String = main_node.cycle_text_size_preset()
 	assert_eq(next2, "extra_large", "Second cycle must switch to 'extra_large'")
 	assert_eq(main_node.get_text_size_preset(), "extra_large", "Current preset must be 'extra_large'")
 	assert_true(main_node.toast_label.text.contains("Extra Large"), "Toast label must indicate Extra Large preset")
+	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 38, "Toast label font size must be 38pt for Extra Large preset")
 
 	var next3: String = main_node.cycle_text_size_preset()
 	assert_eq(next3, "normal", "Third cycle must return to 'normal'")
 	assert_eq(main_node.get_text_size_preset(), "normal", "Current preset must be 'normal'")
 	assert_true(main_node.toast_label.text.contains("Normal"), "Toast label must indicate Normal preset")
+	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 22, "Toast label font size must be 22pt for Normal preset")
+
+	# Verify strict font scaling relationship: normal < mobile < extra_large
+	assert_true(22 < 30 and 30 < 38, "Toast font sizes must strictly scale: normal (22) < mobile (30) < extra_large (38)")
 
 	# Reset to normal before freeing
 	main_node.set_text_size_preset("normal")
