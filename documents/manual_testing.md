@@ -80,7 +80,12 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Inspect all 20 Mystery Prayer Cards.
 - **Expected:**
   - Standardized 32px uniform margins.
-  - Header displays 22pt italic mystery ordinal (e.g., *The First Joyful Mystery*), 34pt bold title (e.g., **The Annunciation**), and 18pt italic fruit badge (*Fruit of the Mystery: Humility*) in antique gold pill box.
+  - Header displays 22pt italic mystery ordinal (e.g., *The First Joyful Mystery*), 34pt bold title (e.g., **The Annunciation**), and 18pt italic fruit badge (*Fruit of the Mystery: <Virtue>*) in antique gold pill box.
+  - Verify that each Mystery Prayer Card renders its standardized concise traditional USCCB spiritual fruit:
+    - **Joyful Mysteries:** Page 6 (*Humility*), Page 8 (*Love of Neighbor*), Page 10 (*Poverty*), Page 12 (*Purity of Heart and Body*), Page 14 (*Devotion to Jesus*).
+    - **Luminous Mysteries:** Page 16 (*Openness to the Holy Spirit*), Page 18 (*To Jesus through Mary*), Page 20 (*Conversion*), Page 22 (*Desire for Holiness*), Page 24 (*Adoration*).
+    - **Sorrowful Mysteries:** Page 26 (*Obedience to God's Will*), Page 28 (*Mortification*), Page 30 (*Courage*), Page 32 (*Patience*), Page 34 (*Sorrow for Our Sins*).
+    - **Glorious Mysteries:** Page 36 (*Faith*), Page 38 (*Hope*), Page 40 (*Wisdom*), Page 42 (*Devotion to Mary*), Page 44 (*Grace of a Happy Death*).
   - Scripture citation renders at 17pt bold with a gold vertical accent bar (displaying clean book, chapter, and verse citations without any trailing `" (CPDV)"` suffix), and scripture reading renders at 18–20pt italic.
   - Verify canonical Catholic Public Domain Version (CPDV) citations, verbatim scripture passages, and contemplative meditations:
     - **Joyful 2 (`Page 8`):** Contemplative meditation reads: `"Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist."`
@@ -343,18 +348,20 @@ This document outlines the strict manual testing procedures required before any 
 
 ### TC-TEXT-06: Strict 720px Card Width Constraint & Header/FruitBadge Text Wrapping Across Presets
 - **Step 1:** Tap the `"Aa"` button to switch to the `Extra Large` text preset.
-- **Step 2:** Scroll through the continuous stream and inspect text cards with long titles and fruit tags:
+- **Step 2:** Scroll through the continuous stream and inspect text cards with titles and fruit tags:
   - Page 8 (The Second Joyful Mystery: *The Visitation* / *Fruit of the Mystery: Love of Neighbor*).
-  - Page 10 (The Third Joyful Mystery: *The Nativity* / *Fruit of the Mystery: Poverty in Spirit*).
-  - Page 26 (The First Sorrowful Mystery: *The Agony in the Garden* / *Fruit of the Mystery: Contempt of the World*).
-  - Page 28 (The Second Sorrowful Mystery: *The Scourging at the Pillar* / *Fruit of the Mystery: Mortification of the Senses*).
+  - Page 10 (The Third Joyful Mystery: *The Nativity* / *Fruit of the Mystery: Poverty*).
+  - Page 12 (The Fourth Joyful Mystery: *The Presentation in the Temple* / *Fruit of the Mystery: Purity of Heart and Body*).
+  - Page 26 (The First Sorrowful Mystery: *The Agony in the Garden* / *Fruit of the Mystery: Obedience to God's Will*).
+  - Page 28 (The Second Sorrowful Mystery: *The Scourging at the Pillar* / *Fruit of the Mystery: Mortification*).
+  - Page 44 (The Fifth Glorious Mystery: *The Coronation of the Blessed Virgin Mary* / *Fruit of the Mystery: Grace of a Happy Death*).
   - Page 48 & Page 49 (*Sacred Artwork Credits Parts I & II*).
 - **Expected:**
   - **Zero Horizontal Expansion:** All page cards remain strictly constrained to a maximum width of 720px (`custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0`). The scroll stream does not shift rightward or introduce horizontal panning.
   - **Clean Multiline Header Wrapping:** Long headings (e.g. *The Scourging at the Pillar*, *Sacred Artwork Credits (Part I)*) and subheadings wrap cleanly onto two or more lines without clipping or overflowing their container boundaries (`autowrap_mode = TextServer.AUTOWRAP_WORD_SMART`).
   - **Dynamic Fruit Badge Clamping:**
-    - Short fruit badges (e.g. Page 6: *Fruit of the Mystery: Humility*) remain tightly shrink-wrapped and centered horizontally in their gold pill container (`size_flags_horizontal = SIZE_SHRINK_CENTER`).
-    - Long fruit badges (e.g. Page 26: *Fruit of the Mystery: Contempt of the World*, Page 28: *Fruit of the Mystery: Mortification of the Senses*) wrap onto multiple lines without expanding past the maximum content width (628px), preserving the pill box styling and keeping card width strictly at 720px.
+    - Short single-word fruit badges (e.g. Page 6: *Fruit of the Mystery: Humility*, Page 10: *Fruit of the Mystery: Poverty*, Page 28: *Fruit of the Mystery: Mortification*, Page 36: *Fruit of the Mystery: Faith*, Page 38: *Fruit of the Mystery: Hope*, Page 40: *Fruit of the Mystery: Wisdom*) remain tightly shrink-wrapped and centered horizontally in their gold pill container (`size_flags_horizontal = SIZE_SHRINK_CENTER`).
+    - Compound fruit badges (e.g. Page 12: *Fruit of the Mystery: Purity of Heart and Body*, Page 26: *Fruit of the Mystery: Obedience to God's Will*, Page 44: *Fruit of the Mystery: Grace of a Happy Death*) fit cleanly on a single line on standard presets and wrap gracefully under enlarged accessibility presets (`extra_large`) without expanding past the maximum content width (628px), preserving the pill box styling and keeping card width strictly at 720px.
   - **Interior Scripture Frame Border:** The 1px interior scripture frame border (`ScriptureContainer`) on Mystery Prayer Cards remains completely visible with 10px internal margins and zero lateral cutoff.
   - **Symmetrical Lateral Margins:** Symmetrical 32px margins (left and right) are preserved uniformly across all 50 cards under all presets.
 
