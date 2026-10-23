@@ -1059,5 +1059,51 @@ func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() 
 	assert_true(ref_content.contains("https://www.newadvent.org/bible/jth015.htm"))
 
 
+func test_apostles_creed_modern_resurrection_and_ascension_phrasing() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
 
+	var creed: Dictionary = loader.get_prayer("apostles_creed")
+	assert_false(creed.is_empty(), "apostles_creed prayer must exist in prayers.json")
 
+	var leader_text: String = str(creed.get("leader_text", ""))
+	var response_text: String = str(creed.get("response_text", ""))
+	var full_text: String = str(creed.get("text", ""))
+
+	# 1. Verify modern Resurrection and Ascension phrasing
+	var expected_resurrection: String = "He descended into hell; on the third day he rose again from the dead."
+	var expected_ascension: String = "He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there he will come to judge the living and the dead."
+
+	assert_true(
+		leader_text.contains(expected_resurrection),
+		"apostles_creed leader_text must contain modern Resurrection phrasing: '%s'" % expected_resurrection
+	)
+	assert_true(
+		leader_text.contains(expected_ascension),
+		"apostles_creed leader_text must contain modern Ascension phrasing: '%s'" % expected_ascension
+	)
+	assert_true(
+		full_text.contains(expected_resurrection),
+		"apostles_creed full text must contain modern Resurrection phrasing: '%s'" % expected_resurrection
+	)
+	assert_true(
+		full_text.contains(expected_ascension),
+		"apostles_creed full text must contain modern Ascension phrasing: '%s'" % expected_ascension
+	)
+
+	# 2. Verify archaic phrasing does NOT regress
+	assert_false(leader_text.contains("arose again"), "apostles_creed leader_text must not contain archaic 'arose again'")
+	assert_false(leader_text.contains("from thence"), "apostles_creed leader_text must not contain archaic 'from thence'")
+	assert_false(full_text.contains("arose again"), "apostles_creed text must not contain archaic 'arose again'")
+	assert_false(full_text.contains("from thence"), "apostles_creed text must not contain archaic 'from thence'")
+
+	# 3. Verify leader + response concatenation and response preservation
+	var expected_full: String = "%s\n%s" % [leader_text, response_text]
+	assert_eq(full_text, expected_full, "apostles_creed.text must match leader_text + '\\n' + response_text")
+
+	var expected_response: String = "I believe in the Holy Spirit, the holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen."
+	assert_eq(response_text, expected_response, "apostles_creed response_text must be preserved exactly")
+
+	# 4. Verify exact target leader_text
+	var expected_leader: String = "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; on the third day he rose again from the dead. He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there he will come to judge the living and the dead."
+	assert_eq(leader_text, expected_leader, "apostles_creed leader_text must match expected text exactly")
