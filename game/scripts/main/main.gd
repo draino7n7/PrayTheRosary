@@ -752,7 +752,25 @@ func _show_preset_feedback(preset: String) -> void:
 			font_size = 22
 	toast_label.text = "Text Size: %s" % display_name
 	toast_label.add_theme_font_size_override("font_size", font_size)
-	preset_toast.reset_size()
+	var min_size: Vector2 = preset_toast.get_combined_minimum_size()
+	var font: Font = toast_label.get_theme_font("font")
+	var style: StyleBox = preset_toast.get_theme_stylebox("panel")
+	var margin_x: float = (style.content_margin_left + style.content_margin_right) if style != null else 36.0
+	var margin_y: float = (style.content_margin_top + style.content_margin_bottom) if style != null else 16.0
+	if font != null:
+		var text_size: Vector2 = font.get_string_size(toast_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size)
+		min_size.x = maxf(min_size.x, text_size.x + margin_x)
+		min_size.y = maxf(min_size.y, text_size.y + margin_y)
+	else:
+		var label_min: Vector2 = toast_label.get_combined_minimum_size()
+		min_size.x = maxf(min_size.x, label_min.x + margin_x)
+		min_size.y = maxf(min_size.y, label_min.y + margin_y)
+	preset_toast.anchor_left = 0.5
+	preset_toast.anchor_right = 0.5
+	preset_toast.offset_left = -min_size.x * 0.5
+	preset_toast.offset_right = min_size.x * 0.5
+	preset_toast.offset_top = 22.0
+	preset_toast.offset_bottom = 22.0 + min_size.y
 	preset_toast.visible = true
 	preset_toast.modulate.a = 1.0
 

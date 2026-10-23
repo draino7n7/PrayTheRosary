@@ -969,21 +969,60 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 	assert_true(main_node.preset_toast.visible, "Preset toast feedback must become visible upon cycling")
 	assert_true(main_node.toast_label.text.contains("Mobile"), "Toast label must indicate Mobile preset")
 	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 30, "Toast label font size must be 30pt for Mobile preset")
+	assert_true(
+		absf(main_node.preset_toast.offset_left + main_node.preset_toast.offset_right) < 0.01,
+		"Preset toast horizontal offsets must be symmetric around center anchor for Mobile"
+	)
+	var mobile_min_size: Vector2 = main_node.preset_toast.get_combined_minimum_size()
+	var mobile_width: float = main_node.preset_toast.offset_right - main_node.preset_toast.offset_left
+	assert_true(
+		mobile_width >= mobile_min_size.x - 0.01,
+		"Preset toast width under Mobile must satisfy combined minimum size"
+	)
+	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
 
 	var next2: String = main_node.cycle_text_size_preset()
 	assert_eq(next2, "extra_large", "Second cycle must switch to 'extra_large'")
 	assert_eq(main_node.get_text_size_preset(), "extra_large", "Current preset must be 'extra_large'")
 	assert_true(main_node.toast_label.text.contains("Extra Large"), "Toast label must indicate Extra Large preset")
 	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 38, "Toast label font size must be 38pt for Extra Large preset")
+	assert_true(
+		absf(main_node.preset_toast.offset_left + main_node.preset_toast.offset_right) < 0.01,
+		"Preset toast horizontal offsets must be symmetric around center anchor for Extra Large"
+	)
+	var extra_large_min_size: Vector2 = main_node.preset_toast.get_combined_minimum_size()
+	var extra_large_width: float = main_node.preset_toast.offset_right - main_node.preset_toast.offset_left
+	assert_true(
+		extra_large_width >= extra_large_min_size.x - 0.01,
+		"Preset toast width under Extra Large must satisfy combined minimum size"
+	)
+	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
 
 	var next3: String = main_node.cycle_text_size_preset()
 	assert_eq(next3, "normal", "Third cycle must return to 'normal'")
 	assert_eq(main_node.get_text_size_preset(), "normal", "Current preset must be 'normal'")
 	assert_true(main_node.toast_label.text.contains("Normal"), "Toast label must indicate Normal preset")
 	assert_eq(main_node.toast_label.get_theme_font_size("font_size"), 22, "Toast label font size must be 22pt for Normal preset")
+	assert_true(
+		absf(main_node.preset_toast.offset_left + main_node.preset_toast.offset_right) < 0.01,
+		"Preset toast horizontal offsets must be symmetric around center anchor for Normal"
+	)
+	var normal_min_size: Vector2 = main_node.preset_toast.get_combined_minimum_size()
+	var normal_width: float = main_node.preset_toast.offset_right - main_node.preset_toast.offset_left
+	assert_true(
+		normal_width >= normal_min_size.x - 0.01,
+		"Preset toast width under Normal must satisfy combined minimum size"
+	)
+	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
 
 	# Verify strict font scaling relationship: normal < mobile < extra_large
 	assert_true(22 < 30 and 30 < 38, "Toast font sizes must strictly scale: normal (22) < mobile (30) < extra_large (38)")
+
+	# Verify width ordering: normal_width < mobile_width < extra_large_width
+	assert_true(
+		normal_width < mobile_width and mobile_width < extra_large_width,
+		"Preset toast width must scale progressively: normal (%f) < mobile (%f) < extra_large (%f)" % [normal_width, mobile_width, extra_large_width]
+	)
 
 	# Reset to normal before freeing
 	main_node.set_text_size_preset("normal")
