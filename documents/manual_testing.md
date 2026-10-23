@@ -508,3 +508,57 @@ This document outlines the strict manual testing procedures required before any 
   - The dual-sized `'AA'` icon (`SmallALabel` at 16pt, `LargeALabel` at 26pt) renders crisply with clean baseline alignment inside the 52×52px button.
   - Preset feedback toasts dynamically resize and preserve horizontal centering (`22pt` for Normal, `30pt` for Mobile, `38pt` for Extra Large) without clipping or visual drift.
 
+## Test 13.0: Automated Print PDF Generation Pipeline (`assets/print/`)
+
+### TC-PDF-01: Standard 50-Page 6" × 9" Print PDF Generation
+- **Step 1:** From the repository root, run the Python print PDF build script:
+  ```powershell
+  python scripts/build_print_pdf.py
+  ```
+- **Step 2:** Inspect the generated PDF at `assets/print/PrayTheRosary.pdf` using a standard PDF viewer (e.g., Adobe Acrobat, SumatraPDF, Edge/Chrome).
+- **Expected:**
+  - The script executes cleanly and reports successful generation of `assets/print/PrayTheRosary.pdf` (~18 MB).
+  - The document contains exactly 50 pages.
+  - Page dimensions are 6.0" × 9.0" (`432 × 648 pt`).
+  - Gutter margins alternate properly across facing spreads: 0.625" inner margin on the punched spiral spine edge (left on odd pages, right on even pages) and 0.500" on outer/top/bottom edges.
+  - Strictly **zero italic fonts** (`EBGaramond-Italic`) appear anywhere across all 50 pages; all text is rendered in crisp regular and bold serif typography.
+  - Page 48 renders the bottom colophon with `"Created and compiled by Kevin Audrain."` and `"Version <X.Y.Z>"` dynamically matching `application/config/version` in `game/project.godot` below a thin gold divider line.
+  - Page 49 renders the Catholic Public Domain Version (CPDV) Scripture citation notice and museum artwork notice below its gold divider.
+  - Page 50 (Back Cover) encapsulates Pope St. John Paul II's epigraph and St. Louis Marie de Montfort's Marian counsel quotes in subtle gold-bordered callout boxes (`#2A090B` fill, `#D4AF37` 0.9pt border, 3.5pt corner radius).
+  - All 23 master artworks render in sharp 300-DPI quality without clipping, warping, or distortion.
+
+### TC-PDF-02: Retail Copy Shop US Letter Edition (`--office-depot`)
+- **Step 1:** From the repository root, run the script with the `--office-depot` (or `--letter`) flag:
+  ```powershell
+  python scripts/build_print_pdf.py --office-depot
+  ```
+- **Step 2:** Inspect the generated output at `assets/print/PrayTheRosary_OfficeDepot.pdf` in a PDF viewer.
+- **Expected:**
+  - The script completes cleanly with 0 errors.
+  - Document contains exactly 50 pages.
+  - Sheet dimensions are 8.5" × 11.0" (`612 × 792 pt`) US Letter size.
+  - Each 6.0" × 9.0" page (with 0.125" bleed) is centered on the US Letter sheet.
+  - Subtle corner crop marks are visible indicating the 6" × 9" trim line, ready for double-sided spiral-bound printing and trimming at commercial copy shops (e.g., Office Depot, FedEx Office).
+
+### TC-PDF-03: Commercial Press Full Bleed Edition (`--bleed`)
+- **Step 1:** From the repository root, run the script with the `--bleed` flag:
+  ```powershell
+  python scripts/build_print_pdf.py --bleed --output "test_bleed.pdf"
+  ```
+- **Step 2:** Inspect `test_bleed.pdf` using a PDF preflight tool or inspect PDF box geometry.
+- **Expected:**
+  - Page dimensions are 6.25" × 9.25" (`450 × 666 pt`).
+  - PDF `TrimBox` is set to `Rect(9, 9, 441, 657)` (6.0" × 9.0" centered) and `BleedBox` is set to `Rect(0, 0, 450, 666)`.
+- **Step 3:** Clean up the temporary test file:
+  ```powershell
+  Remove-Item -Force "test_bleed.pdf"
+  ```
+
+### TC-PDF-04: Automated Python Print PDF Unit Test Suite
+- **Step 1:** Run the Python test suite:
+  ```powershell
+  python -m unittest discover -s scripts -p "test_*.py"
+  ```
+- **Expected:**
+  - All unit tests in `scripts/test_build_print_pdf.py` execute and pass with 0 failures (`OK`).
+
