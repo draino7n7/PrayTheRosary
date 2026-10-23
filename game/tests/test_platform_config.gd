@@ -99,3 +99,23 @@ func test_project_settings() -> void:
 
 	var splash_bg: Color = ProjectSettings.get_setting("application/boot_splash/bg_color", Color.BLACK)
 	assert_eq(splash_bg.to_html(false).to_upper(), "141010", "boot_splash/bg_color must match #141010 ambient espresso.")
+
+
+func test_application_version_synchronization() -> void:
+	var app_version: String = str(ProjectSettings.get_setting("application/config/version", ""))
+	assert_eq(app_version, "0.1.3", "application/config/version in ProjectSettings must be '0.1.3'")
+
+	var proj_file := FileAccess.open("res://project.godot", FileAccess.READ)
+	assert_true(proj_file != null, "project.godot should exist.")
+	if proj_file != null:
+		var proj_content := proj_file.get_as_text()
+		assert_true(proj_content.contains("config/version=\"0.1.3\""), "project.godot must define config/version=\"0.1.3\".")
+
+	var preset_file := FileAccess.open("res://export_presets.cfg", FileAccess.READ)
+	assert_true(preset_file != null, "export_presets.cfg should exist.")
+	if preset_file != null:
+		var preset_content := preset_file.get_as_text()
+		assert_true(preset_content.contains("version/name=\"0.1.3\""), "export_presets.cfg must define version/name=\"0.1.3\".")
+		var target_preset_needle: String = "version/name=\"%s\"" % app_version
+		assert_true(preset_content.contains(target_preset_needle), "export_presets.cfg version/name must match application/config/version exactly (%s)." % app_version)
+

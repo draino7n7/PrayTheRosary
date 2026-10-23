@@ -1186,3 +1186,42 @@ func test_issue_55_refined_mystery_reflections_and_canonical_ledger() -> void:
 		)
 
 
+func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var p48: Dictionary = loader.get_page(48)
+	assert_false(p48.is_empty(), "Page 48 data must exist")
+	assert_true(p48.has("colophon"), "Page 48 must contain a 'colophon' dictionary")
+
+	var colophon: Dictionary = p48.get("colophon", {})
+	assert_true(colophon.has("creator_notice"), "Page 48 colophon must define 'creator_notice'")
+	assert_eq(
+		str(colophon.get("creator_notice", "")),
+		"Created and compiled by Kevin Audrain.",
+		"Page 48 creator_notice must be 'Created and compiled by Kevin Audrain.'"
+	)
+	assert_true(colophon.has("show_version"), "Page 48 colophon must define 'show_version'")
+	assert_true(
+		bool(colophon.get("show_version", false)),
+		"Page 48 show_version must be true"
+	)
+
+	# Verify Spread 24 left_page in book_layout.json contains the identical colophon
+	var spread_24: Dictionary = loader.get_spread(24)
+	assert_false(spread_24.is_empty(), "Spread 24 must exist")
+	var left_p: Dictionary = spread_24.get("left_page", {})
+	assert_true(left_p.has("colophon"), "Spread 24 left_page must contain colophon")
+	var spread_colophon: Dictionary = left_p.get("colophon", {})
+	assert_eq(str(spread_colophon.get("creator_notice", "")), "Created and compiled by Kevin Audrain.")
+	assert_true(bool(spread_colophon.get("show_version", false)))
+
+	# Verify documents/references.md documents Page 48 creator notice
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var references_path: String = repo_root.path_join("documents/references.md")
+	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist")
+	var ref_text: String = FileAccess.get_file_as_string(references_path)
+	assert_true(ref_text.contains("Created and compiled by Kevin Audrain."), "documents/references.md must document Page 48 creator notice")
+
+
+

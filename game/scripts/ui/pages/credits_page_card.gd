@@ -6,6 +6,9 @@ extends BasePageCard
 @onready var heading_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/HeaderVBox/HeadingLabel") as Label
 @onready var credits_container: VBoxContainer = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/CreditsContainer") as VBoxContainer
 @onready var colophon_container: VBoxContainer = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer") as VBoxContainer
+@onready var creator_notice_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/CreatorNoticeLabel") as Label
+@onready var version_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/VersionNoticeLabel") as Label
+@onready var version_notice_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/VersionNoticeLabel") as Label
 @onready var scripture_notice_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/ScriptureNoticeLabel") as Label
 @onready var colophon_notice_label: Label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/ColophonNoticeLabel") as Label
 
@@ -24,6 +27,12 @@ func _apply_page_data() -> void:
 		credits_container = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/CreditsContainer") as VBoxContainer
 	if colophon_container == null:
 		colophon_container = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer") as VBoxContainer
+	if creator_notice_label == null:
+		creator_notice_label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/CreatorNoticeLabel") as Label
+	if version_label == null:
+		version_label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/VersionNoticeLabel") as Label
+	if version_notice_label == null:
+		version_notice_label = version_label
 	if scripture_notice_label == null:
 		scripture_notice_label = get_node_or_null("CardPanel/MarginContainer/VBoxContainer/ColophonContainer/ScriptureNoticeLabel") as Label
 	if colophon_notice_label == null:
@@ -145,31 +154,66 @@ func _apply_page_data() -> void:
 			credits_container.add_child(art_vbox)
 
 	var colophon: Dictionary = page_data.get("colophon", {})
+	var creator_text: String = str(colophon.get("creator_notice", "")).strip_edges()
+	var show_version: bool = bool(colophon.get("show_version", false))
+	var version_text: String = ""
+	if show_version:
+		var app_version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.3"))
+		version_text = "Version %s" % app_version
+	var sn_text: String = str(colophon.get("scripture_notice", "")).strip_edges()
+	var cn_text: String = str(colophon.get("artwork_notice", "")).strip_edges()
+
+	var has_colophon_content: bool = not colophon.is_empty() and (creator_text != "" or version_text != "" or sn_text != "" or cn_text != "")
 	var colophon_h: float = 0.0
+
 	if colophon_container != null:
-		if colophon.is_empty():
+		if not has_colophon_content:
 			colophon_container.visible = false
+			if creator_notice_label != null:
+				creator_notice_label.visible = false
+				creator_notice_label.text = ""
+			if version_label != null:
+				version_label.visible = false
+				version_label.text = ""
+			if scripture_notice_label != null:
+				scripture_notice_label.visible = false
+				scripture_notice_label.text = ""
+			if colophon_notice_label != null:
+				colophon_notice_label.visible = false
+				colophon_notice_label.text = ""
 		else:
 			colophon_container.visible = true
-			colophon_h += 1.0 + 3.0 # Divider + separation
-			if scripture_notice_label != null:
-				scripture_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				var sn_text: String = str(colophon.get("scripture_notice", ""))
-				scripture_notice_label.text = sn_text
-				scripture_notice_label.add_theme_font_size_override("font_size", notice_font_size)
-				scripture_notice_label.add_theme_constant_override("line_spacing", -1)
-				if font_reg != null:
-					var sn_lines: int = int(ceilf(font_reg.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_reg.get_height(notice_font_size))))
-					colophon_h += font_reg.get_multiline_string_size(sn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, sn_lines - 1)) + 3.0
-			if colophon_notice_label != null:
-				colophon_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				var cn_text: String = str(colophon.get("artwork_notice", ""))
-				colophon_notice_label.text = cn_text
-				colophon_notice_label.add_theme_font_size_override("font_size", notice_font_size)
-				colophon_notice_label.add_theme_constant_override("line_spacing", -1)
-				if font_reg != null:
-					var cn_lines: int = int(ceilf(font_reg.get_multiline_string_size(cn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_reg.get_height(notice_font_size))))
-					colophon_h += font_reg.get_multiline_string_size(cn_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, cn_lines - 1))
+			colophon_h += 1.0 # Divider height
+
+			var notice_items: Array[Dictionary] = [
+				{"label": creator_notice_label, "text": creator_text},
+				{"label": version_label, "text": version_text},
+				{"label": scripture_notice_label, "text": sn_text},
+				{"label": colophon_notice_label, "text": cn_text}
+			]
+
+			for item: Dictionary in notice_items:
+				var lbl: Label = item["label"] as Label
+				var txt: String = item["text"] as String
+				if lbl == null:
+					continue
+				if txt.is_empty():
+					lbl.visible = false
+					lbl.text = ""
+				else:
+					lbl.visible = true
+					lbl.text = txt
+					lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+					if font_reg != null:
+						lbl.add_theme_font_override("font", font_reg)
+					lbl.add_theme_font_size_override("font_size", notice_font_size)
+					lbl.add_theme_color_override("font_color", COLOR_UMBER)
+					lbl.add_theme_constant_override("line_spacing", -1)
+
+					colophon_h += 3.0 # Separation before notice
+					if font_reg != null:
+						var n_lines: int = int(ceilf(font_reg.get_multiline_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y / float(font_reg.get_height(notice_font_size))))
+						colophon_h += font_reg.get_multiline_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, 656.0, notice_font_size).y - float(maxi(0, n_lines - 1))
 
 	var header_h: float = 0.0
 	if font_reg != null:
@@ -184,7 +228,7 @@ func _apply_page_data() -> void:
 	var applied_cred_sep: int = 3
 	if text_size_preset == PRESET_NORMAL:
 		var avail_cred: float = 1036.0 - header_h - 6.0
-		if not colophon.is_empty():
+		if has_colophon_content:
 			avail_cred -= (colophon_h + 6.0)
 		var leftover_cred: float = avail_cred - sum_art_heights
 		applied_cred_sep = int(floor(leftover_cred / float(num_art_gaps)))
@@ -196,7 +240,7 @@ func _apply_page_data() -> void:
 		credits_container.add_theme_constant_override("separation", applied_cred_sep)
 
 	var total_h: float = 44.0 + header_h + 6.0 + sum_art_heights + float(num_art_gaps * applied_cred_sep)
-	if not colophon.is_empty():
+	if has_colophon_content:
 		total_h += 6.0 + colophon_h
 
 	var final_height: float = DESIGN_HEIGHT

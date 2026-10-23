@@ -107,7 +107,28 @@ size_flags_horizontal = 4
 mouse_filter = 2
 color = Color(0.721569, 0.568627, 0.188235, 0.6)
 
+[node name="CreatorNoticeLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ColophonContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
+theme_override_fonts/font = ExtResource("4_font_regular")
+theme_override_font_sizes/font_size = 13
+text = "Created and compiled by Kevin Audrain."
+autowrap_mode = 3
+
+[node name="VersionNoticeLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ColophonContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
+theme_override_fonts/font = ExtResource("4_font_regular")
+theme_override_font_sizes/font_size = 13
+text = "Version 0.1.3"
+autowrap_mode = 3
+
 [node name="ScriptureNoticeLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ColophonContainer"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
@@ -117,6 +138,7 @@ text = "Scripture quotations are taken from the Catholic Public Domain Version (
 autowrap_mode = 3
 
 [node name="ColophonNoticeLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer/ColophonContainer"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)

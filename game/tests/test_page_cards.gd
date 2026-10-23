@@ -583,6 +583,19 @@ func test_pages_48_and_49_credits_cards() -> void:
 		assert_true(title_lbl.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
 		assert_true(details_lbl.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
 
+	# Colophon assertions on Page 48
+	assert_true(cpc48.colophon_container != null and cpc48.colophon_container.visible, "Page 48 ColophonContainer must be visible")
+	assert_not_null(cpc48.creator_notice_label, "Page 48 creator_notice_label must exist")
+	assert_true(cpc48.creator_notice_label.visible, "Page 48 creator_notice_label must be visible")
+	assert_eq(cpc48.creator_notice_label.text, "Created and compiled by Kevin Audrain.", "Page 48 creator notice text must match")
+	assert_not_null(cpc48.version_label, "Page 48 version_label must exist")
+	assert_true(cpc48.version_label.visible, "Page 48 version_label must be visible")
+	assert_eq(cpc48.version_label.text, "Version 0.1.3", "Page 48 version label must match 'Version 0.1.3'")
+	assert_false(cpc48.scripture_notice_label.visible, "Page 48 scripture_notice_label must not be visible")
+	assert_false(cpc48.colophon_notice_label.visible, "Page 48 colophon_notice_label must not be visible")
+	assert_true(cpc48.creator_notice_label.get_theme_font_size("font_size") >= 13, "Page 48 creator notice font size must be >= 13pt")
+	assert_true(cpc48.version_label.get_theme_font_size("font_size") >= 13, "Page 48 version font size must be >= 13pt")
+
 	_assert_no_visible_page_numbers(card48, 48)
 	card48.free()
 
@@ -619,6 +632,14 @@ func test_pages_48_and_49_credits_cards() -> void:
 	var last_item49: Node = cpc49.credits_container.get_child(cpc49.get_attribution_count() - 1)
 	assert_eq(String(last_item49.name), "Attribution_closing_prayers", "Final credit entry on Page 49 must be Attribution_closing_prayers")
 
+	# Colophon assertions on Page 49
+	assert_true(cpc49.colophon_container != null and cpc49.colophon_container.visible, "Page 49 ColophonContainer must be visible")
+	assert_not_null(cpc49.creator_notice_label, "Page 49 creator_notice_label must exist")
+	assert_false(cpc49.creator_notice_label.visible, "Page 49 creator_notice_label must not be visible")
+	assert_not_null(cpc49.version_label, "Page 49 version_label must exist")
+	assert_false(cpc49.version_label.visible, "Page 49 version_label must not be visible")
+	assert_true(cpc49.scripture_notice_label.visible, "Page 49 scripture_notice_label must be visible")
+	assert_true(cpc49.colophon_notice_label.visible, "Page 49 colophon_notice_label must be visible")
 	assert_true(cpc49.scripture_notice_label.get_theme_font_size("font_size") >= 13, "Colophon scripture notice must be >= 13pt (was 12pt)")
 	assert_true(
 		cpc49.scripture_notice_label.text.contains("Catholic Public Domain Version (CPDV)"),
@@ -627,6 +648,48 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_true(cpc49.colophon_notice_label.get_theme_font_size("font_size") >= 13, "Colophon artwork notice must be >= 13pt (was 11pt)")
 	_assert_no_visible_page_numbers(card49, 49)
 	card49.free()
+
+
+func test_page_48_colophon_and_presets() -> void:
+	var loader: RosaryDataLoader = _get_loaded_loader()
+	var p48: Dictionary = loader.get_page(48)
+	var card: PageCard = PageCardScene.instantiate() as PageCard
+	test_root_window.add_child(card)
+	card.bind_page_data(p48, loader)
+
+	var cpc: CreditsPageCard = card.get_sub_card() as CreditsPageCard
+	assert_not_null(cpc, "Page 48 sub-card must be CreditsPageCard")
+
+	# 1. Normal preset
+	card.set_text_size_preset("normal")
+	assert_eq(card.custom_minimum_size, Vector2(720.0, 1080.0), "Page 48 normal preset dimensions must be 720x1080")
+	assert_eq(cpc.custom_minimum_size, Vector2(720.0, 1080.0), "Page 48 sub-card normal preset dimensions must be 720x1080")
+	assert_true(cpc.colophon_container.visible, "ColophonContainer must be visible on Page 48")
+	assert_true(cpc.creator_notice_label.visible, "CreatorNoticeLabel must be visible on Page 48")
+	assert_eq(cpc.creator_notice_label.text, "Created and compiled by Kevin Audrain.")
+	assert_true(cpc.version_label.visible, "VersionNoticeLabel must be visible on Page 48")
+	assert_eq(cpc.version_label.text, "Version 0.1.3")
+	assert_false(cpc.scripture_notice_label.visible, "ScriptureNoticeLabel must be hidden on Page 48")
+	assert_false(cpc.colophon_notice_label.visible, "ColophonNoticeLabel must be hidden on Page 48")
+
+	# 2. Mobile preset
+	card.set_text_size_preset("mobile")
+	var mobile_h: float = card.custom_minimum_size.y
+	assert_true(mobile_h > 1080.0, "Page 48 mobile height (%.1fpx) must elongate > 1080.0px" % mobile_h)
+	assert_true(cpc.creator_notice_label.visible, "CreatorNoticeLabel must remain visible under mobile preset")
+	assert_true(cpc.version_label.visible, "VersionNoticeLabel must remain visible under mobile preset")
+	assert_eq(cpc.creator_notice_label.get_theme_font_size("font_size"), 18, "Mobile notice font size must be 18pt")
+
+	# 3. Extra Large preset
+	card.set_text_size_preset("extra_large")
+	var xl_h: float = card.custom_minimum_size.y
+	assert_true(xl_h > 1080.0, "Page 48 extra large height (%.1fpx) must elongate > 1080.0px" % xl_h)
+	assert_true(xl_h > mobile_h, "Page 48 extra large height (%.1fpx) must exceed mobile height (%.1fpx)" % [xl_h, mobile_h])
+	assert_true(cpc.creator_notice_label.visible, "CreatorNoticeLabel must remain visible under extra large preset")
+	assert_true(cpc.version_label.visible, "VersionNoticeLabel must remain visible under extra large preset")
+	assert_eq(cpc.creator_notice_label.get_theme_font_size("font_size"), 23, "Extra large notice font size must be 23pt")
+
+	card.free()
 
 
 func test_page_50_back_cover_card() -> void:
