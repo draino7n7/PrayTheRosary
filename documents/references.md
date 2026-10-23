@@ -1055,7 +1055,7 @@ flowchart TD
   11. Spread 11 (Page 23): Gerard David, *The Transfiguration of Christ* (Church of Our Lady, Bruges `OLV.0003.I`)
   12. Spread 12 (Page 25): Peter Paul Rubens, *The Last Supper* (Pinacoteca di Brera Milan `97`)
 - **Colophon Creator Attribution & Version Notices:**
-  - *Creator Notice*: Created and compiled by Kevin Audrain.
+  - *Creator Notice*: This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.
   - *Application Version*: Dynamic release version indicator (e.g. *Version 0.1.3*) synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`.
 - **Primary Source References:**
   - [Reference 1] Repository Master Attributions Catalog: `assets/2D/gimp/attributions.json`

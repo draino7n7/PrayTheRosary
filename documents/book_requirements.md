@@ -73,7 +73,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
    - In Section 2 (*"Step-by-Step Guide to Praying the Rosary"*), Step 2 (*"2. The Decades (Tabs J, L, S, G)"*) instructs the reader to pray either the five decades of the day's Mystery set or all four Mystery sets (twenty decades) back-to-back in chronological order (*Joyful, Luminous, Sorrowful, Glorious*) for a complete Rosary.
 5. **Sacred Artwork Credits & Colophon Spread (`Spread 24`, `Page Sides 48–49`):**
    - **Page Side 48 (Part I & Creator Colophon):** Lists 12 masterwork attributions (Front Cover, Opening Prayers, Joyful Mysteries 1–5, Luminous Mysteries 1–5), followed below a thin antique-gold divider by a bottom colophon block displaying:
-     - **Creator Attribution Notice:** *"Created and compiled by Kevin Audrain."*
+     - **Creator Attribution Notice:** *"This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain."*
      - **Dynamic Edition / Application Version:** *"Version <X.Y.Z>"* (dynamically synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`, e.g., *"Version 0.1.3"*).
    - **Page Side 49 (Part II & Scripture/Artwork Colophon):** Lists 11 masterwork attributions (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, Closing Prayers), followed below a thin antique-gold divider by:
      - **Scripture Colophon Notice:** *"Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain."* (referencing [SacredBible.org](https://www.sacredbible.org/) and [draino7n7/cpdv](https://github.com/draino7n7/cpdv)).
@@ -101,7 +101,7 @@ The canonical print edition and its automated build pipeline live in `scripts/bu
 - **Canonical Print PDF (`assets/print/PrayTheRosary.pdf`):**
   - 50-page vector PDF (`6.0" × 9.0"`, `432 × 648 pt`) with 300-DPI resampled master paintings and compression (~18 MB, tracked via Git LFS).
   - **Spiral-Binding Gutter Margins:** Every interior page (`Pages 2–49`) reserves an alternating **`0.625"` (`5/8"`) Inner Margin** along the punched spine edge (`Left` on Odd/Right-hand pages; `Right` on Even/Left-hand pages) and **`0.500"` (`1/2"`)** on the Outer, Top, and Bottom edges so twin-loop wire-o punching (`~0.375"` depth) never encroaches on gold borders or typography.
-  - **Page 48 Creator Attribution & Dynamic Version Colophon:** Below the 12 masterwork attributions and a thin antique gold divider, renders `"Created and compiled by Kevin Audrain."` and `"Version <X.Y.Z>"` (read dynamically from `application/config/version` in `game/project.godot`).
+  - **Page 48 Creator Attribution & Dynamic Version Colophon:** Below the 12 masterwork attributions and a thin antique gold divider, renders `"This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain."` and `"Version <X.Y.Z>"` (read dynamically from `application/config/version` in `game/project.godot`).
   - **Page 49 Text Sources Colophon:** Below the 11 masterwork attributions and gold divider, renders the CPDV Scripture notice and museum public-domain artwork credit notice.
   - **Page 50 Back Cover Callout Boxes:** Features Pope St. John Paul II's epigraph and St. Louis Marie de Montfort's Marian counsel encapsulated in subtle gold-bordered callout boxes (`#2A090B` deep fill, `#D4AF37` 0.9pt border, 3.5pt corner radius).
 

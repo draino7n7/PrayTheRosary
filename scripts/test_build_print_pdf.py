@@ -92,7 +92,7 @@ class TestBuildPrintPdf(unittest.TestCase):
         doc = pymupdf.open(str(CANONICAL_PDF))
         try:
             p48_text = doc[47].get_text()
-            self.assertIn("Created and compiled by Kevin Audrain.", p48_text)
+            self.assertIn("This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.", p48_text)
             self.assertIn(f"Version {version_str}", p48_text)
         finally:
             doc.close()
