@@ -91,7 +91,7 @@ The reviewing agent is directly responsible for synchronizing project documentat
 * Update if user-facing behavior, controls, rules, or visuals are changed.
 
 ### 4. `documents/references.md`
-* Verify that any additions, fixes, or modifications to prayers, Douay-Rheims Scripture verses, historical summaries, or artwork metadata are verified against primary sources and recorded in `documents/references.md` in strict book order per `.agents/rules/references_verification.md`.
+* Verify that any additions, fixes, or modifications to prayers, Catholic Public Domain Version (CPDV) Scripture verses, historical summaries, or artwork metadata are verified against primary sources and recorded in `documents/references.md` in strict book order per `.agents/rules/references_verification.md`.
 
 ### Committing Documentation Updates
 Always commit documentation updates directly to the feature branch **prior to merging**:

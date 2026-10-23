@@ -268,57 +268,71 @@ func test_weekday_mystery_recommendations() -> void:
 	assert_eq(loader.get_recommended_mystery_set_for_date(2026, 1, 11), "joyful", "Baptism of the Lord Sunday 2026 must be joyful")
 
 
-func test_douay_rheims_citations_and_verbatim_texts() -> void:
+func test_cpdv_citations_and_verbatim_texts() -> void:
 	var loader: RefCounted = RosaryDataLoaderScript.new()
 	loader.load_all()
+
+	assert_eq(
+		str(loader.mysteries_data.get("scripture_translation", "")),
+		"Catholic Public Domain Version (CPDV)",
+		"mysteries.json scripture_translation must be 'Catholic Public Domain Version (CPDV)'"
+	)
 
 	# Joyful 3: Luke 2:6-7, 10-11
 	var j3: Dictionary = loader.get_mystery_by_id("joyful_3_nativity")
 	assert_eq(str(j3.get("scripture_reference", "")), "Luke 2:6–7, 10–11")
-	assert_true(str(j3.get("scripture_text", "")).contains("And the angel said to them: Fear not; for, behold,"), "Joyful 3 Luke 2:10 must contain 'And the angel said to them: Fear not; for, behold,'")
+	assert_true(str(j3.get("scripture_text", "")).contains("And the Angel said to them: \"Do not be afraid. For, behold,"), "Joyful 3 Luke 2:10 must contain 'And the Angel said to them: \"Do not be afraid. For, behold,'")
 
 	# Joyful 4: Luke 2:28 bracketed subject
 	var j4: Dictionary = loader.get_mystery_by_id("joyful_4_presentation")
 	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32")
-	assert_true(str(j4.get("scripture_text", "")).contains("[Then Simeon] took him into his arms"), "Joyful 4 Luke 2:28 must use bracketed subject '[Then Simeon] took him into his arms'")
+	assert_true(str(j4.get("scripture_text", "")).contains("[Then Simeon] took him up, into his arms"), "Joyful 4 Luke 2:28 must use bracketed subject '[Then Simeon] took him up, into his arms'")
 
-	# Luminous 4: Luke 9:29-31, 35 and verbatim 'hear him.'
+	# Luminous 4: Luke 9:29-31, 35 and verbatim 'Listen to him.'
 	var l4: Dictionary = loader.get_mystery_by_id("luminous_4_transfiguration")
 	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35")
-	assert_true(str(l4.get("scripture_text", "")).contains("[Elijah]"), "Luminous 4 Luke 9:30 must contain bracketed '[Elijah]'")
-	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son; hear him."), "Luminous 4 Luke 9:35 must end with verbatim DRBO 'hear him.'")
+	assert_true(str(l4.get("scripture_text", "")).contains("Moses and Elijah, appearing in majesty"), "Luminous 4 Luke 9:30-31 must contain 'Moses and Elijah, appearing in majesty'")
+	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son. Listen to him.\""), "Luminous 4 Luke 9:35 must end with verbatim CPDV 'This is my beloved Son. Listen to him.\"'")
 	assert_false(str(l4.get("scripture_text", "")).contains("hear ye him"), "Luminous 4 must not contain KJV 'hear ye him'")
 
-	# Sorrowful 2: Isaias (Isaiah) 53:5
+	# Sorrowful 2: John 19:1; Isaiah 53:5
 	var s2: Dictionary = loader.get_mystery_by_id("sorrowful_2_scourging")
-	assert_eq(str(s2.get("scripture_reference", "")), "John 19:1; Isaias (Isaiah) 53:5")
+	assert_eq(str(s2.get("scripture_reference", "")), "John 19:1; Isaiah 53:5")
+	assert_true(str(s2.get("scripture_text", "")).contains("Therefore, Pilate then took Jesus into custody and scourged him..."), "Sorrowful 2 must begin with John 19:1")
+	assert_true(str(s2.get("scripture_text", "")).contains("The discipline of our peace was upon him. And by his wounds, we are healed."), "Sorrowful 2 must contain Isaiah 53:5")
 
 	# Sorrowful 4: Citation order matching passage order (John 19:17; Luke 23:26-27)
 	var s4: Dictionary = loader.get_mystery_by_id("sorrowful_4_carrying_cross")
 	assert_eq(str(s4.get("scripture_reference", "")), "John 19:17; Luke 23:26–27")
+	assert_true(str(s4.get("scripture_text", "")).contains("And carrying his own cross, he went forth to the place which is called Calvary..."), "Sorrowful 4 must begin with John 19:17")
+	assert_true(str(s4.get("scripture_text", "")).contains("And they imposed the cross on him to carry after Jesus."), "Sorrowful 4 must contain Luke 23:26")
 
-	# Sorrowful 5: Luke 23:46 'crying out with a loud voice'
+	# Sorrowful 5: Luke 23:33–34, 46
 	var s5: Dictionary = loader.get_mystery_by_id("sorrowful_5_crucifixion")
-	assert_true(str(s5.get("scripture_text", "")).contains("And Jesus crying out with a loud voice, said:"), "Sorrowful 5 Luke 23:46 must include 'out' in 'crying out with a loud voice'")
+	assert_eq(str(s5.get("scripture_reference", "")), "Luke 23:33–34, 46")
+	assert_true(str(s5.get("scripture_text", "")).contains("And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\""), "Sorrowful 5 Luke 23:46 must contain 'And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\"'")
+	assert_true(str(s5.get("scripture_text", "")).ends_with("And upon saying this, he expired."), "Sorrowful 5 must end with 'And upon saying this, he expired.'")
 
-	# Glorious 2: Separated Luke 24:50-52 and Acts 1:9 in canonical order with ellipses
+	# Glorious 2: Luke 24:50–52; Acts 1:9
 	var g2: Dictionary = loader.get_mystery_by_id("glorious_2_ascension")
 	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–52; Acts 1:9")
 	assert_eq(
 		str(g2.get("scripture_text", "")),
-		"And he led them out as far as Bethania: and lifting up his hands, he blessed them. And it came to pass, whilst he blessed them, he departed from them, and was carried up to heaven. And they adoring went back into Jerusalem with great joy... And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight."
+		"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven. And worshiping, they returned to Jerusalem with great joy... And when he had said these things, while they were watching, he was lifted up, and a cloud took him from their sight."
 	)
 
 	# Glorious 4: Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10
 	var g4: Dictionary = loader.get_mystery_by_id("glorious_4_assumption")
 	assert_eq(str(g4.get("scripture_reference", "")), "Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10")
-	assert_true(str(g4.get("scripture_text", "")).begins_with("Arise, O Lord, into thy resting place: thou and the ark, which thou hast sanctified..."), "Glorious 4 must begin with Psalm 131:8")
-	assert_true(str(g4.get("scripture_text", "")).contains("For behold from henceforth all generations shall call me blessed."), "Glorious 4 must contain Luke 1:48")
-	assert_true(str(g4.get("scripture_text", "")).ends_with("Thou art the glory of Jerusalem, thou art the joy of Israel, thou art the honour of our people."), "Glorious 4 must end with Judith 15:10")
+	assert_true(str(g4.get("scripture_text", "")).begins_with("Rise up, O Lord, into your resting place. You and the ark of your sanctification..."), "Glorious 4 must begin with Psalm 131:8 (CPDV)")
+	assert_true(str(g4.get("scripture_text", "")).contains("For behold, from this time, all generations shall call me blessed."), "Glorious 4 must contain Luke 1:48 (CPDV)")
+	assert_true(str(g4.get("scripture_text", "")).ends_with("You are the glory of Jerusalem, you are the joy of Israel, you are the honor of our people."), "Glorious 4 must end with Judith 15:10 (CPDV)")
 
-	# Glorious 5: Ecclesiasticus (Sirach) 24:7
+	# Glorious 5: Revelation 12:1; Sirach 24:7
 	var g5: Dictionary = loader.get_mystery_by_id("glorious_5_coronation")
-	assert_eq(str(g5.get("scripture_reference", "")), "Apocalypse (Revelation) 12:1; Ecclesiasticus (Sirach) 24:7")
+	assert_eq(str(g5.get("scripture_reference", "")), "Revelation 12:1; Sirach 24:7")
+	assert_true(str(g5.get("scripture_text", "")).begins_with("And a great sign appeared in heaven: a woman clothed with the sun,"), "Glorious 5 must begin with Revelation 12:1 (CPDV)")
+	assert_true(str(g5.get("scripture_text", "")).ends_with("and my throne is in the pillar of a cloud."), "Glorious 5 must end with Sirach 24:7 (CPDV)")
 
 
 func test_museum_catalog_attributions_and_synchronization() -> void:
@@ -469,12 +483,12 @@ func test_simplified_prayer_titles_and_front_matter_bible_version_note() -> void
 	assert_eq(str(sec0.get("title", "")), "How This Book Is Organized", "Page 3 Section 1 title must be 'How This Book Is Organized'")
 	var sec0_body: String = str(sec0.get("body", ""))
 	assert_true(
-		sec0_body.contains("Douay-Rheims"),
-		"Page 3 'How This Book Is Organized' section body must cite the Douay-Rheims Bible translation"
+		sec0_body.contains("Catholic Public Domain Version"),
+		"Page 3 'How This Book Is Organized' section body must cite the Catholic Public Domain Version"
 	)
 	assert_true(
-		sec0_body.contains("• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Douay-Rheims / Confraternity Edition of the Bible), a brief meditation, and the complete prayers for that decade."),
-		"Page 3 Left Page (Word & Prayer) bullet must include '(taken from the Douay-Rheims / Confraternity Edition of the Bible)'"
+		sec0_body.contains("• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Catholic Public Domain Version of the Bible), a brief meditation, and the complete prayers for that decade."),
+		"Page 3 Left Page (Word & Prayer) bullet must include '(taken from the Catholic Public Domain Version of the Bible)'"
 	)
 
 
@@ -829,6 +843,8 @@ func test_references_document_and_agent_rules_exist_and_complete() -> void:
 	var primary_domains: Array[String] = [
 		"https://www.vatican.va",
 		"https://www.usccb.org",
+		"https://www.sacredbible.org",
+		"https://github.com/draino7n7/cpdv",
 		"https://www.drbo.org",
 		"https://www.museodelprado.es",
 		"https://www.nationalgallery.org.uk",
