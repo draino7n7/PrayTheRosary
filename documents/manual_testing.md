@@ -296,17 +296,17 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Text size preset switches from `Normal` to `Mobile`.
   - A top-centered toast banner (`PresetToast`) appears with text `"Text Size: Mobile"` dynamically rendered at **30pt** font size.
-  - The toast smoothly auto-resizes (`reset_size()`) and maintains horizontal centering without text clipping, lingering for ~1.2s before fading out over 0.4s.
+  - The toast resizes dynamically with symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), maintaining exact horizontal centering ($x = 360\text{px}$ on 720px viewport) perfectly balanced between the top-left `"AA"` reader button and top-right navigation drawer menu button (`☰`) without rightward drift or text clipping, lingering for ~1.2s before fading out over 0.4s.
 - **Step 3:** Click or tap the dual-sized `"AA"` button a second time.
 - **Expected:**
   - Text size preset switches from `Mobile` to `Extra Large`.
   - A top-centered toast banner appears with text `"Text Size: Extra Large"` dynamically rendered at **38pt** font size.
-  - The toast smoothly expands to fit the larger text, remains centered horizontally without clipping, and fades out after ~1.2s.
+  - The toast expands symmetrically around the horizontal center anchor ($x = 360\text{px}$) with symmetric offsets (`offset_left == -offset_right`), remaining dead-center between the top-left reader button and top-right navigation drawer menu button without clipping, and fades out after ~1.2s.
 - **Step 4:** Click or tap the dual-sized `"AA"` button a third time.
 - **Expected:**
   - Text size preset wraps sequentially back to `Normal`.
   - A top-centered toast banner appears with text `"Text Size: Normal"` dynamically rendered at **22pt** font size.
-  - The toast scales down smoothly, remains centered horizontally, and fades out after ~1.2s.
+  - The toast scales down symmetrically with symmetric offsets (`offset_left == -offset_right`), remaining perfectly centered horizontally ($x = 360\text{px}$) between the top-left reader button and top-right navigation drawer menu button, and fades out after ~1.2s.
 - **Step 5:** Open the navigation drawer (top-right `☰` button).
 - **Expected:**
   - While the navigation drawer is open, clicking or tapping on the `"AA"` button area does not cycle text size presets (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`).

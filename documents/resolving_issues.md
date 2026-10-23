@@ -156,6 +156,7 @@ If your issue involves UI layout, coloring, or visual polish, you MUST visually 
 * **CRITICAL**: GDScript lambdas capture primitives by VALUE, not by reference. When using inline lambdas to verify signal emissions, capture variables via an `Array` wrapper (e.g., `var count: Array[int] = [0]`) or an object property.
 * **CRITICAL**: The `test_runner.gd` does not initialize `project.godot` autoloads natively. To ensure testability, avoid hardcoded singleton identifier calls (e.g., `StatsManager.do_something()`) inside `RefCounted` or core logic classes. Use dependency injection, mock nodes, or look up peer singletons dynamically using `/root/SingletonName`.
 * **CRITICAL**: When testing `Control` nodes headlessly, `_ready()` is NOT invoked organically unless nodes enter the scene tree. Use `test_root_window.add_child(node)` or build a mock SceneTree structure in your test setup, and clean up with `.free()` in teardown.
+* **CRITICAL**: In headless `SceneTree` execution (such as `test_runner.gd`), `Container.get_combined_minimum_size()` may not immediately reflect font size overrides on child `Label` controls without an explicit layout update pass or direct string measurement (`Font.get_string_size()`). When designing UI containers that rely on dynamic font metrics, compute string sizing and stylebox content margins directly or ensure children propagate their minimum sizes before reading container dimensions.
 
 ### Running Automated Tests
 > [!NOTE]

@@ -163,6 +163,18 @@ To prevent lateral expansion, horizontal overflow, and asymmetrical screen shift
     ```
 - **Dynamic Multiline Card Height Calculation (`Font.get_multiline_string_size`):**
   - Dynamic vertical height calculations (`total_h`) in text cards must calculate heading, fruit, citation, and rubric heights using `Font.get_multiline_string_size(text, alignment, max_width, font_size).y` (using 656.0px for standard card content, 636.0px for scripture container, and 628.0px for fruit badge) rather than single-line approximations (`Font.get_height()`) so that multi-line wrapped headers are accurately reflected in card elongation.
+- **PresetToast Dynamic Symmetrical Horizontal Centering:**
+  - Calling `Control.reset_size()` in Godot 4 on an anchored `Control` with pre-existing offsets expands `size.x` rightward by pinning `offset_left` and advancing `offset_right = offset_left + min_size.x`.
+  - To prevent rightward shift and maintain horizontal centering across `Normal`, `Mobile`, and `Extra Large` presets, `PresetToast` calculates `min_size` dynamically from font metrics (`font.get_string_size(toast_label.text, ...)` and panel stylebox content margins) and explicitly enforces symmetric horizontal offsets centered at 0.5:
+    ```gdscript
+    preset_toast.anchor_left = 0.5
+    preset_toast.anchor_right = 0.5
+    preset_toast.offset_left = -min_size.x * 0.5
+    preset_toast.offset_right = min_size.x * 0.5
+    preset_toast.offset_top = 22.0
+    preset_toast.offset_bottom = 22.0 + min_size.y
+    ```
+  - This strictly maintains `offset_left == -offset_right` and positions the midpoint of `PresetToast` at $x = 360\text{px}$ on 720px portrait viewports across all text size presets without clipping.
 
 ### 3.0.3 Prayer Typography & Communal Recitation (Leader & Bold Group Response) Formatting
 To support traditional communal/group Rosary recitation (family, parish, or prayer group) as well as individual devotion:
@@ -323,7 +335,7 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
     - `Normal`: `22pt` (`"Text Size: Normal"`)
     - `Mobile`: `30pt` (`"Text Size: Mobile"`)
     - `Extra Large`: `38pt` (`"Text Size: Extra Large"`)
-  - Calls `preset_toast.reset_size()` dynamically before display to ensure the pill container resizes smoothly and maintains horizontal centering (`anchors_preset = 5`, `grow_horizontal = 2`) without clipping across all screen viewports.
+  - Rather than calling `reset_size()` (which in Godot 4 pins `offset_left` and expands `offset_right` rightward on center-anchored controls), `PresetToast` calculates symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), keeping the visual midpoint strictly at $x = 360\text{px}$ on 720px viewports between the top-left reader button and top-right navigation drawer menu button across all presets.
   - In graphical runtimes, the toast smoothly lingers for 1.2s before fading out over 0.4s via a tween.
 - **Viewport Scroll Anchor Stability:**
   - When switching presets, `Main.set_text_size_preset()` calculates the relative vertical center of the currently viewed page element in the viewport prior to resizing.
