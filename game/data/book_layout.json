@@ -573,7 +573,11 @@
 					"luminous_3_proclamation",
 					"luminous_4_transfiguration",
 					"luminous_5_eucharist"
-				]
+				],
+				"colophon": {
+					"creator_notice": "Created and compiled by Kevin Audrain.",
+					"show_version": true
+				}
 			},
 			"right_page": {
 				"page_number": 49,
