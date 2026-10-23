@@ -88,23 +88,39 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 ---
 
-## 5. Affinity Publishing & Prepress Workflow (`assets/Affinity/`)
+## 5. Automated Print PDF & Prepress Pipeline (`assets/print/`)
 
 ### 5.1 Content Synchronization & Scripture Translation
-- The Affinity book layout and automated PDF generator consume prayer, mystery, and layout data directly from `game/data/` (`mysteries.json`, `book_layout.json`, `prayers.json`).
+- The automated Python print PDF pipeline consumes prayer, mystery, and layout data directly from `game/data/` (`mysteries.json`, `book_layout.json`, `prayers.json`), versioning from `game/project.godot`, fonts from `game/assets/fonts/`, and archival artwork from `assets/2D/gimp/original_downloads/`.
 - Scripture citations and readings are standardized on the **Catholic Public Domain Version (CPDV)** of the Holy Bible ([SacredBible.org](https://www.sacredbible.org/) / [draino7n7/cpdv](https://github.com/draino7n7/cpdv)), maintaining perfect textual alignment between the interactive digital application and the printed volume.
+- Typography is loaded exclusively from `game/assets/fonts/EBGaramond-Regular.ttf` and `game/assets/fonts/EBGaramond-Bold.ttf`, strictly guaranteeing **zero italic fonts** anywhere across all 50 pages.
 
-### 5.2 Prepress Layout Specifications & Files
-All editable layout files, fonts, and press-ready exports for the 50-page spiral-bound book live in `assets/Affinity/` (tracked via Git LFS):
+### 5.2 Prepress Layout Specifications & CLI Options
+The canonical print edition and its automated build pipeline live in `scripts/build_print_pdf.py` and `assets/print/`:
 
-- **Master Affinity Project (`assets/Affinity/PrayTheRosary.af`):**
-  - Editable 50-page **Affinity** (`Layout` mode) document (`6.0" × 9.0"` trim size, `0.125"` bleed on all 4 sides, Facing Pages starting on Right, `CMYK/8` — `U.S. Web Coated (SWOP) v2`, `300 DPI`).
-  - **Spiral-Binding Gutter Margins:** Every interior page (`Pages 2–49`) reserves a **`0.625"` (`5/8"`) Inner Margin** along the punched spine edge (`Left` on Odd/Right-hand pages; `Right` on Even/Left-hand pages) and **`0.50"` (`1/2"`)** on the Outer, Top, and Bottom edges so twin-loop wire-o punching (`~0.375"` depth) never encroaches on gold borders or typography.
-- **Press-Ready 50-Page PDF (`assets/Affinity/PrayTheRosary.pdf`):**
-  - Exported from Affinity using **`PDF (press ready)`** with **`Area: All Pages`** (50 individual `6.25" × 9.25"` pages with `0.125"` bleed included and `6.00" × 9.00"` `TrimBox`), **`Include bleed: ON`**, **`Include printers marks: OFF`**, **`Convert image color spaces: ON`**, and **`Embed Fonts: All Fonts`**.
-- **Required Font Installation (`assets/Affinity/fonts/`):**
-  - Before opening `assets/Affinity/PrayTheRosary.af`, install all four **`EB Garamond Book`** fonts (`EBGaramondBook-Regular.ttf`, `EBGaramondBook-Bold.ttf`, `EBGaramondBook-Italic.ttf`, `EBGaramondBook-BoldItalic.ttf`).
-  - These fonts are custom-packaged from `EB Garamond` with OpenType terminal swash features (`fina`, `init`, `swsh`, `calt`, `dlig`, `hlig`) stripped so Affinity never substitutes long-tailed word-final `e` glyphs (`e.fina`).
-- **Automated PDF Layout Generator (`assets/Affinity/build_affinity_pdf.py`):**
-  - Rebuilds the 50-page vector PDF directly from `game/data/*.json` and `assets/2D/gimp/original_downloads/` via `python assets/Affinity/build_affinity_pdf.py`.
+- **Canonical Print PDF (`assets/print/PrayTheRosary.pdf`):**
+  - 50-page vector PDF (`6.0" × 9.0"`, `432 × 648 pt`) with 300-DPI resampled master paintings and compression (~18 MB, tracked via Git LFS).
+  - **Spiral-Binding Gutter Margins:** Every interior page (`Pages 2–49`) reserves an alternating **`0.625"` (`5/8"`) Inner Margin** along the punched spine edge (`Left` on Odd/Right-hand pages; `Right` on Even/Left-hand pages) and **`0.500"` (`1/2"`)** on the Outer, Top, and Bottom edges so twin-loop wire-o punching (`~0.375"` depth) never encroaches on gold borders or typography.
+  - **Page 48 Creator Attribution & Dynamic Version Colophon:** Below the 12 masterwork attributions and a thin antique gold divider, renders `"Created and compiled by Kevin Audrain."` and `"Version <X.Y.Z>"` (read dynamically from `application/config/version` in `game/project.godot`).
+  - **Page 49 Text Sources Colophon:** Below the 11 masterwork attributions and gold divider, renders the CPDV Scripture notice and museum public-domain artwork credit notice.
+  - **Page 50 Back Cover Callout Boxes:** Features Pope St. John Paul II's epigraph and St. Louis Marie de Montfort's Marian counsel encapsulated in subtle gold-bordered callout boxes (`#2A090B` deep fill, `#D4AF37` 0.9pt border, 3.5pt corner radius).
+
+- **Automated Generator Script (`scripts/build_print_pdf.py`):**
+  - Rebuilds `assets/print/PrayTheRosary.pdf` directly from canonical project data:
+    ```powershell
+    python scripts/build_print_pdf.py
+    ```
+  - **Retail Copy Shop Printing on US Letter (`--office-depot` / `--letter`):**
+    ```powershell
+    python scripts/build_print_pdf.py --office-depot
+    ```
+    Generates `assets/print/PrayTheRosary_OfficeDepot.pdf` centered on `8.5" × 11.0"` (`612 × 792 pt`) US Letter sheets with `0.125"` bleed and subtle corner crop marks, designed for retail copy shop printing (e.g., Office Depot, FedEx Office) on standard Letter paper stock.
+  - **Commercial Press Full Bleed (`--bleed`):**
+    ```powershell
+    python scripts/build_print_pdf.py --bleed
+    ```
+    Generates a `6.25" × 9.25"` (`450 × 666 pt`) PDF with `0.125"` full bleed and embeds PDF `TrimBox` (`Rect(9, 9, 441, 657)`) and `BleedBox` (`Rect(0, 0, 450, 666)`) metadata for commercial offset and digital presses.
+  - **Automated Test Suite (`scripts/test_build_print_pdf.py`):**
+    - Executed via `python -m unittest discover -s scripts -p "test_*.py"`.
+    - Validates page count (50), page geometry, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.
 

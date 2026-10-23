@@ -47,9 +47,13 @@ Checklist grouped by component or responsibility:
 #### [Component / Feature Area 2]
 - [ ] Explicit requirement 3
 
-#### Automated Tests (`game/tests/`)
+#### Automated Tests (`game/tests/`, `scripts/`)
 - [ ] Add or update unit test cases verifying the new behavior.
-- [ ] Ensure all existing automated test suites pass without regressions.
+- [ ] Ensure all existing automated test suites pass without regressions (`godot --headless --path game -s res://tests/test_runner.gd` and `python -m unittest discover -s scripts -p "test_*.py"`).
+
+#### Print PDF Pipeline Synchronization (Mandatory if page styling, typography, or data JSON change)
+- [ ] Maintain and verify `scripts/build_print_pdf.py` and run `python -m unittest discover -s scripts -p "test_*.py"`.
+- [ ] Regenerate `assets/print/PrayTheRosary.pdf` if page layout, text content, or version numbers change.
 
 #### Documentation Coordination (Mandatory)
 - [ ] Update `documents/requirements.md` to reflect any new or modified specifications.
@@ -87,6 +91,7 @@ Before publishing an issue via GitHub:
 3. [ ] **Clarify Design Choices:** Resolve any open design questions (e.g., color hex codes, UI behaviors, platform fallbacks) before publishing so the issue body contains firm decisions rather than open questions.
 4. [ ] **Include Documentation Acceptance Criteria:** Ensure the mandatory documentation coordination checklist is included per `documents/reviewing_and_merging_prs.md`.
 5. [ ] **Check Canonical References Ledger (`documents/references.md`):** If proposing any additions, modifications, or fixes to sacred text, prayers, translations, Scripture citations, mysteries, historical summaries, or artwork attributions, consult `documents/references.md` and `.agents/rules/references_verification.md` to ensure doctrinal and archival accuracy, and include an acceptance criterion to keep `documents/references.md` synchronized.
+6. [ ] **Print PDF Pipeline Impact (`scripts/build_print_pdf.py`):** If proposing changes that modify book page visual styling, typography rules, prayers/Scripture, or `game/data/*.json` structure, include explicit acceptance criteria requiring `scripts/build_print_pdf.py` maintenance, running `python -m unittest discover -s scripts -p "test_*.py"`, and regenerating `assets/print/PrayTheRosary.pdf`.
 
 ---
 
@@ -121,9 +126,14 @@ Short description of the bug or feature and its user impact.
 - [ ] Action item 1
 - [ ] Action item 2
 
-#### Automated Tests (game/tests/)
-- [ ] Add unit test cases in game/tests/<test_file>.gd.
-- [ ] Ensure test suite passes with 0 failures.
+#### Automated Tests (game/tests/, scripts/)
+- [ ] Add unit test cases in game/tests/<test_file>.gd or scripts/test_*.py.
+- [ ] Ensure test suites pass with 0 failures (Godot and Python).
+
+#### Print PDF Pipeline Synchronization (Mandatory if styling, typography, or data JSON change)
+- [ ] Maintain and verify scripts/build_print_pdf.py.
+- [ ] Run python -m unittest discover -s scripts -p "test_*.py".
+- [ ] Regenerate assets/print/PrayTheRosary.pdf if layout, prayers, or version changed.
 
 #### Documentation Coordination (Mandatory per documents/reviewing_and_merging_prs.md)
 - [ ] Update documents/requirements.md.

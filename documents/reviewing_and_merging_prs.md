@@ -37,6 +37,8 @@ Before approving or merging any Pull Request, verify the following:
 ### 3. Testing Verification
 * [ ] **Automated Test Report:** PR body includes evidence that all automated tests pass (`Test Results: X Passed, 0 Failed`).
 * [ ] **Independent Test Execution:** Reviewer independently runs the test suite on the checked-out branch and confirms zero failures.
+* [ ] **Python Print PDF Unit Tests:** If the PR touches book styling, typography, `game/data/*.json`, or `scripts/build_print_pdf.py`, run `python -m unittest discover -s scripts -p "test_*.py"` and confirm 0 test failures.
+* [ ] **Print PDF Asset Synchronization:** Confirm `assets/print/PrayTheRosary.pdf` has been rebuilt and committed if book page styling, prayers, Scripture, typography, or version numbers changed.
 * [ ] **New Tests Added:** If core logic, autoloads, or calculations were altered, corresponding unit tests are present in `game/tests/`.
 * [ ] **Visual QA (MCP Bridge):** If the PR modifies UI or visual layout, launch the game locally and capture a screenshot via `python mcp_client.py screenshot` to verify the layout visually.
 
@@ -73,6 +75,11 @@ Inside the feature worktree, run the headless Godot test suite. Always force an 
 ```powershell
 godot --headless --editor --quit --path game
 godot --headless --path game -s res://tests/test_runner.gd
+```
+
+If the PR touches book styling, typography, prayers, Scripture, or `game/data/*.json`, also run the Python print PDF test suite:
+```powershell
+python -m unittest discover -s scripts -p "test_*.py"
 ```
 
 ---
@@ -114,14 +121,17 @@ gh pr review <pr_number> --request-changes --body "<Detailed description of what
 Once all acceptance criteria are met, automated tests pass, and documentation is updated and pushed to the feature branch, proceed to merge.
 
 #### 1. Prepare for Merge
-Before merging, exit the review worktree, terminate any background Godot processes to prevent Windows file locks, remove the worktree, and return to the main workspace:
+Before merging, exit the review worktree, terminate any background Godot processes and the git fsmonitor daemon to prevent Windows file locks, remove the worktree, and return to the main workspace:
 ```powershell
-# Kill any background Godot instances to release Windows file locks
+# Kill any background Godot instances and stop git fsmonitor daemon to release Windows file locks
 Stop-Process -Name "godot" -Force -ErrorAction SilentlyContinue
+git fsmonitor--daemon stop 2>$null
 
 # Exit worktree and remove it
 cd ../..
 git worktree remove .worktrees/review-pr-<pr_number> --force
+# If Windows file locks prevent removal, use PowerShell fallback:
+# Remove-Item -Recurse -Force .worktrees/review-pr-<pr_number>; git worktree prune
 ```
 
 #### 2. Merge the Pull Request

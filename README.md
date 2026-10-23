@@ -74,17 +74,30 @@ To get started with OGS:
 
 ---
 
-## Print Book & Affinity Layout (`assets/Affinity/`)
+## Print Book & Automated PDF Pipeline (`assets/print/`)
 
-The repository includes the complete 50-page, 6" × 9" spiral-bound print edition layout and prepress pipeline in `assets/Affinity/`:
-- **Print-Ready 50-Page PDF (`assets/Affinity/PrayTheRosary.pdf`):** 300 DPI, CMYK/8 (`U.S. Web Coated (SWOP) v2`) press-ready PDF with `0.125"` full bleed (`6.25" × 9.25"` bleed box, `6.0" × 9.0"` trim box) and an alternating `0.625"` inner spiral-binding safety margin (`0.50"` outer/top/bottom margins).
-- **Editable Affinity Project (`assets/Affinity/PrayTheRosary.af`):** Native multi-page Affinity project (`Layout` mode) with Facing Pages, editable text frames, vector gold borders, and embedded 300-DPI master paintings.
-- **Print Book Fonts (`assets/Affinity/fonts/`):** Bundles the four `EBGaramondBook-*.ttf` (`Regular`, `Bold`, `Italic`, `BoldItalic`) font files with OpenType terminal/initial swash features (`fina`, `init`, `swsh`) stripped so Affinity renders clean, standard italic letterforms.
-  - **Before opening `PrayTheRosary.af` in Affinity:** Install all four `EBGaramondBook-*.ttf` fonts from `assets/Affinity/fonts/` onto your system so Affinity detects the exact font family without substitution.
-- **Automated Starter PDF Generator (`assets/Affinity/build_affinity_pdf.py`):** Python script (`reportlab` + `Pillow`) that rebuilds the 50-page starter PDF directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, and `assets/2D/gimp/original_downloads/`:
-  ```powershell
-  python assets/Affinity/build_affinity_pdf.py
-  ```
+The repository includes a complete automated Python PDF generation pipeline that produces a 50-page, 6" × 9" spiral-bound print edition directly from project assets and structured data:
+- **Canonical Print PDF Asset (`assets/print/PrayTheRosary.pdf`):** 50-page, 6.0" × 9.0" (432 × 648 pt) reader/print PDF with alternating 0.625" inner spiral-binding safety margins (0.500" outer/top/bottom margins), zero italic fonts, dynamic version and colophon notices on Pages 48–49, and framed quote callout boxes on Page 50. Tracked under Git LFS (~18 MB).
+- **Automated PDF Generator (`scripts/build_print_pdf.py`):** Python script (`reportlab`, `Pillow`, `pymupdf`) compiling the 50-page document directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, `game/project.godot`, `game/assets/fonts/EBGaramond-*.ttf`, and `assets/2D/gimp/original_downloads/`.
+  - **Standard Reader / Print Edition (Default):**
+    ```powershell
+    python scripts/build_print_pdf.py
+    ```
+    Outputs `assets/print/PrayTheRosary.pdf` (6.0" × 9.0").
+  - **Retail Copy Shop US Letter Edition (`--office-depot` / `--letter`):**
+    ```powershell
+    python scripts/build_print_pdf.py --office-depot
+    ```
+    Generates `assets/print/PrayTheRosary_OfficeDepot.pdf` centered on 8.5" × 11.0" (612 × 792 pt) US Letter sheets with 0.125" bleed and subtle corner crop marks, ideal for double-sided spiral-bound printing at retail copy shops like Office Depot.
+  - **Commercial Press Bleed Edition (`--bleed`):**
+    ```powershell
+    python scripts/build_print_pdf.py --bleed
+    ```
+    Generates 6.25" × 9.25" (450 × 666 pt) pages with 0.125" bleed, embedding PDF `TrimBox` (6.0" × 9.0") and `BleedBox` metadata for professional commercial print houses.
+  - **Custom Output Path (`--output <path>`):**
+    ```powershell
+    python scripts/build_print_pdf.py --output "path/to/custom.pdf"
+    ```
 
 ---
 
@@ -92,7 +105,7 @@ The repository includes the complete 50-page, 6" × 9" spiral-bound print editio
 
 Key architecture specifications, theological references, and testing standards:
 - **[Application Requirements (`documents/requirements.md`)](documents/requirements.md):** Comprehensive digital application specifications, continuous scroll architecture, typography presets, and testing standards.
-- **[Print Book Requirements (`documents/book_requirements.md`)](documents/book_requirements.md):** Specifications for the physical 6" × 9" spiral-bound print edition and Affinity prepress workflow.
+- **[Print Book Requirements (`documents/book_requirements.md`)](documents/book_requirements.md):** Specifications for the physical 6" × 9" spiral-bound print edition and automated print PDF pipeline.
 - **[Canonical References Guide (`documents/references.md`)](documents/references.md):** Complete primary source citations and verification ledger for all 50 physical pages, 12 prayers, 20 mysteries, Catholic Public Domain Version (CPDV) Scripture verses, and 23 fine art masterpieces.
 - **[Manual Testing Guide (`documents/manual_testing.md`)](documents/manual_testing.md):** Test suites for manual validation, accessibility testing, and typography verification.
 - **[AI Agent Rules (`.agents/rules/references_verification.md`)](.agents/rules/references_verification.md):** Verification protocols and rules governing modifications to sacred text, prayers, and artwork attributions.
@@ -101,10 +114,15 @@ Key architecture specifications, theological references, and testing standards:
 
 ## Running and Testing
 
-### Headless Unit Tests
-To run the automated test suite locally:
+### Automated Test Suites
+To run the Godot engine test suite locally:
 ```powershell
 godot --headless --path game -s res://tests/test_runner.gd
+```
+
+To run the Python Print PDF pipeline unit tests locally:
+```powershell
+python -m unittest discover -s scripts -p "test_*.py"
 ```
 
 ---
@@ -132,6 +150,7 @@ python mcp_client.py raw '<json>'    # Sends custom MCP JSON payload
 This repository includes production-tested GitHub Actions workflows:
 - **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`.aab`), signs the bundle, and publishes release assets.
 - **Web Release (`web_release.yml`):** Automatically builds an HTML5 Web export and attaches a zip archive to GitHub Releases.
+- **Print PDF Release (`pdf_release.yml`):** Automatically triggers on tag push (`v*`) or manual dispatch. Validates the test suite (`test_*.py`), builds the canonical 50-page print PDF, and attaches `PrayTheRosary.pdf` to the GitHub Release.
 - **GL Compatibility Renderer:** Configured with `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0), guaranteeing optimal compatibility across Web, Desktop, and Mobile.
 
 ---

@@ -48,10 +48,13 @@ Follow these steps strictly in order:
    - Locate the `version/code` (integer) and `version/name` (string) properties under the `[preset.0.options]` section.
    - Increment `version/code` by 1.
    - Update `version/name` to the user-requested target version. **CRITICAL:** Ensure the version uses strict 3-digit semantic versioning (e.g., "0.6.0").
-   - Save the file.
+   - Synchronize `config/version="<VERSION>"` in `game/project.godot` under `[application]` to match the new version.
+   - Regenerate the canonical print PDF with the updated version colophon by running:
+     `python scripts/build_print_pdf.py`
+   - Stage and save all modified files: `git add game/export_presets.cfg game/project.godot assets/print/PrayTheRosary.pdf`.
    
 2. **Commit & Push:**
-   - Commit the change directly to main: `git commit -am "chore: bump version to <VERSION>"`
+   - Commit the changes directly to main: `git commit -m "chore: bump version to <VERSION>"`
    - Push to main: `git push origin main`
 
 3. **Draft Release Notes:**
@@ -60,22 +63,22 @@ Follow these steps strictly in order:
    - **CRITICAL:** When saving the file in PowerShell, you MUST explicitly specify `-Encoding UTF8` (e.g., `Set-Content -Path release_notes.md -Value $content -Encoding UTF8`).
 
 4. **Create DRAFT GitHub Release:**
-   - To avoid triggering two builds, we will create the release as a draft. This creates the tag, which triggers the single CI build.
+   - To avoid triggering redundant builds, create the release as a draft. This creates the tag, which triggers the automated CI release workflows.
    - Run: `gh release create v<VERSION> --draft --title "Pray The Rosary v<VERSION>" --notes-file release_notes.md`
-   - This command will immediately trigger the `android_release.yml` workflow for the new tag.
+   - This command will immediately trigger `android_release.yml`, `web_release.yml`, and `pdf_release.yml` workflows for the new tag.
 
-5. **Monitor CI Workflow:**
-   - Wait 10 seconds to allow GitHub to register the run for the new tag.
-   - Retrieve the run ID of the workflow triggered by the tag:
-     `gh run list --workflow=android_release.yml --branch v<VERSION> --limit 1 --json databaseId -q ".[0].databaseId"`
-   - Watch the run until it completes:
+5. **Monitor CI Workflows:**
+   - Wait 10 seconds to allow GitHub to register the runs for the new tag.
+   - Retrieve run IDs for the release tag:
+     `gh run list --branch v<VERSION> --limit 5 --json databaseId,workflowName,status`
+   - Watch each workflow until completion (`android_release.yml`, `web_release.yml`, `pdf_release.yml`):
      `gh run watch <RUN_ID>`
-   - Check the final status of the run:
+   - Check the final status of all runs:
      `gh run view <RUN_ID>`
-   - **CRITICAL:** If the run failed, STOP immediately. Do not publish the release. Report the failure back to the orchestrator.
+   - **CRITICAL:** If any run failed, STOP immediately. Do not publish the release. Report the failure back to the orchestrator.
 
 6. **Publish Release:**
-   - If the CI run succeeded (which automatically attached the `.aab` artifact to the draft release), publish it by removing the draft status:
+   - If all CI runs succeeded (which automatically attached the `.aab`, `.zip`, and `.pdf` artifacts to the draft release), publish it by removing the draft status:
      `gh release edit v<VERSION> --draft=false`
 
 7. **Handoff:** Report back to the orchestrator that the release was successfully published and provide the URL to the GitHub Release.
