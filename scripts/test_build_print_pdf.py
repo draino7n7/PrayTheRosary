@@ -1,0 +1,193 @@
+"""
+Unit tests for the automated print PDF pipeline (scripts/build_print_pdf.py).
+Validates page geometry, typography standards, text content, and CLI flags.
+"""
+
+import os
+import re
+import tempfile
+import unittest
+from pathlib import Path
+
+import pymupdf
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = PROJECT_ROOT / "scripts"
+CANONICAL_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary.pdf"
+GODOT_PROJECT = PROJECT_ROOT / "game" / "project.godot"
+AFFINITY_DIR = PROJECT_ROOT / "assets" / "Affinity"
+GITATTRIBUTES = PROJECT_ROOT / ".gitattributes"
+
+
+class TestBuildPrintPdf(unittest.TestCase):
+    """Validates the canonical print PDF and the PDF generator pipeline."""
+
+    @classmethod
+    def setUpClass(cls):
+        # Ensure the canonical PDF exists before running tests
+        if not CANONICAL_PDF.exists():
+            from scripts.build_print_pdf import build_print_pdf
+            build_print_pdf(CANONICAL_PDF)
+
+    def test_affinity_files_removed(self):
+        """Verifies assets/Affinity has been completely deleted."""
+        self.assertFalse(
+            AFFINITY_DIR.exists(),
+            f"assets/Affinity directory should not exist, but found at {AFFINITY_DIR}",
+        )
+
+    def test_gitattributes_rules(self):
+        """Verifies .gitattributes has no *.af rules and preserves *.pdf under Git LFS."""
+        self.assertTrue(GITATTRIBUTES.exists(), ".gitattributes file is missing")
+        content = GITATTRIBUTES.read_text(encoding="utf-8")
+        self.assertNotIn("*.af ", content)
+        self.assertNotIn("*.afpub", content)
+        self.assertNotIn("*.afdesign", content)
+        self.assertNotIn("*.afphoto", content)
+        self.assertIn("*.pdf filter=lfs diff=lfs merge=lfs -text", content)
+
+    def test_canonical_pdf_page_count_and_geometry(self):
+        """Verifies PrayTheRosary.pdf has exactly 50 pages at 6.0" x 9.0" (432 x 648 pt)."""
+        self.assertTrue(CANONICAL_PDF.exists(), f"Missing canonical PDF: {CANONICAL_PDF}")
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            self.assertEqual(len(doc), 50, f"Expected 50 pages, got {len(doc)}")
+            for idx, page in enumerate(doc):
+                rect = page.rect
+                self.assertAlmostEqual(rect.width, 432.0, delta=1.0, msg=f"Page {idx+1} width mismatch")
+                self.assertAlmostEqual(rect.height, 648.0, delta=1.0, msg=f"Page {idx+1} height mismatch")
+        finally:
+            doc.close()
+
+    def test_zero_italic_fonts_embedded(self):
+        """Verifies zero italic fonts are embedded anywhere in the generated 50 pages."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            embedded_fonts = set()
+            for page in doc:
+                for font_entry in page.get_fonts():
+                    base_name = font_entry[3]
+                    embedded_fonts.add(base_name)
+                    self.assertNotIn(
+                        "italic",
+                        base_name.lower(),
+                        f"Page {page.number+1} embeds italic font: {base_name}",
+                    )
+            # Ensure upright EB Garamond fonts are indeed used
+            has_regular = any("EBGaramond-Regular" in f for f in embedded_fonts)
+            has_bold = any("EBGaramond-Bold" in f for f in embedded_fonts)
+            self.assertTrue(has_regular, "Expected EBGaramond-Regular to be embedded")
+            self.assertTrue(has_bold, "Expected EBGaramond-Bold to be embedded")
+        finally:
+            doc.close()
+
+    def test_page_48_creator_attribution_and_version(self):
+        """Verifies Page 48 bottom colophon displays Kevin Audrain attribution and dynamic version."""
+        # Read target version from game/project.godot
+        godot_content = GODOT_PROJECT.read_text(encoding="utf-8")
+        match = re.search(r'config/version="([^"]+)"', godot_content)
+        self.assertIsNotNone(match, "Could not extract config/version from game/project.godot")
+        version_str = match.group(1).strip()
+
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p48_text = doc[47].get_text()
+            self.assertIn("Created and compiled by Kevin Audrain.", p48_text)
+            self.assertIn(f"Version {version_str}", p48_text)
+        finally:
+            doc.close()
+
+    def test_page_49_cpdv_and_artwork_colophon(self):
+        """Verifies Page 49 colophon includes CPDV scripture notice and artwork acknowledgments."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p49_text = doc[48].get_text()
+            self.assertIn("Catholic Public Domain Version (CPDV)", p49_text)
+            self.assertIn("sacredbible.org", p49_text)
+            self.assertIn("public-domain masterworks", p49_text)
+            self.assertIn("Museo Nacional del Prado", p49_text)
+        finally:
+            doc.close()
+
+    def test_page_50_back_cover_quotes_and_synopsis(self):
+        """Verifies Page 50 displays epigraph, synopsis, and Marian counsel."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p50_text = " ".join(doc[49].get_text().split())
+            self.assertIn("Pope St. John Paul II", p50_text)
+            self.assertIn("Christocentric prayer", p50_text)
+            self.assertIn("St. Louis Marie de Montfort", p50_text)
+            self.assertIn("The Secret of the Rosary", p50_text)
+            self.assertIn("twenty-three breathtaking Renaissance and Baroque masterworks", p50_text)
+        finally:
+            doc.close()
+
+    def test_prayers_and_scripture_content(self):
+        """Verifies modernized Apostles' Creed, USCCB Fruits, and CPDV Scripture verses."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            # Modernized Apostles' Creed on Page 4 (Spread 2 left page)
+            p4_text = " ".join(doc[3].get_text().split())
+            self.assertIn("he rose again from the dead", p4_text)
+            self.assertIn("ascended into heaven", p4_text.lower())
+
+            # Check 1st Joyful Mystery on Page 6 (Spread 3 left page)
+            p6_text = " ".join(doc[5].get_text().split())
+            self.assertIn("Fruit of the Mystery: Humility", p6_text)
+            self.assertIn("Luke 1:28, 38", p6_text)
+            self.assertIn("Hail, full of grace", p6_text)
+        finally:
+            doc.close()
+
+    def test_bleed_flag_geometry(self):
+        """Verifies --bleed generates 450 x 666 pt pages with TrimBox (9, 9, 441, 657) and BleedBox."""
+        from scripts.build_print_pdf import build_print_pdf
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_pdf = Path(tmp_dir) / "bleed_test.pdf"
+            build_print_pdf(tmp_pdf, bleed=True)
+            self.assertTrue(tmp_pdf.exists())
+
+            doc = pymupdf.open(str(tmp_pdf))
+            try:
+                self.assertEqual(len(doc), 50)
+                for idx, page in enumerate(doc):
+                    self.assertAlmostEqual(page.rect.width, 450.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 666.0, delta=1.0)
+                    trim = page.trimbox
+                    self.assertAlmostEqual(trim.x0, 9.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y0, 9.0, delta=1.0)
+                    self.assertAlmostEqual(trim.x1, 441.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y1, 657.0, delta=1.0)
+                    bleed = page.bleedbox
+                    self.assertAlmostEqual(bleed.x0, 0.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.y0, 0.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.x1, 450.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.y1, 666.0, delta=1.0)
+            finally:
+                doc.close()
+
+    def test_office_depot_flag_geometry(self):
+        """Verifies --office-depot generates 612 x 792 pt (US Letter) pages with centered trim."""
+        from scripts.build_print_pdf import build_print_pdf
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_pdf = Path(tmp_dir) / "office_depot_test.pdf"
+            build_print_pdf(tmp_pdf, office_depot=True)
+            self.assertTrue(tmp_pdf.exists())
+
+            doc = pymupdf.open(str(tmp_pdf))
+            try:
+                self.assertEqual(len(doc), 50)
+                for idx, page in enumerate(doc):
+                    self.assertAlmostEqual(page.rect.width, 612.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 792.0, delta=1.0)
+                    trim = page.trimbox
+                    self.assertAlmostEqual(trim.x0, 90.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y0, 72.0, delta=1.0)
+                    self.assertAlmostEqual(trim.x1, 522.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y1, 720.0, delta=1.0)
+            finally:
+                doc.close()
+
+
+if __name__ == "__main__":
+    unittest.main()
