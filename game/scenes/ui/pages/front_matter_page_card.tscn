@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/pages/front_matter_page_card.gd" id="1_front_matter"]
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_font_bold"]
-[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Italic.ttf" id="3_font_italic"]
+[ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Regular.ttf" id="3_font_regular"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
 content_margin_left = 0.0
@@ -65,7 +65,7 @@ theme_override_constants/separation = 6
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
-theme_override_fonts/font = ExtResource("3_font_italic")
+theme_override_fonts/font = ExtResource("3_font_regular")
 theme_override_font_sizes/font_size = 22
 text = "Origins of the Gospel Prayer of the Church"
 horizontal_alignment = 1

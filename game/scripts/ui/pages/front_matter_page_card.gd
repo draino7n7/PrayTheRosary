@@ -52,7 +52,6 @@ func _apply_page_data() -> void:
 
 		var sections: Array = page_data.get("sections", [])
 		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-		var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
 		# Calibrate font size based on page text density (Page 2 vs Page 3)
@@ -76,8 +75,8 @@ func _apply_page_data() -> void:
 				title_font_size = body_font_size + 3
 
 		var header_h: float = 0.0
-		if font_italic != null:
-			header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 6.0
+		if font_reg != null:
+			header_h += font_reg.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 6.0
 		if font_bold != null:
 			header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 6.0
 		header_h += 2.0 # Divider

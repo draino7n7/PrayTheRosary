@@ -51,7 +51,6 @@ func _apply_page_data() -> void:
 
 		var steps: Array = page_data.get("prayer_steps", [])
 		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
-		var font_italic: FontFile = load("res://assets/fonts/EBGaramond-Italic.ttf") as FontFile
 		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
 		# Calibrate font size between Page 4 (5 steps with long Creed) and Page 46 (4 steps)
@@ -75,8 +74,8 @@ func _apply_page_data() -> void:
 				title_font_size = 19 if is_five_step else 23
 
 		var header_h: float = 0.0
-		if font_italic != null:
-			header_h += font_italic.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
+		if font_reg != null:
+			header_h += font_reg.get_multiline_string_size(sub_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, subheading_font_size).y + 4.0
 		if font_bold != null:
 			header_h += font_bold.get_multiline_string_size(head_text, HORIZONTAL_ALIGNMENT_CENTER, 656.0, heading_font_size).y + 4.0
 		header_h += 2.0 # Divider height
@@ -108,14 +107,14 @@ func _apply_page_data() -> void:
 				var rubric_lbl: Label = Label.new()
 				rubric_lbl.name = "StepRubric"
 				rubric_lbl.text = rubric_text
-				if font_italic != null:
-					rubric_lbl.add_theme_font_override("font", font_italic)
+				if font_reg != null:
+					rubric_lbl.add_theme_font_override("font", font_reg)
 				rubric_lbl.add_theme_font_size_override("font_size", rubric_font_size)
 				rubric_lbl.add_theme_color_override("font_color", COLOR_UMBER)
 				rubric_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				step_vbox.add_child(rubric_lbl)
-				if font_italic != null:
-					step_h += font_italic.get_multiline_string_size(rubric_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y
+				if font_reg != null:
+					step_h += font_reg.get_multiline_string_size(rubric_text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, rubric_font_size).y
 					visible_count += 1
 
 			# Prayer Title & Text
