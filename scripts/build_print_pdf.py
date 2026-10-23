@@ -641,7 +641,7 @@ def render_credits_page(
 ) -> None:
     """
     Pages 48 & 49: Sacred Artwork Credits & Colophon.
-    - Page 48: 12 attributions + gold divider + 'Created and compiled by Kevin Audrain.' + 'Version <X.Y.Z>'.
+    - Page 48: 12 attributions + gold divider + 'This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.' + 'Version <X.Y.Z>'.
     - Page 49: 11 attributions + gold divider + CPDV Scripture notice + Public Domain artwork notice.
     """
     draw_master_a_background_and_border(c, page_num)

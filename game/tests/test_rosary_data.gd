@@ -1198,8 +1198,8 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	assert_true(colophon.has("creator_notice"), "Page 48 colophon must define 'creator_notice'")
 	assert_eq(
 		str(colophon.get("creator_notice", "")),
-		"Created and compiled by Kevin Audrain.",
-		"Page 48 creator_notice must be 'Created and compiled by Kevin Audrain.'"
+		"This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.",
+		"Page 48 creator_notice must be 'This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.'"
 	)
 	assert_true(colophon.has("show_version"), "Page 48 colophon must define 'show_version'")
 	assert_true(
@@ -1213,7 +1213,7 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	var left_p: Dictionary = spread_24.get("left_page", {})
 	assert_true(left_p.has("colophon"), "Spread 24 left_page must contain colophon")
 	var spread_colophon: Dictionary = left_p.get("colophon", {})
-	assert_eq(str(spread_colophon.get("creator_notice", "")), "Created and compiled by Kevin Audrain.")
+	assert_eq(str(spread_colophon.get("creator_notice", "")), "This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.")
 	assert_true(bool(spread_colophon.get("show_version", false)))
 
 	# Verify documents/references.md documents Page 48 creator notice
@@ -1221,7 +1221,7 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	var references_path: String = repo_root.path_join("documents/references.md")
 	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist")
 	var ref_text: String = FileAccess.get_file_as_string(references_path)
-	assert_true(ref_text.contains("Created and compiled by Kevin Audrain."), "documents/references.md must document Page 48 creator notice")
+	assert_true(ref_text.contains("This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain."), "documents/references.md must document Page 48 creator notice")
 
 
 
