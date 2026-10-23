@@ -308,15 +308,22 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 2. **Screen Keep-Awake:**
    - `Main._ready()` calls `DisplayServer.screen_set_keep_on(true)` guarded by `DisplayServer.get_name() != "headless"` to prevent mobile displays from dimming or locking during contemplative prayer.
 
-### 4.6 Floating "Aa" Reader Button & Typography Preset Persistence
-- **Top-Left Floating "Aa" Reader Button:**
+### 4.6 Floating "AA" Reader Button & Typography Preset Persistence
+- **Top-Left Floating "AA" Reader Button:**
   - Located on a dedicated HUD canvas layer (`ReaderCanvasLayer`, `layer = 10`) positioned at `offset_left = 18.0`, `offset_top = 18.0`, with fixed dimensions `52×52px`.
-  - Visual styling matches the canonical illuminated manuscript palette: warm parchment background (`#FAF6EE` at 0.92 alpha), 2px antique gold border (`#B89130`), corner radius 8px, drop shadow, and deep charcoal bold Garamond typography (`#1E1815`) at 24pt.
-  - Interactive states: Hover border brightens to `#D4AF37`, pressed border shifts to Marian crimson `#6B1D21`.
+  - Visual styling matches the canonical illuminated manuscript palette: warm parchment background (`#FAF6EE` at 0.92 alpha), 2px antique gold border (`#B89130`), corner radius 8px, and drop shadow.
+  - **Dual-Sized 'AA' Progressive Icon Layout:** Rather than a uniform single "Aa" label, the button text is cleared (`text = ""`) and houses an interior `HBoxContainer` (`IconHBox`) configured with `mouse_filter = MOUSE_FILTER_IGNORE` (`2`), `anchors_preset = 15` (Full Rect), `grow_horizontal = 2`, `grow_vertical = 2`, `alignment = 1` (Center), and `theme_override_constants/separation = 1`. Inside are two bold serif `Label` nodes (`EBGaramond-Bold.ttf`, `mouse_filter = 2`, `vertical_alignment = 2`):
+    - `SmallALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 16`, positioned on the left.
+    - `LargeALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 26`, positioned on the right.
+  - Interactive color states: Normal typography renders in Deep Charcoal (`#1E1815`); hovering (`mouse_entered`) or pressing (`button_down`) shifts child label colors to Sacred Crimson (`#6B1D21`), restoring to Deep Charcoal on release/exit unless held. Button hover border brightens to `#D4AF37`, and pressed border shifts to Sacred Crimson `#6B1D21`.
   - Pass-through handling: When the navigation drawer is opened, `reader_button.mouse_filter = Control.MOUSE_FILTER_IGNORE` to prevent clicks through the drawer scrim; restored to `MOUSE_FILTER_STOP` upon drawer closing.
-- **One-Tap Preset Cycling & Feedback Toast:**
-  - Tapping the "Aa" button cycles sequentially through: `Normal` $\rightarrow$ `Mobile` $\rightarrow$ `Extra Large` $\rightarrow$ `Normal`.
-  - Displays a centered top floating toast banner (`PresetToast`, `PanelContainer`) styled in parchment and gold with bold Garamond 18pt text (e.g., *"Text Size: Normal"*, *"Text Size: Mobile"*, *"Text Size: Extra Large"*).
+- **One-Tap Preset Cycling & Dynamic Feedback Toast:**
+  - Tapping the "AA" button cycles sequentially through: `Normal` $\rightarrow$ `Mobile` $\rightarrow$ `Extra Large` $\rightarrow$ `Normal`.
+  - Displays a centered top floating toast banner (`PresetToast`, `PanelContainer`) styled in parchment and gold with bold Garamond typography dynamically scaled to reflect the selected reading preset:
+    - `Normal`: `22pt` (`"Text Size: Normal"`)
+    - `Mobile`: `30pt` (`"Text Size: Mobile"`)
+    - `Extra Large`: `38pt` (`"Text Size: Extra Large"`)
+  - Calls `preset_toast.reset_size()` dynamically before display to ensure the pill container resizes smoothly and maintains horizontal centering (`anchors_preset = 5`, `grow_horizontal = 2`) without clipping across all screen viewports.
   - In graphical runtimes, the toast smoothly lingers for 1.2s before fading out over 0.4s via a tween.
 - **Viewport Scroll Anchor Stability:**
   - When switching presets, `Main.set_text_size_preset()` calculates the relative vertical center of the currently viewed page element in the viewport prior to resizing.
