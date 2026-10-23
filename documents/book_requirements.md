@@ -52,7 +52,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
   - **Back Cover:** Deep Baroque Crimson (`#4A1215` / `#2A090B`) background with warm gold (`#D4AF37`) borders and ivory (`#F7F2E7`) typography featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel quote from *The Secret of the Rosary* (25th Rose).
 
 ### 3.2 Typography
-- Classical serif typeface family (**Cormorant Garamond** or **EB Garamond**, Regular, Bold, and Italic weights) used consistently across all headings, Douay-Rheims Scripture readings, meditations, and prayers.
+- Classical serif typeface family (**Cormorant Garamond** or **EB Garamond**, Regular, Bold, and Italic weights) used consistently across all headings, Catholic Public Domain Version (CPDV) Scripture readings, meditations, and prayers.
 
 ### 3.3 Editorial & Contemplative Layout Rules
 1. **No Numerical Page Numbers:**
@@ -64,12 +64,18 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 3. **Left-Hand Mystery Prayer Pages (`Even Page Sides 6, 8, 10, ..., 44`):**
    - Self-contained on a single $6" \times 9"$ page so the reader never turns a page mid-decade:
      - Mystery Ordinal Subtitle, Title, and **Fruit of the Mystery**
-     - Public-domain **Douay-Rheims (Challoner Revision)** verbatim Scripture passage and clean book, chapter, and verse citation (without repeating a trailing `" (Douay-Rheims)"` suffix on each page, since the `Douay-Rheims / Confraternity Edition of the Bible` is noted once in the front matter on Page Side 3 under *"How This Book Is Organized"* and in the Page Side 49 colophon; includes traditional DRBO book names and Psalm numbering with modern equivalents where helpful, such as *Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10*, *Isaias (Isaiah) 53:5*, *Ecclesiasticus (Sirach) 24:7*, and *Apocalypse (Revelation) 12:1*, ordered strictly to match the sequence of quoted verses)
+     - Public-domain **Catholic Public Domain Version (CPDV)** verbatim Scripture passage and clean book, chapter, and verse citation (without repeating a trailing `" (CPDV)"` suffix on each page, since the `Catholic Public Domain Version of the Bible` is noted once in the front matter on Page Side 3 under *"How This Book Is Organized"* and in the Page Side 49 colophon; uses modern Catholic book nomenclature and Psalm numbering where applicable, such as *Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10*, *Isaiah 53:5*, *Sirach 24:7*, and *Revelation 12:1*, ordered strictly to match the sequence of quoted verses)
      - 1–2 sentence Contemplative Meditation
      - Full text of the Decade Prayers (*The Our Father* `1×`, *The Hail Mary* `10×`, *The Glory Be* `1×`, and *The Fatima Prayer* `1×`, using the simplified titles `"The Our Father"` and `"The Glory Be"` without parenthetical `"The Lord's Prayer"` or `"(Doxology)"`)
 4. **Front-Matter Instructional Guide (`Page Side 3`, *Structure of This Book & How to Pray*):**
    - Page Side 2 features subheading *"Origins and Tradition of the Most Holy Rosary"*.
+   - In Section 1 (*"How This Book Is Organized"*), notes that Scripture readings are taken from the Catholic Public Domain Version of the Bible ([SacredBible.org](https://www.sacredbible.org/) / [draino7n7/cpdv](https://github.com/draino7n7/cpdv)), and specifies leader (regular) and group unison (bold) recitation.
    - In Section 2 (*"Step-by-Step Guide to Praying the Rosary"*), Step 2 (*"2. The Decades (Tabs J, L, S, G)"*) instructs the reader to pray either the five decades of the day's Mystery set or all four Mystery sets (twenty decades) back-to-back in chronological order (*Joyful, Luminous, Sorrowful, Glorious*) for a complete Rosary.
+5. **Sacred Artwork Credits & Colophon Spread (`Spread 24`, `Page Sides 48–49`):**
+   - **Page Side 48 (Part I):** Lists 12 masterwork attributions (Front Cover, Opening Prayers, Joyful Mysteries 1–5, Luminous Mysteries 1–5).
+   - **Page Side 49 (Part II & Colophon):** Lists 11 masterwork attributions (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, Closing Prayers), followed by:
+     - **Scripture Colophon Notice:** *"Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain."* (referencing [SacredBible.org](https://www.sacredbible.org/) and [draino7n7/cpdv](https://github.com/draino7n7/cpdv)).
+     - **Artwork Colophon Notice:** Confirms that all twenty-three paintings are public-domain masterworks courtesy of their respective holding museums and collections.
 
 ---
 
@@ -82,6 +88,11 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 ## 5. Affinity Publishing & Prepress Workflow (`assets/Affinity/`)
 
+### 5.1 Content Synchronization & Scripture Translation
+- The Affinity book layout and automated PDF generator consume prayer, mystery, and layout data directly from `game/data/` (`mysteries.json`, `book_layout.json`, `prayers.json`).
+- Scripture citations and readings are standardized on the **Catholic Public Domain Version (CPDV)** of the Holy Bible ([SacredBible.org](https://www.sacredbible.org/) / [draino7n7/cpdv](https://github.com/draino7n7/cpdv)), maintaining perfect textual alignment between the interactive digital application and the printed volume.
+
+### 5.2 Prepress Layout Specifications & Files
 All editable layout files, fonts, and press-ready exports for the 50-page spiral-bound book live in `assets/Affinity/` (tracked via Git LFS):
 
 - **Master Affinity Project (`assets/Affinity/PrayTheRosary.af`):**
