@@ -802,9 +802,10 @@ func test_references_document_and_agent_rules_exist_and_complete() -> void:
 				ref_content.contains(dec_title),
 				"documents/references.md must document mystery title '%s'" % dec_title
 			)
+			var expected_fruit_line: String = "- **Spiritual Fruit:** %s" % dec_fruit
 			assert_true(
-				ref_content.contains(dec_fruit),
-				"documents/references.md must document spiritual fruit '%s'" % dec_fruit
+				ref_content.contains(expected_fruit_line),
+				"documents/references.md must document spiritual fruit line '%s'" % expected_fruit_line
 			)
 
 	# 6. All 23 Master Artworks from attributions.json and layout
@@ -1107,3 +1108,43 @@ func test_apostles_creed_modern_resurrection_and_ascension_phrasing() -> void:
 	# 4. Verify exact target leader_text
 	var expected_leader: String = "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; on the third day he rose again from the dead. He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there he will come to judge the living and the dead."
 	assert_eq(leader_text, expected_leader, "apostles_creed leader_text must match expected text exactly")
+
+
+func test_standardized_usccb_spiritual_fruits() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var expected_fruits: Dictionary = {
+		"joyful_1_annunciation": "Humility",
+		"joyful_2_visitation": "Love of Neighbor",
+		"joyful_3_nativity": "Poverty",
+		"joyful_4_presentation": "Purity of Heart and Body",
+		"joyful_5_finding_in_temple": "Devotion to Jesus",
+		"luminous_1_baptism": "Openness to the Holy Spirit",
+		"luminous_2_wedding_at_cana": "To Jesus through Mary",
+		"luminous_3_proclamation": "Conversion",
+		"luminous_4_transfiguration": "Desire for Holiness",
+		"luminous_5_eucharist": "Adoration",
+		"sorrowful_1_agony": "Obedience to God's Will",
+		"sorrowful_2_scourging": "Mortification",
+		"sorrowful_3_crowning_with_thorns": "Courage",
+		"sorrowful_4_carrying_cross": "Patience",
+		"sorrowful_5_crucifixion": "Sorrow for Our Sins",
+		"glorious_1_resurrection": "Faith",
+		"glorious_2_ascension": "Hope",
+		"glorious_3_pentecost": "Wisdom",
+		"glorious_4_assumption": "Devotion to Mary",
+		"glorious_5_coronation": "Grace of a Happy Death"
+	}
+
+	assert_eq(expected_fruits.size(), 20, "Must define all 20 standardized spiritual fruits")
+
+	for mystery_id: String in expected_fruits.keys():
+		var mystery: Dictionary = loader.get_mystery_by_id(mystery_id)
+		assert_false(mystery.is_empty(), "Mystery '%s' must exist" % mystery_id)
+		assert_eq(
+			str(mystery.get("fruit", "")),
+			expected_fruits[mystery_id],
+			"Mystery '%s' fruit must match standardized USCCB virtue '%s'" % [mystery_id, expected_fruits[mystery_id]]
+		)
+
