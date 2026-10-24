@@ -276,6 +276,45 @@ This document outlines the strict manual testing procedures required before any 
   - The continuous stream immediately navigates to the 1st Mystery of that set (Page 6).
   - The drawer automatically closes.
 
+### TC-NAV-05: Responsive Drawer Width, Scaled Typography & Preset Synchronization
+- **Step 1:** Launch the application in default `Normal` preset and open the navigation drawer (top-right `☰` button).
+- **Expected:**
+  - Drawer panel width is `400px` (leaving a wide `320px` clickable scrim margin on a 720px portrait viewport).
+  - Title reads "Table of Contents" at `24pt`.
+  - Close button ("✕") is `22pt` with dimensions `40×40px`.
+  - Resume button is `17pt` with minimum height `46px`.
+  - Landmark buttons are `17pt` with minimum height `40px`.
+  - "THE TWENTY MYSTERIES" header is `15pt`.
+  - Mystery set title buttons are `18pt` with minimum height `42px`, and disclosure arrows are `38×42px`.
+  - Liturgical `[★ Today]` badge is `13pt`.
+  - Expanding a mystery set displays decade buttons at `16pt` with minimum height `36px`.
+  - All multi-line button labels wrap cleanly via `AUTOWRAP_WORD_SMART` without text truncation or clipping.
+- **Step 2:** Close the drawer, tap the `"AA"` reader button once to switch to `Mobile` preset, and re-open the drawer.
+- **Expected:**
+  - Drawer panel expands to `560px` width (leaving a `160px` clickable scrim margin).
+  - Title scales to `32pt`.
+  - Close button scales to `28pt` with dimensions `48×48px`.
+  - Resume button scales to `24pt` with minimum height `58px`.
+  - Landmark buttons scale to `24pt` with minimum height `52px`.
+  - Mystery header scales to `20pt`.
+  - Mystery set title buttons scale to `25pt` with minimum height `54px`, and disclosure arrows scale to `48×54px`.
+  - Liturgical badge scales to `18pt`.
+  - Decade buttons scale to `22pt` with minimum height `48px`.
+  - All button labels wrap smoothly without horizontal overflow.
+- **Step 3:** Close the drawer, tap the `"AA"` reader button again to switch to `Extra Large` preset, and re-open the drawer.
+- **Expected:**
+  - Drawer panel expands to `680px` width (leaving a `40px` clickable scrim margin on a 720px portrait display).
+  - Title scales to `38pt`.
+  - Close button scales to `34pt` with dimensions `56×56px`.
+  - Resume button scales to `30pt` with minimum height `72px`.
+  - Landmark buttons scale to `30pt` with minimum height `64px`.
+  - Mystery header scales to `25pt`.
+  - Mystery set title buttons scale to `31pt` with minimum height `66px`, and disclosure arrows scale to `56×66px`.
+  - Liturgical badge scales to `22pt`.
+  - Decade buttons scale to `28pt` with minimum height `58px`.
+  - All text wraps cleanly on multiple lines via `AUTOWRAP_WORD_SMART` with zero clipping.
+  - Tapping the 40px dimmed scrim margin on the left closes the drawer.
+
 
 ## Test 8.0: Application Launcher Icon & Boot Splash Screen
 

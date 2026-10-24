@@ -253,9 +253,32 @@ Implemented via `res://scenes/ui/navigation_drawer.tscn` (`res://scripts/ui/navi
   - `FloatingButton` (`Button`): Unobtrusive 52×52px (`custom_minimum_size = Vector2(52, 52)`) floating toggle button pinned in the top-right viewport corner (`offset_left = -70.0, offset_top = 18.0, offset_right = -18.0, offset_bottom = 70.0`) displaying the `☰` (Unicode `U+2630`) navigation icon. StyleBox content margins across all states (`normal`, `hover`, `pressed`, `focus`) are explicitly calibrated to `content_margin_top = 6.0`, `content_margin_bottom = 0.0`, `content_margin_left = 0.0`, and `content_margin_right = 0.0` (both in `navigation_drawer.tscn` and enforced programmatically in `_calibrate_floating_button_margins()`) to counteract font ascent/descent metrics bias between the primary font (`EBGaramond-Bold.ttf`) and fallback symbol font (`NotoSansSymbols-Regular.ttf`), ensuring exact geometric and optical centering of the three horizontal bars within the 52×52 button bounds.
   - `DrawerOverlay` (`Control`): Full-screen control (`ANCHORS_PRESET_FULL_RECT`) containing:
     - `Scrim` (`ColorRect`): Semi-transparent dimming backdrop (`#00000080`, `mouse_filter = MOUSE_FILTER_STOP`). Clicking the scrim closes the drawer.
-    - `DrawerPanel` (`PanelContainer`): Right-aligned sliding drawer panel styled in warm ivory parchment (`#FAF6EE`) with an antique gold left border (`#B89130`), minimum width 320px (responsive on portrait displays).
+    - `DrawerPanel` (`PanelContainer`): Right-aligned sliding drawer panel styled in warm ivory parchment (`#FAF6EE`) with an antique gold left border (`#B89130`). Features dynamic responsive panel width synchronized with the active reading text size preset: `400.0px` on `normal` (leaving a 320px clickable scrim margin on standard 720px portrait viewports), `560.0px` on `mobile` (160px scrim margin), and `680.0px` on `extra_large` (40px scrim margin).
     - `DrawerScroll` (`ScrollContainer`): Smooth vertical scrolling container for drawer content.
     - `ContentContainer` (`VBoxContainer`): Vertical list hosting all navigation entries and dividers.
+- **Responsive Panel Dimensions & Live Re-anchoring:**
+  - Drawer panel width scales dynamically across the three reading presets:
+    - `normal`: `400.0px` panel width (leaving a comfortable 320px scrim margin on standard 720px portrait viewports).
+    - `mobile`: `560.0px` panel width (leaving a 160px scrim margin).
+    - `extra_large`: `680.0px` panel width (leaving a 40px touch-accessible scrim margin).
+  - When text size presets change, `DrawerPanel` offsets are dynamically recalculated and re-anchored according to drawer open/closed state:
+    - **Open:** `offset_left = -panel_width`, `offset_right = 0.0`.
+    - **Closed:** `offset_left = 0.0`, `offset_right = panel_width`.
+- **Dynamic Typography Scaling & Touch Target Dimensions:**
+  - In response to `set_text_size_preset()`, all text labels, headings, buttons, badges, and icons scale proportionately across presets:
+    - **Drawer Title Label (`TitleLabel`, "Table of Contents"):** `24pt` (`normal`) / `32pt` (`mobile`) / `38pt` (`extra_large`).
+    - **Close Button (`CloseButton`, "✕"):** `22pt` at `40×40px` (`normal`) / `28pt` at `48×48px` (`mobile`) / `34pt` at `56×56px` (`extra_large`).
+    - **"Resume Last Page" Button (`ResumeButton`):** `17pt` with minimum height `46px` (`normal`) / `24pt` with minimum height `58px` (`mobile`) / `30pt` with minimum height `72px` (`extra_large`).
+    - **Landmark Section Buttons (`_section_buttons`):** `17pt` with minimum height `40px` (`normal`) / `24pt` with minimum height `52px` (`mobile`) / `30pt` with minimum height `64px` (`extra_large`).
+    - **"THE TWENTY MYSTERIES" Section Header (`_mystery_header`):** `15pt` (`normal`) / `20pt` (`mobile`) / `25pt` (`extra_large`).
+    - **Mystery Set Title & Disclosure Arrow Buttons:** Title text at `18pt` with minimum height `42px` (`normal`) / `25pt` with minimum height `54px` (`mobile`) / `31pt` with minimum height `66px` (`extra_large`). Disclosure arrow (`ArrowButton`) sized to `38×42px` (`normal`) / `48×54px` (`mobile`) / `56×66px` (`extra_large`).
+    - **Liturgical Recommendation Badge (`BadgeLabel`, "[★ Today]"):** `13pt` (`normal`) / `18pt` (`mobile`) / `22pt` (`extra_large`).
+    - **Individual Mystery Decade Buttons (`Decade_1..5`):** `16pt` with minimum height `36px` (`normal`) / `22pt` with minimum height `48px` (`mobile`) / `28pt` with minimum height `58px` (`extra_large`).
+- **Word Wrapping & Anti-Clipping Standards:**
+  - All multi-line button labels (`ResumeButton`, landmark section buttons, mystery set `TitleButton`, and individual mystery decade buttons `Decade_1..5`) enforce `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (`3`). This guarantees clean, unbroken word wrapping with zero horizontal text clipping as typography expands.
+- **Main Integration & Preset Synchronization:**
+  - `Main._setup_navigation_drawer()` initializes `NavigationDrawer` with the startup text size preset (`_current_text_preset`).
+  - When the user cycles or changes presets via `ReaderButton` (`Main.set_text_size_preset()`), `Main` immediately calls `navigation_drawer.set_text_size_preset(_current_text_preset)`, guaranteeing synchronized typography and panel width in both open and closed drawer states.
 - **Background Touch Isolation & Dismissal:**
   - `ScrollContainer.mouse_filter` permanently maintains `Control.MOUSE_FILTER_IGNORE` (`2`) across both open and closed states, while `reader_button.mouse_filter` toggles between `Control.MOUSE_FILTER_STOP` (closed) and `Control.MOUSE_FILTER_IGNORE` (open) so that floating HUD controls cannot be accidentally activated while the drawer is open.
   - Drawer can be dismissed via clicking the close button (`✕`), tapping the dimming `Scrim` backdrop, pressing `Escape` / `ui_cancel`, or selecting any navigation destination.
@@ -340,6 +363,8 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 - **Viewport Scroll Anchor Stability:**
   - When switching presets, `Main.set_text_size_preset()` calculates the relative vertical center of the currently viewed page element in the viewport prior to resizing.
   - After all 50 cards update their minimum dimensions and layouts, the viewport scroll position is re-anchored to the exact relative position of that same element, preventing abrupt jumps, disorientation, or lost reading position.
+- **Navigation Drawer Preset Synchronization:**
+  - Alongside updating all 50 `PageCard` containers in the continuous scroll stream, `Main.set_text_size_preset()` immediately invokes `navigation_drawer.set_text_size_preset(_current_text_preset)`. This keeps drawer panel dimensions (400px / 560px / 680px), button minimum touch heights, and typography fully synchronized with the user's reading preference in both open and closed states.
 - **Configuration Persistence (`user://reading_progress.cfg`):**
   - Stored under section `[reading_progress]`, key `text_size_preset` (values: `"normal"`, `"mobile"`, `"extra_large"`).
   - Loaded automatically at application boot by `Main._ready()` / `ReadingProgressManager`, restoring the user's preferred typography scale before initial card rendering.
