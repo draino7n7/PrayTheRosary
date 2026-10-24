@@ -449,6 +449,278 @@ func test_floating_button_centering_and_stylebox_calibration() -> void:
 	drawer.free()
 
 
+func test_navigation_drawer_preset_normalization_and_panel_widths() -> void:
+	var drawer: NavigationDrawer = _create_nav_drawer()
+	var panel: PanelContainer = drawer.get_drawer_panel()
+	assert_not_null(panel, "DrawerPanel must exist")
+
+	# 1. Preset Normalization
+	drawer.set_text_size_preset(0)
+	assert_eq(drawer.get_text_size_preset(), "normal", "0 should normalize to 'normal'")
+	drawer.set_text_size_preset(1)
+	assert_eq(drawer.get_text_size_preset(), "mobile", "1 should normalize to 'mobile'")
+	drawer.set_text_size_preset(2)
+	assert_eq(drawer.get_text_size_preset(), "extra_large", "2 should normalize to 'extra_large'")
+	drawer.set_text_size_preset("XL")
+	assert_eq(drawer.get_text_size_preset(), "extra_large", "'XL' should normalize to 'extra_large'")
+	drawer.set_text_size_preset("unknown_value")
+	assert_eq(drawer.get_text_size_preset(), "normal", "Unknown should fall back to 'normal'")
+
+	# 2. Panel Widths across Presets
+	drawer.set_text_size_preset("normal")
+	assert_eq(drawer.get_panel_width(), 400.0, "Normal panel width must be 400.0")
+	assert_eq(panel.custom_minimum_size.x, 400.0, "Normal panel custom_minimum_size.x must be 400.0")
+
+	drawer.set_text_size_preset("mobile")
+	assert_eq(drawer.get_panel_width(), 560.0, "Mobile panel width must be 560.0")
+	assert_eq(panel.custom_minimum_size.x, 560.0, "Mobile panel custom_minimum_size.x must be 560.0")
+
+	drawer.set_text_size_preset("extra_large")
+	assert_eq(drawer.get_panel_width(), 680.0, "Extra Large panel width must be 680.0")
+	assert_eq(panel.custom_minimum_size.x, 680.0, "Extra Large panel custom_minimum_size.x must be 680.0")
+
+	# 3. Offsets when closed vs open across presets
+	drawer.set_text_size_preset("normal")
+	drawer.close_drawer(false)
+	assert_eq(panel.offset_left, 0.0, "Normal closed offset_left must be 0.0")
+	assert_eq(panel.offset_right, 400.0, "Normal closed offset_right must be 400.0")
+
+	drawer.open_drawer(false)
+	assert_eq(panel.offset_left, -400.0, "Normal open offset_left must be -400.0")
+	assert_eq(panel.offset_right, 0.0, "Normal open offset_right must be 0.0")
+
+	# While open, changing preset dynamically updates open offsets
+	drawer.set_text_size_preset("mobile")
+	assert_eq(panel.offset_left, -560.0, "Mobile open offset_left must be -560.0")
+	assert_eq(panel.offset_right, 0.0, "Mobile open offset_right must be 0.0")
+
+	drawer.set_text_size_preset("extra_large")
+	assert_eq(panel.offset_left, -680.0, "Extra Large open offset_left must be -680.0")
+	assert_eq(panel.offset_right, 0.0, "Extra Large open offset_right must be 0.0")
+
+	# While closed, changing preset dynamically updates closed offsets
+	drawer.close_drawer(false)
+	assert_eq(panel.offset_left, 0.0, "Extra Large closed offset_left must be 0.0")
+	assert_eq(panel.offset_right, 680.0, "Extra Large closed offset_right must be 680.0")
+
+	drawer.set_text_size_preset("normal")
+	assert_eq(panel.offset_left, 0.0, "Normal closed offset_left must be 0.0")
+	assert_eq(panel.offset_right, 400.0, "Normal closed offset_right must be 400.0")
+
+	drawer.free()
+
+
+func test_navigation_drawer_typography_and_control_heights_scaling() -> void:
+	var drawer: NavigationDrawer = _create_nav_drawer()
+
+	var title_lbl: Label = drawer.get_title_label()
+	var close_btn: Button = drawer.get_close_button()
+	var resume_btn: Button = drawer.get_resume_button()
+	var mystery_hdr: Label = drawer.get_mystery_header()
+
+	assert_not_null(title_lbl, "TitleLabel must exist")
+	assert_not_null(close_btn, "CloseButton must exist")
+	assert_not_null(resume_btn, "ResumeButton must exist")
+	assert_not_null(mystery_hdr, "MysteryHeader label must exist")
+
+	var preset_specs: Array[Dictionary] = [
+		{
+			"preset": "normal",
+			"panel_width": 400.0,
+			"title_font_size": 24,
+			"close_font_size": 22,
+			"close_btn_size": Vector2(40, 40),
+			"resume_font_size": 17,
+			"resume_min_h": 46.0,
+			"landmark_font_size": 17,
+			"landmark_min_h": 40.0,
+			"header_font_size": 15,
+			"set_font_size": 18,
+			"set_min_h": 42.0,
+			"arrow_btn_size": Vector2(38, 42),
+			"badge_font_size": 13,
+			"decade_font_size": 16,
+			"decade_min_h": 36.0
+		},
+		{
+			"preset": "mobile",
+			"panel_width": 560.0,
+			"title_font_size": 32,
+			"close_font_size": 28,
+			"close_btn_size": Vector2(48, 48),
+			"resume_font_size": 24,
+			"resume_min_h": 58.0,
+			"landmark_font_size": 24,
+			"landmark_min_h": 52.0,
+			"header_font_size": 20,
+			"set_font_size": 25,
+			"set_min_h": 54.0,
+			"arrow_btn_size": Vector2(48, 54),
+			"badge_font_size": 18,
+			"decade_font_size": 22,
+			"decade_min_h": 48.0
+		},
+		{
+			"preset": "extra_large",
+			"panel_width": 680.0,
+			"title_font_size": 38,
+			"close_font_size": 34,
+			"close_btn_size": Vector2(56, 56),
+			"resume_font_size": 30,
+			"resume_min_h": 72.0,
+			"landmark_font_size": 30,
+			"landmark_min_h": 64.0,
+			"header_font_size": 25,
+			"set_font_size": 31,
+			"set_min_h": 66.0,
+			"arrow_btn_size": Vector2(56, 66),
+			"badge_font_size": 22,
+			"decade_font_size": 28,
+			"decade_min_h": 58.0
+		}
+	]
+
+	for spec: Dictionary in preset_specs:
+		var preset: String = str(spec["preset"])
+		drawer.set_text_size_preset(preset)
+
+		# TitleLabel
+		assert_eq(title_lbl.get_theme_font_size("font_size"), int(spec["title_font_size"]),
+			"TitleLabel font_size must be %d for preset %s" % [int(spec["title_font_size"]), preset])
+
+		# CloseButton
+		assert_eq(close_btn.get_theme_font_size("font_size"), int(spec["close_font_size"]),
+			"CloseButton font_size must be %d for preset %s" % [int(spec["close_font_size"]), preset])
+		assert_eq(close_btn.custom_minimum_size, spec["close_btn_size"],
+			"CloseButton size must be %s for preset %s" % [str(spec["close_btn_size"]), preset])
+
+		# ResumeButton
+		assert_eq(resume_btn.get_theme_font_size("font_size"), int(spec["resume_font_size"]),
+			"ResumeButton font_size must be %d for preset %s" % [int(spec["resume_font_size"]), preset])
+		assert_eq(resume_btn.custom_minimum_size.y, float(spec["resume_min_h"]),
+			"ResumeButton min height must be %f for preset %s" % [float(spec["resume_min_h"]), preset])
+		assert_eq(resume_btn.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART,
+			"ResumeButton autowrap_mode must be AUTOWRAP_WORD_SMART")
+
+		# Landmark Buttons
+		for sec_id: String in drawer._section_buttons.keys():
+			var btn: Button = drawer.get_section_button(sec_id)
+			assert_not_null(btn, "Landmark button %s must exist" % sec_id)
+			assert_eq(btn.get_theme_font_size("font_size"), int(spec["landmark_font_size"]),
+				"Landmark %s font_size must be %d for preset %s" % [sec_id, int(spec["landmark_font_size"]), preset])
+			assert_eq(btn.custom_minimum_size.y, float(spec["landmark_min_h"]),
+				"Landmark %s min height must be %f for preset %s" % [sec_id, float(spec["landmark_min_h"]), preset])
+			assert_eq(btn.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART,
+				"Landmark %s autowrap_mode must be AUTOWRAP_WORD_SMART" % sec_id)
+
+		# Mystery Header
+		assert_eq(mystery_hdr.get_theme_font_size("font_size"), int(spec["header_font_size"]),
+			"MysteryHeader font_size must be %d for preset %s" % [int(spec["header_font_size"]), preset])
+
+		# Mystery Set Title & Arrow Buttons
+		for set_id: String in NavigationDrawer.MYSTERY_SET_ORDER:
+			var t_btn: Button = drawer.get_mystery_set_title_button(set_id)
+			assert_not_null(t_btn, "TitleButton %s must exist" % set_id)
+			assert_eq(t_btn.get_theme_font_size("font_size"), int(spec["set_font_size"]),
+				"TitleButton %s font_size must be %d for preset %s" % [set_id, int(spec["set_font_size"]), preset])
+			assert_eq(t_btn.custom_minimum_size.y, float(spec["set_min_h"]),
+				"TitleButton %s min height must be %f for preset %s" % [set_id, float(spec["set_min_h"]), preset])
+			assert_eq(t_btn.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART,
+				"TitleButton %s autowrap_mode must be AUTOWRAP_WORD_SMART" % set_id)
+
+			var a_btn: Button = drawer.get_mystery_set_arrow_button(set_id)
+			assert_not_null(a_btn, "ArrowButton %s must exist" % set_id)
+			assert_eq(a_btn.get_theme_font_size("font_size"), int(spec["set_font_size"]),
+				"ArrowButton %s font_size must be %d for preset %s" % [set_id, int(spec["set_font_size"]), preset])
+			assert_eq(a_btn.custom_minimum_size, spec["arrow_btn_size"],
+				"ArrowButton %s size must be %s for preset %s" % [set_id, str(spec["arrow_btn_size"]), preset])
+
+			var badge_lbl: Label = drawer.get_mystery_set_badge_label(set_id)
+			assert_not_null(badge_lbl, "BadgeLabel %s must exist" % set_id)
+			assert_eq(badge_lbl.get_theme_font_size("font_size"), int(spec["badge_font_size"]),
+				"BadgeLabel %s font_size must be %d for preset %s" % [set_id, int(spec["badge_font_size"]), preset])
+
+			for dec_idx: int in range(5):
+				var dec_btn: Button = drawer.get_mystery_button(set_id, dec_idx)
+				assert_not_null(dec_btn, "Decade %s[%d] must exist" % [set_id, dec_idx])
+				assert_eq(dec_btn.get_theme_font_size("font_size"), int(spec["decade_font_size"]),
+					"Decade %s[%d] font_size must be %d for preset %s" % [set_id, dec_idx, int(spec["decade_font_size"]), preset])
+				assert_eq(dec_btn.custom_minimum_size.y, float(spec["decade_min_h"]),
+					"Decade %s[%d] min height must be %f for preset %s" % [set_id, dec_idx, float(spec["decade_min_h"]), preset])
+				assert_eq(dec_btn.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART,
+					"Decade %s[%d] autowrap_mode must be AUTOWRAP_WORD_SMART" % [set_id, dec_idx])
+
+	drawer.free()
+
+
+func test_main_preset_switching_updates_navigation_drawer() -> void:
+	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
+	progress.clear_progress()
+
+	var main: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main)
+	main._ready()
+
+	var nav_drawer: NavigationDrawer = main.get_navigation_drawer()
+	assert_not_null(nav_drawer, "Main must contain NavigationDrawer")
+	if nav_drawer != null:
+		nav_drawer._ready()
+
+	# 1. Initial State: Normal
+	assert_eq(main.get_text_size_preset(), "normal", "Main preset should be normal initially")
+	assert_eq(nav_drawer.get_text_size_preset(), "normal", "Drawer preset should match Main initially")
+	assert_eq(nav_drawer.get_panel_width(), 400.0, "Drawer panel width should be 400.0 initially")
+	assert_eq(nav_drawer.get_drawer_panel().custom_minimum_size.x, 400.0, "Panel min size.x must be 400.0")
+
+	# 2. Cycle Preset: Normal -> Mobile
+	var next_p: String = main.cycle_text_size_preset()
+	assert_eq(next_p, "mobile", "1st cycle should switch to mobile")
+	assert_eq(main.get_text_size_preset(), "mobile", "Main preset should be mobile")
+	assert_eq(nav_drawer.get_text_size_preset(), "mobile", "Drawer preset should be mobile")
+	assert_eq(nav_drawer.get_panel_width(), 560.0, "Drawer panel width should be 560.0")
+	assert_eq(nav_drawer.get_drawer_panel().custom_minimum_size.x, 560.0, "Panel min size.x must be 560.0")
+
+	# 3. Cycle Preset: Mobile -> Extra Large
+	next_p = main.cycle_text_size_preset()
+	assert_eq(next_p, "extra_large", "2nd cycle should switch to extra_large")
+	assert_eq(main.get_text_size_preset(), "extra_large", "Main preset should be extra_large")
+	assert_eq(nav_drawer.get_text_size_preset(), "extra_large", "Drawer preset should be extra_large")
+	assert_eq(nav_drawer.get_panel_width(), 680.0, "Drawer panel width should be 680.0")
+	assert_eq(nav_drawer.get_drawer_panel().custom_minimum_size.x, 680.0, "Panel min size.x must be 680.0")
+
+	# 4. Cycle Preset: Extra Large -> Normal
+	next_p = main.cycle_text_size_preset()
+	assert_eq(next_p, "normal", "3rd cycle should return to normal")
+	assert_eq(main.get_text_size_preset(), "normal", "Main preset should be normal")
+	assert_eq(nav_drawer.get_text_size_preset(), "normal", "Drawer preset should be normal")
+	assert_eq(nav_drawer.get_panel_width(), 400.0, "Drawer panel width should be 400.0")
+	assert_eq(nav_drawer.get_drawer_panel().custom_minimum_size.x, 400.0, "Panel min size.x must be 400.0")
+
+	# 5. Open Drawer and Change Presets Directly
+	nav_drawer.open_drawer(false)
+	assert_true(nav_drawer.is_open(), "Drawer should be open")
+	assert_eq(nav_drawer.get_drawer_panel().offset_left, -400.0, "Normal open offset_left must be -400.0")
+	assert_eq(nav_drawer.get_drawer_panel().offset_right, 0.0, "Normal open offset_right must be 0.0")
+
+	main.set_text_size_preset("mobile")
+	assert_eq(nav_drawer.get_text_size_preset(), "mobile", "Drawer preset must be mobile")
+	assert_eq(nav_drawer.get_drawer_panel().offset_left, -560.0, "Mobile open offset_left must be -560.0")
+	assert_eq(nav_drawer.get_drawer_panel().offset_right, 0.0, "Mobile open offset_right must be 0.0")
+
+	main.set_text_size_preset("extra_large")
+	assert_eq(nav_drawer.get_text_size_preset(), "extra_large", "Drawer preset must be extra_large")
+	assert_eq(nav_drawer.get_drawer_panel().offset_left, -680.0, "Extra Large open offset_left must be -680.0")
+	assert_eq(nav_drawer.get_drawer_panel().offset_right, 0.0, "Extra Large open offset_right must be 0.0")
+
+	nav_drawer.close_drawer(false)
+	assert_false(nav_drawer.is_open(), "Drawer should be closed")
+	assert_eq(nav_drawer.get_drawer_panel().offset_left, 0.0, "Extra Large closed offset_left must be 0.0")
+	assert_eq(nav_drawer.get_drawer_panel().offset_right, 680.0, "Extra Large closed offset_right must be 680.0")
+
+	main.free()
+	progress.clear_progress()
+
+
 func cleanup() -> void:
 	var progress: ReadingProgressManager = ReadingProgressManagerScript.new() as ReadingProgressManager
 	progress.clear_progress()

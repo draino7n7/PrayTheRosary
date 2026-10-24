@@ -25,6 +25,10 @@ const COLOR_PARCHMENT_ALT: Color = Color(0.9412, 0.9176, 0.8784, 1.0)
 const COLOR_CHARCOAL: Color = Color(0.1176, 0.0941, 0.0824, 1.0)     # #1E1815
 const COLOR_UMBER: Color = Color(0.3608, 0.2627, 0.2196, 1.0)         # #5C4338
 
+const PANEL_WIDTH_NORMAL: float = 400.0
+const PANEL_WIDTH_MOBILE: float = 560.0
+const PANEL_WIDTH_EXTRA_LARGE: float = 680.0
+
 const FONT_BOLD_PATH: String = "res://assets/fonts/EBGaramond-Bold.ttf"
 const FONT_REGULAR_PATH: String = "res://assets/fonts/EBGaramond-Regular.ttf"
 const FONT_ITALIC_PATH: String = "res://assets/fonts/EBGaramond-Italic.ttf"
@@ -119,11 +123,14 @@ var _font_italic: Font = null
 var _font_symbols: Font = null
 var _anim_tween: Tween = null
 var _is_built: bool = false
+var text_size_preset: String = BasePageCard.PRESET_NORMAL
+var _mystery_header: Label = null
 
 @onready var floating_button: Button = get_node_or_null("FloatingButton") as Button
 @onready var drawer_overlay: Control = get_node_or_null("DrawerOverlay") as Control
 @onready var scrim: ColorRect = get_node_or_null("DrawerOverlay/Scrim") as ColorRect
 @onready var drawer_panel: PanelContainer = get_node_or_null("DrawerOverlay/DrawerPanel") as PanelContainer
+@onready var title_label: Label = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/TitleLabel") as Label
 @onready var close_button: Button = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/CloseButton") as Button
 @onready var drawer_scroll: ScrollContainer = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll") as ScrollContainer
 @onready var content_container: VBoxContainer = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll/ContentContainer") as VBoxContainer
@@ -138,6 +145,7 @@ func _ready() -> void:
 	if not _is_built:
 		_build_drawer_items()
 
+	_apply_text_size_preset()
 	_connect_base_signals()
 	update_liturgical_badge()
 	update_resume_button()
@@ -204,6 +212,10 @@ func _resolve_nodes() -> void:
 		scrim = get_node_or_null("DrawerOverlay/Scrim") as ColorRect
 	if drawer_panel == null:
 		drawer_panel = get_node_or_null("DrawerOverlay/DrawerPanel") as PanelContainer
+	if title_label == null:
+		title_label = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/TitleLabel") as Label
+	if title_label != null and _font_bold != null:
+		title_label.add_theme_font_override("font", _font_bold)
 	if close_button == null:
 		close_button = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/HeaderHBox/CloseButton") as Button
 	if close_button != null and _font_bold != null:
@@ -270,13 +282,13 @@ func _build_drawer_items() -> void:
 	content_container.add_child(_create_styled_divider())
 
 	# 5. Section Header for Mysteries
-	var mystery_header: Label = Label.new()
-	mystery_header.text = "THE TWENTY MYSTERIES"
+	_mystery_header = Label.new()
+	_mystery_header.text = "THE TWENTY MYSTERIES"
 	if _font_bold != null:
-		mystery_header.add_theme_font_override("font", _font_bold)
-	mystery_header.add_theme_font_size_override("font_size", 15)
-	mystery_header.add_theme_color_override("font_color", COLOR_UMBER)
-	content_container.add_child(mystery_header)
+		_mystery_header.add_theme_font_override("font", _font_bold)
+	_mystery_header.add_theme_font_size_override("font_size", 15)
+	_mystery_header.add_theme_color_override("font_color", COLOR_UMBER)
+	content_container.add_child(_mystery_header)
 
 	# 6. Four Expandable Mystery Set Accordion Rows
 	for set_id: String in MYSTERY_SET_ORDER:
@@ -289,6 +301,7 @@ func _build_drawer_items() -> void:
 	_build_landmark_group(LANDMARKS_BOTTOM)
 
 	BasePageCard.configure_pass_through_mouse_filters(content_container)
+	_apply_text_size_preset()
 	_is_built = true
 
 
@@ -315,7 +328,7 @@ func _build_resume_button() -> void:
 
 	resume_button = Button.new()
 	resume_button.name = "ResumeButton"
-	resume_button.custom_minimum_size = Vector2(0, 48)
+	resume_button.custom_minimum_size = Vector2(0, 46)
 	resume_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	resume_button.focus_mode = Control.FOCUS_NONE
 	resume_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -371,7 +384,7 @@ func _build_mystery_set_row(set_id: String) -> void:
 	# 1. Left Disclosure Arrow Button (▸ / ▾)
 	var arrow_btn: Button = Button.new()
 	arrow_btn.name = "ArrowButton"
-	arrow_btn.custom_minimum_size = Vector2(36, 40)
+	arrow_btn.custom_minimum_size = Vector2(38, 42)
 	arrow_btn.text = "▸"
 	arrow_btn.focus_mode = Control.FOCUS_NONE
 	if _font_bold != null:
@@ -389,9 +402,10 @@ func _build_mystery_set_row(set_id: String) -> void:
 	title_btn.name = "TitleButton"
 	title_btn.text = set_title
 	title_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_btn.custom_minimum_size = Vector2(0, 40)
+	title_btn.custom_minimum_size = Vector2(0, 42)
 	title_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	title_btn.focus_mode = Control.FOCUS_NONE
+	title_btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	if _font_bold != null:
 		title_btn.add_theme_font_override("font", _font_bold)
 	title_btn.add_theme_font_size_override("font_size", 18)
@@ -465,9 +479,10 @@ func _build_mystery_set_row(set_id: String) -> void:
 		dec_btn.name = "Decade_%d" % num
 		dec_btn.text = "%d. %s" % [num, title]
 		dec_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		dec_btn.custom_minimum_size = Vector2(0, 32)
+		dec_btn.custom_minimum_size = Vector2(0, 36)
 		dec_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		dec_btn.focus_mode = Control.FOCUS_NONE
+		dec_btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		if _font_regular != null:
 			dec_btn.add_theme_font_override("font", _font_regular)
 		dec_btn.add_theme_font_size_override("font_size", 16)
@@ -494,9 +509,10 @@ func _create_standard_list_button(label_text: String) -> Button:
 	var btn: Button = Button.new()
 	btn.text = label_text
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	btn.custom_minimum_size = Vector2(0, 38)
+	btn.custom_minimum_size = Vector2(0, 40)
 	btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	btn.focus_mode = Control.FOCUS_NONE
+	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	if _font_bold != null:
 		btn.add_theme_font_override("font", _font_bold)
 	btn.add_theme_font_size_override("font_size", 17)
@@ -618,9 +634,8 @@ func _update_overlay_state(open: bool, animate: bool) -> void:
 		_anim_tween.kill()
 
 	var is_headless: bool = (DisplayServer.get_name() == "headless")
-	var panel_width: float = drawer_panel.custom_minimum_size.x
-	if panel_width <= 0.0:
-		panel_width = 400.0
+	var panel_width: float = get_panel_width()
+	drawer_panel.custom_minimum_size.x = panel_width
 
 	if not animate or is_headless:
 		drawer_overlay.visible = open
@@ -759,6 +774,176 @@ func get_page_title(page_number: int) -> String:
 
 # --- Dependency Injection & Accessors ---
 
+func set_text_size_preset(preset: Variant) -> void:
+	text_size_preset = BasePageCard.normalize_preset(preset)
+	_apply_text_size_preset()
+
+
+func get_text_size_preset() -> String:
+	return text_size_preset
+
+
+func get_panel_width() -> float:
+	match text_size_preset:
+		BasePageCard.PRESET_MOBILE:
+			return PANEL_WIDTH_MOBILE
+		BasePageCard.PRESET_EXTRA_LARGE:
+			return PANEL_WIDTH_EXTRA_LARGE
+		_:
+			return PANEL_WIDTH_NORMAL
+
+
+func _apply_text_size_preset() -> void:
+	var panel_width: float = get_panel_width()
+	if drawer_panel != null:
+		drawer_panel.custom_minimum_size.x = panel_width
+		if _anim_tween != null and _anim_tween.is_valid():
+			_anim_tween.kill()
+		if _is_open:
+			drawer_panel.offset_left = -panel_width
+			drawer_panel.offset_right = 0.0
+		else:
+			drawer_panel.offset_left = 0.0
+			drawer_panel.offset_right = panel_width
+
+	# 1. TitleLabel ("Table of Contents"): 24pt / 32pt / 38pt
+	if title_label != null:
+		var title_font_size: int = 24
+		match text_size_preset:
+			BasePageCard.PRESET_MOBILE:
+				title_font_size = 32
+			BasePageCard.PRESET_EXTRA_LARGE:
+				title_font_size = 38
+			_:
+				title_font_size = 24
+		title_label.add_theme_font_size_override("font_size", title_font_size)
+
+	# 2. CloseButton ("✕"): 22pt (40×40) / 28pt (48×48) / 34pt (56×56)
+	if close_button != null:
+		var close_font_size: int = 22
+		var close_btn_size: Vector2 = Vector2(40, 40)
+		match text_size_preset:
+			BasePageCard.PRESET_MOBILE:
+				close_font_size = 28
+				close_btn_size = Vector2(48, 48)
+			BasePageCard.PRESET_EXTRA_LARGE:
+				close_font_size = 34
+				close_btn_size = Vector2(56, 56)
+			_:
+				close_font_size = 22
+				close_btn_size = Vector2(40, 40)
+		close_button.add_theme_font_size_override("font_size", close_font_size)
+		close_button.custom_minimum_size = close_btn_size
+
+	# 3. ResumeButton: 17pt (min height 46) / 24pt (min height 58) / 30pt (min height 72), autowrap
+	if resume_button != null:
+		var resume_font_size: int = 17
+		var resume_min_h: float = 46.0
+		match text_size_preset:
+			BasePageCard.PRESET_MOBILE:
+				resume_font_size = 24
+				resume_min_h = 58.0
+			BasePageCard.PRESET_EXTRA_LARGE:
+				resume_font_size = 30
+				resume_min_h = 72.0
+			_:
+				resume_font_size = 17
+				resume_min_h = 46.0
+		resume_button.add_theme_font_size_override("font_size", resume_font_size)
+		resume_button.custom_minimum_size = Vector2(0, resume_min_h)
+		resume_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+	# 4. Landmark section buttons (_section_buttons): 17pt (min height 40) / 24pt (min height 52) / 30pt (min height 64), autowrap
+	var landmark_font_size: int = 17
+	var landmark_min_h: float = 40.0
+	match text_size_preset:
+		BasePageCard.PRESET_MOBILE:
+			landmark_font_size = 24
+			landmark_min_h = 52.0
+		BasePageCard.PRESET_EXTRA_LARGE:
+			landmark_font_size = 30
+			landmark_min_h = 64.0
+		_:
+			landmark_font_size = 17
+			landmark_min_h = 40.0
+	for btn: Button in _section_buttons.values():
+		if btn != null:
+			btn.add_theme_font_size_override("font_size", landmark_font_size)
+			btn.custom_minimum_size = Vector2(0, landmark_min_h)
+			btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+	# 5. "THE TWENTY MYSTERIES" header (mystery_header): 15pt / 20pt / 25pt
+	if _mystery_header != null:
+		var header_font_size: int = 15
+		match text_size_preset:
+			BasePageCard.PRESET_MOBILE:
+				header_font_size = 20
+			BasePageCard.PRESET_EXTRA_LARGE:
+				header_font_size = 25
+			_:
+				header_font_size = 15
+		_mystery_header.add_theme_font_size_override("font_size", header_font_size)
+
+	# 6. Mystery Set TitleButton & ArrowButton: 18pt (min height 42, arrow 38×42) / 25pt (min height 54, arrow 48×54) / 31pt (min height 66, arrow 56×66), autowrap on TitleButton
+	var set_font_size: int = 18
+	var set_min_h: float = 42.0
+	var arrow_size: Vector2 = Vector2(38, 42)
+	match text_size_preset:
+		BasePageCard.PRESET_MOBILE:
+			set_font_size = 25
+			set_min_h = 54.0
+			arrow_size = Vector2(48, 54)
+		BasePageCard.PRESET_EXTRA_LARGE:
+			set_font_size = 31
+			set_min_h = 66.0
+			arrow_size = Vector2(56, 66)
+		_:
+			set_font_size = 18
+			set_min_h = 42.0
+			arrow_size = Vector2(38, 42)
+	for title_btn: Button in _mystery_set_title_buttons.values():
+		if title_btn != null:
+			title_btn.add_theme_font_size_override("font_size", set_font_size)
+			title_btn.custom_minimum_size = Vector2(0, set_min_h)
+			title_btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	for arrow_btn: Button in _mystery_set_arrow_buttons.values():
+		if arrow_btn != null:
+			arrow_btn.add_theme_font_size_override("font_size", set_font_size)
+			arrow_btn.custom_minimum_size = arrow_size
+
+	# 7. Liturgical "★ Today" BadgeLabel: 13pt / 18pt / 22pt
+	var badge_font_size: int = 13
+	match text_size_preset:
+		BasePageCard.PRESET_MOBILE:
+			badge_font_size = 18
+		BasePageCard.PRESET_EXTRA_LARGE:
+			badge_font_size = 22
+		_:
+			badge_font_size = 13
+	for badge_lbl: Label in _mystery_set_badges.values():
+		if badge_lbl != null:
+			badge_lbl.add_theme_font_size_override("font_size", badge_font_size)
+
+	# 8. Individual Mystery decade buttons (Decade_1..5): 16pt (min height 36) / 22pt (min height 48) / 28pt (min height 58), autowrap
+	var decade_font_size: int = 16
+	var decade_min_h: float = 36.0
+	match text_size_preset:
+		BasePageCard.PRESET_MOBILE:
+			decade_font_size = 22
+			decade_min_h = 48.0
+		BasePageCard.PRESET_EXTRA_LARGE:
+			decade_font_size = 28
+			decade_min_h = 58.0
+		_:
+			decade_font_size = 16
+			decade_min_h = 36.0
+	for decade_btn: Button in _decade_buttons_by_page.values():
+		if decade_btn != null:
+			decade_btn.add_theme_font_size_override("font_size", decade_font_size)
+			decade_btn.custom_minimum_size = Vector2(0, decade_min_h)
+			decade_btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+
 func set_data_loader(loader: RosaryDataLoader) -> void:
 	data_loader = loader
 	if _is_built:
@@ -769,6 +954,14 @@ func set_data_loader(loader: RosaryDataLoader) -> void:
 func set_progress_manager(manager: ReadingProgressManager) -> void:
 	progress_manager = manager
 	update_resume_button()
+
+
+func get_title_label() -> Label:
+	return title_label
+
+
+func get_mystery_header() -> Label:
+	return _mystery_header
 
 
 func get_floating_button() -> Button:
