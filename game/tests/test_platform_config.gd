@@ -10,7 +10,7 @@ func test_android_and_web_export_presets() -> void:
 	
 	assert_true("package/unique_name=\"games.audrain.praytherosary\"" in content, "Android package unique name should be games.audrain.praytherosary.")
 	assert_true("export_path=\"praytherosary.aab\"" in content, "Android export_path should be praytherosary.aab.")
-	assert_true("screen/immersive_mode=false" in content, "Immersive mode should be disabled (false) to avoid safe area cutoffs.")
+	assert_true("screen/immersive_mode=true" in content, "Android export preset must enable screen/immersive_mode=true to hide system bars.")
 	assert_true("include_filter=" in content and "*.json" in content, "include_filter should contain '*.json'.")
 	assert_true("name=\"Web\"" in content, "Web export preset should exist.")
 	assert_true("platform=\"Web\"" in content, "Web export preset platform should be Web.")
@@ -118,4 +118,14 @@ func test_application_version_synchronization() -> void:
 		var preset_content := preset_file.get_as_text()
 		var target_preset_needle: String = "version/name=\"%s\"" % app_version
 		assert_true(preset_content.contains(target_preset_needle), "export_presets.cfg version/name must match application/config/version exactly (%s)." % app_version)
+
+
+func test_android_runtime_fullscreen_guard() -> void:
+	assert_true(Main.should_use_android_fullscreen("Android", "Android"), "Android on active display driver should enable fullscreen.")
+	assert_true(Main.should_use_android_fullscreen("Android", "dummy_driver"), "Android on custom display driver should enable fullscreen.")
+	assert_false(Main.should_use_android_fullscreen("Android", "headless"), "Android on headless driver should avoid fullscreen.")
+	assert_false(Main.should_use_android_fullscreen("Windows", "windows"), "Windows platform should not trigger Android fullscreen.")
+	assert_false(Main.should_use_android_fullscreen("Web", "web"), "Web platform should not trigger Android fullscreen.")
+	assert_false(Main.should_use_android_fullscreen("macOS", "macos"), "macOS platform should not trigger Android fullscreen.")
+	assert_false(Main.should_use_android_fullscreen("iOS", "ios"), "iOS platform should not trigger Android fullscreen.")
 

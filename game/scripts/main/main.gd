@@ -58,9 +58,22 @@ var _toast_tween: Tween = null
 @onready var toast_label: Label = get_node_or_null("ReaderCanvasLayer/PresetToast/ToastLabel") as Label
 
 
-func _ready() -> void:
-	if DisplayServer.get_name() != "headless":
+## Determines if Android full-screen immersive mode should be enforced.
+static func should_use_android_fullscreen(os_name: String, display_driver: String) -> bool:
+	return os_name == "Android" and display_driver != "headless"
+
+
+## Configures platform-specific display settings (screen sleep prevention and Android full-screen mode).
+func _apply_platform_display_settings() -> void:
+	var display_name: String = DisplayServer.get_name()
+	if display_name != "headless":
 		DisplayServer.screen_set_keep_on(true)
+	if should_use_android_fullscreen(OS.get_name(), display_name):
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
+func _ready() -> void:
+	_apply_platform_display_settings()
 
 	_ensure_initialized()
 	_current_page = 1
