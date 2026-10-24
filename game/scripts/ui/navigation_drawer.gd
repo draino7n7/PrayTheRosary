@@ -236,7 +236,7 @@ func _calibrate_floating_button_margins() -> void:
 		var style: StyleBox = floating_button.get_theme_stylebox(state)
 		if style != null:
 			style.content_margin_left = 0.0
-			style.content_margin_top = 6.0
+			style.content_margin_top = 12.0
 			style.content_margin_right = 0.0
 			style.content_margin_bottom = 0.0
 

@@ -35,7 +35,7 @@ func test_navigation_drawer_scene_structure() -> void:
 	var float_btn: Button = drawer.get_floating_button()
 	assert_not_null(float_btn, "FloatingMenuButton must exist")
 	assert_eq(float_btn.text, "☰", "Floating button must display hamburger icon")
-	assert_eq(float_btn.custom_minimum_size, Vector2(52, 52), "Floating button custom_minimum_size must be 52x52")
+	assert_eq(float_btn.custom_minimum_size, Vector2(104, 104), "Floating button custom_minimum_size must be 104x104")
 
 	var scrim: ColorRect = drawer.get_scrim()
 	assert_not_null(scrim, "Scrim node must exist")
@@ -419,17 +419,18 @@ func test_floating_button_centering_and_stylebox_calibration() -> void:
 	assert_not_null(float_btn, "FloatingButton must exist")
 
 	# 1. Dimensions and Positioning
-	assert_eq(float_btn.custom_minimum_size, Vector2(52, 52), "FloatingButton custom_minimum_size must be 52x52")
-	assert_eq(float_btn.offset_left, -70.0, "FloatingButton offset_left must be -70")
+	assert_eq(float_btn.custom_minimum_size, Vector2(104, 104), "FloatingButton custom_minimum_size must be 104x104")
+	assert_eq(float_btn.offset_left, -122.0, "FloatingButton offset_left must be -122")
 	assert_eq(float_btn.offset_top, 18.0, "FloatingButton offset_top must be 18")
 	assert_eq(float_btn.offset_right, -18.0, "FloatingButton offset_right must be -18")
-	assert_eq(float_btn.offset_bottom, 70.0, "FloatingButton offset_bottom must be 70")
+	assert_eq(float_btn.offset_bottom, 122.0, "FloatingButton offset_bottom must be 122")
 
 	# 2. Text and Font Glyph Resolution
 	assert_eq(float_btn.text, "☰", "FloatingButton text must be hamburger icon ☰")
 	var font: Font = float_btn.get_theme_font("font")
 	assert_not_null(font, "FloatingButton font must exist")
 	assert_true(font.has_char(0x2630), "FloatingButton font must support ☰ (0x2630)")
+	assert_eq(float_btn.get_theme_font_size("font_size"), 56, "FloatingButton font size must be 56pt")
 
 	# 3. Calibrated StyleBox Margins for Pixel Centering across all states
 	var states: Array[String] = ["normal", "hover", "pressed", "focus"]
@@ -443,7 +444,7 @@ func test_floating_button_centering_and_stylebox_calibration() -> void:
 			assert_eq(style.content_margin_left, style.content_margin_right, "FloatingButton %s horizontal margins must be symmetric" % state)
 
 			# Calibrated vertical margin to counteract font ascent/descent bias and center ☰
-			assert_eq(style.content_margin_top, 6.0, "FloatingButton %s content_margin_top must be 6.0" % state)
+			assert_eq(style.content_margin_top, 12.0, "FloatingButton %s content_margin_top must be 12.0" % state)
 			assert_eq(style.content_margin_bottom, 0.0, "FloatingButton %s content_margin_bottom must be 0.0" % state)
 
 	drawer.free()

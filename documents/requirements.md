@@ -163,7 +163,7 @@ To prevent lateral expansion, horizontal overflow, and asymmetrical screen shift
     ```
 - **Dynamic Multiline Card Height Calculation (`Font.get_multiline_string_size`):**
   - Dynamic vertical height calculations (`total_h`) in text cards must calculate heading, fruit, citation, and rubric heights using `Font.get_multiline_string_size(text, alignment, max_width, font_size).y` (using 656.0px for standard card content, 636.0px for scripture container, and 628.0px for fruit badge) rather than single-line approximations (`Font.get_height()`) so that multi-line wrapped headers are accurately reflected in card elongation.
-- **PresetToast Dynamic Symmetrical Horizontal Centering:**
+- **PresetToast Dynamic Symmetrical Horizontal Centering & Vertical Midpoint Alignment:**
   - Calling `Control.reset_size()` in Godot 4 on an anchored `Control` with pre-existing offsets expands `size.x` rightward by pinning `offset_left` and advancing `offset_right = offset_left + min_size.x`.
   - To prevent rightward shift and maintain horizontal centering across `Normal`, `Mobile`, and `Extra Large` presets, `PresetToast` calculates `min_size` dynamically from font metrics (`font.get_string_size(toast_label.text, ...)` and panel stylebox content margins) and explicitly enforces symmetric horizontal offsets centered at 0.5:
     ```gdscript
@@ -171,10 +171,10 @@ To prevent lateral expansion, horizontal overflow, and asymmetrical screen shift
     preset_toast.anchor_right = 0.5
     preset_toast.offset_left = -min_size.x * 0.5
     preset_toast.offset_right = min_size.x * 0.5
-    preset_toast.offset_top = 22.0
-    preset_toast.offset_bottom = 22.0 + min_size.y
+    preset_toast.offset_top = 70.0 - min_size.y * 0.5
+    preset_toast.offset_bottom = 70.0 + min_size.y * 0.5
     ```
-  - This strictly maintains `offset_left == -offset_right` and positions the midpoint of `PresetToast` at $x = 360\text{px}$ on 720px portrait viewports across all text size presets without clipping.
+  - This strictly maintains `offset_left == -offset_right` and positions the midpoint of `PresetToast` at $x = 360\text{px}$ horizontally, while vertically centering the toast at $y = 70.0\text{px}$ (matching the vertical midpoint of the $104\times104\text{px}$ corner buttons between $y = 18.0$ and $y = 122.0$). On 720px portrait viewports, `PresetToast` maintains generous horizontal clearance to both corner buttons across all text size presets without overlap (`137.5px` clearance on Normal, `112.5px` on Mobile, and `46.0px` on Extra Large).
 
 ### 3.0.3 Prayer Typography & Communal Recitation (Leader & Bold Group Response) Formatting
 To support traditional communal/group Rosary recitation (family, parish, or prayer group) as well as individual devotion:
@@ -250,7 +250,7 @@ Implemented via `res://scenes/ui/in_stream_jump_bar.tscn` (`res://scripts/ui/in_
 Implemented via `res://scenes/ui/navigation_drawer.tscn` (`res://scripts/ui/navigation_drawer.gd`):
 - **Node Hierarchy & Visual Design:**
   - `NavigationDrawer` (`CanvasLayer`, `layer = 15`): Overlays the continuous stream and main HUD cleanly.
-  - `FloatingButton` (`Button`): Unobtrusive 52×52px (`custom_minimum_size = Vector2(52, 52)`) floating toggle button pinned in the top-right viewport corner (`offset_left = -70.0, offset_top = 18.0, offset_right = -18.0, offset_bottom = 70.0`) displaying the `☰` (Unicode `U+2630`) navigation icon. StyleBox content margins across all states (`normal`, `hover`, `pressed`, `focus`) are explicitly calibrated to `content_margin_top = 6.0`, `content_margin_bottom = 0.0`, `content_margin_left = 0.0`, and `content_margin_right = 0.0` (both in `navigation_drawer.tscn` and enforced programmatically in `_calibrate_floating_button_margins()`) to counteract font ascent/descent metrics bias between the primary font (`EBGaramond-Bold.ttf`) and fallback symbol font (`NotoSansSymbols-Regular.ttf`), ensuring exact geometric and optical centering of the three horizontal bars within the 52×52 button bounds.
+  - `FloatingButton` (`Button`): Doubled 104×104px (`custom_minimum_size = Vector2(104, 104)`) floating toggle button pinned in the top-right viewport corner (`offset_left = -122.0, offset_top = 18.0, offset_right = -18.0, offset_bottom = 122.0`) displaying the `☰` (Unicode `U+2630`) navigation icon at 56pt font size. StyleBox content margins across all states (`normal`, `hover`, `pressed`, `focus`) are explicitly calibrated to `content_margin_top = 12.0`, `content_margin_bottom = 0.0`, `content_margin_left = 0.0`, and `content_margin_right = 0.0` (both in `navigation_drawer.tscn` and enforced programmatically in `_calibrate_floating_button_margins()`) to counteract font ascent/descent metrics bias between the primary font (`EBGaramond-Bold.ttf`) and fallback symbol font (`NotoSansSymbols-Regular.ttf`), ensuring exact geometric and optical centering (<= 1px difference on both axes) of the three horizontal bars within the 104×104 button bounds.
   - `DrawerOverlay` (`Control`): Full-screen control (`ANCHORS_PRESET_FULL_RECT`) containing:
     - `Scrim` (`ColorRect`): Semi-transparent dimming backdrop (`#00000080`, `mouse_filter = MOUSE_FILTER_STOP`). Clicking the scrim closes the drawer.
     - `DrawerPanel` (`PanelContainer`): Right-aligned sliding drawer panel styled in warm ivory parchment (`#FAF6EE`) with an antique gold left border (`#B89130`). Features dynamic responsive panel width synchronized with the active reading text size preset: `400.0px` on `normal` (leaving a 320px clickable scrim margin on standard 720px portrait viewports), `560.0px` on `mobile` (160px scrim margin), and `680.0px` on `extra_large` (40px scrim margin).
@@ -345,11 +345,11 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 
 ### 4.6 Floating "AA" Reader Button & Typography Preset Persistence
 - **Top-Left Floating "AA" Reader Button:**
-  - Located on a dedicated HUD canvas layer (`ReaderCanvasLayer`, `layer = 10`) positioned at `offset_left = 18.0`, `offset_top = 18.0`, with fixed dimensions `52×52px`.
+  - Located on a dedicated HUD canvas layer (`ReaderCanvasLayer`, `layer = 10`) positioned at `offset_left = 18.0`, `offset_top = 18.0`, `offset_right = 122.0`, `offset_bottom = 122.0` with fixed dimensions `104×104px` (`custom_minimum_size = Vector2(104, 104)`).
   - Visual styling matches the canonical illuminated manuscript palette: warm parchment background (`#FAF6EE` at 0.92 alpha), 2px antique gold border (`#B89130`), corner radius 8px, and drop shadow.
-  - **Dual-Sized 'AA' Progressive Icon Layout:** Rather than a uniform single "Aa" label, the button text is cleared (`text = ""`) and houses an interior `HBoxContainer` (`IconHBox`) configured with `mouse_filter = MOUSE_FILTER_IGNORE` (`2`), `anchors_preset = 15` (Full Rect), `grow_horizontal = 2`, `grow_vertical = 2`, `alignment = 1` (Center), and `theme_override_constants/separation = 1`. Inside are two bold serif `Label` nodes (`EBGaramond-Bold.ttf`, `mouse_filter = 2`, `vertical_alignment = 2`):
-    - `SmallALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 16`, positioned on the left.
-    - `LargeALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 26`, positioned on the right.
+  - **Dual-Sized 'AA' Progressive Icon Layout:** Rather than a uniform single "Aa" label, the button text is cleared (`text = ""`) and houses an interior `HBoxContainer` (`IconHBox`) configured with `mouse_filter = MOUSE_FILTER_IGNORE` (`2`), `anchors_preset = 15` (Full Rect), `grow_horizontal = 2`, `grow_vertical = 2`, `alignment = 1` (Center), and `theme_override_constants/separation = 2`. Inside are two bold serif `Label` nodes (`EBGaramond-Bold.ttf`, `mouse_filter = 2`, `vertical_alignment = 2`):
+    - `SmallALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 32`, positioned on the left.
+    - `LargeALabel`: `text = "A"`, `theme_override_font_sizes/font_size = 52`, positioned on the right.
   - Interactive color states: Normal typography renders in Deep Charcoal (`#1E1815`); hovering (`mouse_entered`) or pressing (`button_down`) shifts child label colors to Sacred Crimson (`#6B1D21`), restoring to Deep Charcoal on release/exit unless held. Button hover border brightens to `#D4AF37`, and pressed border shifts to Sacred Crimson `#6B1D21`.
   - Pass-through handling: When the navigation drawer is opened, `reader_button.mouse_filter = Control.MOUSE_FILTER_IGNORE` to prevent clicks through the drawer scrim; restored to `MOUSE_FILTER_STOP` upon drawer closing.
 - **One-Tap Preset Cycling & Dynamic Feedback Toast:**
@@ -358,7 +358,7 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
     - `Normal`: `22pt` (`"Text Size: Normal"`)
     - `Mobile`: `30pt` (`"Text Size: Mobile"`)
     - `Extra Large`: `38pt` (`"Text Size: Extra Large"`)
-  - Rather than calling `reset_size()` (which in Godot 4 pins `offset_left` and expands `offset_right` rightward on center-anchored controls), `PresetToast` calculates symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), keeping the visual midpoint strictly at $x = 360\text{px}$ on 720px viewports between the top-left reader button and top-right navigation drawer menu button across all presets.
+  - Rather than calling `reset_size()` (which in Godot 4 pins `offset_left` and expands `offset_right` rightward on center-anchored controls), `PresetToast` calculates symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), keeping the visual midpoint strictly at $x = 360\text{px}$ on 720px viewports between the top-left reader button and top-right navigation drawer menu button across all presets. Vertically, `PresetToast` is centered at $y = 70.0\text{px}` (`offset_top = 70.0 - min_size.y * 0.5`, `offset_bottom = 70.0 + min_size.y * 0.5`), aligning directly with the horizontal midpoint of the $104\times104\text{px}$ corner buttons (which span from $y = 18.0$ to $y = 122.0$) while maintaining ample clearance (`>= 46.0px`) from both corner buttons across all presets.
   - In graphical runtimes, the toast smoothly lingers for 1.2s before fading out over 0.4s via a tween.
 - **Viewport Scroll Anchor Stability:**
   - When switching presets, `Main.set_text_size_preset()` calculates the relative vertical center of the currently viewed page element in the viewport prior to resizing.

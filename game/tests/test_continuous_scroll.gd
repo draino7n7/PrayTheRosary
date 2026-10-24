@@ -916,12 +916,12 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 	assert_not_null(parent_layer, "ReaderControls CanvasLayer must exist")
 	assert_true(parent_layer.layer >= 10, "Reader button CanvasLayer must be layer >= 10 (got %d)" % parent_layer.layer)
 
-	# 2. Dimensions and positioning (offset_left=18, offset_top=18, offset_right=70, offset_bottom=70, size 52x52)
+	# 2. Dimensions and positioning (offset_left=18, offset_top=18, offset_right=122, offset_bottom=122, size 104x104)
 	assert_eq(reader_btn.offset_left, 18.0, "Reader button offset_left must be 18")
 	assert_eq(reader_btn.offset_top, 18.0, "Reader button offset_top must be 18")
-	assert_eq(reader_btn.offset_right, 70.0, "Reader button offset_right must be 70")
-	assert_eq(reader_btn.offset_bottom, 70.0, "Reader button offset_bottom must be 70")
-	assert_eq(reader_btn.custom_minimum_size, Vector2(52, 52), "Reader button custom_minimum_size must be 52x52")
+	assert_eq(reader_btn.offset_right, 122.0, "Reader button offset_right must be 122")
+	assert_eq(reader_btn.offset_bottom, 122.0, "Reader button offset_bottom must be 122")
+	assert_eq(reader_btn.custom_minimum_size, Vector2(104, 104), "Reader button custom_minimum_size must be 104x104")
 
 	# 3. Label and styling attributes
 	assert_eq(reader_btn.text, "", "Reader button text must be empty string")
@@ -929,15 +929,16 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 
 	var icon_box: HBoxContainer = reader_btn.get_node_or_null("IconHBox") as HBoxContainer
 	assert_not_null(icon_box, "Reader button must contain child IconHBox")
+	assert_eq(icon_box.get_theme_constant("separation"), 2, "IconHBox separation constant must be 2")
 	var small_lbl: Label = reader_btn.get_node_or_null("IconHBox/SmallALabel") as Label
 	var large_lbl: Label = reader_btn.get_node_or_null("IconHBox/LargeALabel") as Label
 	assert_not_null(small_lbl, "Reader button must contain SmallALabel")
 	assert_not_null(large_lbl, "Reader button must contain LargeALabel")
 	assert_eq(small_lbl.text, "A", "SmallALabel text must be 'A'")
 	assert_eq(large_lbl.text, "A", "LargeALabel text must be 'A'")
-	assert_eq(small_lbl.get_theme_font_size("font_size"), 16, "SmallALabel font size must be 16pt")
-	assert_eq(large_lbl.get_theme_font_size("font_size"), 26, "LargeALabel font size must be 26pt")
-	assert_true(small_lbl.get_theme_font_size("font_size") < large_lbl.get_theme_font_size("font_size"), "SmallALabel font size must be strictly smaller than LargeALabel font size (16pt vs 26pt)")
+	assert_eq(small_lbl.get_theme_font_size("font_size"), 32, "SmallALabel font size must be 32pt")
+	assert_eq(large_lbl.get_theme_font_size("font_size"), 52, "LargeALabel font size must be 52pt")
+	assert_true(small_lbl.get_theme_font_size("font_size") < large_lbl.get_theme_font_size("font_size"), "SmallALabel font size must be strictly smaller than LargeALabel font size (32pt vs 52pt)")
 
 	# 4. Color state shifts (Deep Charcoal #1E1815 -> Sacred Crimson #6B1D21 on hover/press)
 	assert_eq(small_lbl.get_theme_color("font_color"), Main.COLOR_DEEP_CHARCOAL, "Initial small A font color must be Deep Charcoal")
@@ -979,7 +980,14 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 		mobile_width >= mobile_min_size.x - 0.01,
 		"Preset toast width under Mobile must satisfy combined minimum size"
 	)
-	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
+	assert_true(
+		absf((main_node.preset_toast.offset_top + main_node.preset_toast.offset_bottom) * 0.5 - 70.0) < 0.01,
+		"Preset toast vertical midpoint must align with 104x104 corner buttons (y=70) for Mobile"
+	)
+	assert_true(main_node.preset_toast.offset_top >= 18.0, "Preset toast top must remain within corner buttons band for Mobile")
+	assert_true(main_node.preset_toast.offset_bottom <= 122.0, "Preset toast bottom must remain within corner buttons band for Mobile")
+	assert_true(360.0 + main_node.preset_toast.offset_left > 122.0, "Preset toast must not overlap ReaderButton for Mobile")
+	assert_true(360.0 + main_node.preset_toast.offset_right < 598.0, "Preset toast must not overlap FloatingButton for Mobile")
 
 	var next2: String = main_node.cycle_text_size_preset()
 	assert_eq(next2, "extra_large", "Second cycle must switch to 'extra_large'")
@@ -996,7 +1004,14 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 		extra_large_width >= extra_large_min_size.x - 0.01,
 		"Preset toast width under Extra Large must satisfy combined minimum size"
 	)
-	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
+	assert_true(
+		absf((main_node.preset_toast.offset_top + main_node.preset_toast.offset_bottom) * 0.5 - 70.0) < 0.01,
+		"Preset toast vertical midpoint must align with 104x104 corner buttons (y=70) for Extra Large"
+	)
+	assert_true(main_node.preset_toast.offset_top >= 18.0, "Preset toast top must remain within corner buttons band for Extra Large")
+	assert_true(main_node.preset_toast.offset_bottom <= 122.0, "Preset toast bottom must remain within corner buttons band for Extra Large")
+	assert_true(360.0 + main_node.preset_toast.offset_left > 122.0, "Preset toast must not overlap ReaderButton for Extra Large")
+	assert_true(360.0 + main_node.preset_toast.offset_right < 598.0, "Preset toast must not overlap FloatingButton for Extra Large")
 
 	var next3: String = main_node.cycle_text_size_preset()
 	assert_eq(next3, "normal", "Third cycle must return to 'normal'")
@@ -1013,7 +1028,14 @@ func test_reader_button_ui_and_preset_cycling() -> void:
 		normal_width >= normal_min_size.x - 0.01,
 		"Preset toast width under Normal must satisfy combined minimum size"
 	)
-	assert_eq(main_node.preset_toast.offset_top, 22.0, "Preset toast offset_top must remain 22.0")
+	assert_true(
+		absf((main_node.preset_toast.offset_top + main_node.preset_toast.offset_bottom) * 0.5 - 70.0) < 0.01,
+		"Preset toast vertical midpoint must align with 104x104 corner buttons (y=70) for Normal"
+	)
+	assert_true(main_node.preset_toast.offset_top >= 18.0, "Preset toast top must remain within corner buttons band for Normal")
+	assert_true(main_node.preset_toast.offset_bottom <= 122.0, "Preset toast bottom must remain within corner buttons band for Normal")
+	assert_true(360.0 + main_node.preset_toast.offset_left > 122.0, "Preset toast must not overlap ReaderButton for Normal")
+	assert_true(360.0 + main_node.preset_toast.offset_right < 598.0, "Preset toast must not overlap FloatingButton for Normal")
 
 	# Verify strict font scaling relationship: normal < mobile < extra_large
 	assert_true(22 < 30 and 30 < 38, "Toast font sizes must strictly scale: normal (22) < mobile (30) < extra_large (38)")
