@@ -32,7 +32,7 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
    - **No Numerical Page Numbers:** Do not render visible numerical page numbers (`1..50`) on any page cards.
    - **No On-Page Artwork Captions:** Artwork pages (`Pages 5, 7, 9, ..., 47`) display **only** the Top Section/Mystery Header and the gold-framed painting so nothing distracts from using the sacred image as a prayer focus. All artist, title, date, and museum attributions appear exclusively on the **Sacred Artwork Credits pages (`Pages 48–49`)**.
    - **No Interactive Bead-Clicking Mechanic (MVP):** Prayer pages display the complete text of the prayers with clear rubrics (e.g., *"10× Hail Mary"*), assuming the user prays with physical Rosary beads or their fingers.
-   - **Silent & Always-On:** The MVP application is completely silent (no background music or sound effects) and keeps the device screen awake (`DisplayServer.screen_set_keep_on(true)` when not running headlessly) so the screen never dims or locks during a 3–4 minute decade.
+   - **Silent, Always-On & Full-Screen Immersive:** The MVP application is completely silent (no background music or sound effects), keeps the device screen awake (`DisplayServer.screen_set_keep_on(true)` when not running headlessly) so the screen never dims or locks during a 3–4 minute decade, and enforces full-screen immersive mode on Android to eliminate distracting system bars.
 3. **Data-Driven Architecture & Canonical Verification Ledger:**
    - All prayers, mysteries, Catholic Public Domain Version (CPDV) Scripture readings, meditations, artwork metadata, and page sequences are loaded dynamically via `RosaryDataLoader` (`res://scripts/data/rosary_data_loader.gd`) from `res://data/prayers.json`, `res://data/mysteries.json`, and `res://data/book_layout.json`.
    - **Canonical Verification Ledger (`documents/references.md`):** Serves as the complete primary source guide and verification ledger for all 50 physical pages in strict book order, 12 canonical prayers, 20 mysteries and spiritual fruits, Catholic Public Domain Version (CPDV) Scripture citations and verbatim verses, and 23 master artworks (with museum inventory numbers, creation dates, current locations, and direct catalog URLs).
@@ -334,14 +334,16 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
   - For `PageCard` instances, heights strictly evaluate `custom_minimum_size.y` (defaulting to `BasePageCard.DESIGN_HEIGHT = 1080.0`) without relying on pre-sort unconstrained viewport `size.y` expansions, and root card anchors are constrained to `anchors_preset = 10` (`anchor_right = 1.0`).
   - `_is_restoring_initial_page` state flag is held during startup restoration (deferred to post-layout or cleared synchronously in headless tests) to prevent spurious container sort events from overwriting restored page state.
 
-### 4.5 Texture Virtualization & Screen Keep-Awake
+### 4.5 Texture Virtualization, Screen Keep-Awake & Platform Display Settings
 1. **Sliding Buffer Window Virtualization (`ARTWORK_BUFFER_PAGES = 4`):**
    - High-resolution sacred art `.webp` textures are memory-intensive. `Main` maintains an active buffer window of $\pm 4$ pages around the current viewport.
    - Cards within the buffer window have their artwork loaded via `load_artwork()` on `ArtworkPageCard` and `CoverPageCard`.
    - Cards outside the buffer window are unloaded via `unload_artwork()`, freeing VRAM and preventing memory bloat on mobile and web platforms while maintaining a consistent 60 FPS scroll.
    - Transparent fallback: `PageCard.get_artwork_texture()` automatically reloads textures on demand if queried outside the active window.
-2. **Screen Keep-Awake:**
-   - `Main._ready()` calls `DisplayServer.screen_set_keep_on(true)` guarded by `DisplayServer.get_name() != "headless"` to prevent mobile displays from dimming or locking during contemplative prayer.
+2. **Screen Keep-Awake & Android Full-Screen Immersive Mode:**
+   - `Main._ready()` delegates display configuration to `_apply_platform_display_settings()`.
+   - Calls `DisplayServer.screen_set_keep_on(true)` guarded by `DisplayServer.get_name() != "headless"` to prevent mobile displays from dimming or locking during contemplative prayer.
+   - On Android devices (`Main.should_use_android_fullscreen(OS.get_name(), DisplayServer.get_name())`), enforces `DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)` to guarantee distraction-free full-screen display.
 
 ### 4.6 Floating "AA" Reader Button & Typography Preset Persistence
 - **Top-Left Floating "AA" Reader Button:**
@@ -435,3 +437,10 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
   - Note: Godot's core startup initialization (`main/main.cpp`) strictly requires PNG format for `boot_splash/image` (WebP or other formats trigger startup engine fallback/errors).
 - **Splash Background Color (`boot_splash/bg_color`):**
   - Value: `Color(0.0784314, 0.0627451, 0.0627451, 1)` (`#141010` deep ambient espresso), seamlessly matching the app's ambient canvas background during launch transitions.
+
+### 7.3 Android Export Preset Configuration & Full-Screen Immersive Mode
+- **Export Preset (`game/export_presets.cfg`):**
+  - Android preset (`[preset.0.options]`) sets `screen/immersive_mode=true` so exported packages launch in full-screen immersive mode, hiding the top status bar and bottom navigation bar.
+- **Runtime Platform Enforcement (`game/scripts/main/main.gd`):**
+  - In `Main._ready()`, `_apply_platform_display_settings()` checks `should_use_android_fullscreen(OS.get_name(), DisplayServer.get_name())` (`OS.get_name() == "Android"` and `DisplayServer.get_name() != "headless"`), programmatically calling `DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)` to guarantee distraction-free full-screen display on device hardware.
+

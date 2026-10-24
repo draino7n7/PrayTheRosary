@@ -59,7 +59,7 @@ The application connects all 50 sequential pages into a unified, distraction-fre
   - **Post-Opening Prayers (After Page 5):** Displays 4 mystery buttons with an antique gold border and *"★ Recommended Today"* badge on today's liturgically recommended mystery set.
   - **Post-Mystery Set Jump Bars (After Pages 15, 25, 35, 45):** Displays a mystery set completion banner and a prominent *"Proceed to the Closing Prayers →"* action button jumping directly to Page 46.
 - **Reading Progress Persistence (`game/scripts/core/reading_progress_manager.gd`):** Automatically tracks and persists the current page to `user://reading_progress.cfg` (debounced at 600ms during scroll, immediate on jump) and restores the saved page on startup.
-- **VRAM Texture Virtualization & Screen Keep-Awake:** Employs a sliding active buffer window (`ARTWORK_BUFFER_PAGES = 4`) dynamically loading active artwork and unloading distant textures from VRAM for smooth 60 FPS scrolling. Calls `DisplayServer.screen_set_keep_on(true)` to prevent screen dimming during contemplative prayer.
+- **VRAM Texture Virtualization, Screen Keep-Awake & Full-Screen Immersive Mode:** Employs a sliding active buffer window (`ARTWORK_BUFFER_PAGES = 4`) dynamically loading active artwork and unloading distant textures from VRAM for smooth 60 FPS scrolling. Calls `DisplayServer.screen_set_keep_on(true)` to prevent screen dimming during contemplative prayer, and enforces full-screen immersive mode on Android (`screen/immersive_mode=true` and `DisplayServer.WINDOW_MODE_FULLSCREEN`) to hide the top status bar and bottom navigation bar for a distraction-free prayer experience.
 
 
 ---
@@ -149,7 +149,7 @@ python mcp_client.py raw '<json>'    # Sends custom MCP JSON payload
 ## Cross-Platform Builds & CI/CD
 
 This repository includes production-tested GitHub Actions workflows:
-- **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`.aab`), signs the bundle, and publishes release assets.
+- **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`.aab`) configured with full-screen immersive mode (`screen/immersive_mode=true`), signs the bundle, and publishes release assets.
 - **Web Release (`web_release.yml`):** Automatically builds an HTML5 Web export and attaches a zip archive to GitHub Releases.
 - **Print PDF Release (`pdf_release.yml`):** Automatically triggers on tag push (`v*`) or manual dispatch. Validates the test suite (`test_*.py`), builds the canonical 50-page print PDF, and attaches `PrayTheRosary.pdf` to the GitHub Release.
 - **GL Compatibility Renderer:** Configured with `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0), guaranteeing optimal compatibility across Web, Desktop, and Mobile.
