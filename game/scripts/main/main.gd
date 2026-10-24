@@ -770,8 +770,8 @@ func _show_preset_feedback(preset: String) -> void:
 	preset_toast.anchor_right = 0.5
 	preset_toast.offset_left = -min_size.x * 0.5
 	preset_toast.offset_right = min_size.x * 0.5
-	preset_toast.offset_top = 22.0
-	preset_toast.offset_bottom = 22.0 + min_size.y
+	preset_toast.offset_top = 70.0 - min_size.y * 0.5
+	preset_toast.offset_bottom = 70.0 + min_size.y * 0.5
 	preset_toast.visible = true
 	preset_toast.modulate.a = 1.0
 
