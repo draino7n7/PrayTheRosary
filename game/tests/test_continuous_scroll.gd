@@ -355,6 +355,13 @@ func test_screen_keep_on_guard() -> void:
 		# In headless runner, verify call does not crash
 		assert_eq(DisplayServer.get_name(), "headless", "Test runner should be running headlessly")
 
+	# Verify Main's platform display settings application executes cleanly without error
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._apply_platform_display_settings()
+	assert_false(Main.should_use_android_fullscreen(OS.get_name(), DisplayServer.get_name()), "Headless test run should not request Android fullscreen")
+	main_node.free()
+
 
 func _assert_no_control_stops_mouse(node: Node, context: String) -> void:
 	if node is BaseButton:

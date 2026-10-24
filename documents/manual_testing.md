@@ -603,3 +603,18 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - All unit tests in `scripts/test_build_print_pdf.py` execute and pass with 0 failures (`OK`).
 
+## Test 14.0: Android Platform & Full-Screen Immersive Mode
+
+### TC-AND-01: Full-Screen Immersive Mode and System Bar Visibility Verification
+- **Step 1:** Export the Android package using `game/export_presets.cfg` (`screen/immersive_mode=true`) or install the debug/release APK/AAB on an Android device or emulator running Android 7.0+ (API 24+).
+- **Step 2:** Launch the application on the Android device.
+- **Step 3:** Observe the top and bottom screen edges during initial launch and active prayer navigation.
+- **Expected:**
+  - The application enters full-screen immersive mode upon launch.
+  - The Android system status bar (top edge, showing clock, battery, network, notifications) is completely hidden.
+  - The Android system navigation bar (bottom edge, showing back, home, app switcher buttons or gesture bar) is completely hidden.
+  - Page cards, sacred art, and prayer text utilize the full display viewport without distraction.
+  - Swiping from the top or bottom edge of the display temporarily reveals transient system bars per standard Android immersive behavior, which automatically and smoothly fade out when inactive.
+  - The display remains awake without dimming or screen sleep during prayer (`DisplayServer.screen_set_keep_on(true)`).
+
+
