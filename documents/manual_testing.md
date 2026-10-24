@@ -217,8 +217,8 @@ This document outlines the strict manual testing procedures required before any 
 ### TC-NAV-01: Floating Navigation Button & Drawer Toggling
 - **Step 1:** Launch the application and observe the top-right corner of the viewport.
 - **Expected:**
-  - A persistent, unobtrusive floating button ($52\times 52\text{px}$, pinned at offsets `left: -70, top: 18, right: -18, bottom: 70`) labeled `☰` is visible in the top-right corner.
-  - The hamburger menu icon (`☰`, `U+2630`) appears optically and geometrically centered within its 52×52 parchment circular-rectangular button across default and hover states with balanced margins on all sides.
+  - A prominent floating button ($104\times 104\text{px}$, pinned at offsets `left: -122.0, top: 18.0, right: -18.0, bottom: 122.0`) labeled `☰` is visible in the top-right corner.
+  - The hamburger menu icon (`☰`, `U+2630`) appears optically and geometrically centered (within $\le 1\text{px}$ on both axes) at 56pt font size within its 104×104 parchment circular-rectangular button across default, hover, and pressed states with calibrated 12.0px top content margin.
 - **Step 2:** Hover over and click or tap the floating button.
 - **Expected:**
   - Hovering over the button transitions its stylebox smoothly while preserving exact glyph centering.
@@ -335,25 +335,25 @@ This document outlines the strict manual testing procedures required before any 
 ### TC-TEXT-01: Dual-Sized 'AA' Reader Button UI & Dynamic Preset Feedback Toast
 - **Step 1:** Launch the application (`godot --path game`) and observe the top-left corner of the viewport.
 - **Expected:**
-  - A persistent, unobtrusive floating button ($52\times 52\text{px}$) is visible at offset $(18, 18)$ on CanvasLayer 10.
+  - A prominent floating button ($104\times 104\text{px}$) is visible at offsets `left: 18.0, top: 18.0, right: 122.0, bottom: 122.0` on CanvasLayer 10.
   - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, and subtle drop shadow.
-  - **Dual-Sized 'AA' Icon:** Rather than a uniform single "Aa" label, the button displays two side-by-side capital 'A's (`SmallALabel` at 16pt bold on the left, `LargeALabel` at 26pt bold on the right) centered in an `IconHBox` with 1px separation.
+  - **Dual-Sized 'AA' Icon:** Rather than a uniform single "Aa" label, the button displays two side-by-side capital 'A's (`SmallALabel` at 32pt bold on the left, `LargeALabel` at 52pt bold on the right) centered in an `IconHBox` with 2px separation.
   - **Color State Transitions:** The 'AA' labels render in Deep Charcoal (`#1E1815`) in the normal state, and shift to Sacred Crimson (`#6B1D21`) on mouse hover and button press, matching the button's gold-to-crimson border transitions.
 - **Step 2:** Click or tap the dual-sized `"AA"` button once.
 - **Expected:**
   - Text size preset switches from `Normal` to `Mobile`.
   - A top-centered toast banner (`PresetToast`) appears with text `"Text Size: Mobile"` dynamically rendered at **30pt** font size.
-  - The toast resizes dynamically with symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), maintaining exact horizontal centering ($x = 360\text{px}$ on 720px viewport) perfectly balanced between the top-left `"AA"` reader button and top-right navigation drawer menu button (`☰`) without rightward drift or text clipping, lingering for ~1.2s before fading out over 0.4s.
+  - The toast resizes dynamically with symmetric horizontal offsets (`offset_left = -min_size.x * 0.5`, `offset_right = min_size.x * 0.5`) relative to horizontal center anchors (`anchor_left = anchor_right = 0.5`), maintaining exact horizontal centering ($x = 360\text{px}$ on 720px viewport) and vertical midpoint alignment at $y = 70.0\text{px}$ (`offset_top = 70.0 - min_size.y * 0.5`, `offset_bottom = 70.0 + min_size.y * 0.5`, matching the vertical center of the $104\times104\text{px}$ corner buttons). Ample horizontal clearance ($112.5\text{px}$) is maintained to both corner buttons without overlap, lingering for ~1.2s before fading out over 0.4s.
 - **Step 3:** Click or tap the dual-sized `"AA"` button a second time.
 - **Expected:**
   - Text size preset switches from `Mobile` to `Extra Large`.
   - A top-centered toast banner appears with text `"Text Size: Extra Large"` dynamically rendered at **38pt** font size.
-  - The toast expands symmetrically around the horizontal center anchor ($x = 360\text{px}$) with symmetric offsets (`offset_left == -offset_right`), remaining dead-center between the top-left reader button and top-right navigation drawer menu button without clipping, and fades out after ~1.2s.
+  - The toast expands symmetrically around the horizontal center anchor ($x = 360\text{px}$) with symmetric offsets (`offset_left == -offset_right`), remaining vertically centered at $y = 70.0\text{px}$ with $46.0\text{px}$ clearance to both corner buttons without overlap, and fades out after ~1.2s.
 - **Step 4:** Click or tap the dual-sized `"AA"` button a third time.
 - **Expected:**
   - Text size preset wraps sequentially back to `Normal`.
   - A top-centered toast banner appears with text `"Text Size: Normal"` dynamically rendered at **22pt** font size.
-  - The toast scales down symmetrically with symmetric offsets (`offset_left == -offset_right`), remaining perfectly centered horizontally ($x = 360\text{px}$) between the top-left reader button and top-right navigation drawer menu button, and fades out after ~1.2s.
+  - The toast scales down symmetrically with symmetric offsets (`offset_left == -offset_right`), remaining centered at $x = 360\text{px}$ and $y = 70.0\text{px}$ with $137.5\text{px}$ clearance to both corner buttons, and fades out after ~1.2s.
 - **Step 5:** Open the navigation drawer (top-right `☰` button).
 - **Expected:**
   - While the navigation drawer is open, clicking or tapping on the `"AA"` button area does not cycle text size presets (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`).
@@ -546,8 +546,8 @@ This document outlines the strict manual testing procedures required before any 
   - Zero layout regressions, text clipping, or unexpected vertical overflow across all 50 pages.
 - **Step 7:** Observe the top-left floating reader button and cycle text presets via the dual-sized `'AA'` button.
 - **Expected:**
-  - The dual-sized `'AA'` icon (`SmallALabel` at 16pt, `LargeALabel` at 26pt) renders crisply with clean baseline alignment inside the 52×52px button.
-  - Preset feedback toasts dynamically resize and preserve horizontal centering (`22pt` for Normal, `30pt` for Mobile, `38pt` for Extra Large) without clipping or visual drift.
+  - The dual-sized `'AA'` icon (`SmallALabel` at 32pt, `LargeALabel` at 52pt) renders crisply with clean baseline alignment inside the 104×104px button.
+  - Preset feedback toasts dynamically resize and preserve horizontal centering ($x = 360\text{px}$) and vertical midpoint alignment ($y = 70.0\text{px}$) across all presets (`22pt` for Normal, `30pt` for Mobile, `38pt` for Extra Large) without clipping, visual drift, or corner button overlap.
 
 ## Test 13.0: Automated Print PDF Generation Pipeline (`assets/print/`)
 
