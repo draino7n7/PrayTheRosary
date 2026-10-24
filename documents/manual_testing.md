@@ -217,9 +217,11 @@ This document outlines the strict manual testing procedures required before any 
 ### TC-NAV-01: Floating Navigation Button & Drawer Toggling
 - **Step 1:** Launch the application and observe the top-right corner of the viewport.
 - **Expected:**
-  - A persistent, unobtrusive floating button labeled `☰` (48×48px) is visible in the top-right corner.
-- **Step 2:** Click or tap the floating button.
+  - A persistent, unobtrusive floating button ($52\times 52\text{px}$, pinned at offsets `left: -70, top: 18, right: -18, bottom: 70`) labeled `☰` is visible in the top-right corner.
+  - The hamburger menu icon (`☰`, `U+2630`) appears optically and geometrically centered within its 52×52 parchment circular-rectangular button across default and hover states with balanced margins on all sides.
+- **Step 2:** Hover over and click or tap the floating button.
 - **Expected:**
+  - Hovering over the button transitions its stylebox smoothly while preserving exact glyph centering.
   - The navigation drawer smoothly slides into view from the right edge.
   - A semi-transparent dimming scrim (`#00000080`) darkens the background content.
   - Background scrolling is disabled and floating reader button is disabled (`reader_button.mouse_filter = MOUSE_FILTER_IGNORE`, `ScrollContainer.mouse_filter = MOUSE_FILTER_IGNORE`).

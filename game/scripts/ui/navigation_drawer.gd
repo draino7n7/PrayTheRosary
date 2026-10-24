@@ -194,8 +194,10 @@ func _load_fonts() -> void:
 func _resolve_nodes() -> void:
 	if floating_button == null:
 		floating_button = get_node_or_null("FloatingButton") as Button
-	if floating_button != null and _font_bold != null:
-		floating_button.add_theme_font_override("font", _font_bold)
+	if floating_button != null:
+		if _font_bold != null:
+			floating_button.add_theme_font_override("font", _font_bold)
+		_calibrate_floating_button_margins()
 	if drawer_overlay == null:
 		drawer_overlay = get_node_or_null("DrawerOverlay") as Control
 	if scrim == null:
@@ -213,6 +215,18 @@ func _resolve_nodes() -> void:
 		drawer_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	if content_container == null:
 		content_container = get_node_or_null("DrawerOverlay/DrawerPanel/MarginContainer/MainVBox/DrawerScroll/ContentContainer") as VBoxContainer
+
+
+func _calibrate_floating_button_margins() -> void:
+	if floating_button == null:
+		return
+	for state: String in ["normal", "hover", "pressed", "focus"]:
+		var style: StyleBox = floating_button.get_theme_stylebox(state)
+		if style != null:
+			style.content_margin_left = 0.0
+			style.content_margin_top = 6.0
+			style.content_margin_right = 0.0
+			style.content_margin_bottom = 0.0
 
 
 func _connect_base_signals() -> void:

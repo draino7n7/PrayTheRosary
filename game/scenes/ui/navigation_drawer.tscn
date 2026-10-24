@@ -4,6 +4,10 @@
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_font_bold"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_normal"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 bg_color = Color(0.980392, 0.964706, 0.933333, 0.92)
 border_width_left = 2
 border_width_top = 2
@@ -19,6 +23,10 @@ shadow_size = 4
 shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_hover"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 bg_color = Color(1, 0.992157, 0.972549, 1)
 border_width_left = 2
 border_width_top = 2
@@ -34,6 +42,10 @@ shadow_size = 5
 shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_pressed"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 bg_color = Color(0.941176, 0.917647, 0.878431, 1)
 border_width_left = 2
 border_width_top = 2
@@ -46,6 +58,10 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drawer_panel"]
 bg_color = Color(0.980392, 0.964706, 0.933333, 1)
