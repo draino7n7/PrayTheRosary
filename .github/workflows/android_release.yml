@@ -179,14 +179,14 @@ jobs:
             ./game/*-native-debug-symbols.zip
             ./game/android/build/outputs/mapping/release/mapping.txt
 
-      - name: Deploy to Google Play Internal Testing
+      - name: Deploy to Google Play Production
         if: startsWith(github.ref, 'refs/tags/v') && env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != ''
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: games.audrain.praytherosary
           releaseFiles: ./game/*.aab
-          track: internal
+          track: production
           status: completed
 
       - name: Upload Release Assets
