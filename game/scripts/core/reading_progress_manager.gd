@@ -55,9 +55,7 @@ func load_progress() -> int:
 		push_warning("ReadingProgressManager: Failed to load config from %s, defaulting to page 1" % config_path)
 		return MIN_PAGE
 
-	var val: Variant = config.get_value(SECTION_NAME, KEY_PAGE_NUMBER, null)
-	if val == null:
-		return MIN_PAGE
+	var val: Variant = config.get_value(SECTION_NAME, KEY_PAGE_NUMBER, MIN_PAGE)
 	if val is int or val is float:
 		var page: int = int(val)
 		if page < MIN_PAGE or page > MAX_PAGE:

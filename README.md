@@ -54,6 +54,7 @@ The application connects all 50 sequential pages into a unified, distraction-fre
   - **Expandable Mystery Set Accordions:** Dual-action rows for all 4 Mystery sets with left disclosure arrows (`▸` / `▾`) expanding the 5 individual mysteries and title buttons navigating directly to each set's opening page.
   - **Dynamic Liturgical Badge:** Highlights today's canonically recommended mystery set with an antique gold `[★ Today]` badge.
   - **Direct Landmark Navigation:** Instant jump buttons for Cover, History, How to Pray, Opening Prayers, Closing Prayers, Sacred Art Credits, and Back Cover.
+  - **Preset-Adaptive Width & Scaled Typography:** Dynamically adapts drawer width (`400px` in Normal, `560px` in Mobile, `680px` in Extra Large), typography, and button touch targets to match the active reading text size preset, with clean word-smart wrapping across all buttons.
 - **In-Stream Quick-Jump Separator Bars (`game/scenes/ui/in_stream_jump_bar.tscn`):**
   - **Post-Opening Prayers (After Page 5):** Displays 4 mystery buttons with an antique gold border and *"★ Recommended Today"* badge on today's liturgically recommended mystery set.
   - **Post-Mystery Set Jump Bars (After Pages 15, 25, 35, 45):** Displays a mystery set completion banner and a prominent *"Proceed to the Closing Prayers →"* action button jumping directly to Page 46.

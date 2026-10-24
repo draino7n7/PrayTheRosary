@@ -432,6 +432,7 @@ func _setup_navigation_drawer() -> void:
 	if navigation_drawer != null:
 		navigation_drawer.set_data_loader(data_loader)
 		navigation_drawer.set_progress_manager(progress_manager)
+		navigation_drawer.set_text_size_preset(_current_text_preset)
 		if not navigation_drawer.page_requested.is_connected(_on_navigation_drawer_page_requested):
 			navigation_drawer.page_requested.connect(_on_navigation_drawer_page_requested)
 		if not navigation_drawer.drawer_opened.is_connected(_on_drawer_opened):
@@ -815,6 +816,10 @@ func set_text_size_preset(preset: Variant) -> void:
 	for p_num: int in _page_cards.keys():
 		var card: PageCard = _page_cards[p_num]
 		card.set_text_size_preset(_current_text_preset)
+
+	# Update navigation drawer
+	if navigation_drawer != null:
+		navigation_drawer.set_text_size_preset(_current_text_preset)
 
 	# 3. Persist setting
 	if progress_manager != null:
