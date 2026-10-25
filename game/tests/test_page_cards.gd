@@ -196,8 +196,8 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	var sec_title2: Label = fmc2.sections_container.get_child(0).get_node("SectionTitle") as Label
 	var sec_body2: Label = fmc2.sections_container.get_child(0).get_node("SectionBody") as Label
 	var sec3_body2: Label = fmc2.sections_container.get_child(2).get_node("SectionBody") as Label
-	assert_eq(sec_title2.get_theme_font_size("font_size"), 25, "Page 2 section title font size must be 25pt")
-	assert_eq(sec_body2.get_theme_font_size("font_size"), 22, "Page 2 section body font size must be 22pt")
+	assert_eq(sec_title2.get_theme_font_size("font_size"), 23, "Page 2 section title font size must be 23pt (calibrated for > 1,650 chars)")
+	assert_eq(sec_body2.get_theme_font_size("font_size"), 20, "Page 2 section body font size must be 20pt (calibrated for > 1,650 chars)")
 	assert_true(sec3_body2.text.contains("instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."), "Page 2 Section 3 must display updated 1571/1573 feast note")
 	_assert_no_visible_page_numbers(card2, 2)
 	card2.free()
