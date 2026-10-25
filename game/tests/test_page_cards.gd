@@ -345,7 +345,7 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	var p46_s1_vlead: Label = p46_s1.get_node("VersicleLeaderText") as Label
 	var p46_s1_vresp: Label = p46_s1.get_node("VersicleResponseText") as Label
 	assert_not_null(p46_s1_title, "Page 46 Step 1 PrayerTitle must exist")
-	assert_eq(p46_s1_title.text, "Hail, Holy Queen", "Page 46 Step 1 PrayerTitle must be 'Hail, Holy Queen'")
+	assert_eq(p46_s1_title.text, "The Hail, Holy Queen", "Page 46 Step 1 PrayerTitle must be 'The Hail, Holy Queen'")
 	assert_false(p46_s1_prayer.visible, "Page 46 Step 1 (Hail Holy Queen) PrayerText must be hidden (unison prayer)")
 	assert_true(p46_s1_resp.visible, "Page 46 Step 1 (Hail Holy Queen) ResponseText must be visible")
 	assert_eq(p46_s1_resp.get_theme_font("font"), font_bold, "Page 46 Step 1 ResponseText must use bold font")
@@ -364,7 +364,7 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 	var p46_s2_prayer: Label = p46_s2.get_node("PrayerText") as Label
 	var p46_s2_resp: Label = p46_s2.get_node("ResponseText") as Label
 	assert_not_null(p46_s2_title, "Page 46 Step 2 PrayerTitle must exist")
-	assert_eq(p46_s2_title.text, "Concluding Rosary Prayer", "Page 46 Step 2 title must be 'Concluding Rosary Prayer'")
+	assert_eq(p46_s2_title.text, "The Concluding Rosary Prayer", "Page 46 Step 2 title must be 'The Concluding Rosary Prayer'")
 	assert_true(p46_s2_prayer.visible, "Page 46 Step 2 (Concluding Rosary Prayer) PrayerText must be visible")
 	assert_eq(p46_s2_prayer.text, "Let us pray.")
 	assert_eq(p46_s2_prayer.get_theme_font("font"), font_reg, "Page 46 Step 2 PrayerText must use regular font")
@@ -587,7 +587,7 @@ func test_pages_48_and_49_credits_cards() -> void:
 	assert_true(cpc48.colophon_container != null and cpc48.colophon_container.visible, "Page 48 ColophonContainer must be visible")
 	assert_not_null(cpc48.creator_notice_label, "Page 48 creator_notice_label must exist")
 	assert_true(cpc48.creator_notice_label.visible, "Page 48 creator_notice_label must be visible")
-	assert_eq(cpc48.creator_notice_label.text, "This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.", "Page 48 creator notice text must match")
+	assert_eq(cpc48.creator_notice_label.text, "This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.", "Page 48 creator notice text must match")
 	assert_not_null(cpc48.version_label, "Page 48 version_label must exist")
 	assert_true(cpc48.version_label.visible, "Page 48 version_label must be visible")
 	var expected_version_str: String = "Version %s" % str(ProjectSettings.get_setting("application/config/version", ""))
@@ -667,7 +667,7 @@ func test_page_48_colophon_and_presets() -> void:
 	assert_eq(cpc.custom_minimum_size, Vector2(720.0, 1080.0), "Page 48 sub-card normal preset dimensions must be 720x1080")
 	assert_true(cpc.colophon_container.visible, "ColophonContainer must be visible on Page 48")
 	assert_true(cpc.creator_notice_label.visible, "CreatorNoticeLabel must be visible on Page 48")
-	assert_eq(cpc.creator_notice_label.text, "This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.")
+	assert_eq(cpc.creator_notice_label.text, "This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.")
 	assert_true(cpc.version_label.visible, "VersionNoticeLabel must be visible on Page 48")
 	var expected_ver_str: String = "Version %s" % str(ProjectSettings.get_setting("application/config/version", ""))
 	assert_eq(cpc.version_label.text, expected_ver_str)
@@ -841,7 +841,7 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 			body_sz = 23
 		var rubric_sz: int = 17 if body_sz <= 21 else 18
 		total_h += font_bold.get_height(17) + 2.0
-		total_h += font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
+		total_h += font_reg.get_multiline_string_size(scrip_str, HORIZONTAL_ALIGNMENT_LEFT, width - 20.0, body_sz).y + 8.0 + 10.0
 		total_h += font_reg.get_multiline_string_size(med_str, HORIZONTAL_ALIGNMENT_LEFT, width, body_sz).y + 10.0
 		var dec: Array = p_data.get("decade_prayers", [])
 		for p_item_val: Variant in dec:

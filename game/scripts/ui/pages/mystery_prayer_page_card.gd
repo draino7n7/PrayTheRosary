@@ -123,7 +123,7 @@ func _apply_page_data() -> void:
 		scripture_citation_label.add_theme_font_size_override("font_size", citation_font_size)
 	if scripture_text_label != null:
 		scripture_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		scripture_text_label.text = "“%s”" % scrip_str
+		scripture_text_label.text = scrip_str
 		scripture_text_label.add_theme_font_size_override("font_size", body_font_size)
 		scripture_text_label.add_theme_constant_override("line_spacing", 2)
 
@@ -243,8 +243,8 @@ func _apply_page_data() -> void:
 	if font_bold != null:
 		scripture_h += font_bold.get_multiline_string_size(cite_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, citation_font_size).y + 2.0
 	if font_reg != null:
-		var scrip_lines: int = int(ceilf(font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
-		scripture_h += font_reg.get_multiline_string_size("“%s”" % scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + (maxi(0, scrip_lines - 1) * 2)
+		var scrip_lines: int = int(ceilf(font_reg.get_multiline_string_size(scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+		scripture_h += font_reg.get_multiline_string_size(scrip_str, HORIZONTAL_ALIGNMENT_LEFT, 636.0, body_font_size).y + (maxi(0, scrip_lines - 1) * 2)
 
 	var meditation_h: float = 0.0
 	if font_reg != null:

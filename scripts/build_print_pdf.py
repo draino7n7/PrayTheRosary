@@ -508,7 +508,7 @@ def render_mystery_prayer_page(
     heading = mys.get("title", "")
     fruit_str = f"Fruit of the Mystery: {mys.get('fruit', '')}"
     cite_str = mys.get("scripture_reference", "")
-    scrip_str = f"“{mys.get('scripture_text', '')}”"
+    scrip_str = mys.get("scripture_text", "")
     med_str = mys.get("meditation", "")
 
     scrip_wrap_w = cw - 30.0

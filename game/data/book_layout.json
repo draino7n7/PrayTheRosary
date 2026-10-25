@@ -193,7 +193,7 @@
 				"sections": [
 					{
 						"title": "Monastic Roots & The Marian Psalter",
-						"body": "The roots of the Rosary reach back to the early centuries of the Church, when monks prayed all 150 Psalms of David each week. For the faithful and lay brothers who could not read Latin manuscripts, a devotion arose of reciting 150 Pater Nosters (Our Fathers), and later 150 Ave Marias (Hail Marys), counted on cords of knotted beads known as 'Paternosters.' Known as the 'Psalter of the Blessed Virgin Mary,' this practice allowed every believer to unite their daily work and prayer to the liturgical rhythm of the Church."
+						"body": "The roots of the Rosary reach back to the early centuries of the Church, when monks prayed all 150 Psalms of David each week. For the faithful and lay brothers who could not read Latin manuscripts, a devotion arose of reciting 150 Pater Nosters (Our Fathers), and later 150 Ave Marias (Hail Marys), counted on cords of knotted beads known as 'Paternosters.' Known as the 'Psalter of the Blessed Virgin Mary,' this practice allowed all believers to unite their daily work and prayer to the liturgical rhythm of the Church."
 					},
 					{
 						"title": "St. Dominic & Preaching the Mysteries",
@@ -249,13 +249,13 @@
 						"step_number": 2,
 						"bead_label": "On the Crucifix",
 						"prayer_id": "apostles_creed",
-						"rubric": "Still holding the Crucifix, profess the Apostles' Creed:"
+						"rubric": "Profess the Apostles' Creed:"
 					},
 					{
 						"step_number": 3,
 						"bead_label": "First Large Bead",
 						"prayer_id": "our_father",
-						"rubric": "For the intentions of the Holy Father and the Church:"
+						"rubric": "Pray the Our Father for the intentions of the Holy Father and the Church:"
 					},
 					{
 						"step_number": 4,
@@ -520,7 +520,7 @@
 						"step_number": 2,
 						"bead_label": "Concluding Collect",
 						"prayer_id": "rosary_concluding_prayer",
-						"rubric": "Conclude with the Rosary Prayer:"
+						"rubric": "Conclude with the Concluding Rosary Prayer:"
 					},
 					{
 						"step_number": 3,
@@ -575,7 +575,7 @@
 					"luminous_5_eucharist"
 				],
 				"colophon": {
-					"creator_notice": "This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.",
+					"creator_notice": "This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.",
 					"show_version": true
 				}
 			},
