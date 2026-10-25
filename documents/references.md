@@ -112,13 +112,15 @@ flowchart TD
 - **Content & Guidelines:**
   1. **How This Book Is Organized**:
      - Left Page (Word & Prayer): Mystery title, spiritual fruit, Catholic Public Domain Version (CPDV) Scripture passage, meditation, and complete decade prayers.
-     - Right Page (Visual Contemplation): Masterpiece artwork and top header.
+     - Right Page (Visual Contemplation): Mystery header at the top and a related Renaissance or Baroque masterpiece to rest eyes and heart upon as you pray.
      - Six Index Tabs: `O` (Opening Prayers), `J` (Joyful), `L` (Luminous), `S` (Sorrowful), `G` (Glorious), `C` (Closing Prayers).
      - Leader & Group Response: Lines in regular type spoken by the leader; lines in bold spoken by the group together.
      - [Reference 1] Catholic Public Domain Version (CPDV) of the Holy Bible: [SacredBible.org](https://www.sacredbible.org/), [SacredBible.org Catholic Edition](https://www.sacredbible.org/catholic/index.htm), and [GitHub Repository draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org](https://www.drbo.org/)
      - [Reference 2] USCCB "How to Pray the Rosary": [USCCB — How to Pray the Rosary](https://www.usccb.org/how-to-pray-the-rosary)
   2. **Step-by-Step Guide to Praying the Rosary**:
-     - Daily 5 Decades (praying the mystery set appointed for the day) vs. Complete 20-Decade Rosary (praying Joyful, Luminous, Sorrowful, and Glorious back-to-back in chronological order).
+     - Step 1: Opening Prayers (Tab O).
+     - Step 2: The Decades (Tabs J, L, S, G) — For each decade, read the Scripture and meditation, and pray one Our Father, ten Hail Marys, one Glory Be, and the Fatima Prayer, using the artwork to help you contemplate the Mystery. Daily 5 Decades (praying the mystery set appointed for the day) vs. Complete 20-Decade Rosary (praying Joyful, Luminous, Sorrowful, and Glorious back-to-back in chronological order).
+     - Step 3: Closing Prayers (Tab C).
      - [Reference 1] USCCB "How to Pray the Rosary": [USCCB — How to Pray the Rosary](https://www.usccb.org/how-to-pray-the-rosary)
      - [Reference 2] Vatican Rosary Prayers Guide: [Vatican — Litanie Lauretane & Rosary Prayers](https://www.vatican.va/special/rosary/documents/litanie-lauretane_en.html)
      - [Reference 3] Pope St. John Paul II, *Rosarium Virginis Mariae* (§38): [Vatican Archives — Rosarium Virginis Mariae §38](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)

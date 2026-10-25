@@ -514,6 +514,10 @@ func test_simplified_prayer_titles_and_front_matter_bible_version_note() -> void
 		sec0_body.contains("• Left Page (Word & Prayer): Displays the Mystery title, its spiritual fruit, a passage from Sacred Scripture (taken from the Catholic Public Domain Version of the Bible), a brief meditation, and the complete prayers for that decade."),
 		"Page 3 Left Page (Word & Prayer) bullet must include '(taken from the Catholic Public Domain Version of the Bible)'"
 	)
+	assert_true(
+		sec0_body.contains("• Right Page (Visual Contemplation): Displays the Mystery header at the top and a related Renaissance or Baroque masterpiece to rest your eyes and heart upon as you pray."),
+		"Page 3 Right Page (Visual Contemplation) bullet must match refined visual contemplation wording"
+	)
 
 
 func test_page_3_step_by_step_guide_daily_vs_complete_rosary() -> void:
@@ -531,12 +535,16 @@ func test_page_3_step_by_step_guide_daily_vs_complete_rosary() -> void:
 		"Page 3 Section 2 title must be 'Step-by-Step Guide to Praying the Rosary'"
 	)
 
-	var expected_body: String = "1. Opening Prayers (Tab O): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Decades (Tabs J, L, S, G): For each decade, read the Scripture and meditation, pray one Our Father, ten Hail Marys while contemplating the artwork, one Glory Be, and the Fatima Prayer. Pray either the five decades of the day's Mystery set, or all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary.\n3. Closing Prayers (Tab C): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
+	var expected_body: String = "1. Opening Prayers (Tab O): Make the Sign of the Cross, pray the Apostles' Creed on the Crucifix, the Our Father on the first large bead, three Hail Marys (for Faith, Hope, and Charity) on the three small beads, and the Glory Be.\n2. The Decades (Tabs J, L, S, G): For each decade, read the Scripture and meditation, and pray one Our Father, ten Hail Marys, one Glory Be, and the Fatima Prayer, using the artwork to help you contemplate the Mystery. Pray either the five decades of the day's Mystery set, or all four Mystery sets (twenty decades) back-to-back in chronological order (Joyful, Luminous, Sorrowful, Glorious) for a complete Rosary.\n3. Closing Prayers (Tab C): Flip Tab C to the left and conclude with the Hail, Holy Queen (Salve Regina), the Concluding Rosary Prayer, and the Sign of the Cross."
 	var sec1_body: String = str(sec1.get("body", ""))
 	assert_eq(
 		sec1_body,
 		expected_body,
 		"Page 3 'Step-by-Step Guide to Praying the Rosary' body must match exact updated wording"
+	)
+	assert_true(
+		sec1_body.contains(", and pray one Our Father, ten Hail Marys, one Glory Be, and the Fatima Prayer, using the artwork to help you contemplate the Mystery."),
+		"Page 3 Step-by-Step Guide decade prayer sequence must include Fatima Prayer and artwork contemplation clause"
 	)
 	assert_true(
 		sec1_body.contains("five decades of the day's Mystery set"),
