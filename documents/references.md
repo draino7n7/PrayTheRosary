@@ -1064,7 +1064,7 @@ flowchart TD
   12. Spread 12 (Page 25): Peter Paul Rubens, *The Last Supper* (Pinacoteca di Brera Milan `97`)
 - **Colophon Creator Attribution & Version Notices:**
   - *Creator Notice*: This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.
-  - *Application Version*: Dynamic release version indicator (e.g. *Version 0.2.2*) synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`.
+  - *Application Version*: Dynamic release version indicator (e.g. *Version 1.0.0*) synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`.
 - **Primary Source References:**
   - [Reference 1] Repository Master Attributions Catalog: `assets/2D/gimp/attributions.json`
   - [Reference 2] Complete Institutional Catalogs as detailed on Pages 1, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, and 25.
