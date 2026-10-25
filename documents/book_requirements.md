@@ -31,12 +31,12 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 | Tab Order | Tab Letter | Section Opened | Sheet # (Page Sides) | Resulting Open Spread (Left Page \| Right Page) |
 | :---: | :---: | :--- | :---: | :--- |
-| **1 (Top)** | **`O`** | **Opening Prayers** | Sheet 2 *(Sides 3–4)* | **Spread 2:** *Opening Prayers Text* (Left) \| El Greco, *The Holy Trinity* (Right) |
-| **2** | **`J`** | **Joyful Mysteries** | Sheet 3 *(Sides 5–6)* | **Spread 3:** *1st Joyful: The Annunciation* (Left) \| Murillo, *The Annunciation* (Right) |
-| **3** | **`L`** | **Luminous Mysteries** | Sheet 8 *(Sides 15–16)* | **Spread 8:** *1st Luminous: The Baptism* (Left) \| Guido Reni, *The Baptism of Christ* (Right) |
-| **4** | **`S`** | **Sorrowful Mysteries** | Sheet 13 *(Sides 25–26)* | **Spread 13:** *1st Sorrowful: Agony in the Garden* (Left) \| Caracciolo, *Mount of Olives* (Right) |
-| **5** | **`G`** | **Glorious Mysteries** | Sheet 18 *(Sides 35–36)* | **Spread 18:** *1st Glorious: The Resurrection* (Left) \| Murillo, *The Resurrection* (Right) |
-| **6 (Bottom)** | **`C`** | **Closing Prayers** | Sheet 23 *(Sides 45–46)* | **Spread 23:** *Closing Prayers Text* (Left) \| Murillo, *Immaculate Conception* (Right) |
+| **1 (Top)** | **`O`** | **Opening Prayers** | Sheet 2 *(Sides 3–4)* | **Spread 2:** *The Opening Prayers* (Left) \| El Greco, *The Holy Trinity (La Trinidad)* (Right) |
+| **2** | **`J`** | **Joyful Mysteries** | Sheet 3 *(Sides 5–6)* | **Spread 3:** *1st Joyful: The Annunciation* (Left) \| Murillo, *The Annunciation (La Anunciación)* (Right) |
+| **3** | **`L`** | **Luminous Mysteries** | Sheet 8 *(Sides 15–16)* | **Spread 8:** *1st Luminous: The Baptism of Jesus in the Jordan* (Left) \| Guido Reni, *The Baptism of Christ* (Right) |
+| **4** | **`S`** | **Sorrowful Mysteries** | Sheet 13 *(Sides 25–26)* | **Spread 13:** *1st Sorrowful: The Agony in the Garden* (Left) \| Caracciolo, *Christ on the Mount of Olives (Christ's Fear of Death)* (Right) |
+| **5** | **`G`** | **Glorious Mysteries** | Sheet 18 *(Sides 35–36)* | **Spread 18:** *1st Glorious: The Resurrection of Our Lord* (Left) \| Murillo, *The Resurrection of the Lord (La Resurrección del Señor)* (Right) |
+| **6 (Bottom)** | **`C`** | **Closing Prayers** | Sheet 23 *(Sides 45–46)* | **Spread 23:** *The Closing Prayers* (Left) \| Murillo, *The Immaculate Conception of Los Venerables (Inmaculada de Soult)* (Right) |
 
 ---
 
@@ -48,7 +48,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 - **Headings & Mystery Titles:** Baroque Marian Crimson (`#6B1D21`).
 - **Borders, Dividers & Artwork Frames:** Antique Gold (`#B89130`).
 - **Front & Back Covers:**
-  - **Front Cover:** Full-bleed reproduction of Bartolomé Esteban Murillo's *The Virgin of the Rosary* with the title **"Pray the Rosary"** and subtitle set in warm gold/ivory serif typography over the upper crimson drapery.
+  - **Front Cover:** Full-bleed reproduction of Bartolomé Esteban Murillo's *The Madonna of the Rosary (The Virgin of the Rosary)* (Dulwich Picture Gallery, London, `DPG281`, c. 1675–1680, 197.8 cm × 128 cm) with the title **"Pray the Rosary"** and subtitle set in warm gold/ivory serif typography over the upper crimson drapery.
   - **Back Cover:** Deep Baroque Crimson (`#4A1215` / `#2A090B`) background with warm gold (`#D4AF37`) borders and ivory (`#F7F2E7`) typography featuring Pope St. John Paul II's epigraph from *Rosarium Virginis Mariae*, the book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel quote from *The Secret of the Rosary* (25th Rose).
 
 ### 3.2 Typography
@@ -77,7 +77,7 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
      - **Dynamic Edition / Application Version:** *"Version <X.Y.Z>"* (dynamically synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`, e.g., *"Version 0.1.3"*).
    - **Page Side 49 (Part II & Scripture/Artwork Colophon):** Lists 11 masterwork attributions (Sorrowful Mysteries 1–5, Glorious Mysteries 1–5, Closing Prayers), followed below a thin antique-gold divider by:
      - **Scripture Colophon Notice:** *"Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain."* (referencing [SacredBible.org](https://www.sacredbible.org/) and [draino7n7/cpdv](https://github.com/draino7n7/cpdv)).
-     - **Artwork Colophon Notice:** Confirms that all twenty-three paintings are public-domain masterworks courtesy of their respective holding museums and collections.
+     - **Artwork Colophon Notice:** Confirms that all twenty-three paintings are public-domain masterworks courtesy of the Dulwich Picture Gallery (London), the Museo Nacional del Prado (Madrid), the Kunsthistorisches Museum (Vienna), the National Gallery (London), the National Gallery of Art (Washington, D.C.), the Gallerie dell'Accademia (Venice), the Pinacoteca di Brera (Milan), the State Hermitage Museum (St. Petersburg), the Museum of Fine Arts (Boston), the Nelson-Atkins Museum of Art (Kansas City), the Princeton University Art Museum (Princeton), the Museum of National History at Frederiksborg Castle (Hillerød), the Real Academia de Bellas Artes de San Fernando (Madrid), St. Paul's Church (Antwerp), and the Church of Our Lady (Bruges).
 
 ---
 
@@ -85,6 +85,34 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 
 - **Immutable Original Downloads:** All 23 high-resolution archival master files are stored in `assets/2D/gimp/original_downloads/` and cataloged in `assets/2D/gimp/attributions.json` in exact sequential order of appearance in the book (with `"closing_prayers"` ordered last after `"glorious_5_coronation"`), maintaining complete museum `inventory_number`, `original_dimensions`, `creation_date`, `current_location`, and non-numbered placement `section_label` records synchronized with `game/data/mysteries.json`, `game/data/book_layout.json`, and `RosaryDataLoader`.
 - **Print Prep Guidelines:** Any print-ready CMYK/300-DPI exports or GIMP `.xcf` working files must be saved in `assets/2D/gimp/` (outside `original_downloads/`), leaving the 23 files in `assets/2D/gimp/original_downloads/` untouched.
+
+### 4.1 Master Artwork Attribution Catalog (23 Works in Book Sequence)
+
+| Spread / Page | Section Placement Label | Artwork Title | Artist (Dates) | Creation Date | Original Dimensions | Holding Museum / Location | Inventory Number |
+| :---: | :--- | :--- | :--- | :---: | :---: | :--- | :---: |
+| **Page 1** | Front Cover | *The Madonna of the Rosary (The Virgin of the Rosary)* | Bartolomé Esteban Murillo (1617–1682) | c. 1675–1680 | 197.8 cm × 128 cm | Dulwich Picture Gallery, London, UK | `DPG281` |
+| **Spread 2 (P. 5)** | Opening Prayers | *The Holy Trinity (La Trinidad)* | El Greco (1541–1614) | 1577–1579 | 300 cm × 179 cm | Museo del Prado, Madrid, Spain | `P00824` |
+| **Spread 3 (P. 7)** | 1st Joyful Mystery | *The Annunciation (La Anunciación)* | Bartolomé Esteban Murillo (1617–1682) | c. 1660–1665 | 125 cm × 103 cm | Museo del Prado, Madrid, Spain | `P00970` |
+| **Spread 4 (P. 9)** | 2nd Joyful Mystery | *The Visitation* | Philippe de Champaigne (1602–1674) | 1643–1648 | 114.5 cm × 88.5 cm | Princeton University Art Museum, Princeton, NJ | `y1994-17` |
+| **Spread 5 (P. 11)** | 3rd Joyful Mystery | *The Adoration of the Shepherds* | Guido Reni (1575–1642) | c. 1640 | 480 cm × 321 cm | National Gallery, London, UK | `NG6270` |
+| **Spread 6 (P. 13)** | 4th Joyful Mystery | *Presentation of Jesus in the Temple* | Vittore Carpaccio (c. 1465–1525/1526) | 1510 | 421 cm × 236 cm | Gallerie dell'Accademia, Venice, Italy | `Cat. 44` |
+| **Spread 7 (P. 15)** | 5th Joyful Mystery | *Christ among the Doctors* | Bernard van Orley (c. 1488–1541) | c. 1513 | 54.4 cm × 33.3 cm | National Gallery of Art, Washington, D.C. | `1952.5.47.a` |
+| **Spread 8 (P. 17)** | 1st Luminous Mystery | *The Baptism of Christ* | Guido Reni (1575–1642) | c. 1622–1623 | 263.5 cm × 186.5 cm | Kunsthistorisches Museum, Vienna, Austria | `GG 222` |
+| **Spread 9 (P. 19)** | 2nd Luminous Mystery | *The Marriage Feast at Cana* | Sebastiano Ricci (1659–1734) | c. 1712–1715 | 167.0 cm × 137.2 cm | Nelson-Atkins Museum of Art, Kansas City, MO | `59-2` |
+| **Spread 10 (P. 21)** | 3rd Luminous Mystery | *The Sermon on the Mount* | Carl Bloch (1834–1890) | 1877 | 104 cm × 92 cm | Frederiksborg Castle, Hillerød, Denmark | `King's Oratory` |
+| **Spread 11 (P. 23)** | 4th Luminous Mystery | *The Transfiguration of Christ* | Gerard David (c. 1460–1523) | c. 1520 | 174 cm × 120 cm | Church of Our Lady, Bruges, Belgium | `OLV.0003.I` |
+| **Spread 12 (P. 25)** | 5th Luminous Mystery | *The Last Supper* | Peter Paul Rubens (1577–1640) | 1630–1631 | 304 cm × 250 cm | Pinacoteca di Brera, Milan, Italy | `97` |
+| **Spread 13 (P. 27)** | 1st Sorrowful Mystery | *Christ on the Mount of Olives* | Battistello Caracciolo (1578–1635) | c. 1615–1617 | 148 cm × 124 cm | Kunsthistorisches Museum, Vienna, Austria | `GG F 17` |
+| **Spread 14 (P. 29)** | 2nd Sorrowful Mystery | *The Flagellation of Christ* | Peter Paul Rubens (1577–1640) | c. 1617 | 219 cm × 161 cm | St. Paul's Church, Antwerp, Belgium | `70926` |
+| **Spread 15 (P. 31)** | 3rd Sorrowful Mystery | *The Crowning with Thorns* | Sir Anthony van Dyck (1599–1641) | c. 1618–1620 | 225 cm × 197 cm | Museo del Prado, Madrid, Spain | `P01474` |
+| **Spread 16 (P. 33)** | 4th Sorrowful Mystery | *Christ Falling on Way to Calvary* | Raphael (1483–1520) | c. 1515–1516 | 318 cm × 229 cm | Museo del Prado, Madrid, Spain | `P00298` |
+| **Spread 17 (P. 35)** | 5th Sorrowful Mystery | *Christ on the Cross* | Bartolomé Esteban Murillo (1617–1682) | c. 1677 | 71 cm × 54 cm | Museo del Prado, Madrid, Spain | `P00967` |
+| **Spread 18 (P. 37)** | 1st Glorious Mystery | *The Resurrection of the Lord* | Bartolomé Esteban Murillo (1617–1682) | c. 1650–1660 | 243 cm × 164 cm | Real Academia de Bellas Artes, Madrid, Spain | `0641` |
+| **Spread 19 (P. 39)** | 2nd Glorious Mystery | *The Ascension* | John Singleton Copley (1738–1815) | 1775 | 81.3 cm × 73.0 cm | Museum of Fine Arts, Boston, MA | `25.95` |
+| **Spread 20 (P. 41)** | 3rd Glorious Mystery | *Pentecost (Pentecostés)* | Juan Bautista Maíno (1581–1649) | 1612–1614 | 285 cm × 163 cm | Museo del Prado, Madrid, Spain | `P03018` |
+| **Spread 21 (P. 43)** | 4th Glorious Mystery | *The Assumption of the Virgin* | Bartolomé Esteban Murillo (1617–1682) | c. 1680 | 195 cm × 145 cm | State Hermitage Museum, St. Petersburg, Russia | `ГЭ-387` |
+| **Spread 22 (P. 45)** | 5th Glorious Mystery | *The Coronation of the Virgin* | Diego Velázquez (1599–1660) | c. 1635–1636 | 178.5 cm × 134.5 cm | Museo del Prado, Madrid, Spain | `P01168` |
+| **Spread 23 (P. 47)** | Closing Prayers | *Immaculate Conception of Los Venerables* | Bartolomé Esteban Murillo (1617–1682) | c. 1678 | 274 cm × 190 cm | Museo del Prado, Madrid, Spain | `P02809` |
 
 ---
 
