@@ -483,6 +483,18 @@ func test_historical_feast_note_and_marian_counsel_quote() -> void:
 		"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood.",
 		"Back cover Marian counsel quote must match St. Louis Marie de Montfort's full verbatim sentence"
 	)
+	var expected_synopsis: String = "Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers, Sacred Scripture passages, meditations, and spiritual fruits of all twenty Mysteries on the left-hand pages with breathtaking Renaissance and Baroque masterworks on the right-hand pages. Whether used for quiet personal contemplation, family prayer, or learning the Rosary for the first time, this volume invites you to gaze upon the face of Christ with the heart of His Blessed Mother."
+	assert_eq(
+		str(back.get("synopsis", "")),
+		expected_synopsis,
+		"Back cover synopsis must match updated wording"
+	)
+	var test_repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var test_ref_content: String = FileAccess.get_file_as_string(test_repo_root.path_join("documents/references.md"))
+	assert_true(
+		test_ref_content.contains(expected_synopsis),
+		"documents/references.md Page 50 section must match updated synopsis text"
+	)
 
 
 func test_simplified_prayer_titles_and_front_matter_bible_version_note() -> void:

@@ -1104,7 +1104,7 @@ flowchart TD
   - *Attribution*: Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* §1 (Oct 16, 2002)
   - [Reference 1] Pope St. John Paul II, *Rosarium Virginis Mariae* (§1): [Vatican Archives — Rosarium Virginis Mariae §1](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
 - **Synopsis:**
-  - *Summary*: Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers, Sacred Scripture passages, and spiritual fruits of all twenty Mysteries on the left-hand page with twenty-three breathtaking Renaissance and Baroque masterworks on the right-hand page. Whether used for quiet personal contemplation, family prayer, or learning the Rosary for the first time, this volume invites you to gaze upon the face of Christ with the heart of His Blessed Mother.
+  - *Summary*: Designed so that you never need to turn a page mid-decade, Pray the Rosary pairs the complete prayers, Sacred Scripture passages, meditations, and spiritual fruits of all twenty Mysteries on the left-hand pages with breathtaking Renaissance and Baroque masterworks on the right-hand pages. Whether used for quiet personal contemplation, family prayer, or learning the Rosary for the first time, this volume invites you to gaze upon the face of Christ with the heart of His Blessed Mother.
   - [Reference 1] Pray The Rosary Project Architectural Specification: `documents/requirements.md`
 - **Marian Counsel:**
   - *Quote*: *"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood."*
