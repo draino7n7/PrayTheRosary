@@ -118,7 +118,8 @@ class TestBuildPrintPdf(unittest.TestCase):
             self.assertIn("Christocentric prayer", p50_text)
             self.assertIn("St. Louis Marie de Montfort", p50_text)
             self.assertIn("The Secret of the Rosary", p50_text)
-            self.assertIn("twenty-three breathtaking Renaissance and Baroque masterworks", p50_text)
+            self.assertIn("breathtaking Renaissance and Baroque masterworks", p50_text)
+            self.assertNotIn("twenty-three breathtaking", p50_text)
         finally:
             doc.close()
 
