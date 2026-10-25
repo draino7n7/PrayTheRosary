@@ -5,6 +5,7 @@ Validates page geometry, typography standards, text content, and CLI flags.
 
 import os
 import re
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,6 +13,8 @@ from pathlib import Path
 import pymupdf
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 CANONICAL_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary.pdf"
 GODOT_PROJECT = PROJECT_ROOT / "game" / "project.godot"
