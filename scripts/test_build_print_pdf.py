@@ -92,7 +92,7 @@ class TestBuildPrintPdf(unittest.TestCase):
         doc = pymupdf.open(str(CANONICAL_PDF))
         try:
             p48_text = doc[47].get_text()
-            self.assertIn("This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.", p48_text)
+            self.assertIn("This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.", p48_text)
             self.assertIn(f"Version {version_str}", p48_text)
         finally:
             doc.close()
@@ -129,7 +129,7 @@ class TestBuildPrintPdf(unittest.TestCase):
         try:
             # Modernized Apostles' Creed on Page 4 (Spread 2 left page)
             p4_text = " ".join(doc[3].get_text().split())
-            self.assertIn("he rose again from the dead", p4_text)
+            self.assertIn("He rose again from the dead", p4_text)
             self.assertIn("ascended into heaven", p4_text.lower())
 
             # Check 1st Joyful Mystery on Page 6 (Spread 3 left page)
@@ -137,6 +137,28 @@ class TestBuildPrintPdf(unittest.TestCase):
             self.assertIn("Fruit of the Mystery: Humility", p6_text)
             self.assertIn("Luke 1:28, 38", p6_text)
             self.assertIn("Hail, full of grace", p6_text)
+        finally:
+            doc.close()
+
+    def test_issue_85_pdf_refinements(self):
+        """Verifies rubrics, titles, and prose refinements across the generated PDF."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            # Page 2: prose refinement
+            p2_text = " ".join(doc[1].get_text().split())
+            self.assertIn("allowed all believers to unite their daily work and prayer", p2_text)
+
+            # Page 4: rubrics
+            p4_text = " ".join(doc[3].get_text().split())
+            self.assertIn("Profess the Apostles' Creed:", p4_text)
+            self.assertIn("Pray the Our Father for the intentions of the Holy Father and the Church:", p4_text)
+
+            # Page 46: rubrics and titles
+            p46_text = " ".join(doc[45].get_text().split())
+            self.assertIn("The Hail, Holy Queen", p46_text)
+            self.assertIn("Conclude with the Concluding Rosary Prayer:", p46_text)
+            self.assertIn("The Concluding Rosary Prayer", p46_text)
+            self.assertIn("Most Holy Rosary", p46_text)
         finally:
             doc.close()
 

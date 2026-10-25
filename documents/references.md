@@ -88,7 +88,7 @@ flowchart TD
 - **Subheading:** Origins and Tradition of the Most Holy Rosary
 - **Doctrinal & Historical Content:**
   1. **Monastic Roots & The Marian Psalter**:
-     - *Summary*: In the early centuries, monks prayed all 150 Psalms of David weekly. Lay brothers and faithful who could not read Latin prayed 150 Pater Nosters, and later 150 Ave Marias counted on knotted cords ('Paternosters'), forming the 'Psalter of the Blessed Virgin Mary'.
+     - *Summary*: In the early centuries, monks prayed all 150 Psalms of David weekly. Lay brothers and faithful who could not read Latin prayed 150 Pater Nosters, and later 150 Ave Marias counted on knotted cords ('Paternosters'), forming the 'Psalter of the Blessed Virgin Mary', which allowed all believers to unite their daily work and prayer to the liturgical rhythm of the Church.
      - [Reference 1] Catholic Encyclopedia ("The Rosary"): [New Advent — The Rosary](https://www.newadvent.org/cathen/13184b.htm)
      - [Reference 2] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§1–3, §12): [Vatican Archives — Rosarium Virginis Mariae](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
   2. **St. Dominic & Preaching the Mysteries**:
@@ -143,9 +143,11 @@ flowchart TD
   1. **The Sign of the Cross** (`sign_of_the_cross` / *Signum Crucis*):
      - Unison text: *"In the name of the Father, and of the Son, and of the Holy Spirit. Amen."*
   2. **The Apostles' Creed** (`apostles_creed` / *Symbolum Apostolorum*):
+     - Rubric: *"Profess the Apostles' Creed:"*
      - Leader: *"I believe in God, the Father Almighty..."*
      - Group: *"I believe in the Holy Spirit, the holy Catholic Church..."*
   3. **The Our Father** (`our_father` / *Pater Noster*):
+     - Rubric: *"Pray the Our Father for the intentions of the Holy Father and the Church:"*
      - Leader: *"Our Father, who art in heaven..."*
      - Group: *"Give us this day our daily bread..."*
   4. **The Hail Mary** (`hail_mary` / *Ave Maria*):
@@ -195,7 +197,7 @@ flowchart TD
 - **Mystery Title:** The Annunciation
 - **Spiritual Fruit:** Humility
 - **Scripture Citation:** Luke 1:28, 38
-- **Scripture Text:** *"And upon entering, the Angel said to her: \"Hail, full of grace. The Lord is with you. Blessed are you among women.\"... Then Mary said: \"Behold, I am the handmaid of the Lord. Let it be done to me according to your word.\""*
+- **Scripture Text:** *"And upon entering, the Angel said to her: “Hail, full of grace. The Lord is with you. Blessed are you among women.”... Then Mary said: “Behold, I am the handmaid of the Lord. Let it be done to me according to your word.”"*
 - **Meditation:** With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit.
 - **Decade Prayers:**
   - Our Father (`our_father`)
@@ -239,7 +241,7 @@ flowchart TD
 - **Mystery Title:** The Visitation
 - **Spiritual Fruit:** Love of Neighbor
 - **Scripture Citation:** Luke 1:41–42, 46–47
-- **Scripture Text:** *"And it happened that, as Elizabeth heard the greeting of Mary, the infant leaped in her womb, and Elizabeth was filled with the Holy Spirit. And she cried out with a loud voice and said: \"Blessed are you among women, and blessed is the fruit of your womb.\"... And Mary said: \"My soul magnifies the Lord. And my spirit leaps for joy in God my Savior.\""*
+- **Scripture Text:** *"And it happened that, as Elizabeth heard the greeting of Mary, the infant leaped in her womb, and Elizabeth was filled with the Holy Spirit. And she cried out with a loud voice and said: “Blessed are you among women, and blessed is the fruit of your womb.”... And Mary said: “My soul magnifies the Lord. And my spirit leaps for joy in God my Savior.”"*
 - **Meditation:** Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -279,7 +281,7 @@ flowchart TD
 - **Mystery Title:** The Nativity of Our Lord
 - **Spiritual Fruit:** Poverty
 - **Scripture Citation:** Luke 2:6–7, 10–11
-- **Scripture Text:** *"Then it happened that, while they were there, the days were completed, so that she would give birth. And she brought forth her firstborn son. And she wrapped him in swaddling clothes and laid him in a manger, because there was no room for them at the inn... And the Angel said to them: \"Do not be afraid. For, behold, I proclaim to you a great joy, which will be for all the people. For today a Savior has been born for you in the city of David: he is Christ the Lord.\""*
+- **Scripture Text:** *"Then it happened that, while they were there, the days were completed, so that she would give birth. And she brought forth her firstborn son. And she wrapped him in swaddling clothes and laid him in a manger, because there was no room for them at the inn... And the Angel said to [the shepherds]: “Do not be afraid. For, behold, I proclaim to you a great joy, which will be for all the people. For today a Savior has been born for you in the city of David: he is Christ the Lord.”"*
 - **Meditation:** In the stillness of Bethlehem's night, the Light of the World is born in humble poverty, adored by Mary, Joseph, the angels, and the simple shepherds.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -319,7 +321,7 @@ flowchart TD
 - **Mystery Title:** The Presentation of Jesus in the Temple
 - **Spiritual Fruit:** Purity of Heart and Body
 - **Scripture Citation:** Luke 2:22, 28–32
-- **Scripture Text:** *"And after the days of her purification were fulfilled, according to the law of Moses, they brought him to Jerusalem, in order to present him to the Lord... [Then Simeon] took him up, into his arms, and he blessed God and said: \"Now you may dismiss your servant in peace, O Lord, according to your word. For my eyes have seen your salvation, which you have prepared before the face of all peoples: the light of revelation to the nations and the glory of your people Israel.\""*
+- **Scripture Text:** *"And after the days of her purification were fulfilled, according to the law of Moses, they brought him to Jerusalem, in order to present him to the Lord... [Then Simeon] took him up, into his arms, and he blessed God and said: “Now you may dismiss your servant in peace, O Lord, according to your word. For my eyes have seen your salvation, which you have prepared before the face of all peoples: the light of revelation to the nations and the glory of your people Israel.”"*
 - **Meditation:** In loving obedience to the Law of the Lord, Mary and Joseph offer the Infant Jesus in the Temple, where righteous Simeon recognizes the promised Redeemer.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -359,7 +361,7 @@ flowchart TD
 - **Mystery Title:** The Finding of Jesus in the Temple
 - **Spiritual Fruit:** Devotion to Jesus
 - **Scripture Citation:** Luke 2:46–47, 49, 51
-- **Scripture Text:** *"And it happened that, after three days, they found him in the temple, sitting in the midst of the doctors, listening to them and questioning them. And all who listened to him were astonished over his prudence and his responses... And he said to them: \"How is it that you were seeking me? For did you not know that it is necessary for me to be in these things which are of my Father?\"... And his mother kept all these words in her heart."*
+- **Scripture Text:** *"And it happened that, after three days, they found him in the temple, sitting in the midst of the doctors, listening to them and questioning them. But all who listened to him were astonished over his prudence and his responses... And he said to [his parents]: “How is it that you were seeking me? For did you not know that it is necessary for me to be in these things which are of my Father?”... And his mother kept all these words in her heart."*
 - **Meditation:** After three days of sorrowful searching, Mary and Joseph rejoice to find the twelve-year-old Jesus in His Father's house, illuminating the teachers of Israel with divine wisdom.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -399,7 +401,7 @@ flowchart TD
 - **Mystery Title:** The Baptism of Jesus in the Jordan
 - **Spiritual Fruit:** Openness to the Holy Spirit
 - **Scripture Citation:** Matthew 3:16–17
-- **Scripture Text:** *"And Jesus, having been baptized, ascended from the water immediately, and behold, the heavens were opened to him. And he saw the Spirit of God descending like a dove, and alighting on him. And behold, there was a voice from heaven, saying: \"This is my beloved Son, in whom I am well pleased.\""*
+- **Scripture Text:** *"And Jesus, having been baptized, ascended from the water immediately, and behold, the heavens were opened to him. And he saw the Spirit of God descending like a dove, and alighting on him. And behold, there was a voice from heaven, saying: “This is my beloved Son, in whom I am well pleased.”"*
 - **Meditation:** Descending into the River Jordan to sanctify the waters of Baptism, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -439,7 +441,7 @@ flowchart TD
 - **Mystery Title:** The Wedding Feast at Cana
 - **Spiritual Fruit:** To Jesus through Mary
 - **Scripture Citation:** John 2:3–5, 11
-- **Scripture Text:** *"And when the wine was failing, the mother of Jesus said to him, \"They have no wine.\" And Jesus said to her: \"What is that to me and to you, woman? My hour has not yet arrived.\" His mother said to the servants, \"Do whatever he tells you.\"... This was the beginning of the signs that Jesus accomplished in Cana of Galilee, and it manifested his glory, and his disciples believed in him."*
+- **Scripture Text:** *"And when the wine was failing, the mother of Jesus said to him, “They have no wine.” And Jesus said to her: “What is that to me and to you, woman? My hour has not yet arrived.” His mother said to the servants, “Do whatever he tells you.”... This was the beginning of the signs that Jesus accomplished in Cana of Galilee, and it manifested his glory, and his disciples believed in him."*
 - **Meditation:** At the compassionate intercession of His Mother, Christ changes water into the choicest wine, awakening faith in the hearts of His disciples.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -479,7 +481,7 @@ flowchart TD
 - **Mystery Title:** The Proclamation of the Kingdom of God
 - **Spiritual Fruit:** Conversion
 - **Scripture Citation:** Mark 1:14–15; Matthew 5:3, 8
-- **Scripture Text:** *"Jesus went into Galilee, preaching the Gospel of the kingdom of God, and saying: \"For the time has been fulfilled and the kingdom of God has drawn near. Repent and believe in the Gospel.\"... Blessed are the poor in spirit, for theirs is the kingdom of heaven... Blessed are the pure in heart, for they shall see God."*
+- **Scripture Text:** *"Jesus went into Galilee, preaching the Gospel of the kingdom of God, and saying: “For the time has been fulfilled and the kingdom of God has drawn near. Repent and believe in the Gospel.”... “Blessed are the poor in spirit, for theirs is the kingdom of heaven... Blessed are the pure in heart, for they shall see God.”"*
 - **Meditation:** Upon the Galilean hillside, Christ proclaims the Beatitudes, calling every soul to conversion of heart, merciful forgiveness, and childlike trust in the Father.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -518,9 +520,9 @@ flowchart TD
 - **Mystery ID:** `luminous_4_transfiguration`
 - **Mystery Title:** The Transfiguration
 - **Spiritual Fruit:** Desire for Holiness
-- **Scripture Citation:** Luke 9:29–31, 35
-- **Scripture Text:** *"And while he was praying, the appearance of his countenance was altered, and his vestment became white and shining. And behold, two men were talking with him. And these were Moses and Elijah, appearing in majesty... And a voice came from the cloud, saying: \"This is my beloved Son. Listen to him.\""*
-- **Meditation:** Upon the holy mountain, the divine glory of God shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
+- **Scripture Citation:** Luke 9:29–30, 35
+- **Scripture Text:** *"And while he was praying, the appearance of his countenance was altered, and his vestment became white and shining. And behold, two men were talking with him. And these were Moses and Elijah, appearing in majesty... And a voice came from the cloud, saying: “This is my beloved Son. Listen to him.”"*
+- **Meditation:** Upon the holy mountain, the divine glory shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (Luke 9): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 9](https://www.drbo.org/chapter/49009.htm) and [New Advent — Luke 9](https://www.newadvent.org/bible/luk009.htm)
@@ -559,7 +561,7 @@ flowchart TD
 - **Mystery Title:** The Institution of the Eucharist
 - **Spiritual Fruit:** Adoration
 - **Scripture Citation:** Matthew 26:26–28
-- **Scripture Text:** *"Now while they were eating the meal, Jesus took bread, and he blessed and broke and gave it to his disciples, and he said: \"Take and eat. This is my body.\" And taking the chalice, he gave thanks. And he gave it to them, saying: \"Drink from this, all of you. For this is my blood of the new covenant, which shall be shed for many as a remission of sins.\""*
+- **Scripture Text:** *"Now while they were eating the meal, Jesus took bread, and he blessed and broke and gave it to his disciples, and he said: “Take and eat. This is my body.” And taking the chalice, he gave thanks. And he gave it to them, saying: “Drink from this, all of you. For this is my blood of the new covenant, which shall be shed for many as a remission of sins.”"*
 - **Meditation:** Having loved His own unto the end, Christ offers His Body, Blood, Soul, and Divinity, under the appearances of bread and wine, to remain truly, really, and substantially present with His Church forever.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -599,8 +601,8 @@ flowchart TD
 - **Mystery Title:** The Agony in the Garden
 - **Spiritual Fruit:** Obedience to God's Will
 - **Scripture Citation:** Luke 22:41–44
-- **Scripture Text:** *"And he was separated from them about a stone's throw. And kneeling down, he prayed, saying: \"Father, if you are willing, take this chalice away from me. Yet let not my will, but yours, be done.\" And an Angel appeared to him from heaven, strengthening him. And being in agony, he prayed more intensely; and his sweat became like drops of blood, running down forward upon the ground."*
-- **Meditation:** In the dark stillness of Gethsemane, Christ bears the weight of every human sin, uniting His sacred heart to the Father's redemptive will.
+- **Scripture Text:** *"And he was separated from them by about a stone's throw. And kneeling down, he prayed, saying: “Father, if you are willing, take this chalice away from me. Yet truly, let not my will, but yours, be done.” Then an Angel appeared to him from heaven, strengthening him. And being in agony, he prayed more intensely; and so his sweat became like drops of blood, running down to the ground."*
+- **Meditation:** In the dark stillness of Gethsemane, Christ bears the weight of every human sin, uniting His Sacred Heart to the Father's redemptive will.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (Luke 22): [SacredBible.org — Luke](https://www.sacredbible.org/catholic/NT-03_Luke.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — Luke 22](https://www.drbo.org/chapter/49022.htm) and [New Advent — Luke 22](https://www.newadvent.org/bible/luk022.htm)
@@ -640,7 +642,7 @@ flowchart TD
 - **Spiritual Fruit:** Mortification
 - **Scripture Citation:** John 19:1; Isaiah 53:5
 - **Scripture Text:** *"Therefore, Pilate then took Jesus into custody and scourged him... But he himself was wounded because of our iniquities. He was bruised because of our wickedness. The discipline of our peace was upon him. And by his wounds, we are healed."*
-- **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins and to heal our wounded human nature.
+- **Meditation:** Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins, healing our wounded human nature.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
   - [Reference 1] Catholic Public Domain Version (John 19 & Isaiah 53): [SacredBible.org — John](https://www.sacredbible.org/catholic/NT-04_John.htm), [SacredBible.org — Isaiah](https://www.sacredbible.org/catholic/OT-27_Isaiah.htm), [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference [DRBO.org — John 19](https://www.drbo.org/chapter/50019.htm) & [DRBO.org — Isaias 53](https://www.drbo.org/chapter/27053.htm), and [New Advent — John 19](https://www.newadvent.org/bible/joh019.htm)
@@ -679,7 +681,7 @@ flowchart TD
 - **Mystery Title:** The Crowning with Thorns
 - **Spiritual Fruit:** Courage
 - **Scripture Citation:** Matthew 27:28–30
-- **Scripture Text:** *"And stripping him, they put a scarlet cloak around him. And plaiting a crown of thorns, they placed it on his head, with a reed in his right hand. And genuflecting before him, they mocked him, saying, \"Hail, King of the Jews.\" And spitting on him, they took the reed and struck his head."*
+- **Scripture Text:** *"And stripping him, they put a scarlet cloak around him. And plaiting a crown of thorns, they placed it on his head, with a reed in his right hand. And genuflecting before him, they mocked him, saying, “Hail, King of the Jews.” And spitting on him, they took the reed and struck his head."*
 - **Meditation:** Crowned with sharp thorns and mocked by soldiers, the true King of Kings teaches us meekness and courage when enduring the world's contempt.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -759,7 +761,7 @@ flowchart TD
 - **Mystery Title:** The Crucifixion and Death of Our Lord
 - **Spiritual Fruit:** Sorrow for Our Sins
 - **Scripture Citation:** Luke 23:33–34, 46
-- **Scripture Text:** *"And when they arrived at the place that is called Calvary, they crucified him there... Then Jesus said, \"Father, forgive them. For they know not what they do.\"... And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\" And upon saying this, he expired."*
+- **Scripture Text:** *"And when they arrived at the place that is called Calvary, they crucified him there... Then Jesus said, “Father, forgive them. For they know not what they do.”... And Jesus, crying out with a loud voice, said: “Father, into your hands I commend my spirit.” And upon saying this, he expired."*
 - **Meditation:** Raised upon the Cross of Calvary, Christ pardons His executioners, entrusts us to His Blessed Mother, and pours forth His last breath for the salvation of souls.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -799,7 +801,7 @@ flowchart TD
 - **Mystery Title:** The Resurrection of Our Lord
 - **Spiritual Fruit:** Faith
 - **Scripture Citation:** Mark 16:5–6
-- **Scripture Text:** *"And upon entering the tomb, they saw a young man sitting on the right side, covered with a white robe, and they were astonished. And he said to them, \"Do not become frightened. You are seeking Jesus of Nazareth, the Crucified One. He has risen. He is not here. Behold, the place where they laid him.\""*
+- **Scripture Text:** *"And upon entering the tomb, they saw a young man sitting on the right side, covered with a white robe, and they were astonished. And he said to them, “Do not become frightened. You are seeking Jesus of Nazareth, the Crucified One. He has risen. He is not here. Behold, the place where they laid him.”"*
 - **Meditation:** At dawn on the third day, Christ bursts the bonds of death and rises in radiant majesty, opening the gates of eternal life to all who believe in Him.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -838,8 +840,8 @@ flowchart TD
 - **Mystery ID:** `glorious_2_ascension`
 - **Mystery Title:** The Ascension of Our Lord into Heaven
 - **Spiritual Fruit:** Hope
-- **Scripture Citation:** Luke 24:50–52; Acts 1:9
-- **Scripture Text:** *"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven. And worshiping, they returned to Jerusalem with great joy... And when he had said these things, while they were watching, he was lifted up, and a cloud took him from their sight."*
+- **Scripture Citation:** Luke 24:50–51; Acts 1:9; Luke 24:52
+- **Scripture Text:** *"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven... And while they were watching, he was lifted up, and a cloud took him from their sight... And worshiping, they returned to Jerusalem with great joy."*
 - **Meditation:** Forty days after His Resurrection, Christ ascends from the Mount of Olives to the right hand of the Father, preparing a place for us in our heavenly homeland.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
 - **Primary Source References:**
@@ -958,7 +960,7 @@ flowchart TD
 - **Mystery ID:** `glorious_5_coronation`
 - **Mystery Title:** The Coronation of the Blessed Virgin Mary
 - **Spiritual Fruit:** Grace of a Happy Death
-- **Scripture Citation:** Revelation 12:1; Sirach 24:7
+- **Scripture Citation:** Revelation 12:1; Sirach 24:7 (24:4)
 - **Scripture Text:** *"And a great sign appeared in heaven: a woman clothed with the sun, and the moon was under her feet, and on her head was a crown of twelve stars... I lived in the highest places, and my throne is in the pillar of a cloud."*
 - **Meditation:** Exalted above all choirs of angels, the Blessed Virgin Mary is crowned Queen of Heaven and Earth by the Most Holy Trinity, reigning forever as our Mother and Advocate.
 - **Decade Prayers:** Our Father (`our_father`), 10× Hail Mary (`hail_mary`), Glory Be (`glory_be`), Fatima Prayer (`fatima_prayer`).
@@ -998,14 +1000,15 @@ flowchart TD
 - **Heading:** The Closing Prayers
 - **Subheading:** Entrusting Our Prayers to the Mother of Mercy
 - **Prayers in Sequence:**
-  1. **Hail, Holy Queen** (`hail_holy_queen` / *Salve Regina*):
+  1. **The Hail, Holy Queen** (`hail_holy_queen` / *Salve Regina*):
      - Unison: *"Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve; to thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary!"*
      - Appended Versicle and Response (`versicle_response` / *Ora Pro Nobis*):
        - Leader: *"Pray for us, O holy Mother of God."*
        - Group: *"That we may be made worthy of the promises of Christ."*
-  2. **Concluding Rosary Prayer** (`rosary_concluding_prayer` / *Deus, Cuius Unigenitus*):
+  2. **The Concluding Rosary Prayer** (`rosary_concluding_prayer` / *Deus, Cuius Unigenitus*):
+     - Rubric: *"Conclude with the Concluding Rosary Prayer:"*
      - Leader: *"Let us pray."*
-     - Group: *"O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal salvation, grant, we beseech Thee, that meditating upon these mysteries of the Most Holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."*
+     - Group: *"O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal life, grant, we beseech Thee, that meditating upon these mysteries of the Most Holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."*
   3. **The Sign of the Cross** (`sign_of_the_cross` / *Signum Crucis*):
      - Unison: *"In the name of the Father, and of the Son, and of the Holy Spirit. Amen."*
 - **Primary Source References:**
@@ -1058,7 +1061,7 @@ flowchart TD
   11. Spread 11 (Page 23): Gerard David, *The Transfiguration of Christ* (Church of Our Lady, Bruges `OLV.0003.I`)
   12. Spread 12 (Page 25): Peter Paul Rubens, *The Last Supper* (Pinacoteca di Brera Milan `97`)
 - **Colophon Creator Attribution & Version Notices:**
-  - *Creator Notice*: This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.
+  - *Creator Notice*: This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.
   - *Application Version*: Dynamic release version indicator (e.g. *Version 0.1.3*) synchronized with `application/config/version` in `game/project.godot` and `version/name` in `game/export_presets.cfg`.
 - **Primary Source References:**
   - [Reference 1] Repository Master Attributions Catalog: `assets/2D/gimp/attributions.json`

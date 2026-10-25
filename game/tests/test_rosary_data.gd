@@ -281,18 +281,18 @@ func test_cpdv_citations_and_verbatim_texts() -> void:
 	# Joyful 3: Luke 2:6-7, 10-11
 	var j3: Dictionary = loader.get_mystery_by_id("joyful_3_nativity")
 	assert_eq(str(j3.get("scripture_reference", "")), "Luke 2:6–7, 10–11")
-	assert_true(str(j3.get("scripture_text", "")).contains("And the Angel said to them: \"Do not be afraid. For, behold,"), "Joyful 3 Luke 2:10 must contain 'And the Angel said to them: \"Do not be afraid. For, behold,'")
+	assert_true(str(j3.get("scripture_text", "")).contains("And the Angel said to [the shepherds]: “Do not be afraid. For, behold,"), "Joyful 3 Luke 2:10 must contain 'And the Angel said to [the shepherds]: “Do not be afraid. For, behold,'")
 
 	# Joyful 4: Luke 2:28 bracketed subject
 	var j4: Dictionary = loader.get_mystery_by_id("joyful_4_presentation")
 	assert_eq(str(j4.get("scripture_reference", "")), "Luke 2:22, 28–32")
 	assert_true(str(j4.get("scripture_text", "")).contains("[Then Simeon] took him up, into his arms"), "Joyful 4 Luke 2:28 must use bracketed subject '[Then Simeon] took him up, into his arms'")
 
-	# Luminous 4: Luke 9:29-31, 35 and verbatim 'Listen to him.'
+	# Luminous 4: Luke 9:29-30, 35 and verbatim 'Listen to him.'
 	var l4: Dictionary = loader.get_mystery_by_id("luminous_4_transfiguration")
-	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–31, 35")
-	assert_true(str(l4.get("scripture_text", "")).contains("Moses and Elijah, appearing in majesty"), "Luminous 4 Luke 9:30-31 must contain 'Moses and Elijah, appearing in majesty'")
-	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son. Listen to him.\""), "Luminous 4 Luke 9:35 must end with verbatim CPDV 'This is my beloved Son. Listen to him.\"'")
+	assert_eq(str(l4.get("scripture_reference", "")), "Luke 9:29–30, 35")
+	assert_true(str(l4.get("scripture_text", "")).contains("Moses and Elijah, appearing in majesty"), "Luminous 4 Luke 9:30 must contain 'Moses and Elijah, appearing in majesty'")
+	assert_true(str(l4.get("scripture_text", "")).ends_with("This is my beloved Son. Listen to him.”"), "Luminous 4 Luke 9:35 must end with verbatim CPDV 'This is my beloved Son. Listen to him.”'")
 	assert_false(str(l4.get("scripture_text", "")).contains("hear ye him"), "Luminous 4 must not contain KJV 'hear ye him'")
 
 	# Sorrowful 2: John 19:1; Isaiah 53:5
@@ -310,15 +310,15 @@ func test_cpdv_citations_and_verbatim_texts() -> void:
 	# Sorrowful 5: Luke 23:33–34, 46
 	var s5: Dictionary = loader.get_mystery_by_id("sorrowful_5_crucifixion")
 	assert_eq(str(s5.get("scripture_reference", "")), "Luke 23:33–34, 46")
-	assert_true(str(s5.get("scripture_text", "")).contains("And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\""), "Sorrowful 5 Luke 23:46 must contain 'And Jesus, crying out with a loud voice, said: \"Father, into your hands I commend my spirit.\"'")
+	assert_true(str(s5.get("scripture_text", "")).contains("And Jesus, crying out with a loud voice, said: “Father, into your hands I commend my spirit.”"), "Sorrowful 5 Luke 23:46 must contain 'And Jesus, crying out with a loud voice, said: “Father, into your hands I commend my spirit.”'")
 	assert_true(str(s5.get("scripture_text", "")).ends_with("And upon saying this, he expired."), "Sorrowful 5 must end with 'And upon saying this, he expired.'")
 
-	# Glorious 2: Luke 24:50–52; Acts 1:9
+	# Glorious 2: Luke 24:50–51; Acts 1:9; Luke 24:52
 	var g2: Dictionary = loader.get_mystery_by_id("glorious_2_ascension")
-	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–52; Acts 1:9")
+	assert_eq(str(g2.get("scripture_reference", "")), "Luke 24:50–51; Acts 1:9; Luke 24:52")
 	assert_eq(
 		str(g2.get("scripture_text", "")),
-		"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven. And worshiping, they returned to Jerusalem with great joy... And when he had said these things, while they were watching, he was lifted up, and a cloud took him from their sight."
+		"Then he led them out as far as Bethania. And lifting up his hands, he blessed them. And it happened that, while he was blessing them, he withdrew from them, and he was carried up into heaven... And while they were watching, he was lifted up, and a cloud took him from their sight... And worshiping, they returned to Jerusalem with great joy."
 	)
 
 	# Glorious 4: Psalm 131:8 (132:8); Luke 1:48–49; Judith 15:10
@@ -328,9 +328,9 @@ func test_cpdv_citations_and_verbatim_texts() -> void:
 	assert_true(str(g4.get("scripture_text", "")).contains("For behold, from this time, all generations shall call me blessed."), "Glorious 4 must contain Luke 1:48 (CPDV)")
 	assert_true(str(g4.get("scripture_text", "")).ends_with("You are the glory of Jerusalem, you are the joy of Israel, you are the honor of our people."), "Glorious 4 must end with Judith 15:10 (CPDV)")
 
-	# Glorious 5: Revelation 12:1; Sirach 24:7
+	# Glorious 5: Revelation 12:1; Sirach 24:7 (24:4)
 	var g5: Dictionary = loader.get_mystery_by_id("glorious_5_coronation")
-	assert_eq(str(g5.get("scripture_reference", "")), "Revelation 12:1; Sirach 24:7")
+	assert_eq(str(g5.get("scripture_reference", "")), "Revelation 12:1; Sirach 24:7 (24:4)")
 	assert_true(str(g5.get("scripture_text", "")).begins_with("And a great sign appeared in heaven: a woman clothed with the sun,"), "Glorious 5 must begin with Revelation 12:1 (CPDV)")
 	assert_true(str(g5.get("scripture_text", "")).ends_with("and my throne is in the pillar of a cloud."), "Glorious 5 must end with Sirach 24:7 (CPDV)")
 
@@ -1116,8 +1116,8 @@ func test_apostles_creed_modern_resurrection_and_ascension_phrasing() -> void:
 	var full_text: String = str(creed.get("text", ""))
 
 	# 1. Verify modern Resurrection and Ascension phrasing
-	var expected_resurrection: String = "He descended into hell; on the third day he rose again from the dead."
-	var expected_ascension: String = "He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there he will come to judge the living and the dead."
+	var expected_resurrection: String = "He descended into hell; on the third day He rose again from the dead."
+	var expected_ascension: String = "He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there He will come to judge the living and the dead."
 
 	assert_true(
 		leader_text.contains(expected_resurrection),
@@ -1150,7 +1150,7 @@ func test_apostles_creed_modern_resurrection_and_ascension_phrasing() -> void:
 	assert_eq(response_text, expected_response, "apostles_creed response_text must be preserved exactly")
 
 	# 4. Verify exact target leader_text
-	var expected_leader: String = "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; on the third day he rose again from the dead. He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there he will come to judge the living and the dead."
+	var expected_leader: String = "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; on the third day He rose again from the dead. He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there He will come to judge the living and the dead."
 	assert_eq(leader_text, expected_leader, "apostles_creed leader_text must match expected text exactly")
 
 
@@ -1200,9 +1200,9 @@ func test_issue_55_refined_mystery_reflections_and_canonical_ledger() -> void:
 	var expected_reflections: Dictionary = {
 		"joyful_1_annunciation": "With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit.",
 		"luminous_1_baptism": "Descending into the River Jordan to sanctify the waters of Baptism, Christ is anointed by the Holy Spirit and proclaimed the Beloved Son of the Eternal Father.",
-		"luminous_4_transfiguration": "Upon the holy mountain, the divine glory of God shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.",
+		"luminous_4_transfiguration": "Upon the holy mountain, the divine glory shines forth from the face of Christ, strengthening His Apostles for the coming Passion and revealing our call to transfiguring grace.",
 		"luminous_5_eucharist": "Having loved His own unto the end, Christ offers His Body, Blood, Soul, and Divinity, under the appearances of bread and wine, to remain truly, really, and substantially present with His Church forever.",
-		"sorrowful_2_scourging": "Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins and to heal our wounded human nature.",
+		"sorrowful_2_scourging": "Bound to the pillar in silence, the innocent Lamb of God endures cruel blows in reparation for our sins, healing our wounded human nature.",
 		"sorrowful_4_carrying_cross": "Falling beneath the heavy wood along the way to Calvary, Christ exchanges a look of piercing love with His grieving Mother, inviting us to take up our daily cross after Him."
 	}
 
@@ -1242,8 +1242,8 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	assert_true(colophon.has("creator_notice"), "Page 48 colophon must define 'creator_notice'")
 	assert_eq(
 		str(colophon.get("creator_notice", "")),
-		"This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.",
-		"Page 48 creator_notice must be 'This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.'"
+		"This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.",
+		"Page 48 creator_notice must be 'This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.'"
 	)
 	assert_true(colophon.has("show_version"), "Page 48 colophon must define 'show_version'")
 	assert_true(
@@ -1257,7 +1257,7 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	var left_p: Dictionary = spread_24.get("left_page", {})
 	assert_true(left_p.has("colophon"), "Spread 24 left_page must contain colophon")
 	var spread_colophon: Dictionary = left_p.get("colophon", {})
-	assert_eq(str(spread_colophon.get("creator_notice", "")), "This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain.")
+	assert_eq(str(spread_colophon.get("creator_notice", "")), "This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain.")
 	assert_true(bool(spread_colophon.get("show_version", false)))
 
 	# Verify documents/references.md documents Page 48 creator notice
@@ -1265,7 +1265,95 @@ func test_page_48_colophon_data_structure_and_creator_attribution() -> void:
 	var references_path: String = repo_root.path_join("documents/references.md")
 	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist")
 	var ref_text: String = FileAccess.get_file_as_string(references_path)
-	assert_true(ref_text.contains("This edition of “Pray The Rosary” was created and is maintained by Kevin Audrain."), "documents/references.md must document Page 48 creator notice")
+	assert_true(ref_text.contains("This edition of “Pray the Rosary” was created and is maintained by Kevin Audrain."), "documents/references.md must document Page 48 creator notice")
+
+
+func test_issue_85_prayer_titles_rubrics_and_prose_refinements() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	# 1. Prayer titles: "The Hail, Holy Queen" and "The Concluding Rosary Prayer"
+	var hail_holy_queen: Dictionary = loader.get_prayer("hail_holy_queen")
+	assert_false(hail_holy_queen.is_empty(), "hail_holy_queen prayer must exist")
+	assert_eq(str(hail_holy_queen.get("title", "")), "The Hail, Holy Queen", "hail_holy_queen title must be 'The Hail, Holy Queen'")
+
+	var concluding_prayer: Dictionary = loader.get_prayer("rosary_concluding_prayer")
+	assert_false(concluding_prayer.is_empty(), "rosary_concluding_prayer must exist")
+	assert_eq(str(concluding_prayer.get("title", "")), "The Concluding Rosary Prayer", "rosary_concluding_prayer title must be 'The Concluding Rosary Prayer'")
+
+	# 2. Concluding Rosary Prayer title case: "Most Holy Rosary"
+	var resp_text: String = str(concluding_prayer.get("response_text", ""))
+	var full_text: String = str(concluding_prayer.get("text", ""))
+	assert_true(resp_text.contains("Most Holy Rosary"), "Concluding prayer response_text must contain 'Most Holy Rosary'")
+	assert_true(full_text.contains("Most Holy Rosary"), "Concluding prayer full text must contain 'Most Holy Rosary'")
+	assert_false(resp_text.contains("most holy Rosary"), "Concluding prayer response_text must not contain lowercase 'most holy Rosary'")
+
+	# 3. Sorrowful 1 Agony meditation title case: "His Sacred Heart"
+	var agony: Dictionary = loader.get_mystery_by_id("sorrowful_1_agony")
+	assert_false(agony.is_empty(), "sorrowful_1_agony must exist")
+	var agony_meditation: String = str(agony.get("meditation", ""))
+	assert_true(agony_meditation.contains("His Sacred Heart"), "Agony meditation must capitalize 'His Sacred Heart'")
+	assert_false(agony_meditation.contains("His sacred Heart"), "Agony meditation must not contain 'His sacred Heart'")
+
+	# 4. Page 2 Section 1 prose refinement: "allowed all believers to unite their daily work and prayer"
+	var p2: Dictionary = loader.get_page(2)
+	assert_false(p2.is_empty(), "Page 2 must exist")
+	var p2_sections: Array = p2.get("sections", [])
+	assert_true(p2_sections.size() > 0, "Page 2 must have sections")
+	var s1_body: String = str(p2_sections[0].get("body", ""))
+	assert_true(s1_body.contains("allowed all believers to unite their daily work and prayer"), "Page 2 Section 1 must contain refined phrase 'allowed all believers to unite their daily work and prayer'")
+
+	# 5. Page 4 step rubrics
+	var p4: Dictionary = loader.get_page(4)
+	assert_false(p4.is_empty(), "Page 4 must exist")
+	var p4_steps: Array = p4.get("prayer_steps", [])
+	assert_true(p4_steps.size() >= 3, "Page 4 must have at least 3 steps")
+	assert_eq(str(p4_steps[1].get("rubric", "")), "Profess the Apostles' Creed:", "Page 4 Step 2 rubric must be 'Profess the Apostles' Creed:'")
+	assert_eq(str(p4_steps[2].get("rubric", "")), "Pray the Our Father for the intentions of the Holy Father and the Church:", "Page 4 Step 3 rubric must be 'Pray the Our Father for the intentions of the Holy Father and the Church:'")
+
+	# 6. Page 46 Step 2 rubric
+	var p46: Dictionary = loader.get_page(46)
+	assert_false(p46.is_empty(), "Page 46 must exist")
+	var p46_steps: Array = p46.get("prayer_steps", [])
+	assert_true(p46_steps.size() >= 2, "Page 46 must have at least 2 steps")
+	assert_eq(str(p46_steps[1].get("rubric", "")), "Conclude with the Concluding Rosary Prayer:", "Page 46 Step 2 rubric must be 'Conclude with the Concluding Rosary Prayer:'")
+
+
+func test_all_twenty_mysteries_scripture_text_synchronized_with_references_document() -> void:
+	var loader: RefCounted = RosaryDataLoaderScript.new()
+	loader.load_all()
+
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var references_path: String = repo_root.path_join("documents/references.md")
+	assert_true(FileAccess.file_exists(references_path), "documents/references.md must exist on disk")
+	var ref_content: String = FileAccess.get_file_as_string(references_path)
+
+	var mystery_sets: Array[String] = ["joyful", "luminous", "sorrowful", "glorious"]
+	var mystery_count: int = 0
+
+	for set_id: String in mystery_sets:
+		var mset: Dictionary = loader.get_mystery_set(set_id)
+		assert_false(mset.is_empty(), "Mystery set '%s' must exist" % set_id)
+		var decades: Array = mset.get("decades", [])
+		for dec_var: Variant in decades:
+			var dec: Dictionary = dec_var as Dictionary
+			mystery_count += 1
+			var mystery_id: String = str(dec.get("id", ""))
+			var scrip_text: String = str(dec.get("scripture_text", ""))
+			assert_false(scrip_text.is_empty(), "Mystery '%s' must have non-empty scripture_text" % mystery_id)
+
+			# Verify no straight quotes exist in scripture_text (typographic quotes only)
+			assert_false(scrip_text.contains("\""), "Mystery '%s' scripture_text must not contain straight double quotes" % mystery_id)
+
+			# Verify verbatim match in documents/references.md
+			var expected_line: String = "- **Scripture Text:** *\"%s\"*" % scrip_text
+			assert_true(
+				ref_content.contains(expected_line),
+				"documents/references.md must contain exact line for mystery '%s': %s" % [mystery_id, expected_line]
+			)
+
+	assert_eq(mystery_count, 20, "Must have exactly 20 mysteries")
+
 
 
 
