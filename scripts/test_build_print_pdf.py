@@ -320,6 +320,19 @@ class TestBuildPrintPdf(unittest.TestCase):
         finally:
             doc.close()
 
+    def test_issue_88_get_project_version_and_fallback(self):
+        """Verifies get_project_version correctly extracts version from project.godot and returns fallback 0.2.2."""
+        from scripts.build_print_pdf import get_project_version
+
+        # 1. Real project root matches project.godot config/version="0.2.2"
+        version = get_project_version(PROJECT_ROOT)
+        self.assertEqual(version, "0.2.2")
+
+        # 2. Empty directory returns synchronized fallback version 0.2.2
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            fallback = get_project_version(Path(tmp_dir))
+            self.assertEqual(fallback, "0.2.2")
+
 
 if __name__ == "__main__":
     unittest.main()

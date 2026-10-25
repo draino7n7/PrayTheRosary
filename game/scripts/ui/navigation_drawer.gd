@@ -31,7 +31,6 @@ const PANEL_WIDTH_EXTRA_LARGE: float = 680.0
 
 const FONT_BOLD_PATH: String = "res://assets/fonts/EBGaramond-Bold.ttf"
 const FONT_REGULAR_PATH: String = "res://assets/fonts/EBGaramond-Regular.ttf"
-const FONT_ITALIC_PATH: String = "res://assets/fonts/EBGaramond-Italic.ttf"
 const FONT_SYMBOLS_PATH: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
 
 const LANDMARKS_TOP: Array[Dictionary] = [
@@ -49,47 +48,47 @@ const LANDMARKS_BOTTOM: Array[Dictionary] = [
 
 const MYSTERY_SET_DEFAULTS: Dictionary = {
 	"joyful": {
-		"title": "Joyful Mysteries",
+		"title": "The Joyful Mysteries",
 		"first_page": 6,
 		"decades": [
 			{"number": 1, "title": "The Annunciation", "page": 6},
 			{"number": 2, "title": "The Visitation", "page": 8},
-			{"number": 3, "title": "The Nativity", "page": 10},
-			{"number": 4, "title": "The Presentation", "page": 12},
-			{"number": 5, "title": "The Finding in the Temple", "page": 14}
+			{"number": 3, "title": "The Nativity of Our Lord", "page": 10},
+			{"number": 4, "title": "The Presentation of Jesus in the Temple", "page": 12},
+			{"number": 5, "title": "The Finding of Jesus in the Temple", "page": 14}
 		]
 	},
 	"luminous": {
-		"title": "Luminous Mysteries",
+		"title": "The Luminous Mysteries",
 		"first_page": 16,
 		"decades": [
-			{"number": 1, "title": "The Baptism of the Lord", "page": 16},
-			{"number": 2, "title": "The Wedding at Cana", "page": 18},
-			{"number": 3, "title": "The Proclamation of the Kingdom", "page": 20},
+			{"number": 1, "title": "The Baptism of Jesus in the Jordan", "page": 16},
+			{"number": 2, "title": "The Wedding Feast at Cana", "page": 18},
+			{"number": 3, "title": "The Proclamation of the Kingdom of God", "page": 20},
 			{"number": 4, "title": "The Transfiguration", "page": 22},
 			{"number": 5, "title": "The Institution of the Eucharist", "page": 24}
 		]
 	},
 	"sorrowful": {
-		"title": "Sorrowful Mysteries",
+		"title": "The Sorrowful Mysteries",
 		"first_page": 26,
 		"decades": [
 			{"number": 1, "title": "The Agony in the Garden", "page": 26},
 			{"number": 2, "title": "The Scourging at the Pillar", "page": 28},
 			{"number": 3, "title": "The Crowning with Thorns", "page": 30},
 			{"number": 4, "title": "The Carrying of the Cross", "page": 32},
-			{"number": 5, "title": "The Crucifixion", "page": 34}
+			{"number": 5, "title": "The Crucifixion and Death of Our Lord", "page": 34}
 		]
 	},
 	"glorious": {
-		"title": "Glorious Mysteries",
+		"title": "The Glorious Mysteries",
 		"first_page": 36,
 		"decades": [
-			{"number": 1, "title": "The Resurrection", "page": 36},
-			{"number": 2, "title": "The Ascension", "page": 38},
+			{"number": 1, "title": "The Resurrection of Our Lord", "page": 36},
+			{"number": 2, "title": "The Ascension of Our Lord into Heaven", "page": 38},
 			{"number": 3, "title": "The Descent of the Holy Spirit", "page": 40},
-			{"number": 4, "title": "The Assumption of Mary", "page": 42},
-			{"number": 5, "title": "The Coronation of Mary", "page": 44}
+			{"number": 4, "title": "The Assumption of the Blessed Virgin Mary", "page": 42},
+			{"number": 5, "title": "The Coronation of the Blessed Virgin Mary", "page": 44}
 		]
 	}
 }
@@ -119,7 +118,6 @@ var _decade_buttons_by_page: Dictionary = {}     # int -> Button
 
 var _font_bold: Font = null
 var _font_regular: Font = null
-var _font_italic: Font = null
 var _font_symbols: Font = null
 var _anim_tween: Tween = null
 var _is_built: bool = false
@@ -189,14 +187,6 @@ func _load_fonts() -> void:
 		if _font_symbols != null:
 			fv_reg.fallbacks = [_font_symbols]
 		_font_regular = fv_reg
-
-	if ResourceLoader.exists(FONT_ITALIC_PATH):
-		var base_ita: Font = load(FONT_ITALIC_PATH) as Font
-		var fv_ita: FontVariation = FontVariation.new()
-		fv_ita.base_font = base_ita
-		if _font_symbols != null:
-			fv_ita.fallbacks = [_font_symbols]
-		_font_italic = fv_ita
 
 
 func _resolve_nodes() -> void:
@@ -748,7 +738,7 @@ func get_page_title(page_number: int) -> String:
 		2:
 			return "The History of the Holy Rosary"
 		3:
-			return "Structure of the Book & How to Pray"
+			return "Structure of This Book & How to Pray"
 		4:
 			return "The Opening Prayers"
 		46:
@@ -1026,10 +1016,6 @@ func get_font_bold() -> Font:
 
 func get_font_regular() -> Font:
 	return _font_regular
-
-
-func get_font_italic() -> Font:
-	return _font_italic
 
 
 func get_font_symbols() -> Font:

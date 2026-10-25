@@ -170,7 +170,7 @@ func _apply_page_data() -> void:
 	var show_version: bool = bool(colophon.get("show_version", false))
 	var version_text: String = ""
 	if show_version:
-		var app_version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.3"))
+		var app_version: String = str(ProjectSettings.get_setting("application/config/version", "0.2.2"))
 		version_text = "Version %s" % app_version
 	var sn_text: String = str(colophon.get("scripture_notice", "")).strip_edges()
 	var cn_text: String = str(colophon.get("artwork_notice", "")).strip_edges()

@@ -66,12 +66,10 @@ func test_navigation_drawer_font_fallbacks() -> void:
 
 	assert_not_null(drawer._font_bold, "drawer._font_bold must be loaded")
 	assert_not_null(drawer._font_regular, "drawer._font_regular must be loaded")
-	assert_not_null(drawer._font_italic, "drawer._font_italic must be loaded")
 
 	var font_checks: Array[Dictionary] = [
 		{"name": "_font_bold", "font": drawer._font_bold},
-		{"name": "_font_regular", "font": drawer._font_regular},
-		{"name": "_font_italic", "font": drawer._font_italic}
+		{"name": "_font_regular", "font": drawer._font_regular}
 	]
 
 	for item: Dictionary in font_checks:
@@ -720,6 +718,38 @@ func test_main_preset_switching_updates_navigation_drawer() -> void:
 
 	main.free()
 	progress.clear_progress()
+
+
+func test_navigation_drawer_fallbacks_and_mystery_set_defaults() -> void:
+	var drawer: NavigationDrawer = _create_nav_drawer()
+	assert_eq(drawer.get_page_title(3), "Structure of This Book & How to Pray", "Page 3 title must match canonical 'Structure of This Book & How to Pray'")
+
+	var loader: RosaryDataLoader = RosaryDataLoaderScript.new() as RosaryDataLoader
+	loader.load_all()
+	var canonical_sets: Array = loader.mysteries_data.get("mystery_sets", [])
+	assert_true(canonical_sets.size() == 4, "Must have 4 canonical mystery sets")
+
+	var defaults: Dictionary = NavigationDrawer.MYSTERY_SET_DEFAULTS
+	for set_dict: Variant in canonical_sets:
+		var c_set: Dictionary = set_dict as Dictionary
+		var set_id: String = str(c_set.get("id", ""))
+		var expected_title: String = str(c_set.get("title", ""))
+		assert_true(defaults.has(set_id), "MYSTERY_SET_DEFAULTS must contain set '%s'" % set_id)
+		var def_set: Dictionary = defaults.get(set_id, {}) as Dictionary
+		assert_eq(str(def_set.get("title", "")), expected_title, "Mystery set title for '%s' must match canonical" % set_id)
+
+		var canonical_decades: Array = c_set.get("decades", []) as Array
+		var def_decades: Array = def_set.get("decades", []) as Array
+		assert_eq(def_decades.size(), canonical_decades.size(), "Decade count for set '%s' must match" % set_id)
+
+		for i: int in range(canonical_decades.size()):
+			var c_dec: Dictionary = canonical_decades[i] as Dictionary
+			var d_dec: Dictionary = def_decades[i] as Dictionary
+			var exp_dec_title: String = str(c_dec.get("title", ""))
+			var actual_dec_title: String = str(d_dec.get("title", ""))
+			assert_eq(actual_dec_title, exp_dec_title, "Decade %d in '%s' must match canonical '%s'" % [i + 1, set_id, exp_dec_title])
+
+	drawer.free()
 
 
 func cleanup() -> void:

@@ -1,5 +1,57 @@
-Creative Commons Attribution-ShareAlike 4.0 International License
+# Asset Licensing Terms
 
-Unless otherwise specified, all game assets (art, 3D models, music, and sound effects) in the `game/assets/` directory are licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0).
+This repository contains third-party historical artworks, bundled typography fonts, and original project assets. The licensing terms for each asset category are defined below.
 
-To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+---
+
+## 1. Historical Masterwork Artworks (`game/assets/images/`, `assets/2D/`)
+
+The 23 sacred masterwork paintings featured throughout the book and application are in the **Public Domain (`PD-Art / CC0`)**. 
+
+Because the original artists (Murillo, El Greco, Champaigne, Reni, Carpaccio, Van Orley, Ricci, Bloch, David, Rubens, Battistello, Van Dyck, Raphael, Copley, Maíno, Velázquez) died more than 100 years ago, copyright in these historic works has expired worldwide. In accordance with legal standards (such as *Bridgeman Art Library v. Corel Corp.*), faithful photographic reproductions of two-dimensional public domain artworks are likewise in the public domain worldwide.
+
+### Verified Catalog of Sacred Masterwork Artworks (23 Works in Book Sequence)
+
+| # | Placement | Artwork Title | Artist & Dates | Creation Date | Location & Catalog ID | License |
+|---|-----------|---------------|----------------|---------------|-----------------------|---------|
+| 1 | Front Cover (Page 1) | *The Madonna of the Rosary (The Virgin of the Rosary)* | Bartolomé Esteban Murillo (1617–1682) | c. 1675–1680 | Dulwich Picture Gallery, London, UK (`DPG281`) | Public Domain (`PD-Art / CC0`) |
+| 2 | Opening Prayers (Page 5) | *The Holy Trinity (La Trinidad)* | El Greco (Doménikos Theotokópoulos, 1541–1614) | 1577–1579 | Museo del Prado, Madrid, Spain (`P00824`) | Public Domain (`PD-Art / CC0`) |
+| 3 | 1st Joyful (Page 7) | *The Annunciation (La Anunciación)* | Bartolomé Esteban Murillo (1617–1682) | c. 1660–1665 | Museo del Prado, Madrid, Spain (`P00970`) | Public Domain (`PD-Art / CC0`) |
+| 4 | 2nd Joyful (Page 9) | *The Visitation* | Philippe de Champaigne (1602–1674) | 1643–1648 | Princeton University Art Museum, Princeton, NJ (`y1994-17`) | Public Domain (`PD-Art / CC0`) |
+| 5 | 3rd Joyful (Page 11) | *The Adoration of the Shepherds* | Guido Reni (1575–1642) | c. 1640 | National Gallery, London, UK (`NG6270`) | Public Domain (`PD-Art / CC0`) |
+| 6 | 4th Joyful (Page 13) | *Presentation of Jesus in the Temple* | Vittore Carpaccio (c. 1465–1525/1526) | 1510 | Gallerie dell'Accademia, Venice, Italy (`Cat. 44`) | Public Domain (`PD-Art / CC0`) |
+| 7 | 5th Joyful (Page 15) | *Christ among the Doctors* | Bernard van Orley (c. 1488–1541) | c. 1513 | National Gallery of Art, Washington, D.C. (`1952.5.47.a`) | Public Domain (`PD-Art / CC0`) |
+| 8 | 1st Luminous (Page 17) | *The Baptism of Christ* | Guido Reni (1575–1642) | c. 1622–1623 | Kunsthistorisches Museum, Vienna, Austria (`GG 222`) | Public Domain (`PD-Art / CC0`) |
+| 9 | 2nd Luminous (Page 19) | *The Marriage Feast at Cana* | Sebastiano Ricci (1659–1734) | c. 1700–1710 | Nelson-Atkins Museum of Art, Kansas City, MO (`59-2`) | Public Domain (`PD-Art / CC0`) |
+| 10 | 3rd Luminous (Page 21) | *The Sermon on the Mount* | Carl Bloch (1834–1890) | 1877 | Museum of National History at Frederiksborg Castle, Hillerød, Denmark | Public Domain (`PD-Art / CC0`) |
+| 11 | 4th Luminous (Page 23) | *The Transfiguration of Christ* | Gerard David (c. 1460–1523) | c. 1500–1505 | Church of Our Lady, Bruges, Belgium (`OLV.0003.I`) | Public Domain (`PD-Art / CC0`) |
+| 12 | 5th Luminous (Page 25) | *The Last Supper* | Peter Paul Rubens (1577–1640) | 1630–1631 | Pinacoteca di Brera, Milan, Italy (`97`) | Public Domain (`PD-Art / CC0`) |
+| 13 | 1st Sorrowful (Page 27) | *Christ on the Mount of Olives* | Giovanni Battista Caracciolo (Battistello, 1578–1635) | c. 1615–1617 | Kunsthistorisches Museum, Vienna, Austria (`GG F 17`) | Public Domain (`PD-Art / CC0`) |
+| 14 | 2nd Sorrowful (Page 29) | *The Flagellation of Christ* | Peter Paul Rubens (1577–1640) | 1617 | St. Paul's Church, Antwerp, Belgium | Public Domain (`PD-Art / CC0`) |
+| 15 | 3rd Sorrowful (Page 31) | *The Crowning with Thorns (La coronación de espinas)* | Anthony van Dyck (1599–1641) | c. 1618–1620 | Museo del Prado, Madrid, Spain (`P01474`) | Public Domain (`PD-Art / CC0`) |
+| 16 | 4th Sorrowful (Page 33) | *Christ Falling on the Way to Calvary (Spasimo di Sicilia)* | Raphael (Raffaello Sanzio, 1483–1520) | c. 1515–1516 | Museo del Prado, Madrid, Spain (`P00298`) | Public Domain (`PD-Art / CC0`) |
+| 17 | 5th Sorrowful (Page 35) | *Christ on the Cross* | Bartolomé Esteban Murillo (1617–1682) | c. 1677 | Museo del Prado, Madrid, Spain (`P00967`) | Public Domain (`PD-Art / CC0`) |
+| 18 | 1st Glorious (Page 37) | *The Resurrection of Christ* | Bartolomé Esteban Murillo (1617–1682) | c. 1660–1665 | Real Academia de Bellas Artes de San Fernando, Madrid (`0713`) | Public Domain (`PD-Art / CC0`) |
+| 19 | 2nd Glorious (Page 39) | *The Ascension* | John Singleton Copley (1738–1815) | 1775 | Museum of Fine Arts, Boston, MA (`60.1086`) | Public Domain (`PD-Art / CC0`) |
+| 20 | 3rd Glorious (Page 41) | *Pentecost (Pentecostés)* | Juan Bautista Maíno (1581–1649) | 1612–1614 | Museo del Prado, Madrid, Spain (`P00885`) | Public Domain (`PD-Art / CC0`) |
+| 21 | 4th Glorious (Page 43) | *The Assumption of the Virgin (The Walpole Immaculate Conception)* | Bartolomé Esteban Murillo (1617–1682) | c. 1680 | State Hermitage Museum, St. Petersburg, Russia (`ГЭ-387` / Wikidata `Q27968621`) | Public Domain (`PD-Art / CC0`) |
+| 22 | 5th Glorious (Page 45) | *The Coronation of the Virgin (La coronación de la Virgen)* | Diego Velázquez (1599–1660) | c. 1635–1636 | Museo del Prado, Madrid, Spain (`P01168`) | Public Domain (`PD-Art / CC0`) |
+| 23 | Closing Prayers (Page 47) | *The Immaculate Conception of Los Venerables (Inmaculada de Soult)* | Bartolomé Esteban Murillo (1617–1682) | c. 1678 | Museo del Prado, Madrid, Spain (`P00972`) | Public Domain (`PD-Art / CC0`) |
+
+---
+
+## 2. Bundled Typography Fonts (`game/assets/fonts/`)
+
+The bundled typography fonts are licensed under the **SIL Open Font License, Version 1.1 (OFL-1.1)**:
+- **EB Garamond** (`EBGaramond-Regular.ttf`, `EBGaramond-Bold.ttf`, `EBGaramond-Italic.ttf`, `EBGaramond-BoldItalic.ttf`): Designed by Georg Duffner and Octavio Pardo.
+- **Noto Sans Symbols** (`NotoSansSymbols-Regular.ttf`): Designed by Google and the Noto Project Authors.
+
+The full license text of the SIL Open Font License, Version 1.1 is provided in [`game/assets/fonts/OFL.txt`](file:///game/assets/fonts/OFL.txt) and at https://openfontlicense.org.
+
+---
+
+## 3. Original Project Assets & Compilations
+
+All original project assets—including custom UI vector icons, liturgical badges, layout themes, color palette tokens, procedural styling configurations, and structured dataset compilations (`game/data/prayers.json`, `game/data/mysteries.json`, `game/data/book_layout.json`)—are licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)**.
+
+To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
