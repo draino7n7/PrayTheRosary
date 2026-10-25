@@ -448,8 +448,32 @@ func test_historical_feast_note_and_marian_counsel_quote() -> void:
 	assert_eq(sections.size(), 3, "Page 2 must have 3 historical sections")
 	var sec3_body: String = str((sections[2] as Dictionary).get("body", ""))
 	assert_true(
-		sec3_body.contains("and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."),
-		"Page 2 Section 3 must document the 1571 Our Lady of Victory feast and 1573 renaming"
+		sec3_body.contains("In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."),
+		"Page 2 Section 3 must document the standalone 1571 Our Lady of Victory feast and 1573 renaming sentence"
+	)
+	assert_true(
+		sec3_body.contains("the Joyful Mysteries (Christ's Incarnation and early life, from the Annunciation to the Finding in the Temple)"),
+		"Page 2 Section 3 must summarize the Joyful Mysteries"
+	)
+	assert_true(
+		sec3_body.contains("the Sorrowful Mysteries (His Passion and Death, from the Agony in the Garden to the Crucifixion)"),
+		"Page 2 Section 3 must summarize the Sorrowful Mysteries"
+	)
+	assert_true(
+		sec3_body.contains("the Glorious Mysteries (His Resurrection, Ascension, and the crowning glory of the Church and the Blessed Virgin)"),
+		"Page 2 Section 3 must summarize the Glorious Mysteries"
+	)
+	assert_true(
+		sec3_body.contains("introducing the five Luminous Mysteries, contemplating the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."),
+		"Page 2 Section 3 must summarize the Luminous Mysteries"
+	)
+	assert_true(
+		sec3_body.contains("\n"),
+		"Page 2 Section 3 must contain a newline separator dividing Pope St. Pius V from Pope St. John Paul II"
+	)
+	assert_false(
+		sec3_body.contains("(the Mysteries of Light)"),
+		"Page 2 Section 3 must not contain redundant parenthetical '(the Mysteries of Light)'"
 	)
 
 	var back: Dictionary = loader.get_back_cover()

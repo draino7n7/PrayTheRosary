@@ -139,6 +139,21 @@ class TestBuildPrintPdf(unittest.TestCase):
         finally:
             doc.close()
 
+    def test_page_2_history_content(self):
+        """Verifies Page 2 displays the updated mystery summaries and feast note."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p2_text = " ".join(doc[1].get_text().split())
+            self.assertIn("In 1569, Pope St. Pius V formally established the traditional fifteen Mysteries", p2_text)
+            self.assertIn("Joyful Mysteries (Christ's Incarnation and early life", p2_text)
+            self.assertIn("Sorrowful Mysteries (His Passion and Death", p2_text)
+            self.assertIn("Glorious Mysteries (His Resurrection, Ascension, and the crowning glory", p2_text)
+            self.assertIn("In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573).", p2_text)
+            self.assertIn("Pope St. John Paul II completed this chronological Gospel arc by introducing the five Luminous Mysteries", p2_text)
+            self.assertNotIn("(the Mysteries of Light)", p2_text)
+        finally:
+            doc.close()
+
     def test_bleed_flag_geometry(self):
         """Verifies --bleed generates 450 x 666 pt pages with TrimBox (9, 9, 441, 657) and BleedBox."""
         from scripts.build_print_pdf import build_print_pdf

@@ -50,10 +50,12 @@ This document outlines the strict manual testing procedures required before any 
   - 22pt regular subheading (`EBGaramond-Regular.ttf` in Warm Umber `#5C4338`), 34pt bold heading, and warm ivory parchment panels (`#FAF6EE`) with antique gold borders (`#B89130`).
   - Page 2 displays subheading *"Origins and Tradition of the Most Holy Rosary"*.
   - Calibrated typography auto-fitting based on character density (`total_chars <= 1650`):
-    - Page 2 (1,622 chars): 25pt section headers and 22pt body paragraphs.
-    - Page 3 (1,813 chars): 23pt section headers and 20pt body paragraphs.
+    - Page 2 (1,854 chars, > 1,650 threshold): 23pt section headers and 20pt body paragraphs across all 3 sections.
+    - Page 3 (1,813 chars, > 1,650 threshold): 23pt section headers and 20pt body paragraphs across all 3 sections.
   - Page 2 Section 2 (*St. Dominic & Preaching the Mysteries*) accurately notes: `"organized the Marian Psalter (the 150 Hail Marys) into fifteen decades"`.
-  - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) accurately documents: `"...and in 1571 instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
+  - Page 2 Section 3 (*Pope St. Pius V & The Twenty Mysteries*) is formatted into two distinct chronological paragraphs separated by a clean newline break:
+    - **Paragraph 1:** Documents Pope St. Pius V establishing the fifteen traditional mysteries with descriptive bookend summaries for the Joyful Mysteries (*"Christ's Incarnation and early life, from the Annunciation to the Finding in the Temple"*), Sorrowful Mysteries (*"His Passion and Death, from the Agony in the Garden to the Crucifixion"*), and Glorious Mysteries (*"His Resurrection, Ascension, and the crowning glory of the Church and the Blessed Virgin"*), followed by the clean standalone sentence: `"In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."`
+    - **Paragraph 2:** Documents Pope St. John Paul II's 2002 Apostolic Letter *Rosarium Virginis Mariae* completing the chronological Gospel arc by introducing the five Luminous Mysteries (*"contemplating the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist"*), with the redundant parenthetical `(the Mysteries of Light)` omitted.
   - Page 3 Heading displays `"Structure of This Book & How to Pray"`, with subheading `"Praying with Scripture, Prayer, and Sacred Art"`.
   - Page 3 Section 1 (*How This Book Is Organized*) explicitly notes:
     - Group recitation guidance in the opening paragraph: lines printed in regular type are spoken by the leader and lines in bold are spoken by everyone together in unison.
