@@ -105,7 +105,25 @@ class TestBuildPrintPdf(unittest.TestCase):
             self.assertIn("Catholic Public Domain Version (CPDV)", p49_text)
             self.assertIn("sacredbible.org", p49_text)
             self.assertIn("public-domain masterworks", p49_text)
-            self.assertIn("Museo Nacional del Prado", p49_text)
+            self.assertIn("Dulwich Picture Gallery (London)", p49_text)
+            self.assertIn("Museo Nacional del Prado (Madrid)", p49_text)
+            self.assertIn("Princeton University Art Museum (Princeton)", p49_text)
+            self.assertIn("Frederiksborg Castle (Hillerød)", p49_text)
+        finally:
+            doc.close()
+
+    def test_credits_pages_museum_attributions(self):
+        """Verifies updated museum attributions on Page 48 and Page 49 credits."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p48_text = " ".join(doc[47].get_text().split())
+            self.assertIn("The Madonna of the Rosary (The Virgin of the Rosary)", p48_text)
+            self.assertIn("Dulwich Picture Gallery, London, UK", p48_text)
+            self.assertIn("The Marriage Feast at Cana", p48_text)
+
+            p49_text = " ".join(doc[48].get_text().split())
+            self.assertIn("The Crowning with Thorns (La coronación de espinas)", p49_text)
+            self.assertIn("The Assumption of the Virgin (The Walpole Immaculate Conception)", p49_text)
         finally:
             doc.close()
 

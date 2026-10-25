@@ -340,7 +340,7 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 	loader.load_all()
 
 	var expected_inventory: Dictionary = {
-		"cover": "P00975",
+		"cover": "DPG281",
 		"opening_prayers": "P00824",
 		"closing_prayers": "P02809",
 		"joyful_1_annunciation": "P00970",
@@ -353,7 +353,7 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 		"luminous_3_proclamation": "King's Oratory (Kongens Bedekammer)",
 		"luminous_4_transfiguration": "OLV.0003.I",
 		"luminous_5_eucharist": "97",
-		"sorrowful_1_agony": "GG F17",
+		"sorrowful_1_agony": "GG F 17",
 		"sorrowful_2_scourging": "70926",
 		"sorrowful_3_crowning_with_thorns": "P01474",
 		"sorrowful_4_carrying_cross": "P00298",
@@ -397,10 +397,14 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 		assert_eq(str(art.get("inventory_number", "")), expected_inventory[art_id], "Artwork '%s' inventory_number must match museum catalog" % art_id)
 		assert_eq(str(art.get("section_label", "")), expected_section_labels[art_id], "Artwork '%s' section_label must match non-numbered book placement label" % art_id)
 
+	assert_eq(str(loader.get_artwork("joyful_2_visitation").get("creation_date", "")), "1643–1648")
 	assert_eq(str(loader.get_artwork("luminous_2_wedding_at_cana").get("creation_date", "")), "c. 1712–1715")
-	assert_eq(str(loader.get_artwork("luminous_5_eucharist").get("creation_date", "")), "1631–1632")
+	assert_eq(str(loader.get_artwork("luminous_5_eucharist").get("creation_date", "")), "1630–1631")
+	assert_eq(str(loader.get_artwork("glorious_2_ascension").get("original_dimensions", "")), "81.3 cm × 73.0 cm")
 	assert_eq(str(loader.get_artwork("glorious_3_pentecost").get("creation_date", "")), "1612–1614")
 	assert_eq(str(loader.get_artwork("glorious_4_assumption").get("current_location", "")), "State Hermitage Museum, St. Petersburg, Russia")
+	assert_eq(str(loader.get_artwork("glorious_4_assumption").get("creation_date", "")), "c. 1680")
+	assert_eq(str(loader.get_artwork("glorious_4_assumption").get("original_dimensions", "")), "195 cm × 145 cm")
 	assert_eq(str(loader.get_artwork("glorious_5_coronation").get("creation_date", "")), "c. 1635–1636")
 
 	# Verify synchronization with assets/2D/gimp/attributions.json
@@ -433,9 +437,13 @@ func test_museum_catalog_attributions_and_synchronization() -> void:
 			assert_eq(str(img.get("creation_date", "")), str(runtime_art.get("creation_date", "")), "Creation date for '%s' must match between attributions.json and runtime data" % id_str)
 			assert_eq(str(img.get("current_location", "")), str(runtime_art.get("current_location", "")), "Location for '%s' must match between attributions.json and runtime data" % id_str)
 			assert_eq(str(img.get("section_label", "")), str(runtime_art.get("section_label", "")), "Section label for '%s' must match between attributions.json and runtime data" % id_str)
+			assert_eq(str(img.get("original_dimensions", "")), str(runtime_art.get("original_dimensions", "")), "Original dimensions for '%s' must match between attributions.json and runtime data" % id_str)
 
+	assert_eq(str(attr_by_id.get("cover", {}).get("original_dimensions", "")), "197.8 cm × 128 cm")
 	assert_eq(str(attr_by_id.get("joyful_2_visitation", {}).get("original_dimensions", "")), "114.5 cm × 88.5 cm")
 	assert_eq(str(attr_by_id.get("luminous_3_proclamation", {}).get("original_dimensions", "")), "104 cm × 92 cm")
+	assert_eq(str(attr_by_id.get("glorious_2_ascension", {}).get("original_dimensions", "")), "81.3 cm × 73.0 cm")
+	assert_eq(str(attr_by_id.get("glorious_4_assumption", {}).get("original_dimensions", "")), "195 cm × 145 cm")
 	assert_eq(str(attr_by_id.get("glorious_5_coronation", {}).get("original_dimensions", "")), "178.5 cm × 134.5 cm")
 
 

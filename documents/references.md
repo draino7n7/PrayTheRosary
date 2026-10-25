@@ -65,18 +65,18 @@ flowchart TD
 - **Subtitle:** A Contemplative Visual Guide to the Twenty Mysteries
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `cover`
-  - **Title:** *The Virgin of the Rosary* (*La Virgen del Rosario*)
+  - **Title:** *The Madonna of the Rosary* (*The Virgin of the Rosary*)
   - **Artist:** Bartolomé Esteban Murillo (1617–1682)
-  - **Creation Date:** c. 1650–1655
+  - **Creation Date:** c. 1675–1680
   - **Medium & Support:** Oil on canvas
-  - **Original Dimensions:** 166 cm × 112 cm
-  - **Current Location:** Museo del Prado, Madrid, Spain (Room 016)
-  - **Inventory Number:** `P00975`
+  - **Original Dimensions:** 197.8 cm × 128 cm
+  - **Current Location:** Dulwich Picture Gallery, London, UK
+  - **Inventory Number:** `DPG281`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/cover_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/cover.webp`
 - **Primary Source References:**
-  - [Reference 1] Museo del Prado Official Catalog (`P00975`): [Museo del Prado Collection — The Virgin of the Rosary](https://www.museodelprado.es/en/the-collection/art-work/the-virgin-of-the-rosary/eb5f85ec-f95d-4709-ab09-693206bfb3f5), [Dulwich Picture Gallery](https://www.dulwichpicturegallery.org.uk/explore-the-collection/251-300/the-virgin-of-the-rosary/), [Wikidata Q3918296](https://www.wikidata.org/wiki/Q3918296), and [Wikidata Q23929017](https://www.wikidata.org/wiki/Q23929017)
+  - [Reference 1] Dulwich Picture Gallery Official Catalog (`DPG281`): [Dulwich Picture Gallery Collection — The Madonna of the Rosary](https://www.dulwichpicturegallery.org.uk/explore-the-collection/251-300/the-virgin-of-the-rosary/) and [Wikidata Q23929017](https://www.wikidata.org/wiki/Q23929017); comparative reference [Museo del Prado Collection — The Virgin of the Rosary P00975](https://www.museodelprado.es/en/the-collection/art-work/the-virgin-of-the-rosary/eb5f85ec-f95d-4709-ab09-693206bfb3f5) and [Wikidata Q3918296](https://www.wikidata.org/wiki/Q3918296)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons Dossier](https://commons.wikimedia.org/wiki/File:Murillo,_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg) and [Direct Image Master](https://upload.wikimedia.org/wikipedia/commons/9/9b/Murillo%2C_Bartolom%C3%A9_Est%C3%A9ban_-_The_Madonna_of_the_Rosary_-_Google_Art_Project.jpg)
 
 ---
@@ -93,14 +93,15 @@ flowchart TD
      - [Reference 2] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§1–3, §12): [Vatican Archives — Rosarium Virginis Mariae](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
   2. **St. Dominic & Preaching the Mysteries**:
      - *Summary*: Tradition holds that Our Lady entrusted the Rosary to St. Dominic de Guzmán (1170–1221) to combat heresy by pairing vocal prayer with quiet meditation on Christ's life, death, and resurrection. Carthusian Dominic of Prussia and Dominican Blessed Alan de la Roche later organized the Marian Psalter (the 150 Hail Marys) into fifteen decades with specific Gospel mysteries.
-     - [Reference 1] Pope St. Pius V, Papal Bull *Consueverunt Romani Pontifices* (Sept 17, 1569): [Papal Encyclicals Online — Consueverunt Romani Pontifices](https://www.papalencyclicals.net/pius05/p5consue.htm)
-     - [Reference 2] Catholic Encyclopedia: [New Advent — Feast of the Holy Rosary](https://www.newadvent.org/cathen/13189a.htm) and [New Advent — Confraternity of the Holy Rosary](https://www.newadvent.org/cathen/13188b.htm)
-     - [Reference 3] Vatican News (Liturgical Feast of Our Lady of the Rosary & Battle of Lepanto 1571): [Vatican News — Memorial of Our Lady of the Rosary](https://www.vaticannews.va/en/liturgical-holidays/memorial-of-our-lady-of-the-rosary.html)
+     - [Reference 1] Catholic Encyclopedia: [New Advent — Confraternity of the Holy Rosary](https://www.newadvent.org/cathen/13188b.htm) and [New Advent — St. Dominic](https://www.newadvent.org/cathen/05106a.htm)
   3. **Pope St. Pius V & The Twenty Mysteries**:
      - *Summary*: In 1569, Pope St. Pius V formally established the traditional fifteen Mysteries in his papal bull *Consueverunt Romani Pontifices*: the Joyful Mysteries (Christ's Incarnation and early life, from the Annunciation to the Finding in the Temple), the Sorrowful Mysteries (His Passion and Death, from the Agony in the Garden to the Crucifixion), and the Glorious Mysteries (His Resurrection, Ascension, and the crowning glory of the Church and the Blessed Virgin). In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573).
        In his 2002 Apostolic Letter *Rosarium Virginis Mariae*, Pope St. John Paul II completed this chronological Gospel arc by introducing the five Luminous Mysteries, contemplating the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist.
-     - [Reference 1] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§19): [Vatican Archives — Rosarium Virginis Mariae §19](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
-     - [Reference 2] Vatican Holy Rosary Overview: [Vatican — The Holy Rosary](https://www.vatican.va/special/rosary/index_rosary.htm)
+     - [Reference 1] Pope St. Pius V, Papal Bull *Consueverunt Romani Pontifices* (Sept 17, 1569): [Papal Encyclicals Online — Consueverunt Romani Pontifices](https://www.papalencyclicals.net/pius05/p5consue.htm)
+     - [Reference 2] Catholic Encyclopedia: [New Advent — Feast of the Holy Rosary](https://www.newadvent.org/cathen/13189a.htm)
+     - [Reference 3] Vatican News (Liturgical Feast of Our Lady of the Rosary & Battle of Lepanto 1571): [Vatican News — Memorial of Our Lady of the Rosary](https://www.vaticannews.va/en/liturgical-holidays/memorial-of-our-lady-of-the-rosary.html)
+     - [Reference 4] Pope St. John Paul II, Apostolic Letter *Rosarium Virginis Mariae* (§19): [Vatican Archives — Rosarium Virginis Mariae §19](https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html)
+     - [Reference 5] Vatican Holy Rosary Overview: [Vatican — The Holy Rosary](https://www.vatican.va/special/rosary/index_rosary.htm)
 
 ---
 
@@ -144,15 +145,15 @@ flowchart TD
      - Unison text: *"In the name of the Father, and of the Son, and of the Holy Spirit. Amen."*
   2. **The Apostles' Creed** (`apostles_creed` / *Symbolum Apostolorum*):
      - Rubric: *"Profess the Apostles' Creed:"*
-     - Leader: *"I believe in God, the Father Almighty..."*
-     - Group: *"I believe in the Holy Spirit, the holy Catholic Church..."*
+     - Leader: *"I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; on the third day He rose again from the dead. He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there He will come to judge the living and the dead."*
+     - Group: *"I believe in the Holy Spirit, the holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen."*
   3. **The Our Father** (`our_father` / *Pater Noster*):
      - Rubric: *"Pray the Our Father for the intentions of the Holy Father and the Church:"*
-     - Leader: *"Our Father, who art in heaven..."*
-     - Group: *"Give us this day our daily bread..."*
+     - Leader: *"Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven."*
+     - Group: *"Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen."*
   4. **The Hail Mary** (`hail_mary` / *Ave Maria*):
-     - Leader: *"Hail Mary, full of grace..."*
-     - Group: *"Holy Mary, Mother of God..."*
+     - Leader: *"Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus."*
+     - Group: *"Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."*
      - First bead: **First Hail Mary (For an Increase of Faith)** (`hail_mary_faith` / *Ave Maria (Pro Fide)*)
      - Second bead: **Second Hail Mary (For an Increase of Hope)** (`hail_mary_hope` / *Ave Maria (Pro Spe)*)
      - Third bead: **Third Hail Mary (For an Increase of Charity)** (`hail_mary_charity` / *Ave Maria (Pro Caritate)*)
@@ -179,7 +180,7 @@ flowchart TD
   - **Creation Date:** 1577–1579
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 300 cm × 179 cm
-  - **Current Location:** Museo del Prado, Madrid, Spain (Room 009B)
+  - **Current Location:** Museo del Prado, Madrid, Spain
   - **Inventory Number:** `P00824`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/opening_master_el_greco_trinity.jpg`
@@ -214,13 +215,13 @@ flowchart TD
 ### Page 7 — First Joyful Mystery Artwork
 
 - **Page Number:** 7 (Recto)
-- **Heading:** The First Joyful Mystery
-- **Subheading:** The Annunciation
+- **Heading:** The Annunciation
+- **Subheading:** The First Joyful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `joyful_1_annunciation`
   - **Title:** *The Annunciation* (*La Anunciación*)
   - **Artist:** Bartolomé Esteban Murillo (1617–1682)
-  - **Creation Date:** c. 1660
+  - **Creation Date:** c. 1660–1665
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 125 cm × 103 cm
   - **Current Location:** Museo del Prado, Madrid, Spain
@@ -254,13 +255,13 @@ flowchart TD
 ### Page 9 — Second Joyful Mystery Artwork
 
 - **Page Number:** 9 (Recto)
-- **Heading:** The Second Joyful Mystery
-- **Subheading:** The Visitation
+- **Heading:** The Visitation
+- **Subheading:** The Second Joyful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `joyful_2_visitation`
   - **Title:** *The Visitation*
   - **Artist:** Philippe de Champaigne (1602–1674)
-  - **Creation Date:** c. 1643–1648
+  - **Creation Date:** 1643–1648
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 114.5 cm × 88.5 cm
   - **Current Location:** Princeton University Art Museum, Princeton, New Jersey
@@ -294,8 +295,8 @@ flowchart TD
 ### Page 11 — Third Joyful Mystery Artwork
 
 - **Page Number:** 11 (Recto)
-- **Heading:** The Third Joyful Mystery
-- **Subheading:** The Nativity of Our Lord
+- **Heading:** The Nativity of Our Lord
+- **Subheading:** The Third Joyful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `joyful_3_nativity`
   - **Title:** *The Adoration of the Shepherds*
@@ -303,7 +304,7 @@ flowchart TD
   - **Creation Date:** c. 1640
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 480 cm × 321 cm
-  - **Current Location:** National Gallery, London, United Kingdom
+  - **Current Location:** National Gallery, London, UK
   - **Inventory Number:** `NG6270`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/joyful_3_nativity_master_guido_reni.jpg`
@@ -334,8 +335,8 @@ flowchart TD
 ### Page 13 — Fourth Joyful Mystery Artwork
 
 - **Page Number:** 13 (Recto)
-- **Heading:** The Fourth Joyful Mystery
-- **Subheading:** The Presentation of Jesus in the Temple
+- **Heading:** The Presentation of Jesus in the Temple
+- **Subheading:** The Fourth Joyful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `joyful_4_presentation`
   - **Title:** *Presentation of Jesus in the Temple*
@@ -374,15 +375,15 @@ flowchart TD
 ### Page 15 — Fifth Joyful Mystery Artwork
 
 - **Page Number:** 15 (Recto)
-- **Heading:** The Fifth Joyful Mystery
-- **Subheading:** The Finding of Jesus in the Temple
+- **Heading:** The Finding of Jesus in the Temple
+- **Subheading:** The Fifth Joyful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `joyful_5_finding_in_temple`
   - **Title:** *Christ among the Doctors*
-  - **Artist:** Bernard van Orley (c. 1487–1541)
+  - **Artist:** Bernard van Orley (c. 1488–1541)
   - **Creation Date:** c. 1513
   - **Medium & Support:** Oil on panel
-  - **Original Dimensions:** 53.7 cm × 32.3 cm
+  - **Original Dimensions:** 54.4 cm × 33.3 cm
   - **Current Location:** National Gallery of Art, Washington, D.C.
   - **Inventory Number:** `1952.5.47.a (NGA 41661)`
   - **License:** Public Domain (CC0 / Open Access)
@@ -414,8 +415,8 @@ flowchart TD
 ### Page 17 — First Luminous Mystery Artwork
 
 - **Page Number:** 17 (Recto)
-- **Heading:** The First Luminous Mystery
-- **Subheading:** The Baptism of Jesus in the Jordan
+- **Heading:** The Baptism of Jesus in the Jordan
+- **Subheading:** The First Luminous Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `luminous_1_baptism`
   - **Title:** *The Baptism of Christ*
@@ -454,15 +455,15 @@ flowchart TD
 ### Page 19 — Second Luminous Mystery Artwork
 
 - **Page Number:** 19 (Recto)
-- **Heading:** The Second Luminous Mystery
-- **Subheading:** The Wedding Feast at Cana
+- **Heading:** The Wedding Feast at Cana
+- **Subheading:** The Second Luminous Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `luminous_2_wedding_at_cana`
-  - **Title:** *The Marriage at Cana*
+  - **Title:** *The Marriage Feast at Cana*
   - **Artist:** Sebastiano Ricci (1659–1734)
   - **Creation Date:** c. 1712–1715
   - **Medium & Support:** Oil on canvas
-  - **Original Dimensions:** 166.4 cm × 137.2 cm
+  - **Original Dimensions:** 167.0 cm × 137.2 cm
   - **Current Location:** Nelson-Atkins Museum of Art, Kansas City, Missouri
   - **Inventory Number:** `59-2`
   - **License:** Public Domain (CC0 / PD-Art)
@@ -494,8 +495,8 @@ flowchart TD
 ### Page 21 — Third Luminous Mystery Artwork
 
 - **Page Number:** 21 (Recto)
-- **Heading:** The Third Luminous Mystery
-- **Subheading:** The Proclamation of the Kingdom of God
+- **Heading:** The Proclamation of the Kingdom of God
+- **Subheading:** The Third Luminous Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `luminous_3_proclamation`
   - **Title:** *The Sermon on the Mount*
@@ -534,8 +535,8 @@ flowchart TD
 ### Page 23 — Fourth Luminous Mystery Artwork
 
 - **Page Number:** 23 (Recto)
-- **Heading:** The Fourth Luminous Mystery
-- **Subheading:** The Transfiguration
+- **Heading:** The Transfiguration
+- **Subheading:** The Fourth Luminous Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `luminous_4_transfiguration`
   - **Title:** *The Transfiguration of Christ*
@@ -543,7 +544,7 @@ flowchart TD
   - **Creation Date:** c. 1520
   - **Medium & Support:** Oil on panel
   - **Original Dimensions:** 174 cm × 120 cm
-  - **Current Location:** Church of Our Lady (*Onze-Lieve-Vrouwekerk*), Bruges, Belgium
+  - **Current Location:** Church of Our Lady (Onze-Lieve-Vrouwekerk), Bruges, Belgium
   - **Inventory Number:** `OLV.0003.I`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/luminous_4_transfiguration_master_gerard_david.jpg`
@@ -574,13 +575,13 @@ flowchart TD
 ### Page 25 — Fifth Luminous Mystery Artwork
 
 - **Page Number:** 25 (Recto)
-- **Heading:** The Fifth Luminous Mystery
-- **Subheading:** The Institution of the Eucharist
+- **Heading:** The Institution of the Eucharist
+- **Subheading:** The Fifth Luminous Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `luminous_5_eucharist`
   - **Title:** *The Last Supper*
   - **Artist:** Peter Paul Rubens (1577–1640)
-  - **Creation Date:** 1631–1632
+  - **Creation Date:** 1630–1631
   - **Medium & Support:** Oil on panel
   - **Original Dimensions:** 304 cm × 250 cm
   - **Current Location:** Pinacoteca di Brera, Milan, Italy
@@ -614,8 +615,8 @@ flowchart TD
 ### Page 27 — First Sorrowful Mystery Artwork
 
 - **Page Number:** 27 (Recto)
-- **Heading:** The First Sorrowful Mystery
-- **Subheading:** The Agony in the Garden
+- **Heading:** The Agony in the Garden
+- **Subheading:** The First Sorrowful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `sorrowful_1_agony`
   - **Title:** *Christ on the Mount of Olives* (*Christ's Fear of Death*)
@@ -624,12 +625,12 @@ flowchart TD
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 148 cm × 124 cm
   - **Current Location:** Kunsthistorisches Museum, Vienna, Austria
-  - **Inventory Number:** `GG F17`
+  - **Inventory Number:** `GG F 17`
   - **License:** Public Domain (CC0 / Google Art Project)
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_1_agony_master_caracciolo.jpg`
   - **Runtime Texture:** `res://assets/images/sorrowful_1_agony.webp`
 - **Primary Source References:**
-  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG F17`): [KHM Vienna (English) — Christ on the Mount of Olives](https://www.khm.at/en/artworks/christ-on-the-mount-of-olives-187), [KHM Vienna (German) — Christus am Oelberg](https://www.khm.at/kunstwerke/christus-am-oelberg-187), and [Wikidata Q27978904](https://www.wikidata.org/wiki/Q27978904)
+  - [Reference 1] Kunsthistorisches Museum Vienna Official Catalog (`GG F 17`): [KHM Vienna (English) — Christ on the Mount of Olives](https://www.khm.at/en/artworks/christ-on-the-mount-of-olives-187), [KHM Vienna (German) — Christus am Oelberg](https://www.khm.at/kunstwerke/christus-am-oelberg-187), and [Wikidata Q27978904](https://www.wikidata.org/wiki/Q27978904)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Giovanni Battista Caracciolo, called Battistello - Christ on the Mount of Olives (Christ’s Fear of Death) - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Giovanni_Battista_Caracciolo,_called_Battistello_-_Christ_on_the_Mount_of_Olives_%28Christ%E2%80%99s_Fear_of_Death%29_-_Google_Art_Project.jpg)
 
 ---
@@ -654,8 +655,8 @@ flowchart TD
 ### Page 29 — Second Sorrowful Mystery Artwork
 
 - **Page Number:** 29 (Recto)
-- **Heading:** The Second Sorrowful Mystery
-- **Subheading:** The Scourging at the Pillar
+- **Heading:** The Scourging at the Pillar
+- **Subheading:** The Second Sorrowful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `sorrowful_2_scourging`
   - **Title:** *The Flagellation of Christ*
@@ -663,7 +664,7 @@ flowchart TD
   - **Creation Date:** c. 1617
   - **Medium & Support:** Oil on panel
   - **Original Dimensions:** 219 cm × 161 cm
-  - **Current Location:** St. Paul's Church (*Sint-Pauluskerk*), Antwerp, Belgium
+  - **Current Location:** St. Paul's Church (Sint-Pauluskerk), Antwerp, Belgium
   - **Inventory Number:** `70926`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/sorrowful_2_scourging_master_rubens.jpg`
@@ -694,11 +695,11 @@ flowchart TD
 ### Page 31 — Third Sorrowful Mystery Artwork
 
 - **Page Number:** 31 (Recto)
-- **Heading:** The Third Sorrowful Mystery
-- **Subheading:** The Crowning with Thorns
+- **Heading:** The Crowning with Thorns
+- **Subheading:** The Third Sorrowful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `sorrowful_3_crowning_with_thorns`
-  - **Title:** *Christ Crowned with Thorns* (*La coronación de espinas*)
+  - **Title:** *The Crowning with Thorns (La coronación de espinas)*
   - **Artist:** Sir Anthony van Dyck (1599–1641)
   - **Creation Date:** c. 1618–1620
   - **Medium & Support:** Oil on canvas
@@ -734,13 +735,13 @@ flowchart TD
 ### Page 33 — Fourth Sorrowful Mystery Artwork
 
 - **Page Number:** 33 (Recto)
-- **Heading:** The Fourth Sorrowful Mystery
-- **Subheading:** The Carrying of the Cross
+- **Heading:** The Carrying of the Cross
+- **Subheading:** The Fourth Sorrowful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `sorrowful_4_carrying_cross`
   - **Title:** *Christ Falling on the Way to Calvary* (*Lo Spasimo di Sicilia*)
   - **Artist:** Raphael (Raffaello Sanzio, 1483–1520)
-  - **Creation Date:** c. 1516–1517
+  - **Creation Date:** c. 1515–1516
   - **Medium & Support:** Oil on panel transferred to canvas
   - **Original Dimensions:** 318 cm × 229 cm
   - **Current Location:** Museo del Prado, Madrid, Spain
@@ -774,13 +775,13 @@ flowchart TD
 ### Page 35 — Fifth Sorrowful Mystery Artwork
 
 - **Page Number:** 35 (Recto)
-- **Heading:** The Fifth Sorrowful Mystery
-- **Subheading:** The Crucifixion and Death of Our Lord
+- **Heading:** The Crucifixion and Death of Our Lord
+- **Subheading:** The Fifth Sorrowful Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `sorrowful_5_crucifixion`
   - **Title:** *Christ on the Cross* (*Cristo crucificado*)
   - **Artist:** Bartolomé Esteban Murillo (1617–1682)
-  - **Creation Date:** c. 1675
+  - **Creation Date:** c. 1677
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 71 cm × 54 cm
   - **Current Location:** Museo del Prado, Madrid, Spain
@@ -814,8 +815,8 @@ flowchart TD
 ### Page 37 — First Glorious Mystery Artwork
 
 - **Page Number:** 37 (Recto)
-- **Heading:** The First Glorious Mystery
-- **Subheading:** The Resurrection of Our Lord
+- **Heading:** The Resurrection of Our Lord
+- **Subheading:** The First Glorious Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `glorious_1_resurrection`
   - **Title:** *The Resurrection of the Lord* (*La Resurrección del Señor*)
@@ -854,15 +855,15 @@ flowchart TD
 ### Page 39 — Second Glorious Mystery Artwork
 
 - **Page Number:** 39 (Recto)
-- **Heading:** The Second Glorious Mystery
-- **Subheading:** The Ascension of Our Lord into Heaven
+- **Heading:** The Ascension of Our Lord into Heaven
+- **Subheading:** The Second Glorious Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `glorious_2_ascension`
   - **Title:** *The Ascension*
   - **Artist:** John Singleton Copley (1738–1815)
   - **Creation Date:** 1775
   - **Medium & Support:** Oil on canvas
-  - **Original Dimensions:** 81.6 cm × 74 cm
+  - **Original Dimensions:** 81.3 cm × 73.0 cm
   - **Current Location:** Museum of Fine Arts, Boston, Massachusetts
   - **Inventory Number:** `25.95`
   - **License:** Public Domain (CC0 / PD-Art)
@@ -894,8 +895,8 @@ flowchart TD
 ### Page 41 — Third Glorious Mystery Artwork
 
 - **Page Number:** 41 (Recto)
-- **Heading:** The Third Glorious Mystery
-- **Subheading:** The Descent of the Holy Spirit
+- **Heading:** The Descent of the Holy Spirit
+- **Subheading:** The Third Glorious Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `glorious_3_pentecost`
   - **Title:** *Pentecost* (*Pentecostés*)
@@ -934,22 +935,22 @@ flowchart TD
 ### Page 43 — Fourth Glorious Mystery Artwork
 
 - **Page Number:** 43 (Recto)
-- **Heading:** The Fourth Glorious Mystery
-- **Subheading:** The Assumption of the Blessed Virgin Mary
+- **Heading:** The Assumption of the Blessed Virgin Mary
+- **Subheading:** The Fourth Glorious Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `glorious_4_assumption`
-  - **Title:** *The Assumption of the Virgin*
+  - **Title:** *The Assumption of the Virgin (The Walpole Immaculate Conception)*
   - **Artist:** Bartolomé Esteban Murillo (1617–1682)
-  - **Creation Date:** c. 1670
+  - **Creation Date:** c. 1680
   - **Medium & Support:** Oil on canvas
-  - **Original Dimensions:** 195.5 cm × 145 cm
+  - **Original Dimensions:** 195 cm × 145 cm
   - **Current Location:** State Hermitage Museum, St. Petersburg, Russia
   - **Inventory Number:** `ГЭ-387`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/glorious_4_assumption_master_murillo.jpg`
   - **Runtime Texture:** `res://assets/images/glorious_4_assumption.webp`
 - **Primary Source References:**
-  - [Reference 1] State Hermitage Museum Catalog Record & Authorities (`ГЭ-387`): [Wikimedia Commons Category](https://commons.wikimedia.org/wiki/Category:Inmaculada_Concepci%C3%B3n_de_Walpole_%28Museo_del_Hermitage%29) and [Wikidata Q21711868](https://www.wikidata.org/wiki/Q21711868)
+  - [Reference 1] State Hermitage Museum Catalog Record & Authorities (`ГЭ-387`): [Wikimedia Commons Category](https://commons.wikimedia.org/wiki/Category:Inmaculada_Concepci%C3%B3n_de_Walpole_%28Museo_del_Hermitage%29) and [Wikidata Q27968621](https://www.wikidata.org/wiki/Q27968621)
   - [Reference 2] Wikimedia Commons Archival Master: [Wikimedia Commons — File:Bartolome Murillo - Assumption of the Virgin.jpg](https://commons.wikimedia.org/wiki/File:Bartolome_Murillo_-_Assumption_of_the_Virgin.jpg)
 
 ---
@@ -974,8 +975,8 @@ flowchart TD
 ### Page 45 — Fifth Glorious Mystery Artwork
 
 - **Page Number:** 45 (Recto)
-- **Heading:** The Fifth Glorious Mystery
-- **Subheading:** The Coronation of the Blessed Virgin Mary
+- **Heading:** The Coronation of the Blessed Virgin Mary
+- **Subheading:** The Fifth Glorious Mystery
 - **Sacred Artwork Attribution:**
   - **Artwork ID:** `glorious_5_coronation`
   - **Title:** *The Coronation of the Virgin* (*La coronación de la Virgen*)
@@ -1031,7 +1032,7 @@ flowchart TD
   - **Creation Date:** c. 1678
   - **Medium & Support:** Oil on canvas
   - **Original Dimensions:** 274 cm × 190 cm
-  - **Current Location:** Museo del Prado, Madrid, Spain (Room 016)
+  - **Current Location:** Museo del Prado, Madrid, Spain
   - **Inventory Number:** `P02809`
   - **License:** Public Domain (CC0 / PD-Art)
   - **Local Master File:** `assets/2D/gimp/original_downloads/closing_master_murillo_immaculate_conception.jpg`
@@ -1048,7 +1049,7 @@ flowchart TD
 - **Heading:** Sacred Artwork Credits (Part I)
 - **Subheading:** Front Cover, Opening Prayers, Joyful Mysteries & Luminous Mysteries
 - **Summary of Attributions (12 Works):**
-  1. Front Cover (Page 1): Bartolomé Esteban Murillo, *The Virgin of the Rosary* (Museo del Prado `P00975`)
+  1. Front Cover (Page 1): Bartolomé Esteban Murillo, *The Madonna of the Rosary* (Dulwich Picture Gallery `DPG281`)
   2. Spread 2 (Page 5): El Greco, *The Holy Trinity* (Museo del Prado `P00824`)
   3. Spread 3 (Page 7): Bartolomé Esteban Murillo, *The Annunciation* (Museo del Prado `P00970`)
   4. Spread 4 (Page 9): Philippe de Champaigne, *The Visitation* (Princeton University Art Museum `y1994-17`)
@@ -1056,7 +1057,7 @@ flowchart TD
   6. Spread 6 (Page 13): Vittore Carpaccio, *Presentation of Jesus in the Temple* (Gallerie dell'Accademia Venice `Cat. 44`)
   7. Spread 7 (Page 15): Bernard van Orley, *Christ among the Doctors* (National Gallery of Art Washington `1952.5.47.a`)
   8. Spread 8 (Page 17): Guido Reni, *The Baptism of Christ* (Kunsthistorisches Museum Vienna `GG 222`)
-  9. Spread 9 (Page 19): Sebastiano Ricci, *The Marriage at Cana* (Nelson-Atkins Museum of Art `59-2`)
+  9. Spread 9 (Page 19): Sebastiano Ricci, *The Marriage Feast at Cana* (Nelson-Atkins Museum of Art `59-2`)
   10. Spread 10 (Page 21): Carl Bloch, *The Sermon on the Mount* (Frederiksborg Castle, Denmark)
   11. Spread 11 (Page 23): Gerard David, *The Transfiguration of Christ* (Church of Our Lady, Bruges `OLV.0003.I`)
   12. Spread 12 (Page 25): Peter Paul Rubens, *The Last Supper* (Pinacoteca di Brera Milan `97`)
@@ -1076,20 +1077,20 @@ flowchart TD
 - **Heading:** Sacred Artwork Credits (Part II) & Colophon
 - **Subheading:** Sorrowful Mysteries, Glorious Mysteries, Closing Prayers & Text Sources
 - **Summary of Attributions (11 Works):**
-  13. Spread 13 (Page 27): Giovanni Battista Caracciolo, *Christ on the Mount of Olives* (Kunsthistorisches Museum Vienna `GG F17`)
+  13. Spread 13 (Page 27): Giovanni Battista Caracciolo, *Christ on the Mount of Olives* (Kunsthistorisches Museum Vienna `GG F 17`)
   14. Spread 14 (Page 29): Peter Paul Rubens, *The Flagellation of Christ* (St. Paul's Church Antwerp `70926`)
-  15. Spread 15 (Page 31): Sir Anthony van Dyck, *Christ Crowned with Thorns* (Museo del Prado `P01474`)
+  15. Spread 15 (Page 31): Sir Anthony van Dyck, *The Crowning with Thorns* (Museo del Prado `P01474`)
   16. Spread 16 (Page 33): Raphael, *Christ Falling on the Way to Calvary* (Museo del Prado `P00298`)
   17. Spread 17 (Page 35): Bartolomé Esteban Murillo, *Christ on the Cross* (Museo del Prado `P00967`)
   18. Spread 18 (Page 37): Bartolomé Esteban Murillo, *The Resurrection of the Lord* (Real Academia de Bellas Artes de San Fernando `0641`)
   19. Spread 19 (Page 39): John Singleton Copley, *The Ascension* (Museum of Fine Arts Boston `25.95`)
   20. Spread 20 (Page 41): Juan Bautista Maíno, *Pentecost* (Museo del Prado `P03018`)
-  21. Spread 21 (Page 43): Bartolomé Esteban Murillo, *The Assumption of the Virgin* (State Hermitage Museum `ГЭ-387`)
+  21. Spread 21 (Page 43): Bartolomé Esteban Murillo, *The Assumption of the Virgin (The Walpole Immaculate Conception)* (State Hermitage Museum `ГЭ-387`)
   22. Spread 22 (Page 45): Diego Velázquez, *The Coronation of the Virgin* (Museo del Prado `P01168`)
   23. Spread 23 (Page 47): Bartolomé Esteban Murillo, *The Immaculate Conception of Los Venerables* (Museo del Prado `P02809`)
 - **Colophon Legal & Public Domain Notices:**
   - *Scripture Notice*: Scripture quotations are taken from the Catholic Public Domain Version (CPDV) of the Holy Bible (sacredbible.org), which is in the public domain.
-  - *Artwork Notice*: All twenty-three paintings reproduced in this volume are public-domain masterworks (PD-Art / CC0) courtesy of their respective holding museums, cathedrals, and archival collections.
+  - *Artwork Notice*: All twenty-three paintings reproduced in this volume are public-domain masterworks (PD-Art / CC0) courtesy of the Dulwich Picture Gallery (London), the Museo Nacional del Prado (Madrid), the Kunsthistorisches Museum (Vienna), the National Gallery (London), the National Gallery of Art (Washington, D.C.), the Gallerie dell'Accademia (Venice), the Pinacoteca di Brera (Milan), the State Hermitage Museum (St. Petersburg), the Museum of Fine Arts (Boston), the Nelson-Atkins Museum of Art (Kansas City), the Princeton University Art Museum (Princeton), the Museum of National History at Frederiksborg Castle (Hillerød), the Real Academia de Bellas Artes de San Fernando (Madrid), St. Paul's Church (Antwerp), and the Church of Our Lady (Bruges).
 - **Primary Source References:**
   - [Reference 1] Repository Master Attributions Catalog: `assets/2D/gimp/attributions.json`
   - [Reference 2] Catholic Public Domain Version: [SacredBible.org](https://www.sacredbible.org/) and [GitHub draino7n7/cpdv](https://github.com/draino7n7/cpdv); comparative reference Douay-Rheims Bible Online (Challoner Revision): [DRBO.org](https://www.drbo.org/)
@@ -1111,7 +1112,7 @@ flowchart TD
   - [Reference 1] Pray The Rosary Project Architectural Specification: `documents/requirements.md`
 - **Marian Counsel:**
   - *Quote*: *"Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood."*
-  - *Attribution*: St. Louis Marie de Montfort, *The Secret of the Rosary*, "First Rose: Prayers"
+  - *Attribution*: St. Louis Marie de Montfort, *The Secret of the Rosary*, "Twenty-Fifth Rose: The Wealth of Sanctification" (§80)
   - [Reference 1] St. Louis Marie de Montfort, *The Secret of the Rosary* (Montfortian Associates): [The Admirable Secret of the Rosary — Writings of Montfort](https://www.montfortian.info/writingsandhymns/the-admirable-secret-of-the-rosary.html)
   - [Reference 2] Internet Archive Full Text: [Internet Archive — The Secret of the Rosary](https://archive.org/details/secretofrosary0000grig)
 - **Background Palette Verification:**
@@ -1119,6 +1120,6 @@ flowchart TD
   - Secondary Crimson: `#2A090B`
   - Accent Gold: `#D4AF37`
   - Text Ivory: `#F7F2E7`
-  - Aesthetic Rationale: Harmonizes with the upper crimson drapery of Murillo's *The Virgin of the Rosary* (Page 1 Cover).
+  - Aesthetic Rationale: Harmonizes with the rose-and-crimson garments and warm golden sky of Murillo's Dulwich *The Madonna of the Rosary* (Page 1 Cover).
 
 ---
