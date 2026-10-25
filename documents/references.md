@@ -152,11 +152,12 @@ flowchart TD
      - Leader: *"Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven."*
      - Group: *"Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen."*
   4. **The Hail Mary** (`hail_mary` / *Ave Maria*):
+     - Rubric: *"Pray three Hail Marys for the theological virtues of Faith, Hope, and Charity:"* (Step 4 renders **3× The Hail Mary** with the three theological virtue intentions stated concisely in the Step 4 rubric)
      - Leader: *"Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus."*
      - Group: *"Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."*
-     - First bead: **First Hail Mary (For an Increase of Faith)** (`hail_mary_faith` / *Ave Maria (Pro Fide)*)
-     - Second bead: **Second Hail Mary (For an Increase of Hope)** (`hail_mary_hope` / *Ave Maria (Pro Spe)*)
-     - Third bead: **Third Hail Mary (For an Increase of Charity)** (`hail_mary_charity` / *Ave Maria (Pro Caritate)*)
+     - First bead: **First Hail Mary (For an Increase in the Virtue of Faith)** (`hail_mary_faith` / *Ave Maria (Pro Fide)*)
+     - Second bead: **Second Hail Mary (For an Increase in the Virtue of Hope)** (`hail_mary_hope` / *Ave Maria (Pro Spe)*)
+     - Third bead: **Third Hail Mary (For an Increase in the Virtue of Charity)** (`hail_mary_charity` / *Ave Maria (Pro Caritate)*)
   5. **The Glory Be** (`glory_be` / *Gloria Patri*):
      - Leader: *"Glory be to the Father, and to the Son, and to the Holy Spirit,"*
      - Group: *"as it was in the beginning, is now, and ever shall be, world without end. Amen."*

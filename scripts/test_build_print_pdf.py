@@ -245,5 +245,81 @@ class TestBuildPrintPdf(unittest.TestCase):
                 doc.close()
 
 
+    def test_issue_87_page_1_front_cover_crimson_palette_and_typography(self):
+        """Verifies Page 1 renders deep Baroque crimson background, gold border, and ivory subtitle."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p1 = doc[0]
+            p1_text = " ".join(p1.get_text().split())
+            self.assertIn("PRAY THE ROSARY", p1_text)
+            self.assertIn("A Contemplative Visual Guide to the Twenty Mysteries", p1_text)
+
+            drawings = p1.get_drawings()
+            self.assertTrue(len(drawings) >= 2, "Page 1 must contain cover background fill and framing borders")
+            # Background fill is deep Baroque crimson (#4A1215)
+            bg_fill = drawings[0].get("fill")
+            self.assertIsNotNone(bg_fill)
+            self.assertAlmostEqual(bg_fill[0], 0.290, delta=0.01)
+            self.assertAlmostEqual(bg_fill[1], 0.071, delta=0.01)
+            self.assertAlmostEqual(bg_fill[2], 0.082, delta=0.01)
+
+            # Gold framing border (#D4AF37)
+            border_stroke = drawings[1].get("color")
+            self.assertIsNotNone(border_stroke)
+            self.assertAlmostEqual(border_stroke[0], 0.831, delta=0.01)
+            self.assertAlmostEqual(border_stroke[1], 0.686, delta=0.01)
+            self.assertAlmostEqual(border_stroke[2], 0.216, delta=0.01)
+        finally:
+            doc.close()
+
+    def test_issue_87_page_4_step_4_three_hail_marys_prefix(self):
+        """Verifies Page 4 Step 4 renders '3× The Hail Mary' title prefix."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p4_text = doc[3].get_text()
+            self.assertIn("3× The Hail Mary", p4_text)
+        finally:
+            doc.close()
+
+    def test_issue_87_credits_formatting_and_non_duplicate_headers(self):
+        """Verifies Pages 48-49 credits merge artist dates cleanly without )...( and omit duplicate mystery titles."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p48_text = " ".join(doc[47].get_text().split())
+            p49_text = " ".join(doc[48].get_text().split())
+
+            # No double-parentheses )...( on either credits page
+            self.assertNotIn(")...(", p48_text)
+            self.assertNotIn(")...(", p49_text)
+
+            # Merged sobriquets and dates
+            self.assertIn("El Greco (Doménikos Theotokópoulos, 1541–1614)", p48_text)
+            self.assertIn("Giovanni Battista Caracciolo (Battistello, 1578–1635)", p49_text)
+            self.assertIn("Raphael (Raffaello Sanzio, 1483–1520)", p49_text)
+
+            # Non-duplicate header titles: '1st Joyful Mystery — The Annunciation' (not '... Mystery (The Annunciation) — The Annunciation')
+            self.assertIn("1st Joyful Mystery — The Annunciation (La Anunciación)", p48_text)
+            self.assertNotIn("1st Joyful Mystery (The Annunciation) — The Annunciation", p48_text)
+            self.assertIn("1st Sorrowful Mystery — Christ on the Mount of Olives (Christ's Fear of Death)", p49_text)
+            self.assertNotIn("1st Sorrowful Mystery (The Agony in the Garden) —", p49_text)
+        finally:
+            doc.close()
+
+    def test_issue_87_page_49_colophon_and_page_50_attribution_styling(self):
+        """Verifies Page 49 colophon styling and Page 50 attribution regular serif font weight."""
+        doc = pymupdf.open(str(CANONICAL_PDF))
+        try:
+            p50 = doc[49]
+            p50_text = p50.get_text()
+            self.assertIn("Pope St. John Paul II", p50_text)
+            self.assertIn("St. Louis Marie de Montfort", p50_text)
+
+            # In Page 50, attributions use EBGaramond-Regular
+            fonts_p50 = [f[3] for f in p50.get_fonts()]
+            self.assertTrue(any("EBGaramond-Regular" in f for f in fonts_p50))
+        finally:
+            doc.close()
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -110,10 +110,15 @@ func _apply_page_data() -> void:
 			title_lbl.name = "Title"
 			var section_label: String = str(art.get("section_label", "")).strip_edges()
 			var art_title: String = str(art.get("title", "")).strip_edges()
-			if section_label != "" and art_title != "":
-				title_lbl.text = "%s — %s" % [section_label, art_title]
-			elif section_label != "":
-				title_lbl.text = section_label
+			var display_section: String = section_label
+			if display_section.contains(" Mystery ("):
+				var paren_start: int = display_section.find(" (")
+				if paren_start != -1:
+					display_section = display_section.substr(0, paren_start)
+			if display_section != "" and art_title != "":
+				title_lbl.text = "%s — %s" % [display_section, art_title]
+			elif display_section != "":
+				title_lbl.text = display_section
 			else:
 				title_lbl.text = art_title
 			if font_bold != null:
@@ -128,9 +133,16 @@ func _apply_page_data() -> void:
 				var t_lines: int = int(ceilf(font_bold.get_multiline_string_size(title_lbl.text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y / float(font_bold.get_height(title_font_size))))
 				title_h = font_bold.get_multiline_string_size(title_lbl.text, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y - float(maxi(0, t_lines - 1))
 
-			var details: String = "%s (%s), %s • %s • %s" % [
-				str(art.get("artist", "")),
-				str(art.get("artist_dates", "")),
+			var raw_artist: String = str(art.get("artist", "")).strip_edges()
+			var artist_dates: String = str(art.get("artist_dates", "")).strip_edges()
+			var artist_str: String = raw_artist
+			if artist_dates != "":
+				if raw_artist.ends_with(")"):
+					artist_str = raw_artist.substr(0, raw_artist.length() - 1) + ", " + artist_dates + ")"
+				else:
+					artist_str = "%s (%s)" % [raw_artist, artist_dates]
+			var details: String = "%s, %s • %s • %s" % [
+				artist_str,
 				str(art.get("creation_date", "")),
 				str(art.get("medium", "")),
 				str(art.get("current_location", ""))
