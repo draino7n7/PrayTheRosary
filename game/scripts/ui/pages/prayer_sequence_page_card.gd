@@ -123,6 +123,9 @@ func _apply_page_data() -> void:
 				prayer = data_loader.get_prayer(str(step.get("prayer_id", "")))
 
 			var title: String = str(prayer.get("title", ""))
+			var reps: int = int(step.get("repetitions", 1))
+			if reps > 1 and title != "":
+				title = "%d× %s" % [reps, title]
 			if title != "":
 				var title_lbl: Label = Label.new()
 				title_lbl.name = "PrayerTitle"

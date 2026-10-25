@@ -107,9 +107,14 @@ func _apply_page_data() -> void:
 				title_h = font_bold.get_multiline_string_size(sec_title, HORIZONTAL_ALIGNMENT_LEFT, 656.0, title_font_size).y
 
 			var body_str: String = str(sec.get("body", ""))
+			var formatted_body: String = body_str
+			if body_str.contains("\n"):
+				if not body_str.contains("•") and not (body_str.begins_with("1.") and body_str.contains("\n2.")):
+					formatted_body = body_str.replace("\n", "\n\n")
+
 			var body_lbl: Label = Label.new()
 			body_lbl.name = "SectionBody"
-			body_lbl.text = body_str
+			body_lbl.text = formatted_body
 			if font_reg != null:
 				body_lbl.add_theme_font_override("font", font_reg)
 			body_lbl.add_theme_font_size_override("font_size", body_font_size)
@@ -119,8 +124,8 @@ func _apply_page_data() -> void:
 			sec_vbox.add_child(body_lbl)
 			var body_h: float = 0.0
 			if font_reg != null:
-				var b_lines: int = int(ceilf(font_reg.get_multiline_string_size(body_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
-				body_h = font_reg.get_multiline_string_size(body_str, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, b_lines - 1) * 2)
+				var b_lines: int = int(ceilf(font_reg.get_multiline_string_size(formatted_body, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y / float(font_reg.get_height(body_font_size))))
+				body_h = font_reg.get_multiline_string_size(formatted_body, HORIZONTAL_ALIGNMENT_LEFT, 656.0, body_font_size).y + (maxi(0, b_lines - 1) * 2)
 
 			sum_sec_heights += title_h + 4.0 + body_h
 			sections_container.add_child(sec_vbox)

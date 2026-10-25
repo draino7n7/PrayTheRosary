@@ -62,12 +62,12 @@ pdfmetrics.registerFontFamily(
 )
 
 # Color Palette
-COLOR_PARCHMENT = HexColor("#F5EFE0")
+COLOR_PARCHMENT = HexColor("#FAF6EE")
 COLOR_PARCHMENT_BOX = HexColor("#EDE3CE")
-COLOR_GOLD = HexColor("#B8963E")
-COLOR_CRIMSON = HexColor("#6B1D2F")
-COLOR_CHARCOAL = HexColor("#2B1E16")
-COLOR_UMBER = HexColor("#6E5A4F")
+COLOR_GOLD = HexColor("#B89130")
+COLOR_CRIMSON = HexColor("#6B1D21")
+COLOR_CHARCOAL = HexColor("#1E1815")
+COLOR_UMBER = HexColor("#5C4338")
 
 # Cover / Back Cover Crimson Palette
 BACK_PRIMARY = HexColor("#4A1215")
@@ -212,7 +212,13 @@ def measure_header_block(
 
 
 def draw_framed_image(
-    c: canvas.Canvas, img_path: Path, box_x: float, box_y: float, box_w: float, box_h: float
+    c: canvas.Canvas,
+    img_path: Path,
+    box_x: float,
+    box_y: float,
+    box_w: float,
+    box_h: float,
+    border_color: HexColor = COLOR_GOLD,
 ) -> None:
     """
     Renders an archival master painting scaled with aspect ratio preserved,
@@ -255,7 +261,7 @@ def draw_framed_image(
     c.drawImage(reader, dx, dy, width=draw_w, height=draw_h, preserveAspectRatio=True, mask="auto")
 
     c.saveState()
-    c.setStrokeColor(COLOR_GOLD)
+    c.setStrokeColor(border_color)
     c.setLineWidth(1.0)
     c.rect(dx, dy, draw_w, draw_h, stroke=1, fill=0)
     c.restoreState()
@@ -306,8 +312,16 @@ def load_all_data(project_root: Path) -> Tuple[Dict[str, Any], Dict[str, Any], D
 
 
 def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root: Path) -> None:
-    """Page 1: Front Cover with full-page parchment, gold border, title, and Murillo painting."""
-    draw_master_a_background_and_border(c, 1)
+    """Page 1: Front Cover in deep Baroque crimson (#4A1215) and gold (#D4AF37) palette with Murillo painting."""
+    c.saveState()
+    c.setFillColor(BACK_PRIMARY)
+    c.rect(-BLEED, -BLEED, PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+    gx, gy, gw, gh = get_gold_box(1)
+    c.setStrokeColor(BACK_GOLD)
+    c.setLineWidth(1.5)
+    c.rect(gx, gy, gw, gh, stroke=1, fill=0)
+    c.restoreState()
+
     cx, cy, cw, ch = get_content_box(1, pad_x=16.0, pad_y=16.0)
     top_y = cy + ch
 
@@ -315,8 +329,8 @@ def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root:
     title = fc.get("title", "Pray the Rosary").upper()
     subtitle = fc.get("subtitle", "")
 
-    st_title = make_style("fc_title", "EBGaramond-Bold", 23.0, 27.0, COLOR_CRIMSON, TA_CENTER)
-    st_sub = make_style("fc_sub", "EBGaramond-Regular", 11.0, 14.0, COLOR_UMBER, TA_CENTER)
+    st_title = make_style("fc_title", "EBGaramond-Bold", 23.0, 27.0, BACK_GOLD, TA_CENTER)
+    st_sub = make_style("fc_sub", "EBGaramond-Regular", 11.0, 14.0, BACK_IVORY, TA_CENTER)
 
     h1 = draw_para(c, title, st_title, cx, top_y, cw)
     top_y -= (h1 + 3.0)
@@ -324,7 +338,7 @@ def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root:
     top_y -= (h2 + 6.0)
 
     c.saveState()
-    c.setStrokeColor(COLOR_GOLD)
+    c.setStrokeColor(BACK_GOLD)
     c.setLineWidth(1.0)
     c.line(cx + cw * 0.12, top_y, cx + cw * 0.88, top_y)
     c.restoreState()
@@ -332,7 +346,7 @@ def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root:
 
     img_path = project_root / fc["artwork"]["master_file"]
     avail_h = top_y - cy
-    draw_framed_image(c, img_path, cx, cy, cw, avail_h)
+    draw_framed_image(c, img_path, cx, cy, cw, avail_h, border_color=BACK_GOLD)
 
 
 def render_front_matter_page(c: canvas.Canvas, page_num: int, page_data: dict) -> None:
@@ -418,6 +432,9 @@ def render_prayer_sequence_page(c: canvas.Canvas, page_num: int, page_data: dict
             rub_line = f"[{bead}] {rub}" if bead else rub
             p_obj = prayers[st["prayer_id"]]
             p_title = p_obj.get("title", "")
+            reps = st.get("repetitions", 1)
+            if reps > 1 and p_title:
+                p_title = f"{reps}× {p_title}"
             l_txt = p_obj.get("leader_text", "")
             r_txt = p_obj.get("response_text", "") or p_obj.get("text", "")
 
@@ -452,6 +469,9 @@ def render_prayer_sequence_page(c: canvas.Canvas, page_num: int, page_data: dict
         rub_line = f"[{bead}] {rub}" if bead else rub
         p_obj = prayers[st["prayer_id"]]
         p_title = p_obj.get("title", "")
+        reps = st.get("repetitions", 1)
+        if reps > 1 and p_title:
+            p_title = f"{reps}× {p_title}"
         l_txt = p_obj.get("leader_text", "")
         r_txt = p_obj.get("response_text", "") or p_obj.get("text", "")
 
@@ -574,7 +594,7 @@ def render_mystery_prayer_page(
     c.setStrokeColor(COLOR_GOLD)
     c.setLineWidth(0.6)
     c.roundRect(pill_x, curr_y - f_box_h, pill_w, f_box_h, 3.0, stroke=1, fill=1)
-    c.setFillColor(COLOR_CHARCOAL)
+    c.setFillColor(COLOR_CRIMSON)
     c.setFont("EBGaramond-Regular", fruit_sz)
     c.drawString(text_start_x, curr_y - f_box_h + 6.5, fruit_str)
     c.restoreState()
@@ -668,9 +688,23 @@ def render_credits_page(
         art = artworks_by_id[aid]
         sec_lbl = art.get("section_label", "")
         art_title = art.get("title", "")
-        t_line = f"{sec_lbl} — {art_title}" if sec_lbl else art_title
+        disp_sec = sec_lbl
+        if " Mystery (" in disp_sec:
+            disp_sec = disp_sec.split(" (")[0]
+        t_line = f"{disp_sec} — {art_title}" if disp_sec else art_title
+
+        raw_artist = art.get("artist", "").strip()
+        artist_dates = art.get("artist_dates", "").strip()
+        if artist_dates:
+            if raw_artist.endswith(")"):
+                artist_str = f"{raw_artist[:-1]}, {artist_dates})"
+            else:
+                artist_str = f"{raw_artist} ({artist_dates})"
+        else:
+            artist_str = raw_artist
+
         d_line = (
-            f"{art.get('artist', '')} ({art.get('artist_dates', '')}), "
+            f"{artist_str}, "
             f"{art.get('creation_date', '')} • {art.get('medium', '')} • {art.get('current_location', '')}"
         )
         items_h += measure_para(t_line, st_title, text_w) + measure_para(d_line, st_det, text_w)
@@ -697,8 +731,8 @@ def render_credits_page(
                 col_h += measure_para(sn_text, st_col_u, text_w) + 3.0
             an_text = colophon.get("artwork_notice", "")
             if an_text:
-                colophon_lines.append((an_text, st_col_r))
-                col_h += measure_para(an_text, st_col_r, text_w) + 2.0
+                colophon_lines.append((an_text, st_col_u))
+                col_h += measure_para(an_text, st_col_u, text_w) + 2.0
 
     avail_h = (curr_y - cy) - items_h - col_h
     gap = min(6.0, max(1.8, avail_h / max(1, len(rendered_items) - 1)))
@@ -753,7 +787,7 @@ def render_page_50_back_cover(c: canvas.Canvas, book_layout: dict) -> None:
 
     # Callout box text styles
     st_quote = make_style("bc_q", "EBGaramond-Regular", 10.5, 14.5, BACK_IVORY, TA_LEFT)
-    st_attr = make_style("bc_a", "EBGaramond-Bold", 9.5, 13.0, BACK_GOLD, TA_RIGHT)
+    st_attr = make_style("bc_a", "EBGaramond-Regular", 9.5, 13.0, BACK_GOLD, TA_RIGHT)
     st_syn = make_style("bc_syn", "EBGaramond-Regular", 10.5, 14.5, BACK_IVORY, TA_LEFT)
 
     # 1. Header block

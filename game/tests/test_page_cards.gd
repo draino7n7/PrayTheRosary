@@ -199,6 +199,9 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	assert_eq(sec_title2.get_theme_font_size("font_size"), 23, "Page 2 section title font size must be 23pt (calibrated for > 1,650 chars)")
 	assert_eq(sec_body2.get_theme_font_size("font_size"), 20, "Page 2 section body font size must be 20pt (calibrated for > 1,650 chars)")
 	assert_true(sec3_body2.text.contains("instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."), "Page 2 Section 3 must display updated 1571/1573 feast note")
+	assert_true(sec3_body2.text.contains("\n\n"), "Page 2 Section 3 body text must have paragraph breaks")
+	var req_h2: float = _calculate_page_content_required_height(fmc2, p2, loader)
+	assert_true(req_h2 <= 1080.0, "Page 2 content required height (%.1fpx) must stay strictly within 1080.0px" % req_h2)
 	_assert_no_visible_page_numbers(card2, 2)
 	card2.free()
 
@@ -302,6 +305,9 @@ func test_page_4_and_46_prayer_sequence_cards() -> void:
 
 	# Step 4: Three Hail Marys (Split)
 	var step4: VBoxContainer = psc4.steps_container.get_child(3) as VBoxContainer
+	var s4_title: Label = step4.get_node("PrayerTitle") as Label
+	assert_not_null(s4_title, "Page 4 Step 4 PrayerTitle must exist")
+	assert_eq(s4_title.text, "3× The Hail Mary", "Page 4 Step 4 title must be '3× The Hail Mary'")
 	var s4_prayer: Label = step4.get_node("PrayerText") as Label
 	var s4_resp: Label = step4.get_node("ResponseText") as Label
 	assert_true(s4_prayer.visible, "Page 4 Step 4 (Hail Mary) PrayerText must be visible")
@@ -419,6 +425,17 @@ func test_all_twenty_mystery_prayer_cards() -> void:
 		assert_true(mpc.subheading_label.get_theme_font_size("font_size") >= 22, "Page %d subheading font size must be >= 22pt" % p_num)
 		assert_true(mpc.heading_label.get_theme_font_size("font_size") >= 34, "Page %d heading font size must be >= 34pt" % p_num)
 		assert_true(mpc.fruit_label.get_theme_font_size("font_size") >= 17, "Page %d FruitLabel font size must be >= 17pt" % p_num)
+		assert_true(mpc.fruit_label.get_theme_color("font_color").is_equal_approx(BasePageCard.COLOR_CRIMSON), "Page %d FruitLabel font color must be COLOR_CRIMSON" % p_num)
+		var scripture_c: PanelContainer = mpc.get_node("CardPanel/MarginContainer/VBoxContainer/ScriptureContainer") as PanelContainer
+		assert_not_null(scripture_c, "Page %d ScriptureContainer must exist" % p_num)
+		var sc_style: StyleBoxFlat = scripture_c.get_theme_stylebox("panel") as StyleBoxFlat
+		assert_not_null(sc_style, "Page %d ScriptureContainer must have a StyleBoxFlat panel" % p_num)
+		assert_eq(sc_style.border_width_left, 1, "Page %d ScriptureContainer border_width_left must be 1" % p_num)
+		assert_eq(sc_style.border_width_top, 1, "Page %d ScriptureContainer border_width_top must be 1" % p_num)
+		assert_eq(sc_style.border_width_right, 1, "Page %d ScriptureContainer border_width_right must be 1" % p_num)
+		assert_eq(sc_style.border_width_bottom, 1, "Page %d ScriptureContainer border_width_bottom must be 1" % p_num)
+		assert_true(sc_style.border_color.is_equal_approx(BasePageCard.COLOR_ANTIQUE_GOLD), "Page %d ScriptureContainer border_color must be COLOR_ANTIQUE_GOLD" % p_num)
+		assert_eq(sc_style.corner_radius_top_left, 3, "Page %d ScriptureContainer corner_radius must be 3" % p_num)
 		assert_true(mpc.scripture_citation_label.get_theme_font_size("font_size") >= 16, "Page %d ScriptureCitationLabel font size must be >= 16pt" % p_num)
 		assert_ne(mpc.scripture_citation_label.text, "", "Page %d ScriptureCitationLabel text must not be empty" % p_num)
 		assert_false(mpc.scripture_citation_label.text.contains("(Douay-Rheims)"), "Page %d ScriptureCitationLabel must not contain '(Douay-Rheims)'" % p_num)
@@ -578,10 +595,19 @@ func test_pages_48_and_49_credits_cards() -> void:
 		assert_eq(String(item_node.name), "Attribution_%s" % aid, "Page 48 item %d must be Attribution_%s" % [i, aid])
 		var title_lbl: Label = item_node.get_node("Title") as Label
 		var details_lbl: Label = item_node.get_node("Details") as Label
-		assert_eq(title_lbl.text, "%s — %s" % [sec_label, art_title], "Page 48 item %d Title must include section_label and painting title" % i)
+		var display_sec: String = sec_label
+		var paren_idx: int = display_sec.find(" (")
+		if paren_idx != -1 and display_sec.ends_with(")"):
+			display_sec = display_sec.substr(0, paren_idx).strip_edges()
+		assert_eq(title_lbl.text, "%s — %s" % [display_sec, art_title], "Page 48 item %d Title must include clean section_label and painting title" % i)
+		assert_false(details_lbl.text.contains(")...("), "Page 48 item %d Details must not contain duplicate parentheticals ')...('" % i)
 		assert_eq(title_lbl.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART, "Page 48 Title label must use AUTOWRAP_WORD_SMART")
 		assert_true(title_lbl.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
 		assert_true(details_lbl.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
+	var el_greco_item: Node = cpc48.credits_container.get_node("Attribution_opening_prayers")
+	var el_greco_details: Label = el_greco_item.get_node("Details") as Label
+	assert_true(el_greco_details.text.contains("El Greco (Doménikos Theotokópoulos, 1541–1614)"), "El Greco credit details must merge sobriquet into single parenthetical")
 
 	# Colophon assertions on Page 48
 	assert_true(cpc48.colophon_container != null and cpc48.colophon_container.visible, "Page 48 ColophonContainer must be visible")
@@ -625,10 +651,23 @@ func test_pages_48_and_49_credits_cards() -> void:
 		assert_eq(String(item_node.name), "Attribution_%s" % aid, "Page 49 item %d must be Attribution_%s" % [i, aid])
 		var title_lbl: Label = item_node.get_node("Title") as Label
 		var details_lbl: Label = item_node.get_node("Details") as Label
-		assert_eq(title_lbl.text, "%s — %s" % [sec_label, art_title], "Page 49 item %d Title must include section_label and painting title" % i)
+		var display_sec: String = sec_label
+		var paren_idx: int = display_sec.find(" (")
+		if paren_idx != -1 and display_sec.ends_with(")"):
+			display_sec = display_sec.substr(0, paren_idx).strip_edges()
+		assert_eq(title_lbl.text, "%s — %s" % [display_sec, art_title], "Page 49 item %d Title must include clean section_label and painting title" % i)
+		assert_false(details_lbl.text.contains(")...("), "Page 49 item %d Details must not contain duplicate parentheticals ')...('" % i)
 		assert_eq(title_lbl.autowrap_mode, TextServer.AUTOWRAP_WORD_SMART, "Page 49 Title label must use AUTOWRAP_WORD_SMART")
 		assert_true(title_lbl.get_theme_font_size("font_size") >= 16, "Credits Title font size must be >= 16pt (was 13pt)")
 		assert_true(details_lbl.get_theme_font_size("font_size") >= 14, "Credits Details font size must be >= 14pt (was 11pt)")
+
+	var caracciolo_item: Node = cpc49.credits_container.get_node("Attribution_sorrowful_1_agony")
+	var caracciolo_details: Label = caracciolo_item.get_node("Details") as Label
+	assert_true(caracciolo_details.text.contains("Giovanni Battista Caracciolo (Battistello, 1578–1635)"), "Caracciolo credit details must merge sobriquet into single parenthetical")
+
+	var raphael_item: Node = cpc49.credits_container.get_node("Attribution_sorrowful_4_carrying_cross")
+	var raphael_details: Label = raphael_item.get_node("Details") as Label
+	assert_true(raphael_details.text.contains("Raphael (Raffaello Sanzio, 1483–1520)"), "Raphael credit details must merge sobriquet into single parenthetical")
 
 	var last_item49: Node = cpc49.credits_container.get_child(cpc49.get_attribution_count() - 1)
 	assert_eq(String(last_item49.name), "Attribution_closing_prayers", "Final credit entry on Page 49 must be Attribution_closing_prayers")
@@ -647,6 +686,7 @@ func test_pages_48_and_49_credits_cards() -> void:
 		"Colophon scripture notice must cite Catholic Public Domain Version (CPDV)"
 	)
 	assert_true(cpc49.colophon_notice_label.get_theme_font_size("font_size") >= 13, "Colophon artwork notice must be >= 13pt (was 11pt)")
+	assert_eq(cpc49.colophon_notice_label.get_theme_color("font_color"), BasePageCard.COLOR_UMBER, "Colophon artwork notice font color must be COLOR_UMBER")
 	_assert_no_visible_page_numbers(card49, 49)
 	card49.free()
 
@@ -718,6 +758,12 @@ func test_page_50_back_cover_card() -> void:
 	assert_true(bcc.counsel_quote_label.text.contains("become a formal heretic or be led astray by the devil."), "Back cover counsel quote must include full verbatim Montfort text")
 	assert_true(bcc.epigraph_container is PanelContainer, "Epigraph container must be a PanelContainer callout box")
 	assert_true(bcc.counsel_container is PanelContainer, "Counsel container must be a PanelContainer callout box")
+	var epi_sb: StyleBoxFlat = bcc.epigraph_container.get_theme_stylebox("panel") as StyleBoxFlat
+	assert_not_null(epi_sb, "Epigraph container must have StyleBoxFlat")
+	assert_eq(epi_sb.bg_color, Color(0.164706, 0.035294, 0.043137, 1), "Epigraph callout box must use dark crimson bg_color #2A090B")
+	var coun_sb: StyleBoxFlat = bcc.counsel_container.get_theme_stylebox("panel") as StyleBoxFlat
+	assert_not_null(coun_sb, "Counsel container must have StyleBoxFlat")
+	assert_eq(coun_sb.bg_color, Color(0.164706, 0.035294, 0.043137, 1), "Counsel callout box must use dark crimson bg_color #2A090B")
 
 	_assert_no_visible_page_numbers(card, 50)
 	card.free()

@@ -36,7 +36,7 @@
 		},
 		"hail_mary_faith": {
 			"id": "hail_mary_faith",
-			"title": "First Hail Mary (For an Increase of Faith)",
+			"title": "First Hail Mary (For an Increase in the Virtue of Faith)",
 			"latin_title": "Ave Maria (Pro Fide)",
 			"intention": "For an increase in the virtue of Faith",
 			"leader_text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus.",
@@ -45,7 +45,7 @@
 		},
 		"hail_mary_hope": {
 			"id": "hail_mary_hope",
-			"title": "Second Hail Mary (For an Increase of Hope)",
+			"title": "Second Hail Mary (For an Increase in the Virtue of Hope)",
 			"latin_title": "Ave Maria (Pro Spe)",
 			"intention": "For an increase in the virtue of Hope",
 			"leader_text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus.",
@@ -54,7 +54,7 @@
 		},
 		"hail_mary_charity": {
 			"id": "hail_mary_charity",
-			"title": "Third Hail Mary (For an Increase of Charity)",
+			"title": "Third Hail Mary (For an Increase in the Virtue of Charity)",
 			"latin_title": "Ave Maria (Pro Caritate)",
 			"intention": "For an increase in the virtue of Charity",
 			"leader_text": "Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus.",
