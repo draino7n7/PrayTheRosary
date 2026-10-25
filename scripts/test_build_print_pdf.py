@@ -5,6 +5,7 @@ Validates page geometry, typography standards, text content, and CLI flags.
 
 import os
 import re
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,6 +13,8 @@ from pathlib import Path
 import pymupdf
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 CANONICAL_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary.pdf"
 GODOT_PROJECT = PROJECT_ROOT / "game" / "project.godot"
@@ -319,6 +322,19 @@ class TestBuildPrintPdf(unittest.TestCase):
             self.assertTrue(any("EBGaramond-Regular" in f for f in fonts_p50))
         finally:
             doc.close()
+
+    def test_issue_88_get_project_version_and_fallback(self):
+        """Verifies get_project_version correctly extracts version from project.godot and returns fallback 0.2.2."""
+        from scripts.build_print_pdf import get_project_version
+
+        # 1. Real project root matches project.godot config/version="0.2.2"
+        version = get_project_version(PROJECT_ROOT)
+        self.assertEqual(version, "0.2.2")
+
+        # 2. Empty directory returns synchronized fallback version 0.2.2
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            fallback = get_project_version(Path(tmp_dir))
+            self.assertEqual(fallback, "0.2.2")
 
 
 if __name__ == "__main__":

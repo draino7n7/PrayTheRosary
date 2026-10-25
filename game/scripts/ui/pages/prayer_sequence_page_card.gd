@@ -53,7 +53,7 @@ func _apply_page_data() -> void:
 		var font_bold: FontFile = load("res://assets/fonts/EBGaramond-Bold.ttf") as FontFile
 		var font_reg: FontFile = load("res://assets/fonts/EBGaramond-Regular.ttf") as FontFile
 
-		# Calibrate font size between Page 4 (5 steps with long Creed) and Page 46 (4 steps)
+		# Calibrate font size between Page 4 (5 steps with long Creed) and Page 46 (3 steps)
 		var is_five_step: bool = steps.size() >= 5
 		var body_font_size: int = 18 if is_five_step else 22
 		var rubric_font_size: int = 15 if is_five_step else 18

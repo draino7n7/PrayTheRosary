@@ -94,7 +94,7 @@ def get_project_version(root_dir: Path) -> str:
         match = re.search(r'config/version="([^"]+)"', content)
         if match:
             return match.group(1).strip()
-    return "0.1.0"
+    return "0.2.2"
 
 
 def get_gold_box(page_num: int) -> Tuple[float, float, float, float]:

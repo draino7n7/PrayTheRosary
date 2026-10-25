@@ -67,7 +67,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.360784, 0.262745, 0.219608, 1)
 theme_override_fonts/font = ExtResource("3_font_regular")
 theme_override_font_sizes/font_size = 22
-text = "Origins of the Gospel Prayer of the Church"
+text = "Origins and Tradition of the Most Holy Rosary"
 horizontal_alignment = 1
 autowrap_mode = 3
 

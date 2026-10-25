@@ -49,6 +49,7 @@ Follow these steps strictly in order:
    - Increment `version/code` by 1.
    - Update `version/name` to the user-requested target version. **CRITICAL:** Ensure the version uses strict 3-digit semantic versioning (e.g., "0.6.0").
    - Synchronize `config/version="<VERSION>"` in `game/project.godot` under `[application]` to match the new version.
+   - Synchronize fallback version strings in `game/scripts/ui/pages/credits_page_card.gd`, `game/scenes/ui/pages/credits_page_card.tscn`, `scripts/build_print_pdf.py`, and documentation examples (`documents/book_requirements.md`, `documents/references.md`, `documents/manual_testing.md`).
    - Regenerate the canonical print PDF with the updated version colophon by running:
      `python scripts/build_print_pdf.py`
    - Stage and save all modified files: `git add game/export_presets.cfg game/project.godot assets/print/PrayTheRosary.pdf`.

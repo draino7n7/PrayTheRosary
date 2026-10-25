@@ -184,7 +184,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.968627, 0.94902, 0.905882, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
 theme_override_font_sizes/font_size = 22
-text = "“Never will anyone who says his Rosary every day be led astray...”"
+text = "“Never will anyone who says his Rosary every day become a formal heretic or be led astray by the devil. This is a statement that I would gladly sign with my blood.”"
 autowrap_mode = 3
 
 [node name="CounselAttrLabel" type="Label" parent="CardPanel/MarginContainer/InnerBorder/InnerMargin/VBoxContainer/CounselContainer/CounselVBox"]

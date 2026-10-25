@@ -44,15 +44,7 @@ func _apply_page_data() -> void:
 	var total_text_len: int = scrip_str.length() + med_str.length()
 
 	# Calibrate font size dynamically based on passage length
-	var body_font_size: int = 24
-	if total_text_len > 580:
-		body_font_size = 20
-	elif total_text_len > 480:
-		body_font_size = 21
-	elif total_text_len > 380:
-		body_font_size = 22
-	else:
-		body_font_size = 23
+	var body_font_size: int = 20 if total_text_len > 580 else (21 if total_text_len > 480 else (22 if total_text_len > 380 else 23))
 
 	var rubric_font_size: int = 17 if body_font_size <= 21 else 18
 

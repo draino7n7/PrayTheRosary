@@ -161,7 +161,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
 theme_override_font_sizes/font_size = 22
-text = "“And upon entering, the Angel said to her: Hail, full of grace...”"
+text = "And upon entering, the Angel said to her: \"Hail, full of grace. The Lord is with you. Blessed are you among women.\"... Then Mary said: \"Behold, I am the handmaid of the Lord. Let it be done to me according to your word.\""
 autowrap_mode = 3
 
 [node name="MeditationLabel" type="Label" parent="CardPanel/MarginContainer/VBoxContainer"]
@@ -170,7 +170,7 @@ mouse_filter = 2
 theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_fonts/font = ExtResource("4_font_regular")
 theme_override_font_sizes/font_size = 22
-text = "With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word."
+text = "With humble surrender, the Blessed Virgin welcomes the Archangel Gabriel's message and conceives the Eternal Word by the power of the Holy Spirit."
 autowrap_mode = 3
 
 [node name="DecadePrayersContainer" type="VBoxContainer" parent="CardPanel/MarginContainer/VBoxContainer"]
