@@ -1729,10 +1729,79 @@ func test_top_buttons_inactivity_fade_and_instant_wakeup() -> void:
 	_clean_user_progress()
 
 
-func cleanup() -> void:
+func test_top_corner_buttons_exact_mirror_symmetry() -> void:
+	_clean_user_progress()
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	var reader_btn: Button = main_node.get_reader_button()
+	var nav_drawer: NavigationDrawer = main_node.get_navigation_drawer()
+	assert_not_null(reader_btn, "ReaderButton must exist")
+	assert_not_null(nav_drawer, "NavigationDrawer must exist")
+	if nav_drawer != null:
+		nav_drawer._ready()
+	var float_btn: Button = nav_drawer.get_floating_button()
+	assert_not_null(float_btn, "FloatingButton must exist")
+
+	# 1. Identical outer dimensions and combined minimum sizes (104x104)
+	assert_eq(reader_btn.custom_minimum_size, Vector2(104, 104), "ReaderButton custom_minimum_size must be 104x104")
+	assert_eq(float_btn.custom_minimum_size, Vector2(104, 104), "FloatingButton custom_minimum_size must be 104x104")
+	assert_eq(reader_btn.get_combined_minimum_size(), Vector2(104, 104), "ReaderButton get_combined_minimum_size must be 104x104")
+	assert_eq(float_btn.get_combined_minimum_size(), Vector2(104, 104), "FloatingButton get_combined_minimum_size must be 104x104")
+	assert_eq(reader_btn.size, Vector2(104, 104), "ReaderButton size must be 104x104")
+	assert_eq(float_btn.size, Vector2(104, 104), "FloatingButton size must be 104x104")
+
+	# 2. Identical vertical placement (y=18..122, flush with TopSpacerBar / 24px page breaker top at y=122)
+	assert_eq(reader_btn.position.y, 18.0, "ReaderButton position.y must be 18.0")
+	assert_eq(float_btn.position.y, 18.0, "FloatingButton position.y must be 18.0")
+	assert_eq(reader_btn.position.y + reader_btn.size.y, 122.0, "ReaderButton bottom y must be 122.0")
+	assert_eq(float_btn.position.y + float_btn.size.y, 122.0, "FloatingButton bottom y must be 122.0")
+	assert_eq(reader_btn.offset_top, 18.0, "ReaderButton offset_top must be 18.0")
+	assert_eq(reader_btn.offset_bottom, 122.0, "ReaderButton offset_bottom must be 122.0")
+	assert_eq(float_btn.offset_top, 18.0, "FloatingButton offset_top must be 18.0")
+	assert_eq(float_btn.offset_bottom, 122.0, "FloatingButton offset_bottom must be 122.0")
+
+	# 3. Mirror-symmetric horizontal offsets (18px from left edge and 18px from right edge)
+	assert_eq(reader_btn.offset_left, 18.0, "ReaderButton offset_left must be 18.0")
+	assert_eq(reader_btn.offset_right, 122.0, "ReaderButton offset_right must be 122.0")
+	assert_eq(float_btn.offset_left, -122.0, "FloatingButton offset_left must be -122.0")
+	assert_eq(float_btn.offset_right, -18.0, "FloatingButton offset_right must be -18.0")
+	assert_eq(reader_btn.offset_left, -float_btn.offset_right, "Left margin of ReaderButton must equal right margin of FloatingButton")
+	assert_eq(reader_btn.offset_right - reader_btn.offset_left, float_btn.offset_right - float_btn.offset_left, "Horizontal span of both buttons must be equal (104px)")
+
+	# 4. Calibrated inner icon offsets
+	var icon_box: HBoxContainer = reader_btn.get_node_or_null("IconHBox") as HBoxContainer
+	assert_not_null(icon_box, "ReaderButton IconHBox must exist")
+	assert_eq(icon_box.offset_left, 0.0, "IconHBox offset_left must be 0.0")
+	assert_eq(icon_box.offset_top, 1.0, "IconHBox offset_top must be 1.0 for pixel vertical centering")
+	assert_eq(icon_box.offset_right, 0.0, "IconHBox offset_right must be 0.0")
+	assert_eq(icon_box.offset_bottom, 1.0, "IconHBox offset_bottom must be 1.0 for pixel vertical centering")
+
+	# 5. Matching StyleBoxFlat border, corner, background, and shadow parameters
+	for state: String in ["normal", "hover", "pressed"]:
+		var r_style: StyleBoxFlat = reader_btn.get_theme_stylebox(state) as StyleBoxFlat
+		var f_style: StyleBoxFlat = float_btn.get_theme_stylebox(state) as StyleBoxFlat
+		assert_not_null(r_style, "ReaderButton %s StyleBoxFlat must exist" % state)
+		assert_not_null(f_style, "FloatingButton %s StyleBoxFlat must exist" % state)
+		if r_style != null and f_style != null:
+			assert_eq(r_style.bg_color, f_style.bg_color, "Corner buttons %s bg_color must match" % state)
+			assert_eq(r_style.border_color, f_style.border_color, "Corner buttons %s border_color must match" % state)
+			assert_eq(r_style.border_width_left, f_style.border_width_left, "Corner buttons %s border_width_left must match" % state)
+			assert_eq(r_style.border_width_top, f_style.border_width_top, "Corner buttons %s border_width_top must match" % state)
+			assert_eq(r_style.border_width_right, f_style.border_width_right, "Corner buttons %s border_width_right must match" % state)
+			assert_eq(r_style.border_width_bottom, f_style.border_width_bottom, "Corner buttons %s border_width_bottom must match" % state)
+			assert_eq(r_style.corner_radius_top_left, f_style.corner_radius_top_left, "Corner buttons %s corner_radius_top_left must match" % state)
+			assert_eq(r_style.corner_radius_top_right, f_style.corner_radius_top_right, "Corner buttons %s corner_radius_top_right must match" % state)
+			assert_eq(r_style.corner_radius_bottom_right, f_style.corner_radius_bottom_right, "Corner buttons %s corner_radius_bottom_right must match" % state)
+			assert_eq(r_style.corner_radius_bottom_left, f_style.corner_radius_bottom_left, "Corner buttons %s corner_radius_bottom_left must match" % state)
+			assert_eq(r_style.shadow_color, f_style.shadow_color, "Corner buttons %s shadow_color must match" % state)
+			assert_eq(r_style.shadow_size, f_style.shadow_size, "Corner buttons %s shadow_size must match" % state)
+			assert_eq(r_style.shadow_offset, f_style.shadow_offset, "Corner buttons %s shadow_offset must match" % state)
+
+	main_node.free()
 	_clean_user_progress()
 
 
-
-
-
+func cleanup() -> void:
+	_clean_user_progress()

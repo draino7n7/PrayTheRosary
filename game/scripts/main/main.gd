@@ -408,6 +408,15 @@ func _ensure_initialized() -> void:
 func _setup_reader_controls() -> void:
 	_ensure_initialized()
 	if reader_button != null:
+		for state: String in ["normal", "hover", "pressed", "focus"]:
+			var style: StyleBox = reader_button.get_theme_stylebox(state)
+			if style != null:
+				style.content_margin_left = 0.0
+				style.content_margin_top = 0.0
+				style.content_margin_right = 0.0
+				style.content_margin_bottom = 0.0
+		reader_button.custom_minimum_size = Vector2(104, 104)
+		reader_button.size = Vector2(104, 104)
 		if not reader_button.pressed.is_connected(_on_reader_button_pressed):
 			reader_button.pressed.connect(_on_reader_button_pressed)
 		if not reader_button.mouse_entered.is_connected(_on_reader_button_mouse_entered):
@@ -418,6 +427,11 @@ func _setup_reader_controls() -> void:
 			reader_button.button_down.connect(_on_reader_button_down)
 		if not reader_button.button_up.is_connected(_on_reader_button_up):
 			reader_button.button_up.connect(_on_reader_button_up)
+	if icon_hbox != null:
+		icon_hbox.offset_left = 0.0
+		icon_hbox.offset_top = 1.0
+		icon_hbox.offset_right = 0.0
+		icon_hbox.offset_bottom = 1.0
 	_update_reader_icon_color(COLOR_DEEP_CHARCOAL)
 
 
