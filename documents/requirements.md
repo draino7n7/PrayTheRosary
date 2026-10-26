@@ -27,7 +27,8 @@ This document is the definitive source of truth for the **Pray The Rosary** digi
      - **Immediate Interruption:** Active momentum is immediately halted upon any touch press down, mouse press down, mouse wheel scroll, navigation drawer opening (`_on_drawer_opened`), or page navigation (`scroll_to_page`).
      - **Virtualization & Reading Progress Synchronization:** As momentum scrolls past page boundaries, texture virtualization (`_update_virtualization`) and debounced reading progress saving (`_save_timer`) update dynamically.
    - Every page is rendered as a distinct **$2:3$ ($6:9$) portrait page card**. On portrait mobile screens, page cards fill the viewport width; on wider tablet/desktop windows, page cards remain centered horizontally at a $2:3$ aspect ratio against a deep ambient backdrop (`#141010`).
-   - Integrated with 5 in-stream quick-jump separator bars (`InStreamJumpBar`) placed after Page 5 and after each mystery set (Pages 15, 25, 35, 45), comprising exactly 55 elements in the continuous stream.
+   - Integrated with 5 in-stream quick-jump separator bars (`InStreamJumpBar`) placed after Page 5 and after each mystery set (Pages 15, 25, 35, 45), comprising exactly 55 elements in the continuous stream (`_stream_elements`).
+   - **Top Scroll Spacer Bar (`TopSpacerBar`):** A dedicated 122px tall spacer bar (`ColorRect`, `custom_minimum_size = Vector2(720, 122)`, `color = COLOR_AMBIENT_ESPRESSO` `#141010`, `mouse_filter = MOUSE_FILTER_PASS`, `size_flags_horizontal = SIZE_SHRINK_CENTER`) is prepended as child index 0 of `PageContainer` before Page 1. It offsets Page 1 down to raw container stream Y coordinate `146px` (122px spacer + 24px container separation) at `scroll_vertical = 0`, keeping the top-left `ReaderButton` ("AA") and top-right `FloatingButton` ("☰") (both spanning from $y = 18.0$ to $y = 122.0$) completely above the Front Cover card and header band. `TopSpacerBar` is excluded from `_stream_elements`, preserving exactly 55 page and separator elements.
 2. **Distraction-Free Contemplation:**
    - **No Numerical Page Numbers:** Do not render visible numerical page numbers (`1..50`) on any page cards.
    - **No On-Page Artwork Captions:** Artwork pages (`Pages 5, 7, 9, ..., 47`) display **only** the Top Section/Mystery Header and the gold-framed painting so nothing distracts from using the sacred image as a prayer focus. All artist, title, date, and museum attributions appear exclusively on the **Sacred Artwork Credits pages (`Pages 48–49`)**.
@@ -371,6 +372,26 @@ Implemented via `ReadingProgressManager` (`res://scripts/core/reading_progress_m
 - **Configuration Persistence (`user://reading_progress.cfg`):**
   - Stored under section `[reading_progress]`, key `text_size_preset` (values: `"normal"`, `"mobile"`, `"extra_large"`).
   - Loaded automatically at application boot by `Main._ready()` / `ReadingProgressManager`, restoring the user's preferred typography scale before initial card rendering.
+
+### 4.7 Top Scroll Spacer Bar, Page Jump Target Offset Alignment & Distraction-Free Inactivity Fade
+To ensure an unobstructed, contemplative visual experience when navigating through the continuous scroll:
+1. **Top Scroll Spacer Bar (`TopSpacerBar`):**
+   - Configured with `custom_minimum_size = Vector2(720, 122)` matching `TOP_BUTTON_BOTTOM_Y = 122`, `color = COLOR_AMBIENT_ESPRESSO` (`#141010`), and `mouse_filter = MOUSE_FILTER_PASS`.
+   - Prepend at child index 0 of `PageContainer` before `Page_1`.
+   - When scrolled to the very top (`scroll_vertical = 0`), the 122px spacer + 24px container separation offsets Page 1 to `stream_y = 146px`, completely clearing the top corner buttons ($y = 18.0$ to $122.0$) and preventing any visual overlap with the Front Cover title header band.
+   - Excluded from `_stream_elements` so that the array retains its exact count of 55 stream elements (50 page cards + 5 jump bars). Stream calculations in `set_text_size_preset()` initialize `accum` and `new_accum` with `TOP_BUTTON_BOTTOM_Y + separation` (`146.0px`) for deterministic scroll re-anchoring.
+2. **Page Jump Target Offset Alignment (`get_target_scroll_for_page`):**
+   - When jumping to Page 1 via the Navigation Drawer or jump bars, the scroll target returns `0` (`scroll_vertical = 0`).
+   - When jumping to any other page (`page_number` in `2..50`), `get_target_scroll_for_page()` computes:
+     $$\text{target\_scroll} = \max\left(0, \text{card\_top\_y} - \text{separation} - \text{TOP\_BUTTON\_BOTTOM\_Y}\right)$$
+     where $\text{card\_top\_y} = \text{get\_page\_card\_stream\_y}(\text{page\_number})$, $\text{separation} = 24.0\text{px}$, and $\text{TOP\_BUTTON\_BOTTOM\_Y} = 122$.
+   - This aligns the top edge of the 24px container breaker above the target card with the bottom edge of the top buttons at $\text{viewport\_y} = 122\text{px}$, positioning the target page card's top edge at $\text{viewport\_y} = 146\text{px}$. Subheadings, titles, fruit badges, and opening prayer lines are positioned entirely below both top buttons with zero visual obstruction.
+   - `get_current_page_number()` calibrates its minimum probe threshold ($\text{min\_probe} = \text{TOP\_BUTTON\_BOTTOM\_Y} + \text{separation} + 50.0 = 196.0\text{px}$) to accurately resolve the active page immediately upon arriving at the target scroll position.
+3. **Distraction-Free Top Button Inactivity Fade & Instant Wakeup:**
+   - Both the top-left `ReaderButton` ("AA") and top-right `FloatingButton` ("☰") automatically fade out smoothly over 5.0 seconds (`BUTTON_FADE_DURATION = 5.0`) of user inactivity.
+   - `Main._process(delta)` continuously increments `_inactivity_elapsed` regardless of momentum scrolling, modulating the opacity (`modulate.a`) of both buttons from `1.0` down to `0.0`.
+   - Any user interaction (`InputEventScreenTouch`, `InputEventScreenDrag`, `InputEventMouseButton`, `InputEventMouseMotion`, `InputEventKey`, button presses, or opening/closing the navigation drawer) triggers `wake_top_buttons()`, immediately resetting `_inactivity_elapsed = 0.0` and restoring opacity to `1.0`.
+   - While mouse dragging is active or while the navigation drawer is open, buttons remain awake at full opacity (`1.0`).
 
 ---
 
