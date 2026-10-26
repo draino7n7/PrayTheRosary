@@ -242,7 +242,8 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Launch the application and observe the top-right corner of the viewport.
 - **Expected:**
   - A prominent floating button ($104\times 104\text{px}$, pinned at offsets `left: -122.0, top: 18.0, right: -18.0, bottom: 122.0`) labeled `☰` is visible in the top-right corner.
-  - The hamburger menu icon (`☰`, `U+2630`) appears optically and geometrically centered (within $\le 1\text{px}$ on both axes) at 56pt font size within its 104×104 parchment circular-rectangular button across default, hover, and pressed states with calibrated 12.0px top content margin.
+  - The top-right `FloatingButton` (`☰`) and top-left `ReaderButton` (`AA`) are exact $104\times 104\text{px}$ mirror images spanning $y = 18.0 .. 122.0$ with symmetric $18.0\text{px}$ outer horizontal margins, and their bottom borders align on the exact same pixel row flush with the top of the 24px page breaker at $y = 122\text{px}$.
+  - The hamburger menu icon (`☰`, `U+2630`) appears optically and geometrically centered (within $\le 1\text{px}$ on both axes) at 56pt font size within its 104×104 parchment circular-rectangular button across default, hover, and pressed states with calibrated 12.0px top content margin and dedicated FontVariation `spacing_bottom = -4`.
 - **Step 2:** Hover over and click or tap the floating button.
 - **Expected:**
   - Hovering over the button transitions its stylebox smoothly while preserving exact glyph centering.
@@ -360,8 +361,9 @@ This document outlines the strict manual testing procedures required before any 
 - **Step 1:** Launch the application (`godot --path game`) and observe the top-left corner of the viewport.
 - **Expected:**
   - A prominent floating button ($104\times 104\text{px}$) is visible at offsets `left: 18.0, top: 18.0, right: 122.0, bottom: 122.0` on CanvasLayer 10.
-  - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, and subtle drop shadow.
-  - **Dual-Sized 'AA' Icon:** Rather than a uniform single "Aa" label, the button displays two side-by-side capital 'A's (`SmallALabel` at 32pt bold on the left, `LargeALabel` at 52pt bold on the right) centered in an `IconHBox` with 2px separation.
+  - The button is an exact $104\times 104\text{px}$ horizontal mirror image of the top-right `FloatingButton` (`☰`), spanning $y = 18.0 .. 122.0$ with an $18.0\text{px}$ left margin and bottom border aligned flush with the 24px page breaker at $y = 122\text{px}$.
+  - The button is styled with a warm ivory parchment background (`#FAF6EE`), a 2px antique gold border (`#B89130`), 8px rounded corners, and subtle drop shadow, with all StyleBox states configured with `content_margin_* = 0.0`.
+  - **Dual-Sized 'AA' Icon:** Rather than a uniform single "Aa" label, the button displays two side-by-side capital 'A's (`SmallALabel` at 32pt bold on the left, `LargeALabel` at 52pt bold on the right) centered in an `IconHBox` with 2px separation and calibrated `offset_top = 1.0, offset_bottom = 1.0` vertical offset to pixel-center the `"AA"` glyph ink bounding box at $(70.0\text{px}, 70.5\text{px})$.
   - **Color State Transitions:** The 'AA' labels render in Deep Charcoal (`#1E1815`) in the normal state, and shift to Sacred Crimson (`#6B1D21`) on mouse hover and button press, matching the button's gold-to-crimson border transitions.
 - **Step 2:** Click or tap the dual-sized `"AA"` button once.
 - **Expected:**

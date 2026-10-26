@@ -32,6 +32,7 @@ const PANEL_WIDTH_EXTRA_LARGE: float = 680.0
 const FONT_BOLD_PATH: String = "res://assets/fonts/EBGaramond-Bold.ttf"
 const FONT_REGULAR_PATH: String = "res://assets/fonts/EBGaramond-Regular.ttf"
 const FONT_SYMBOLS_PATH: String = "res://assets/fonts/NotoSansSymbols-Regular.ttf"
+const FLOATING_ICON_SPACING_BOTTOM: int = -4
 
 const LANDMARKS_TOP: Array[Dictionary] = [
 	{"id": "front_cover", "label": "Front Cover (Page 1)", "page": 1},
@@ -119,6 +120,7 @@ var _decade_buttons_by_page: Dictionary = {}     # int -> Button
 var _font_bold: Font = null
 var _font_regular: Font = null
 var _font_symbols: Font = null
+var _font_floating_icon: Font = null
 var _anim_tween: Tween = null
 var _is_built: bool = false
 var text_size_preset: String = BasePageCard.PRESET_NORMAL
@@ -180,6 +182,16 @@ func _load_fonts() -> void:
 			fv_bold.fallbacks = [_font_symbols]
 		_font_bold = fv_bold
 
+	if _font_symbols != null:
+		var fv_icon: FontVariation = FontVariation.new()
+		fv_icon.base_font = _font_symbols
+		fv_icon.spacing_bottom = FLOATING_ICON_SPACING_BOTTOM
+		if _font_bold != null:
+			fv_icon.fallbacks = [_font_bold]
+		_font_floating_icon = fv_icon
+	else:
+		_font_floating_icon = _font_bold
+
 	if ResourceLoader.exists(FONT_REGULAR_PATH):
 		var base_reg: Font = load(FONT_REGULAR_PATH) as Font
 		var fv_reg: FontVariation = FontVariation.new()
@@ -193,9 +205,13 @@ func _resolve_nodes() -> void:
 	if floating_button == null:
 		floating_button = get_node_or_null("FloatingButton") as Button
 	if floating_button != null:
-		if _font_bold != null:
+		if _font_floating_icon != null:
+			floating_button.add_theme_font_override("font", _font_floating_icon)
+		elif _font_bold != null:
 			floating_button.add_theme_font_override("font", _font_bold)
 		_calibrate_floating_button_margins()
+		floating_button.custom_minimum_size = Vector2(104, 104)
+		floating_button.size = Vector2(104, 104)
 	if drawer_overlay == null:
 		drawer_overlay = get_node_or_null("DrawerOverlay") as Control
 	if scrim == null:

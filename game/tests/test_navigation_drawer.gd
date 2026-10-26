@@ -416,8 +416,12 @@ func test_floating_button_centering_and_stylebox_calibration() -> void:
 	var float_btn: Button = drawer.get_floating_button()
 	assert_not_null(float_btn, "FloatingButton must exist")
 
-	# 1. Dimensions and Positioning
+	# 1. Dimensions and Positioning (104x104 at y=18..122, right margin 18)
 	assert_eq(float_btn.custom_minimum_size, Vector2(104, 104), "FloatingButton custom_minimum_size must be 104x104")
+	assert_eq(float_btn.get_combined_minimum_size(), Vector2(104, 104), "FloatingButton get_combined_minimum_size must be 104x104")
+	assert_eq(float_btn.size, Vector2(104, 104), "FloatingButton size must be 104x104")
+	assert_eq(float_btn.position.y, 18.0, "FloatingButton position.y must be 18.0")
+	assert_eq(float_btn.position.y + float_btn.size.y, 122.0, "FloatingButton bottom y must be 122.0")
 	assert_eq(float_btn.offset_left, -122.0, "FloatingButton offset_left must be -122")
 	assert_eq(float_btn.offset_top, 18.0, "FloatingButton offset_top must be 18")
 	assert_eq(float_btn.offset_right, -18.0, "FloatingButton offset_right must be -18")
@@ -429,6 +433,7 @@ func test_floating_button_centering_and_stylebox_calibration() -> void:
 	assert_not_null(font, "FloatingButton font must exist")
 	assert_true(font.has_char(0x2630), "FloatingButton font must support ☰ (0x2630)")
 	assert_eq(float_btn.get_theme_font_size("font_size"), 56, "FloatingButton font size must be 56pt")
+	assert_true(font.get_height(56) + 12.0 <= 104.0, "FloatingButton font height + top margin must not exceed 104px")
 
 	# 3. Calibrated StyleBox Margins for Pixel Centering across all states
 	var states: Array[String] = ["normal", "hover", "pressed", "focus"]

@@ -2,6 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/ui/navigation_drawer.gd" id="1_nav_drawer"]
 [ext_resource type="FontFile" path="res://assets/fonts/EBGaramond-Bold.ttf" id="2_font_bold"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSymbols-Regular.ttf" id="3_font_symbols"]
+
+[sub_resource type="FontVariation" id="FontVariation_floating_icon"]
+base_font = ExtResource("3_font_symbols")
+fallbacks = Array[Font]([ExtResource("2_font_bold")])
+spacing_bottom = -4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_floating_btn_normal"]
 content_margin_left = 0.0
@@ -93,7 +99,7 @@ focus_mode = 0
 theme_override_colors/font_color = Color(0.117647, 0.0941176, 0.0823529, 1)
 theme_override_colors/font_hover_color = Color(0.419608, 0.113725, 0.129412, 1)
 theme_override_colors/font_pressed_color = Color(0.419608, 0.113725, 0.129412, 1)
-theme_override_fonts/font = ExtResource("2_font_bold")
+theme_override_fonts/font = SubResource("FontVariation_floating_icon")
 theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxFlat_floating_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_floating_btn_hover")
