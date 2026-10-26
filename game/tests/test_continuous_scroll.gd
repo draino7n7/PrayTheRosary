@@ -1600,6 +1600,135 @@ func test_exact_scroll_offset_and_lifecycle_persistence() -> void:
 	_clean_user_progress()
 
 
+func test_top_spacer_bar_and_page_jump_target_alignment() -> void:
+	_clean_user_progress()
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	# 1. TopSpacerBar is child 0 of page_container
+	assert_not_null(main_node.get_top_spacer_bar(), "TopSpacerBar must exist")
+	var spacer: ColorRect = main_node.get_top_spacer_bar()
+	assert_eq(spacer.name, "TopSpacerBar", "Spacer bar node name must be TopSpacerBar")
+	assert_eq(spacer.get_index(), 0, "TopSpacerBar must be child 0 of PageContainer")
+	assert_eq(spacer.custom_minimum_size.y, float(Main.TOP_BUTTON_BOTTOM_Y), "TopSpacerBar height must be 122.0")
+	assert_eq(spacer.custom_minimum_size.x, float(BasePageCard.DESIGN_WIDTH), "TopSpacerBar width must match BasePageCard.DESIGN_WIDTH (720.0)")
+	assert_eq(spacer.color, Main.COLOR_AMBIENT_ESPRESSO, "TopSpacerBar color must match COLOR_AMBIENT_ESPRESSO (#141010)")
+	assert_eq(spacer.mouse_filter, Control.MOUSE_FILTER_PASS, "TopSpacerBar mouse_filter must be MOUSE_FILTER_PASS")
+	assert_eq(spacer.size_flags_horizontal, Control.SIZE_SHRINK_CENTER, "TopSpacerBar size_flags_horizontal must be SIZE_SHRINK_CENTER")
+
+	# 2. _stream_elements still contains exactly 55 elements (spacer is excluded from stream elements)
+	assert_eq(main_node.get_stream_element_count(), 55, "_stream_elements must retain exactly 55 elements")
+
+	# 3. Raw stream Y coordinate of Page 1 is exactly 146 (122 spacer + 24 separation)
+	assert_eq(main_node.get_page_card_stream_y(1), 146, "Page 1 raw stream Y must be 146")
+	assert_eq(main_node.get_target_scroll_for_page(1), 0, "Page 1 target scroll must be 0")
+	assert_eq(main_node.get_page_card_stream_y(1) - main_node.get_target_scroll_for_page(1), 146, "Page 1 stream_y - target_scroll must equal 146")
+
+	# 4. For sample pages (2, 4, 6, 16, 26, 36, 46, 50), verify:
+	# - get_page_card_stream_y(p) - get_target_scroll_for_page(p) == 146
+	# - When scroll_vertical == get_target_scroll_for_page(p):
+	#   Breaker top is at viewport_y = 122px (aligned with bottom edge of 104x104 top buttons)
+	#   Page top is at viewport_y = 146px (completely below top buttons)
+	# - get_current_page_number() correctly returns page p
+	var sample_pages: Array[int] = [2, 4, 6, 16, 26, 36, 46, 50]
+	for p: int in sample_pages:
+		var stream_y: int = main_node.get_page_card_stream_y(p)
+		var target_scroll: int = main_node.get_target_scroll_for_page(p)
+		assert_eq(stream_y - target_scroll, 146, "Page %d: stream_y (%d) - target_scroll (%d) must equal 146" % [p, stream_y, target_scroll])
+
+		main_node.scroll_to_page(p, false)
+		assert_eq(main_node.scroll_container.scroll_vertical, target_scroll, "Page %d: scroll_vertical must match target_scroll" % p)
+		var breaker_top_viewport_y: int = stream_y - 24 - main_node.scroll_container.scroll_vertical
+		var page_top_viewport_y: int = stream_y - main_node.scroll_container.scroll_vertical
+		assert_eq(breaker_top_viewport_y, 122, "Page %d: breaker top must be at viewport Y 122" % p)
+		assert_eq(page_top_viewport_y, 146, "Page %d: page top must be at viewport Y 146" % p)
+		assert_eq(main_node.get_current_page_number(), p, "Page %d: get_current_page_number must return %d" % [p, p])
+
+	main_node.free()
+	_clean_user_progress()
+
+
+func test_top_buttons_inactivity_fade_and_instant_wakeup() -> void:
+	_clean_user_progress()
+	var main_node: Main = MainScene.instantiate() as Main
+	test_root_window.add_child(main_node)
+	main_node._ready()
+
+	var reader_btn: Button = main_node.get_reader_button()
+	var nav_drawer: NavigationDrawer = main_node.get_navigation_drawer()
+	var float_btn: Button = nav_drawer.get_floating_button()
+
+	# 1. Initially at full opacity and 0 inactivity
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Initial top buttons opacity must be 1.0")
+	assert_eq(main_node.get_inactivity_elapsed(), 0.0, "Initial inactivity elapsed must be 0.0")
+	assert_eq(reader_btn.modulate.a, 1.0, "ReaderButton initial modulate.a must be 1.0")
+	assert_eq(float_btn.modulate.a, 1.0, "FloatingButton initial modulate.a must be 1.0")
+	assert_eq(nav_drawer.get_floating_button_opacity(), 1.0, "get_floating_button_opacity must return 1.0")
+
+	# 2. Simulate 2.5s inactivity -> opacity 0.5
+	main_node.simulate_inactivity(2.5)
+	assert_eq(main_node.get_inactivity_elapsed(), 2.5, "Inactivity elapsed should be 2.5s")
+	assert_true(absf(main_node.get_top_buttons_opacity() - 0.5) < 0.001, "Top buttons opacity should be 0.5 at 2.5s")
+	assert_true(absf(reader_btn.modulate.a - 0.5) < 0.001, "ReaderButton modulate.a should be 0.5")
+	assert_true(absf(float_btn.modulate.a - 0.5) < 0.001, "FloatingButton modulate.a should be 0.5")
+
+	# 3. Simulate another 2.5s (total 5.0s) -> opacity 0.0 (fully faded)
+	main_node.simulate_inactivity(2.5)
+	assert_eq(main_node.get_inactivity_elapsed(), 5.0, "Inactivity elapsed should be capped at 5.0s")
+	assert_eq(main_node.get_top_buttons_opacity(), 0.0, "Top buttons opacity should be 0.0 at 5.0s")
+	assert_eq(reader_btn.modulate.a, 0.0, "ReaderButton modulate.a should be 0.0")
+	assert_eq(float_btn.modulate.a, 0.0, "FloatingButton modulate.a should be 0.0")
+
+	# Simulate beyond 5.0s -> remains clamped at 5.0s and 0.0
+	main_node.simulate_inactivity(5.0)
+	assert_eq(main_node.get_inactivity_elapsed(), 5.0, "Inactivity elapsed should remain clamped at 5.0s")
+	assert_eq(main_node.get_top_buttons_opacity(), 0.0, "Top buttons opacity should remain 0.0")
+
+	# 4. Instant wakeup via wake_top_buttons()
+	main_node.wake_top_buttons()
+	assert_eq(main_node.get_inactivity_elapsed(), 0.0, "Inactivity elapsed should be 0.0 after wakeup")
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Top buttons opacity should be 1.0 after wakeup")
+	assert_eq(reader_btn.modulate.a, 1.0, "ReaderButton modulate.a should be 1.0 after wakeup")
+	assert_eq(float_btn.modulate.a, 1.0, "FloatingButton modulate.a should be 1.0 after wakeup")
+
+	# 5. Screen touch wakes buttons from faded state
+	main_node.simulate_inactivity(5.0)
+	assert_eq(main_node.get_top_buttons_opacity(), 0.0, "Buttons should be faded out")
+	var touch_event: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch_event.pressed = true
+	main_node._input(touch_event)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Touch event must instantly wake buttons to 1.0")
+
+	# 6. Mouse motion wakes buttons from faded state
+	main_node.simulate_inactivity(5.0)
+	assert_eq(main_node.get_top_buttons_opacity(), 0.0, "Buttons should be faded out")
+	var motion_event: InputEventMouseMotion = InputEventMouseMotion.new()
+	main_node._input(motion_event)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Mouse motion must instantly wake buttons to 1.0")
+
+	# 7. Key event wakes buttons from faded state
+	main_node.simulate_inactivity(5.0)
+	assert_eq(main_node.get_top_buttons_opacity(), 0.0, "Buttons should be faded out")
+	var key_event: InputEventKey = InputEventKey.new()
+	key_event.pressed = true
+	main_node._input(key_event)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Key event must instantly wake buttons to 1.0")
+
+	# 8. While NavigationDrawer is open, buttons stay awake at 1.0
+	main_node.simulate_inactivity(2.5)
+	nav_drawer.open_drawer(false)
+	main_node._process(0.016)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Opening drawer must wake buttons")
+	main_node.simulate_inactivity(5.0)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Buttons must remain 1.0 while drawer is open")
+	nav_drawer.close_drawer(false)
+	assert_eq(main_node.get_top_buttons_opacity(), 1.0, "Closing drawer must keep buttons at 1.0")
+
+	main_node.free()
+	_clean_user_progress()
+
+
 func cleanup() -> void:
 	_clean_user_progress()
 

@@ -219,6 +219,23 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - The app restores stably to Page 10 without any layout inflation drift across repeated launches.
 
+### TC-SCROLL-07: Top Scroll Spacer Bar & Front Cover Header Clearance
+- **Step 1:** Launch the application or scroll all the way to the top of the continuous stream (`scroll_vertical = 0`).
+- **Expected:**
+  - Above Page 1 (Front Cover), a 122px tall ambient espresso spacer bar (`TopSpacerBar`, `#141010`) fills the area behind the top floating buttons.
+  - Page 1 starts at raw stream Y coordinate 146px (122px spacer + 24px container separation).
+  - The top-left `ReaderButton` ("AA") and top-right `FloatingButton` ("☰") (both spanning Y = 18px to Y = 122px) rest entirely above the Front Cover card.
+  - The Front Cover top header band ("PRAY THE ROSARY", subtitle, and gold border) is completely clear of the top buttons with zero visual overlap.
+
+### TC-SCROLL-08: Page Jump Target Offset Alignment Under Top Corner Buttons
+- **Step 1:** Open the navigation drawer or use an in-stream jump bar to jump to any page (e.g. Page 4 *The Opening Prayers*, Page 6 *1st Joyful Mystery*, Page 16 *1st Luminous Mystery*, Page 26 *1st Sorrowful Mystery*, Page 36 *1st Glorious Mystery*, Page 46 *The Closing Prayers*).
+- **Expected:**
+  - The scroll container smoothly scrolls to the target scroll position calculated via `maxi(0, int(card_top_y - separation - TOP_BUTTON_BOTTOM_Y))`.
+  - The 24px breaker above the target card aligns its top edge exactly with the bottom edge of the top buttons at `viewport_y = 122px`.
+  - The target page card's top edge aligns at `viewport_y = 146px`.
+  - The target page's subheading, title, fruit badge, and opening prayer lines appear completely below both top buttons with zero visual obstruction or overlap.
+  - `get_current_page_number()` accurately resolves to the targeted page.
+
 ## Test 7.0: Top-Right Navigation Drawer & Table of Contents
 
 ### TC-NAV-01: Floating Navigation Button & Drawer Toggling
@@ -445,6 +462,20 @@ This document outlines the strict manual testing procedures required before any 
 - **Expected:**
   - Consistent uniform inter-item spacing is maintained while text-heavy cards smoothly elongate vertically beyond 1080px without label collisions, truncation, or clipping.
   - Back Cover (Page 50) maintains its locked 2:3 aspect ratio (`720x1080`).
+
+### TC-TEXT-08: Distraction-Free Top Button Inactivity Fade & Instant Wakeup
+- **Step 1:** Launch the application and observe the top-left `ReaderButton` ("AA") and top-right `FloatingButton` ("☰").
+- **Expected:**
+  - Both corner buttons are rendered at full opacity (`modulate.a = 1.0`).
+- **Step 2:** Leave the device/mouse untouched for 5 seconds without touching the screen, dragging, moving the mouse cursor, or pressing any keys.
+- **Expected:**
+  - Over the course of 5.0 seconds (`BUTTON_FADE_DURATION = 5.0`), both buttons smoothly and continuously fade out until becoming completely invisible (`modulate.a = 0.0`), allowing uninterrupted visual contemplation of sacred art and prayer text.
+- **Step 3:** Touch or click anywhere on the screen, move the mouse cursor, drag/scroll, or press any key.
+- **Expected:**
+  - Both top buttons immediately wake up and restore to full opacity (`modulate.a = 1.0`) instantly with zero lag.
+- **Step 4:** Open the navigation drawer, or click and hold to drag the scroll stream.
+- **Expected:**
+  - While the navigation drawer is open or while dragging, the buttons remain awake at full opacity (`1.0`) and do not fade out. Closing the drawer resets the inactivity timer.
 
 ## Test 10.0: Group Recitation & Leader/Response Typography
 
