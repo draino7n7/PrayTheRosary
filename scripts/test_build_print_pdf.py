@@ -167,7 +167,7 @@ class TestBuildPrintPdf(unittest.TestCase):
         try:
             # Page 2: prose refinement
             p2_text = " ".join(doc[1].get_text().split())
-            self.assertIn("allowed all believers to unite their daily work and prayer", p2_text)
+            self.assertIn("Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter", p2_text)
 
             # Page 4: rubrics
             p4_text = " ".join(doc[3].get_text().split())
@@ -188,12 +188,14 @@ class TestBuildPrintPdf(unittest.TestCase):
         doc = pymupdf.open(str(CANONICAL_PDF))
         try:
             p2_text = " ".join(doc[1].get_text().split())
+            self.assertIn("From the earliest centuries of the Church, monastic communities chanted the 150 Psalms of David daily.", p2_text)
+            self.assertIn("Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter (the Psalter of the Blessed Virgin Mary).", p2_text)
             self.assertIn("In 1569, Pope St. Pius V formally established the traditional fifteen Mysteries", p2_text)
-            self.assertIn("Joyful Mysteries (Christ's Incarnation and early life", p2_text)
-            self.assertIn("Sorrowful Mysteries (His Passion and Death", p2_text)
-            self.assertIn("Glorious Mysteries (His Resurrection, Ascension, and the crowning glory", p2_text)
+            self.assertIn("Joyful Mysteries (Christ's Incarnation and early life)", p2_text)
+            self.assertIn("Sorrowful Mysteries (His Passion and Death)", p2_text)
+            self.assertIn("Glorious Mysteries (His Resurrection and Ascension, Pentecost, and Mary's Assumption and Coronation)", p2_text)
             self.assertIn("In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573).", p2_text)
-            self.assertIn("Pope St. John Paul II completed this chronological Gospel arc by introducing the five Luminous Mysteries", p2_text)
+            self.assertIn("Pope St. John Paul II expanded the Mysteries of the Rosary to include the five Luminous Mysteries", p2_text)
             self.assertNotIn("(the Mysteries of Light)", p2_text)
         finally:
             doc.close()

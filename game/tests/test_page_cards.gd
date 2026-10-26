@@ -809,7 +809,8 @@ func _calculate_page_content_required_height(sub: BasePageCard, p_data: Dictiona
 		var total_chars: int = 0
 		for s_val: Variant in sections:
 			if s_val is Dictionary:
-				total_chars += str((s_val as Dictionary).get("body", "")).length()
+				var s_dict: Dictionary = s_val as Dictionary
+				total_chars += str(s_dict.get("title", "")).length() + str(s_dict.get("body", "")).length()
 		var body_sz: int = 22 if total_chars <= 1650 else 20
 		var title_sz: int = body_sz + 3
 		for s_val: Variant in sections:

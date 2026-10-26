@@ -58,7 +58,8 @@ func _apply_page_data() -> void:
 		var total_chars: int = 0
 		for sec_val: Variant in sections:
 			if sec_val is Dictionary:
-				total_chars += str((sec_val as Dictionary).get("body", "")).length()
+				var sec_dict: Dictionary = sec_val as Dictionary
+				total_chars += str(sec_dict.get("title", "")).length() + str(sec_dict.get("body", "")).length()
 
 		var body_font_size: int = 22 if total_chars <= 1650 else 20
 		var title_font_size: int = body_font_size + 3
