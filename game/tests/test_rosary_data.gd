@@ -454,25 +454,31 @@ func test_historical_feast_note_and_marian_counsel_quote() -> void:
 	var p2: Dictionary = loader.get_page(2)
 	var sections: Array = p2.get("sections", [])
 	assert_eq(sections.size(), 3, "Page 2 must have 3 historical sections")
+	var sec1_body: String = str((sections[0] as Dictionary).get("body", ""))
+	assert_eq(
+		sec1_body,
+		"From the earliest centuries of the Church, monastic communities chanted the 150 Psalms of David daily. Because many lay brothers and the faithful could not read Latin manuscripts or own costly psalters, the practice arose of reciting 150 Our Fathers on knotted cords called Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter (the Psalter of the Blessed Virgin Mary).",
+		"Page 2 Section 1 body must match refined monastic roots and Paternoster cords prose"
+	)
 	var sec3_body: String = str((sections[2] as Dictionary).get("body", ""))
 	assert_true(
 		sec3_body.contains("In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."),
 		"Page 2 Section 3 must document the standalone 1571 Our Lady of Victory feast and 1573 renaming sentence"
 	)
 	assert_true(
-		sec3_body.contains("the Joyful Mysteries (Christ's Incarnation and early life, from the Annunciation to the Finding in the Temple)"),
+		sec3_body.contains("the Joyful Mysteries (Christ's Incarnation and early life)"),
 		"Page 2 Section 3 must summarize the Joyful Mysteries"
 	)
 	assert_true(
-		sec3_body.contains("the Sorrowful Mysteries (His Passion and Death, from the Agony in the Garden to the Crucifixion)"),
+		sec3_body.contains("the Sorrowful Mysteries (His Passion and Death)"),
 		"Page 2 Section 3 must summarize the Sorrowful Mysteries"
 	)
 	assert_true(
-		sec3_body.contains("the Glorious Mysteries (His Resurrection, Ascension, and the crowning glory of the Church and the Blessed Virgin)"),
+		sec3_body.contains("the Glorious Mysteries (His Resurrection and Ascension, Pentecost, and Mary's Assumption and Coronation)"),
 		"Page 2 Section 3 must summarize the Glorious Mysteries"
 	)
 	assert_true(
-		sec3_body.contains("introducing the five Luminous Mysteries, contemplating the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."),
+		sec3_body.contains("expanded the Mysteries of the Rosary to include the five Luminous Mysteries, contemplating the public ministry of Christ from His Baptism in the Jordan to the Institution of the Eucharist."),
 		"Page 2 Section 3 must summarize the Luminous Mysteries"
 	)
 	assert_true(
@@ -1039,7 +1045,7 @@ func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() 
 	var j2: Dictionary = loader.get_mystery_by_id("joyful_2_visitation")
 	assert_eq(
 		str(j2.get("meditation", "")),
-		"Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, bringing sanctifying joy to the unborn John the Baptist.",
+		"Bearing Christ within her, Mary hastens in charity to visit and care for her aged cousin Elizabeth, where the unborn John the Baptist leaps for joy at the presence of the Lord.",
 		"Joyful 2 meditation must match"
 	)
 
@@ -1303,13 +1309,13 @@ func test_issue_85_prayer_titles_rubrics_and_prose_refinements() -> void:
 	assert_true(agony_meditation.contains("His Sacred Heart"), "Agony meditation must capitalize 'His Sacred Heart'")
 	assert_false(agony_meditation.contains("His sacred Heart"), "Agony meditation must not contain 'His sacred Heart'")
 
-	# 4. Page 2 Section 1 prose refinement: "allowed all believers to unite their daily work and prayer"
+	# 4. Page 2 Section 1 prose refinement: "Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter"
 	var p2: Dictionary = loader.get_page(2)
 	assert_false(p2.is_empty(), "Page 2 must exist")
 	var p2_sections: Array = p2.get("sections", [])
 	assert_true(p2_sections.size() > 0, "Page 2 must have sections")
 	var s1_body: String = str(p2_sections[0].get("body", ""))
-	assert_true(s1_body.contains("allowed all believers to unite their daily work and prayer"), "Page 2 Section 1 must contain refined phrase 'allowed all believers to unite their daily work and prayer'")
+	assert_true(s1_body.contains("Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter"), "Page 2 Section 1 must contain refined phrase 'Paternoster cords—a devotion later adapted to 150 Hail Marys as Our Lady's Psalter'")
 
 	# 5. Page 4 step rubrics
 	var p4: Dictionary = loader.get_page(4)
