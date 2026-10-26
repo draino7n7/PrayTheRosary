@@ -26,7 +26,9 @@ The **Issue Resolver** is responsible for taking an open issue from conception t
 
 ### Explicit Boundaries (What the Issue Resolver Does NOT Do)
 * **DO NOT merge into `main`:** The Issue Resolver must never merge the PR or push directly to `main`.
-* **DO NOT update project documentation:** Updating `documents/requirements.md`, `documents/manual_testing.md`, or `README.md` is handled by the **PR Reviewer & Documentation Agent**. The resolver provides the necessary handoff details in the PR body so the reviewing agent can update documentation accurately.
+* **Documentation Boundary:** By default, updating `documents/requirements.md`, `documents/manual_testing.md`, or `README.md` is handled by the **PR Reviewer & Documentation Agent** using the resolver's PR handoff notes. **Exceptions:**
+  1. Whenever modifying prayers, Scripture citations, mysteries, historical prose, or artwork attributions, the Issue Resolver **MUST** update `documents/references.md` to keep the canonical source ledger synchronized.
+  2. When a data/docs-focused issue's Acceptance Criteria or orchestrator prompt explicitly mandates updating `documents/requirements.md` or `documents/manual_testing.md`, the Issue Resolver should update those files directly as part of the PR (and the PR Reviewer will verify them prior to merge).
 
 ---
 
@@ -144,6 +146,8 @@ If your issue involves UI layout, coloring, or visual polish, you MUST visually 
 1. Start a fresh instance of the game in the background using `godot --path game`. Do NOT rely on an already-running instance, as it won't have your latest changes.
 2. This fresh instance will automatically spin up the `McpInteractionServer` AutoLoad.
 3. Use `mcp_client.py` (e.g., `python mcp_client.py screenshot`) to capture a screenshot (`agent_screenshot.png`) and inspect the SceneTree.
+   * **1:1 Viewport (`720×1280`) Pixel-Measurement Tip on 1080p Hosts:** On a `1920×1080` monitor, Windows OS window title-bar/border decorations clamp a normal bordered window's height to `~1061px`. If you need an exact 1:1 `720×1280` screenshot for pixel-bounding-box verification, enable borderless window mode before resizing via MCP `eval`:
+     `DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true); DisplayServer.window_set_size(Vector2i(720, 1280))`
 4. Visually verify that your changes adhere to project style guidelines, look good, and don't break existing layouts.
 5. **CRITICAL:** Once your visual QA is complete, you must kill the background task running the Godot process to close the window and free up port 9090.
 

@@ -121,17 +121,26 @@ gh pr review <pr_number> --request-changes --body "<Detailed description of what
 Once all acceptance criteria are met, automated tests pass, and documentation is updated and pushed to the feature branch, proceed to merge.
 
 #### 1. Prepare for Merge
-Before merging, exit the review worktree, terminate any background Godot processes and the git fsmonitor daemon to prevent Windows file locks, remove the worktree, and return to the main workspace:
+Before merging, exit the review worktree, terminate any background Godot processes and lingering `git` (`fsmonitor--daemon`) processes to release Windows file locks, remove the worktree, and return to the main workspace:
 ```powershell
-# Kill any background Godot instances and stop git fsmonitor daemon to release Windows file locks
-Stop-Process -Name "godot" -Force -ErrorAction SilentlyContinue
-git fsmonitor--daemon stop 2>$null
+# Exit worktree back to main repository root first
+cd c:\Users\kevin\OGS_Projects\PrayTheRosary
 
-# Exit worktree and remove it
-cd ../..
-git worktree remove .worktrees/review-pr-<pr_number> --force
-# If Windows file locks prevent removal, use PowerShell fallback:
-# Remove-Item -Recurse -Force .worktrees/review-pr-<pr_number>; git worktree prune
+# Kill any background Godot instances and orphaned git fsmonitor daemons holding worktree locks
+Stop-Process -Name "godot", "git" -Force -ErrorAction SilentlyContinue
+
+# Remove the worktree (with PowerShell fallback if Windows read-only/fsmonitor locks persist)
+git worktree remove .worktrees/<worktree-name> --force
+if ($LASTEXITCODE -ne 0) {
+    if (Test-Path ".git/worktrees/<worktree-name>") {
+        Get-ChildItem -Path ".git/worktrees/<worktree-name>" -Recurse -Force | ForEach-Object { $_.Attributes = 'Normal' }
+        Remove-Item -Path ".git/worktrees/<worktree-name>" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    if (Test-Path ".worktrees/<worktree-name>") {
+        Remove-Item -Path ".worktrees/<worktree-name>" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    git worktree prune
+}
 ```
 
 #### 2. Merge the Pull Request
@@ -158,8 +167,8 @@ git worktree prune
 git checkout main
 git pull origin main
 
-# Delete local branch if lingering
-git branch -d feature/issue-<number>-<short-description> -ErrorAction SilentlyContinue
+# Delete local branch if lingering (use 2>$null, NOT -ErrorAction, with external git.exe)
+git branch -d feature/issue-<number>-<short-description> 2>$null
 
 # Force an editor import pass to register newly merged classes and assets
 godot --headless --editor --quit --path game

@@ -86,9 +86,9 @@ Apply at least one standard GitHub label when creating the issue:
 ## 4. Pre-Creation Checklist (For Authors & Agents)
 
 Before publishing an issue via GitHub:
-1. [ ] **Search Existing Issues:** Run `gh issue list --state all` to confirm the issue doesn't already exist or duplicate past work.
-2. [ ] **Inspect Codebase:** Verify the exact file paths, variable names, and current behavior in the code.
-3. [ ] **Clarify Design Choices:** Resolve any open design questions (e.g., color hex codes, UI behaviors, platform fallbacks) before publishing so the issue body contains firm decisions rather than open questions.
+1. [ ] **Search Existing Issues:** Run `gh issue list --state all --json number,title,state` to confirm the issue doesn't already exist or duplicate past work. When inspecting a specific issue, **NEVER run bare `gh issue view <id>`** (which triggers a `read:project` token scope error); always pass `--json`: `gh issue view <id> --json number,title,body,state,labels`.
+2. [ ] **Inspect Codebase:** Verify the exact file paths, variable names, and current behavior in the code. *(PowerShell tip: `Select-String` does not support `-Recurse`; use `Get-ChildItem -Recurse -File | Select-String -Pattern "<pattern>"` when searching across files via PowerShell, or use built-in search tools).*
+3. [ ] **Clarify Design Choices:** Resolve any open design questions (e.g., color hex codes, UI behaviors, platform fallbacks) before publishing so the issue body contains firm decisions rather than open questions. When proposing prose edits to front-matter cards (`Pages 2 & 3`), note that `FrontMatterPageCard` computes `total_chars` as the sum of both section `title` and `body` lengths (`sum(len(s['title']) + len(s['body']) for s in sections)`) against the `1,650`-character density threshold.
 4. [ ] **Include Documentation Acceptance Criteria:** Ensure the mandatory documentation coordination checklist is included per `documents/reviewing_and_merging_prs.md`.
 5. [ ] **Check Canonical References Ledger (`documents/references.md`):** If proposing any additions, modifications, or fixes to sacred text, prayers, translations, Scripture citations, mysteries, historical summaries, or artwork attributions, consult `documents/references.md` and `.agents/rules/references_verification.md` to ensure doctrinal and archival accuracy, and include an acceptance criterion to keep `documents/references.md` synchronized.
 6. [ ] **Print PDF Pipeline Impact (`scripts/build_print_pdf.py`):** If proposing changes that modify book page visual styling, typography rules, prayers/Scripture, or `game/data/*.json` structure, include explicit acceptance criteria requiring `scripts/build_print_pdf.py` maintenance, running `python -m unittest discover -s scripts -p "test_*.py"`, and regenerating `assets/print/PrayTheRosary.pdf`.
@@ -99,7 +99,10 @@ Before publishing an issue via GitHub:
 
 Contributors and agents can create issues directly from the command line using the GitHub CLI (`gh`).
 
-### Option A: Using Predefined Templates (Recommended)
+> [!WARNING]
+> **NEVER run a bare `gh issue view <id>` command.** The repository's token configuration triggers a `read:project` scope error for bare view commands. Always pass `--json` (e.g., `gh issue view <id> --json number,title,body,state,labels`).
+
+### Option A: Using Predefined Templates
 You can invoke the repository issue templates directly with the `--template` flag:
 ```powershell
 # Create a bug report using the bug_report.md template
@@ -109,39 +112,17 @@ gh issue create --template "bug_report.md"
 gh issue create --template "feature_request.md" --title "UI - Add Haptic Feedback on Keypress"
 ```
 
-### Option B: Scripted / Headless Creation
-When generating an issue programmatically, format the body string according to the full standard structure:
+### Option B: Scripted / Headless Creation via `--body-file` (Recommended for Agents)
+When generating or editing an issue programmatically on Windows PowerShell, **always write the markdown body to a temporary `.md` file** (using your file-writing tool in your scratch directory) and pass `--body-file` to `gh issue create` or `gh issue edit`, then delete the temporary file. This avoids PowerShell multiline quoting, backtick escaping, and newline distortion issues:
 ```powershell
-$body = @"
-### 1. Problem & Context
-Short description of the bug or feature and its user impact.
+# 1. Write the formatted markdown issue body to a temporary file (e.g., issue_body.md)
+# 2. Create (or edit) the issue using --body-file:
+gh issue create --title "<Prefix> - <Short Summary>" --body-file issue_body.md --label "<bug|enhancement>"
+# Or when editing an existing issue:
+# gh issue edit <issue_number> --title "<Prefix> - <Short Summary>" --body-file issue_body.md
 
-### 2. Technical Scope & Affected Files
-- game/scripts/<file>.gd
-- game/scenes/<file>.tscn
-
-### 3. Acceptance Criteria
-
-#### [Component / Feature Area]
-- [ ] Action item 1
-- [ ] Action item 2
-
-#### Automated Tests (game/tests/, scripts/)
-- [ ] Add unit test cases in game/tests/<test_file>.gd or scripts/test_*.py.
-- [ ] Ensure test suites pass with 0 failures (Godot and Python).
-
-#### Print PDF Pipeline Synchronization (Mandatory if styling, typography, or data JSON change)
-- [ ] Maintain and verify scripts/build_print_pdf.py.
-- [ ] Run python -m unittest discover -s scripts -p "test_*.py".
-- [ ] Regenerate assets/print/PrayTheRosary.pdf if layout, prayers, or version changed.
-
-#### Documentation Coordination (Mandatory per documents/reviewing_and_merging_prs.md)
-- [ ] Update documents/requirements.md.
-- [ ] Update documents/manual_testing.md.
-- [ ] Update README.md if applicable.
-"@
-
-gh issue create --title "<Prefix> - <Short Summary>" --body "$body" --label "<bug|enhancement>"
+# 3. Clean up the temporary file:
+Remove-Item -Force issue_body.md
 ```
 
 ---
