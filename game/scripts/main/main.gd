@@ -12,6 +12,8 @@ const WHEEL_SCROLL_STEP: int = 80
 const COLOR_AMBIENT_ESPRESSO: Color = Color(0.0784314, 0.0627451, 0.0627451, 1.0) # #141010
 const COLOR_DEEP_CHARCOAL: Color = Color(0.117647, 0.0941176, 0.0823529, 1.0) # #1E1815
 const COLOR_SACRED_CRIMSON: Color = Color(0.419608, 0.113725, 0.129412, 1.0) # #6B1D21
+const TOP_BUTTON_BOTTOM_Y: int = 122
+const BUTTON_FADE_DURATION: float = 5.0
 
 const MIN_FLICK_VELOCITY: float = 100.0
 const MOMENTUM_STOP_VELOCITY: float = 12.0
@@ -29,6 +31,7 @@ var progress_manager: ReadingProgressManager = null
 var _page_cards: Dictionary = {} # int -> PageCard
 var _jump_bars: Array[InStreamJumpBar] = []
 var _stream_elements: Array[Node] = []
+var _top_spacer_bar: ColorRect = null
 var _current_page: int = 1
 var _scroll_tween: Tween = null
 var _save_timer: Timer = null
@@ -44,6 +47,8 @@ var _is_mouse_dragging: bool = false
 var _velocity_samples: Array[Dictionary] = [] # Array of {"time": int, "vel_y": float}
 var _current_text_preset: String = ""
 var _toast_tween: Tween = null
+var _inactivity_elapsed: float = 0.0
+var _top_buttons_opacity: float = 1.0
 
 @onready var background: ColorRect = get_node_or_null("Background") as ColorRect
 @onready var scroll_container: ScrollContainer = get_node_or_null("ScrollContainer") as ScrollContainer
@@ -84,6 +89,7 @@ func _ready() -> void:
 	_setup_save_timer()
 	_setup_scroll_listening()
 	_setup_navigation_drawer()
+	wake_top_buttons()
 
 	if _page_cards.is_empty():
 		build_scroll_stream()
@@ -110,6 +116,8 @@ func _exit_tree() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_button_inactivity(delta)
+
 	if not _is_momentum_scrolling:
 		return
 	if scroll_container == null:
@@ -150,6 +158,8 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch or event is InputEventScreenDrag or event is InputEventMouseButton or event is InputEventMouseMotion or event is InputEventKey:
+		wake_top_buttons()
 	if navigation_drawer == null or not navigation_drawer.is_open():
 		handle_scroll_input(event)
 
@@ -377,6 +387,8 @@ func _ensure_initialized() -> void:
 		preset_toast = get_node_or_null("ReaderCanvasLayer/PresetToast") as PanelContainer
 	if toast_label == null:
 		toast_label = get_node_or_null("ReaderCanvasLayer/PresetToast/ToastLabel") as Label
+	if _top_spacer_bar == null and page_container != null:
+		_top_spacer_bar = page_container.get_node_or_null("TopSpacerBar") as ColorRect
 
 	if progress_manager == null:
 		progress_manager = ReadingProgressManager.new()
@@ -417,6 +429,7 @@ func _update_reader_icon_color(color: Color) -> void:
 
 
 func _on_reader_button_mouse_entered() -> void:
+	wake_top_buttons()
 	_update_reader_icon_color(COLOR_SACRED_CRIMSON)
 
 
@@ -428,6 +441,7 @@ func _on_reader_button_mouse_exited() -> void:
 
 
 func _on_reader_button_down() -> void:
+	wake_top_buttons()
 	_update_reader_icon_color(COLOR_SACRED_CRIMSON)
 
 
@@ -446,6 +460,9 @@ func _setup_navigation_drawer() -> void:
 		navigation_drawer.set_data_loader(data_loader)
 		navigation_drawer.set_progress_manager(progress_manager)
 		navigation_drawer.set_text_size_preset(_current_text_preset)
+		var float_btn: Button = navigation_drawer.get_floating_button()
+		if float_btn != null and not float_btn.button_down.is_connected(wake_top_buttons):
+			float_btn.button_down.connect(wake_top_buttons)
 		if not navigation_drawer.page_requested.is_connected(_on_navigation_drawer_page_requested):
 			navigation_drawer.page_requested.connect(_on_navigation_drawer_page_requested)
 		if not navigation_drawer.drawer_opened.is_connected(_on_drawer_opened):
@@ -486,9 +503,20 @@ func build_scroll_stream() -> void:
 	# Clear any existing elements
 	for child: Node in page_container.get_children():
 		child.queue_free()
+	_top_spacer_bar = null
 	_page_cards.clear()
 	_jump_bars.clear()
 	_stream_elements.clear()
+
+	# Top Scroll Spacer Bar (matches 122px bottom edge of top buttons)
+	var spacer: ColorRect = ColorRect.new()
+	spacer.name = "TopSpacerBar"
+	spacer.custom_minimum_size = Vector2(BasePageCard.DESIGN_WIDTH, float(TOP_BUTTON_BOTTOM_Y))
+	spacer.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	spacer.mouse_filter = Control.MOUSE_FILTER_PASS
+	spacer.color = COLOR_AMBIENT_ESPRESSO
+	page_container.add_child(spacer)
+	_top_spacer_bar = spacer
 
 	var all_pages: Array[Dictionary] = data_loader.get_all_pages()
 	var separators: Array = data_loader.get_in_stream_separators()
@@ -608,12 +636,9 @@ func _get_stream_element_height(ctrl: Control) -> float:
 	return h
 
 
-func get_target_scroll_for_page(page_number: int) -> int:
+func get_page_card_stream_y(page_number: int) -> int:
 	_ensure_initialized()
 	var clamped_page: int = clampi(page_number, 1, TOTAL_PAGES)
-	if clamped_page == 1:
-		return 0
-
 	var card: PageCard = _page_cards.get(clamped_page)
 	if card == null or page_container == null:
 		return 0
@@ -630,18 +655,30 @@ func get_target_scroll_for_page(page_number: int) -> int:
 	return int(offset)
 
 
+func get_target_scroll_for_page(page_number: int) -> int:
+	_ensure_initialized()
+	var clamped_page: int = clampi(page_number, 1, TOTAL_PAGES)
+	if clamped_page == 1:
+		return 0
+
+	var card_top_y: int = get_page_card_stream_y(clamped_page)
+	var separation: float = float(page_container.get_theme_constant("separation")) if page_container != null else 24.0
+	return maxi(0, int(float(card_top_y) - separation - float(TOP_BUTTON_BOTTOM_Y)))
+
+
 func get_current_page_number() -> int:
 	_ensure_initialized()
 	if _page_cards.is_empty():
 		return 1
 
 	var scroll_y: float = float(scroll_container.scroll_vertical) if scroll_container != null else 0.0
-	var viewport_h: float = scroll_container.size.y if scroll_container != null else 1280.0
-	var probe_y: float = scroll_y + maxf(viewport_h * 0.35, 120.0)
+	var viewport_h: float = scroll_container.size.y if (scroll_container != null and scroll_container.size.y > 0.0) else 1280.0
+	var separation: float = float(page_container.get_theme_constant("separation")) if page_container != null else 24.0
+	var min_probe: float = float(TOP_BUTTON_BOTTOM_Y) + separation + 50.0
+	var probe_y: float = scroll_y + maxf(viewport_h * 0.35, min_probe)
 
 	var active_page: int = 1
 	var accum_y: float = 0.0
-	var separation: float = float(page_container.get_theme_constant("separation")) if page_container != null else 0.0
 
 	if page_container != null:
 		for child: Node in page_container.get_children():
@@ -658,7 +695,7 @@ func get_current_page_number() -> int:
 				accum_y += h + separation
 	else:
 		for p_num: int in range(1, TOTAL_PAGES + 1):
-			var card_top: float = float(get_target_scroll_for_page(p_num))
+			var card_top: float = float(get_page_card_stream_y(p_num))
 			if card_top <= probe_y:
 				active_page = p_num
 			else:
@@ -705,6 +742,7 @@ func _on_navigation_drawer_page_requested(target_page: int) -> void:
 
 
 func _on_drawer_opened() -> void:
+	wake_top_buttons()
 	_stop_momentum()
 	_is_mouse_dragging = false
 	if scroll_container != null:
@@ -714,6 +752,7 @@ func _on_drawer_opened() -> void:
 
 
 func _on_drawer_closed() -> void:
+	wake_top_buttons()
 	if scroll_container != null:
 		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if reader_button != null:
@@ -746,6 +785,7 @@ func cycle_text_size_preset() -> String:
 
 
 func _on_reader_button_pressed() -> void:
+	wake_top_buttons()
 	cycle_text_size_preset()
 
 
@@ -811,8 +851,9 @@ func set_text_size_preset(preset: Variant) -> void:
 	var anchor_elem: Control = null
 	var anchor_rel_offset: float = 0.5
 	if page_container != null and not _stream_elements.is_empty():
-		var accum: float = 0.0
 		var sep: float = float(page_container.get_theme_constant("separation"))
+		var spacer_h: float = float(TOP_BUTTON_BOTTOM_Y) + sep
+		var accum: float = spacer_h
 		for elem_node: Node in _stream_elements:
 			if elem_node is Control:
 				var elem: Control = elem_node as Control
@@ -840,8 +881,9 @@ func set_text_size_preset(preset: Variant) -> void:
 
 	# 4. Re-anchor scroll
 	if scroll_container != null and page_container != null and anchor_elem != null:
-		var new_accum: float = 0.0
 		var sep: float = float(page_container.get_theme_constant("separation"))
+		var spacer_h: float = float(TOP_BUTTON_BOTTOM_Y) + sep
+		var new_accum: float = spacer_h
 		for elem_node: Node in _stream_elements:
 			if elem_node is Control:
 				var elem: Control = elem_node as Control
@@ -937,5 +979,55 @@ func stop_momentum() -> void:
 
 func start_momentum(velocity: float) -> void:
 	_start_momentum(velocity)
+
+
+func get_top_spacer_bar() -> ColorRect:
+	if _top_spacer_bar == null and page_container != null:
+		_top_spacer_bar = page_container.get_node_or_null("TopSpacerBar") as ColorRect
+	return _top_spacer_bar
+
+
+func _update_button_inactivity(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	if (navigation_drawer != null and navigation_drawer.is_open()) or _is_mouse_dragging:
+		wake_top_buttons()
+		return
+
+	_inactivity_elapsed = minf(_inactivity_elapsed + delta, BUTTON_FADE_DURATION)
+	var alpha: float = clampf(1.0 - (_inactivity_elapsed / BUTTON_FADE_DURATION), 0.0, 1.0)
+	_set_top_buttons_opacity(alpha)
+
+
+func _set_top_buttons_opacity(alpha: float) -> void:
+	_top_buttons_opacity = clampf(alpha, 0.0, 1.0)
+	if reader_button == null:
+		reader_button = get_node_or_null("ReaderCanvasLayer/ReaderButton") as Button
+	if reader_button != null:
+		reader_button.modulate.a = _top_buttons_opacity
+	if navigation_drawer == null:
+		navigation_drawer = get_node_or_null("NavigationDrawer") as NavigationDrawer
+	if navigation_drawer != null:
+		navigation_drawer.set_floating_button_opacity(_top_buttons_opacity)
+
+
+func wake_top_buttons() -> void:
+	_inactivity_elapsed = 0.0
+	_set_top_buttons_opacity(1.0)
+
+
+func simulate_inactivity(seconds: float) -> void:
+	if seconds <= 0.0:
+		return
+	_update_button_inactivity(seconds)
+
+
+func get_top_buttons_opacity() -> float:
+	return _top_buttons_opacity
+
+
+func get_inactivity_elapsed() -> float:
+	return _inactivity_elapsed
+
 
 

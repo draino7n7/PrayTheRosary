@@ -958,6 +958,21 @@ func get_floating_button() -> Button:
 	return floating_button
 
 
+func set_floating_button_opacity(alpha: float) -> void:
+	if floating_button == null:
+		floating_button = get_node_or_null("FloatingButton") as Button
+	if floating_button != null:
+		floating_button.modulate.a = clampf(alpha, 0.0, 1.0)
+
+
+func get_floating_button_opacity() -> float:
+	if floating_button == null:
+		floating_button = get_node_or_null("FloatingButton") as Button
+	if floating_button != null:
+		return floating_button.modulate.a
+	return 1.0
+
+
 func get_close_button() -> Button:
 	return close_button
 
