@@ -38,7 +38,7 @@ Before approving or merging any Pull Request, verify the following:
 * [ ] **Automated Test Report:** PR body includes evidence that all automated tests pass (`Test Results: X Passed, 0 Failed`).
 * [ ] **Independent Test Execution:** Reviewer independently runs the test suite on the checked-out branch and confirms zero failures.
 * [ ] **Python Print PDF Unit Tests:** If the PR touches book styling, typography, `game/data/*.json`, or `scripts/build_print_pdf.py`, run `python -m unittest discover -s scripts -p "test_*.py"` and confirm 0 test failures.
-* [ ] **Print PDF Asset Synchronization:** Confirm `assets/print/PrayTheRosary.pdf` has been rebuilt and committed if book page styling, prayers, Scripture, typography, or version numbers changed.
+* [ ] **Print PDF Asset Synchronization:** Confirm `assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, and `assets/print/PrayTheRosary_Tabs_Bleed.pdf` have been rebuilt and committed if book page styling, prayers, Scripture, typography, or version numbers changed.
 * [ ] **New Tests Added:** If core logic, autoloads, or calculations were altered, corresponding unit tests are present in `game/tests/`.
 * [ ] **Visual QA (MCP Bridge):** If the PR modifies UI or visual layout, launch the game locally and capture a screenshot via `python mcp_client.py screenshot` to verify the layout visually.
 

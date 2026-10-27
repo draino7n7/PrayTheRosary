@@ -635,7 +635,21 @@ This document outlines the strict manual testing procedures required before any 
   Remove-Item -Force "test_bleed.pdf"
   ```
 
-### TC-PDF-04: Automated Python Print PDF Unit Test Suite
+### TC-PDF-04: Protruding Index Tabs & Overhang Cover Editions (`--tabs` and `--tabs --bleed`)
+- **Step 1:** From the repository root, run the script with `--tabs` and `--tabs --bleed`:
+  ```powershell
+  python scripts/build_print_pdf.py --tabs
+  python scripts/build_print_pdf.py --tabs --bleed
+  ```
+- **Step 2:** Inspect `assets/print/PrayTheRosary_Tabs.pdf` and `assets/print/PrayTheRosary_Tabs_Bleed.pdf` in a PDF viewer.
+- **Expected:**
+  - `PrayTheRosary_Tabs.pdf` contains 50 pages at 6.375" × 9.0" (`459 × 648 pt`).
+  - `Pages 1 & 50` render as full-width 6.375" × 9.0" Deep Baroque Crimson (`#4A1215`) overhang covers.
+  - `Page 2` (Inside Front Cover) and `Page 49` (Inside Back Cover) render a 0.375" Deep Baroque Crimson (`#4A1215`) wrap-around overhang strip on their outer edge (`left` on Page 2, `right` on Page 49) separated from the 6.0" parchment page by a 1.5pt gold divider line.
+  - The 6 tabbed sheets (`Pages 3-4, 5-6, 15-16, 25-26, 35-36, 45-46`) display the 6 stepped `1/6-cut` Crimson and Gold tabs (`O`, `J`, `L`, `S`, `G`, `C` in upright `EBGaramond-Bold`) protruding 0.375" on the right edge for odd pages and on the left edge for even pages.
+  - `PrayTheRosary_Tabs_Bleed.pdf` contains 50 pages at 6.625" × 9.25" (`477 × 666 pt`) with `TrimBox` set to `Rect(9, 9, 468, 657)` and `BleedBox` set to `Rect(0, 0, 477, 666)`.
+
+### TC-PDF-05: Automated Python Print PDF Unit Test Suite
 - **Step 1:** Run the Python test suite:
   ```powershell
   python -m unittest discover -s scripts -p "test_*.py"

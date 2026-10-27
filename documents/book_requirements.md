@@ -12,11 +12,13 @@ This document defines the physical production, layout, typography, index tab, an
 - **Interior Body Page Trim Size:** $6.0" \text{ wide} \times 9.0" \text{ tall}$ ($2:3$ portrait aspect ratio).
 - **Open Two-Page Spread Size:** $12.0" \text{ wide} \times 9.0" \text{ tall}$ ($4:3$ landscape aspect ratio).
 - **Protruding Die-Cut Index Tabs (`O`, `J`, `L`, `S`, `G`, `C`):**
-  - **Tab Extension Width:** $0.375"$ ($3/8"$) protruding beyond the $6.0"$ right fore-edge.
-  - **Tabbed Sheet Width:** $6.375" \times 9.0"$ prior to die-cutting.
-  - **Vertical Tab Stepping:** 6 stepped tabs along a centered $7.5"$ vertical track ($0.75"$ top and bottom margins), with each tab measuring **$1.25"$ tall**.
-- **Overhang Front & Back Covers:**
-  - Heavy laminated cover stock measuring **$6.375" \text{ wide} \times 9.0" \text{ tall}$** so the outer edge of the covers is flush with the outer edge of the 6 protruding index tabs, protecting the tabs from damage when the book is closed.
+  - **Tab Extension Width:** $0.375"$ ($3/8"$, `27.0 pt`) protruding beyond the $6.0"$ right fore-edge.
+  - **Tabbed Sheet Width:** $6.375" \times 9.0"$ (`459 × 648 pt`) prior to die-cutting.
+  - **Vertical Tab Stepping (`1/6-Cut`):** 6 stepped tabs along an $8.0"$ (`576 pt`) vertical track aligned with the top and bottom of the Master A gold border frame ($0.50"$ top and bottom margins), with each tab measuring **$1.333"$ (`96.0 pt`) tall**.
+  - **Tab Visual Styling:** Deep Baroque Crimson (`#4A1215`) fill with a `1.5pt` gold shoulder rule along the $6.0"$ edge, an inset Antique Gold (`#D4AF37`) rounded border frame, and an upright `EBGaramond-Bold` (`17.5pt`) gold monogram (`O`, `J`, `L`, `S`, `G`, `C`) printed on both the front (odd page, right edge) and back (even page, left edge) for duplex back-to-back registration.
+- **Overhang Front & Back Covers (`Sheets 1 & 25`):**
+  - Heavy laminated cover stock measuring **$6.375" \text{ wide} \times 9.0" \text{ tall}$** (`459 × 648 pt`) so the outer edge of the covers is flush with the outer edge of the 6 protruding index tabs, protecting the tabs from damage when the book is closed.
+  - **Inside Cover Wrap-Around Overhang Strip (`Pages 2 & 49`):** Because `Page 2` prints on the Inside Front Cover (verso of Sheet 1) and `Page 49` prints on the Inside Back Cover (recto of Sheet 25), their main $6.0"$ parchment page areas align symmetrically with the facing $6.0"$ interior pages while the outer $0.375"$ overhang strip (`left` edge on Page 2, `right` edge on Page 49) is rendered in Deep Baroque Crimson (`#4A1215`) with a vertical `1.5pt` Antique Gold (`#D4AF37`) divider line at the $6.0"$ mark.
 - **Total Sheet & Page Count:**
   - **25 double-sided leaves (50 page sides total):**
     - Outside Front Cover (`Page Side 1`)
@@ -148,7 +150,17 @@ The canonical print edition and its automated build pipeline live in `scripts/bu
     python scripts/build_print_pdf.py --bleed
     ```
     Generates a `6.25" × 9.25"` (`450 × 666 pt`) PDF with `0.125"` full bleed and embeds PDF `TrimBox` (`Rect(9, 9, 441, 657)`) and `BleedBox` (`Rect(0, 0, 450, 666)`) metadata for commercial offset and digital presses.
+  - **Protruding Index Tabs & Overhang Cover Edition (`--tabs`):**
+    ```powershell
+    python scripts/build_print_pdf.py --tabs
+    ```
+    Generates `assets/print/PrayTheRosary_Tabs.pdf` at `6.375" × 9.0"` (`459 × 648 pt`), rendering the full-width `6.375" × 9.0"` Front and Back Overhang Covers (`Pages 1 & 50`), the `0.375"` Deep Baroque Crimson (`#4A1215`) wrap-around overhang strips on `Pages 2 & 49` (Inside Covers), and the 6 stepped `1/6-cut` Crimson and Gold monogram tabs (`O`, `J`, `L`, `S`, `G`, `C`) on `Sheets 2, 3, 8, 13, 18, and 23` (`Page Sides 3-4, 5-6, 15-16, 25-26, 35-36, 45-46`). Designed for visual review and attaching to custom print quote requests.
+  - **Protruding Index Tabs with Commercial Full Bleed (`--tabs --bleed`):**
+    ```powershell
+    python scripts/build_print_pdf.py --tabs --bleed
+    ```
+    Generates `assets/print/PrayTheRosary_Tabs_Bleed.pdf` at `6.625" × 9.25"` (`477 × 666 pt`) with `0.125"` (`9 pt`) full bleed around the overhang covers, pages, and protruding tab ears, embedding PDF `TrimBox` (`Rect(9, 9, 468, 657)`) and `BleedBox` (`Rect(0, 0, 477, 666)`) metadata for commercial press production.
   - **Automated Test Suite (`scripts/test_build_print_pdf.py`):**
     - Executed via `python -m unittest discover -s scripts -p "test_*.py"`.
-    - Validates page count (50), page geometry, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.
+    - Validates page count (50), page geometry (including `--bleed`, `--office-depot`, `--tabs`, and `--tabs --bleed`), tab monograms, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.
 

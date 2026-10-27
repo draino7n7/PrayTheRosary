@@ -339,6 +339,48 @@ class TestBuildPrintPdf(unittest.TestCase):
             fallback = get_project_version(Path(tmp_dir))
             self.assertEqual(fallback, "1.0.2")
 
+    def test_tabs_and_tabs_bleed_flag_geometry_and_monograms(self):
+        """Verifies --tabs (459 x 648 pt) and --tabs --bleed (477 x 666 pt) geometry and tab monograms."""
+        from scripts.build_print_pdf import TAB_SPECS, build_print_pdf
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tabs_pdf = Path(tmp_dir) / "tabs_test.pdf"
+            build_print_pdf(tabs_pdf, tabs=True)
+            self.assertTrue(tabs_pdf.exists())
+
+            doc = pymupdf.open(str(tabs_pdf))
+            try:
+                self.assertEqual(len(doc), 50)
+                for page in doc:
+                    self.assertAlmostEqual(page.rect.width, 459.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 648.0, delta=1.0)
+                for pnum, (_, monogram) in TAB_SPECS.items():
+                    self.assertIn(monogram, doc[pnum - 1].get_text())
+            finally:
+                doc.close()
+
+            tabs_bleed_pdf = Path(tmp_dir) / "tabs_bleed_test.pdf"
+            build_print_pdf(tabs_bleed_pdf, tabs=True, bleed=True)
+            self.assertTrue(tabs_bleed_pdf.exists())
+
+            doc_bleed = pymupdf.open(str(tabs_bleed_pdf))
+            try:
+                self.assertEqual(len(doc_bleed), 50)
+                for page in doc_bleed:
+                    self.assertAlmostEqual(page.rect.width, 477.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 666.0, delta=1.0)
+                    trim = page.trimbox
+                    self.assertAlmostEqual(trim.x0, 9.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y0, 9.0, delta=1.0)
+                    self.assertAlmostEqual(trim.x1, 468.0, delta=1.0)
+                    self.assertAlmostEqual(trim.y1, 657.0, delta=1.0)
+                    bleed = page.bleedbox
+                    self.assertAlmostEqual(bleed.x0, 0.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.y0, 0.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.x1, 477.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.y1, 666.0, delta=1.0)
+            finally:
+                doc_bleed.close()
+
 
 if __name__ == "__main__":
     unittest.main()

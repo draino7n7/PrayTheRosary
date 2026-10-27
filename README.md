@@ -96,6 +96,16 @@ The repository includes a complete automated Python PDF generation pipeline that
     python scripts/build_print_pdf.py --bleed
     ```
     Generates 6.25" × 9.25" (450 × 666 pt) pages with 0.125" bleed, embedding PDF `TrimBox` (6.0" × 9.0") and `BleedBox` metadata for professional commercial print houses.
+  - **Protruding Index Tabs & Overhang Cover Edition (`--tabs`):**
+    ```powershell
+    python scripts/build_print_pdf.py --tabs
+    ```
+    Generates `assets/print/PrayTheRosary_Tabs.pdf` (6.375" × 9.0", 459 × 648 pt) with 6.375" overhang covers (`Pages 1 & 50`), 0.375" Deep Baroque Crimson (`#4A1215`) wrap-around overhang strips on `Pages 2 & 49`, and 6 stepped `1/6-cut` Crimson and Gold monogram tabs (`O`, `J`, `L`, `S`, `G`, `C`) on `Sheets 2, 3, 8, 13, 18, and 23`.
+  - **Protruding Index Tabs with Full Bleed (`--tabs --bleed`):**
+    ```powershell
+    python scripts/build_print_pdf.py --tabs --bleed
+    ```
+    Generates `assets/print/PrayTheRosary_Tabs_Bleed.pdf` (6.625" × 9.25", 477 × 666 pt) with 0.125" full bleed, `TrimBox` (6.375" × 9.0"), and `BleedBox` metadata for commercial press production.
   - **Custom Output Path (`--output <path>`):**
     ```powershell
     python scripts/build_print_pdf.py --output "path/to/custom.pdf"

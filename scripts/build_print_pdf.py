@@ -12,6 +12,8 @@ Compiles canonical book content directly from:
 Supports:
   - Default: 6.0" x 9.0" (432 x 648 pt) 50-page print PDF -> assets/print/PrayTheRosary.pdf
   - --bleed: 6.25" x 9.25" (450 x 666 pt) pages with 0.125" bleed, setting PDF TrimBox and BleedBox
+  - --tabs: 6.375" x 9.0" (459 x 648 pt) overhang covers and 6 stepped 1/6-cut index tabs -> assets/print/PrayTheRosary_Tabs.pdf
+  - --tabs --bleed: 6.625" x 9.25" (477 x 666 pt) tabbed edition with 0.125" bleed -> assets/print/PrayTheRosary_Tabs_Bleed.pdf
   - --office-depot / --letter: Centers 6" x 9" pages with 0.125" bleed and crop marks on 8.5" x 11.0" US Letter
 """
 
@@ -42,6 +44,8 @@ DATA_DIR = PROJECT_ROOT / "game" / "data"
 ARTWORK_DIR = PROJECT_ROOT / "assets" / "2D" / "gimp" / "original_downloads"
 DEFAULT_OUTPUT_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary.pdf"
 DEFAULT_OFFICE_DEPOT_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_OfficeDepot.pdf"
+DEFAULT_TABS_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs.pdf"
+DEFAULT_TABS_BLEED_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs_Bleed.pdf"
 
 # Register upright EB Garamond fonts ONLY. Zero italic fonts anywhere.
 pdfmetrics.registerFont(TTFont("EBGaramond-Regular", str(FONTS_DIR / "EBGaramond-Regular.ttf")))
@@ -78,10 +82,26 @@ BACK_IVORY = HexColor("#F7F2E7")
 # Page Dimensions (in points: 72 points per inch)
 PAGE_W = 6.0 * inch       # 432.0 pt
 PAGE_H = 9.0 * inch       # 648.0 pt
+TAB_EXT = 0.375 * inch    # 27.0 pt (3/8" protruding tab & overhang cover extension)
+TAB_PAGE_W = PAGE_W + TAB_EXT  # 459.0 pt (6.375")
 BLEED = 0.125 * inch      # 9.0 pt
 
 LETTER_W = 8.5 * inch     # 612.0 pt
 LETTER_H = 11.0 * inch    # 792.0 pt
+
+# 6-Tab (1/6-Cut) Stepped Index Tab Specification:
+# Maps page_num -> (tab_index 0..5 from top to bottom, upright monogram letter)
+TAB_SPECS: Dict[int, Tuple[int, str]] = {
+    3: (0, "O"), 4: (0, "O"),     # Sheet 2: Opening Prayers (opens to Spread 2: Pages 4-5)
+    5: (1, "J"), 6: (1, "J"),     # Sheet 3: Joyful Mysteries (opens to Spread 3: Pages 6-7)
+    15: (2, "L"), 16: (2, "L"),   # Sheet 8: Luminous Mysteries (opens to Spread 8: Pages 16-17)
+    25: (3, "S"), 26: (3, "S"),   # Sheet 13: Sorrowful Mysteries (opens to Spread 13: Pages 26-27)
+    35: (4, "G"), 36: (4, "G"),   # Sheet 18: Glorious Mysteries (opens to Spread 18: Pages 36-37)
+    45: (5, "C"), 46: (5, "C"),   # Sheet 23: Closing Prayers (opens to Spread 23: Pages 46-47)
+}
+
+_TABS_MODE: bool = False
+_BLEED_MODE: bool = False
 
 _IMAGE_CACHE: Dict[str, Tuple[io.BytesIO, int, int]] = {}
 
@@ -103,7 +123,13 @@ def get_gold_box(page_num: int) -> Tuple[float, float, float, float]:
     matching 0.625" inner spiral spine margin and 0.500" outer/top/bottom margins.
     Odd pages (Recto): Inner margin on left (0.625" = 45 pt), outer on right (0.5" = 36 pt).
     Even pages (Verso): Outer margin on left (0.5" = 36 pt), inner on right (0.625" = 45 pt).
+    In --tabs mode, Page 1 (Front Overhang Cover) and Page 50 (Back Overhang Cover) span the full 6.375" cover.
     """
+    if _TABS_MODE and page_num == 1:
+        return 0.625 * inch, 0.500 * inch, 4.875 * inch + TAB_EXT, 8.000 * inch
+    if _TABS_MODE and page_num == 50:
+        return -TAB_EXT + 0.500 * inch, 0.500 * inch, 4.875 * inch + TAB_EXT, 8.000 * inch
+
     if page_num % 2 == 1:
         x = 0.625 * inch  # 45 pt
     else:
@@ -158,11 +184,107 @@ def draw_master_a_background_and_border(c: canvas.Canvas, page_num: int) -> None
     """Fills the parchment background with full bleed and draws the 1.5pt gold framing rectangle."""
     c.saveState()
     c.setFillColor(COLOR_PARCHMENT)
-    c.rect(-BLEED, -BLEED, PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+    if _TABS_MODE and not _BLEED_MODE:
+        c.rect(0.0, 0.0, PAGE_W, PAGE_H, stroke=0, fill=1)
+        if 3 <= page_num <= 48:
+            c.setStrokeColor(HexColor("#D6CBB8"))
+            c.setLineWidth(0.5)
+            cut_x = PAGE_W if (page_num % 2 == 1) else 0.0
+            c.line(cut_x, 0.0, cut_x, PAGE_H)
+    else:
+        c.rect(-BLEED, -BLEED, PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
     gx, gy, gw, gh = get_gold_box(page_num)
     c.setStrokeColor(COLOR_GOLD)
     c.setLineWidth(1.5)
     c.rect(gx, gy, gw, gh, stroke=1, fill=0)
+    c.restoreState()
+
+
+def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
+    """
+    In --tabs mode, renders:
+      - Page 2 (Inside Front Cover) & Page 49 (Inside Back Cover): 0.375" Deep Baroque Crimson (#4A1215)
+        wrap-around overhang strip on the outer fore-edge with a 1.5pt gold divider line at the 6.0" mark.
+      - Pages in TAB_SPECS (Sheets 2, 3, 8, 13, 18, 23): Protruding 0.375" x 1.333" (1/6-cut) stepped
+        index tab ear in Deep Baroque Crimson (#4A1215) with Antique Gold (#D4AF37) border and upright
+        EBGaramond-Bold monogram (O, J, L, S, G, C) on both front (odd) and back (even) sides.
+    """
+    if not _TABS_MODE:
+        return
+
+    c.saveState()
+    bleed_pad = BLEED if _BLEED_MODE else 0.0
+
+    # 1. Inside Cover Overhang Wrap-Around Strips (Page 2 on left edge, Page 49 on right edge)
+    if page_num == 2:
+        c.setFillColor(BACK_PRIMARY)
+        c.rect(-TAB_EXT - bleed_pad, -bleed_pad, TAB_EXT + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
+        c.setStrokeColor(BACK_GOLD)
+        c.setLineWidth(1.5)
+        c.line(0.0, -bleed_pad, 0.0, PAGE_H + bleed_pad)
+        c.restoreState()
+        return
+
+    if page_num == 49:
+        c.setFillColor(BACK_PRIMARY)
+        c.rect(PAGE_W, -bleed_pad, TAB_EXT + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
+        c.setStrokeColor(BACK_GOLD)
+        c.setLineWidth(1.5)
+        c.line(PAGE_W, -bleed_pad, PAGE_W, PAGE_H + bleed_pad)
+        c.restoreState()
+        return
+
+    # 2. Protruding 1/6-Cut Stepped Index Tabs on Sheets 2, 3, 8, 13, 18, 23
+    if page_num in TAB_SPECS:
+        tab_idx, monogram = TAB_SPECS[page_num]
+        bank_top = 8.500 * inch   # 612.0 pt (aligned with top of Master A gold frame)
+        tab_h = (8.000 * inch) / 6.0  # 96.0 pt (1.3333" per tab)
+        tab_top = bank_top - tab_idx * tab_h
+        tab_bot = tab_top - tab_h
+        is_odd = (page_num % 2 == 1)
+
+        c.setFillColor(BACK_PRIMARY)
+        if is_odd:
+            # Protrudes on the RIGHT (x = PAGE_W .. PAGE_W + TAB_EXT)
+            if _BLEED_MODE:
+                c.rect(PAGE_W, tab_bot - BLEED, TAB_EXT + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
+            else:
+                c.roundRect(PAGE_W - 6.0, tab_bot, TAB_EXT + 6.0, tab_h, 4.5, stroke=0, fill=1)
+                # Clean up the inner 6pt overlap on the parchment side
+                c.setFillColor(COLOR_PARCHMENT)
+                c.rect(PAGE_W - 6.5, tab_bot - 1.0, 6.5, tab_h + 2.0, stroke=0, fill=1)
+
+            # Gold divider along 6.0" shoulder & inset gold frame inside tab ear
+            c.setStrokeColor(BACK_GOLD)
+            c.setLineWidth(1.5)
+            c.line(PAGE_W, tab_bot, PAGE_W, tab_top)
+            c.setLineWidth(1.0)
+            c.roundRect(PAGE_W + 2.8, tab_bot + 3.5, TAB_EXT - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
+            center_x = PAGE_W + TAB_EXT / 2.0
+        else:
+            # Protrudes on the LEFT (x = -TAB_EXT .. 0)
+            if _BLEED_MODE:
+                c.rect(-TAB_EXT - BLEED, tab_bot - BLEED, TAB_EXT + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
+            else:
+                c.roundRect(-TAB_EXT, tab_bot, TAB_EXT + 6.0, tab_h, 4.5, stroke=0, fill=1)
+                c.setFillColor(COLOR_PARCHMENT)
+                c.rect(0.0, tab_bot - 1.0, 6.5, tab_h + 2.0, stroke=0, fill=1)
+
+            c.setStrokeColor(BACK_GOLD)
+            c.setLineWidth(1.5)
+            c.line(0.0, tab_bot, 0.0, tab_top)
+            c.setLineWidth(1.0)
+            c.roundRect(-TAB_EXT + 3.0, tab_bot + 3.5, TAB_EXT - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
+            center_x = -TAB_EXT / 2.0
+
+        # Upright EBGaramond-Bold Gold Monogram (O, J, L, S, G, C)
+        font_sz = 17.5
+        c.setFillColor(BACK_GOLD)
+        c.setFont("EBGaramond-Bold", font_sz)
+        char_w = pdfmetrics.stringWidth(monogram, "EBGaramond-Bold", font_sz)
+        center_y = (tab_bot + tab_top) / 2.0 - (font_sz * 0.34)
+        c.drawString(center_x - char_w / 2.0, center_y, monogram)
+
     c.restoreState()
 
 
@@ -315,7 +437,8 @@ def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root:
     """Page 1: Front Cover in deep Baroque crimson (#4A1215) and gold (#D4AF37) palette with Murillo painting."""
     c.saveState()
     c.setFillColor(BACK_PRIMARY)
-    c.rect(-BLEED, -BLEED, PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+    extra_w = TAB_EXT if _TABS_MODE else 0.0
+    c.rect(-BLEED, -BLEED, PAGE_W + extra_w + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
     gx, gy, gw, gh = get_gold_box(1)
     c.setStrokeColor(BACK_GOLD)
     c.setLineWidth(1.5)
@@ -769,7 +892,8 @@ def render_page_50_back_cover(c: canvas.Canvas, book_layout: dict) -> None:
     bc = book_layout["back_cover"]
     c.saveState()
     c.setFillColor(BACK_PRIMARY)
-    c.rect(-BLEED, -BLEED, PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+    extra_left = TAB_EXT if _TABS_MODE else 0.0
+    c.rect(-extra_left - BLEED, -BLEED, PAGE_W + extra_left + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
     gx, gy, gw, gh = get_gold_box(50)
     c.setStrokeColor(BACK_GOLD)
     c.setLineWidth(1.5)
@@ -905,6 +1029,7 @@ def build_print_pdf(
     output_path: Path,
     bleed: bool = False,
     office_depot: bool = False,
+    tabs: bool = False,
     project_root: Optional[Path] = None,
 ) -> Path:
     """
@@ -912,8 +1037,14 @@ def build_print_pdf(
     Modes:
       - Default: 6.0" x 9.0" (432 x 648 pt)
       - Bleed: 6.25" x 9.25" (450 x 666 pt) with PyMuPDF TrimBox (9, 9, 441, 657) and BleedBox (0, 0, 450, 666)
+      - Tabs: 6.375" x 9.0" (459 x 648 pt, or 477 x 666 pt with --bleed) featuring 6.375" overhang covers,
+              0.375" crimson wrap-around strips on Pages 2 & 49, and 6 stepped 1/6-cut crimson/gold tabs
       - Office Depot: 8.5" x 11.0" (612 x 792 pt) US Letter with centered 6" x 9" page, 0.125" bleed, and crop marks
     """
+    global _TABS_MODE, _BLEED_MODE
+    _TABS_MODE = tabs
+    _BLEED_MODE = bleed
+
     if project_root is None:
         project_root = PROJECT_ROOT
 
@@ -922,16 +1053,18 @@ def build_print_pdf(
     book_layout, prayers, mysteries_raw, mysteries_by_id, artworks_by_id = load_all_data(project_root)
     decade_seq = mysteries_raw["decade_prayer_sequence"]
 
+    eff_w = TAB_PAGE_W if tabs else PAGE_W
+
     if office_depot:
         pagesize = (LETTER_W, LETTER_H)
-        trans_x = (LETTER_W - PAGE_W) / 2.0  # 90.0 pt
-        trans_y = (LETTER_H - PAGE_H) / 2.0  # 72.0 pt
+        trans_x = (LETTER_W - eff_w) / 2.0
+        trans_y = (LETTER_H - PAGE_H) / 2.0
     elif bleed:
-        pagesize = (PAGE_W + 2 * BLEED, PAGE_H + 2 * BLEED)  # 450 x 666 pt
+        pagesize = (eff_w + 2 * BLEED, PAGE_H + 2 * BLEED)
         trans_x = BLEED  # 9.0 pt
         trans_y = BLEED  # 9.0 pt
     else:
-        pagesize = (PAGE_W, PAGE_H)  # 432 x 648 pt
+        pagesize = (eff_w, PAGE_H)
         trans_x = 0.0
         trans_y = 0.0
 
@@ -939,22 +1072,24 @@ def build_print_pdf(
     c.setTitle("Pray the Rosary - A Contemplative Visual Guide to the Twenty Mysteries")
     c.setAuthor("Pray the Rosary")
 
-    def start_page():
+    def start_page(page_num: int):
         if office_depot:
-            draw_crop_marks(c, trans_x, trans_y, PAGE_W, PAGE_H)
-        if trans_x != 0.0 or trans_y != 0.0:
-            c.saveState()
-            c.translate(trans_x, trans_y)
+            draw_crop_marks(c, trans_x, trans_y, eff_w, PAGE_H)
+        even_tab_shift = TAB_EXT if (tabs and page_num % 2 == 0) else 0.0
+        c.saveState()
+        if (trans_x + even_tab_shift) != 0.0 or trans_y != 0.0:
+            c.translate(trans_x + even_tab_shift, trans_y)
 
-    def finish_page():
-        if trans_x != 0.0 or trans_y != 0.0:
-            c.restoreState()
+    def finish_page(page_num: int):
+        if tabs:
+            draw_tab_or_overhang(c, page_num)
+        c.restoreState()
         c.showPage()
 
     # --- Page 1: Front Cover ---
-    start_page()
+    start_page(1)
     render_page_1_front_cover(c, book_layout, project_root)
-    finish_page()
+    finish_page(1)
 
     # --- Spreads 1..24 -> Pages 2..49 ---
     for sp in book_layout["spreads"]:
@@ -962,64 +1097,64 @@ def build_print_pdf(
         if sp_type == "front_matter_spread":
             lp = sp["left_page"]
             rp = sp["right_page"]
-            start_page()
+            start_page(lp["page_number"])
             render_front_matter_page(c, lp["page_number"], lp)
-            finish_page()
-            start_page()
+            finish_page(lp["page_number"])
+            start_page(rp["page_number"])
             render_front_matter_page(c, rp["page_number"], rp)
-            finish_page()
+            finish_page(rp["page_number"])
         elif sp_type == "prayer_art_spread":
             lp = sp["left_page"]
             rp = sp["right_page"]
-            start_page()
+            start_page(lp["page_number"])
             render_prayer_sequence_page(c, lp["page_number"], lp, prayers)
-            finish_page()
-            start_page()
+            finish_page(lp["page_number"])
+            start_page(rp["page_number"])
             render_artwork_page(
                 c, rp["page_number"], rp.get("subheading", ""), rp.get("heading", ""), rp["artwork"], project_root
             )
-            finish_page()
+            finish_page(rp["page_number"])
         elif sp_type == "mystery_spread":
             mid = sp["id"]
             mys = mysteries_by_id[mid]
             lp_num = int(sp["left_page_number"])
             rp_num = int(sp["right_page_number"])
-            start_page()
+            start_page(lp_num)
             render_mystery_prayer_page(c, lp_num, mys, decade_seq, prayers)
-            finish_page()
-            start_page()
+            finish_page(lp_num)
+            start_page(rp_num)
             render_artwork_page(
                 c, rp_num, mys.get("ordinal_label", ""), mys.get("title", ""), mys["artwork"], project_root
             )
-            finish_page()
+            finish_page(rp_num)
         elif sp_type == "credits_spread":
             lp = sp["left_page"]
             rp = sp["right_page"]
-            start_page()
+            start_page(lp["page_number"])
             render_credits_page(c, lp["page_number"], lp, artworks_by_id, version)
-            finish_page()
-            start_page()
+            finish_page(lp["page_number"])
+            start_page(rp["page_number"])
             render_credits_page(c, rp["page_number"], rp, artworks_by_id, version)
-            finish_page()
+            finish_page(rp["page_number"])
 
     # --- Page 50: Back Cover ---
-    start_page()
+    start_page(50)
     render_page_50_back_cover(c, book_layout)
-    finish_page()
+    finish_page(50)
 
     c.save()
 
     # Post-process with PyMuPDF to configure TrimBox, BleedBox, and optimize streams
     doc = pymupdf.open(str(output_path))
     if bleed:
-        trim_rect = pymupdf.Rect(9, 9, 441, 657)
-        bleed_rect = pymupdf.Rect(0, 0, 450, 666)
+        trim_rect = pymupdf.Rect(BLEED, BLEED, BLEED + eff_w, BLEED + PAGE_H)
+        bleed_rect = pymupdf.Rect(0, 0, eff_w + 2 * BLEED, PAGE_H + 2 * BLEED)
         for page in doc:
             page.set_trimbox(trim_rect)
             page.set_bleedbox(bleed_rect)
     elif office_depot:
-        trim_rect = pymupdf.Rect(90, 72, 522, 720)
-        bleed_rect = pymupdf.Rect(81, 63, 531, 729)
+        trim_rect = pymupdf.Rect(trans_x, trans_y, trans_x + eff_w, trans_y + PAGE_H)
+        bleed_rect = pymupdf.Rect(trans_x - BLEED, trans_y - BLEED, trans_x + eff_w + BLEED, trans_y + PAGE_H + BLEED)
         for page in doc:
             page.set_trimbox(trim_rect)
             page.set_bleedbox(bleed_rect)
@@ -1031,20 +1166,22 @@ def build_print_pdf(
     temp_path.replace(output_path)
 
     size_mb = output_path.stat().st_size / (1024 * 1024)
-    print(f"Generated ({'Office Depot' if office_depot else ('Bleed' if bleed else 'Standard 6x9')}): {output_path} ({size_mb:.2f} MB)")
+    mode_label = "Office Depot" if office_depot else ("Tabs+Bleed" if (tabs and bleed) else ("Tabs 6.375x9" if tabs else ("Bleed" if bleed else "Standard 6x9")))
+    print(f"Generated ({mode_label}): {output_path} ({size_mb:.2f} MB)")
     return output_path
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Pray The Rosary Print PDF Generator")
     parser.add_argument("--output", "-o", type=str, default=None, help="Custom output PDF path")
-    parser.add_argument("--bleed", action="store_true", help="Generate 6.25\" x 9.25\" pages with 0.125\" bleed and TrimBox")
+    parser.add_argument("--bleed", action="store_true", help="Generate pages with 0.125\" bleed and TrimBox")
+    parser.add_argument("--tabs", action="store_true", help="Generate 6.375\" x 9.0\" overhang covers and 6 stepped index tabs")
     parser.add_argument(
         "--office-depot",
         "--letter",
         action="store_true",
         dest="office_depot",
-        help="Center 6\" x 9\" pages onto 8.5\" x 11.0\" US Letter with crop marks",
+        help="Center pages onto 8.5\" x 11.0\" US Letter with crop marks",
     )
     args = parser.parse_args()
 
@@ -1052,10 +1189,14 @@ def main() -> None:
         out_path = Path(args.output).resolve()
     elif args.office_depot:
         out_path = DEFAULT_OFFICE_DEPOT_PDF
+    elif args.tabs and args.bleed:
+        out_path = DEFAULT_TABS_BLEED_PDF
+    elif args.tabs:
+        out_path = DEFAULT_TABS_PDF
     else:
         out_path = DEFAULT_OUTPUT_PDF
 
-    build_print_pdf(out_path, bleed=args.bleed, office_depot=args.office_depot)
+    build_print_pdf(out_path, bleed=args.bleed, office_depot=args.office_depot, tabs=args.tabs)
 
 
 if __name__ == "__main__":
