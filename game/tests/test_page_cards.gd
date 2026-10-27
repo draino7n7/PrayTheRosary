@@ -198,7 +198,7 @@ func test_pages_2_and_3_front_matter_cards() -> void:
 	var sec3_body2: Label = fmc2.sections_container.get_child(2).get_node("SectionBody") as Label
 	assert_eq(sec_title2.get_theme_font_size("font_size"), 23, "Page 2 section title font size must be 23pt (calibrated for > 1,650 chars)")
 	assert_eq(sec_body2.get_theme_font_size("font_size"), 20, "Page 2 section body font size must be 20pt (calibrated for > 1,650 chars)")
-	assert_true(sec3_body2.text.contains("instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."), "Page 2 Section 3 must display updated 1571/1573 feast note")
+	assert_true(sec3_body2.text.contains("Following the Christian naval victory at Lepanto in 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary by Pope Gregory XIII in 1573)."), "Page 2 Section 3 must display updated 1571/1573 feast note")
 	assert_true(sec3_body2.text.contains("\n\n"), "Page 2 Section 3 body text must have paragraph breaks")
 	var req_h2: float = _calculate_page_content_required_height(fmc2, p2, loader)
 	assert_true(req_h2 <= 1080.0, "Page 2 content required height (%.1fpx) must stay strictly within 1080.0px" % req_h2)
