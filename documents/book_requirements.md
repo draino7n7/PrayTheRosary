@@ -125,7 +125,16 @@ When the book is closed, the 6 stepped tabs are visible down the right edge (`O`
 - Scripture citations and readings are standardized on the **Catholic Public Domain Version (CPDV)** of the Holy Bible ([SacredBible.org](https://www.sacredbible.org/) / [draino7n7/cpdv](https://github.com/draino7n7/cpdv)), maintaining perfect textual alignment between the interactive digital application and the printed volume.
 - Typography is loaded exclusively from `game/assets/fonts/EBGaramond-Regular.ttf` and `game/assets/fonts/EBGaramond-Bold.ttf`, strictly guaranteeing **zero italic fonts** anywhere across all 50 pages.
 
-### 5.2 Prepress Layout Specifications & CLI Options
+### 5.2 Modular Architecture (`scripts/pdf_builder/`)
+The automated print PDF engine is organized as a modular Python package under `scripts/pdf_builder/`, with `scripts/build_print_pdf.py` acting as the lightweight CLI entry point and backwards-compatible facade:
+- **`config.py`:** Centralized dimensions, colors, palettes, font registration, `TAB_SPECS`, and the immutable `PrintConfig` dataclass. Provides factory constructors (`standard()`, `bleed()`, `tabs()`, `tabs_bleed()`, `vervante()`, `office_depot()`) that encapsulate trim dimensions, bleed margins, tab extensions, crop marks, and output paths without global mutable state.
+- **`data_loader.py`:** Extracts application versioning from `game/project.godot` (`get_project_version`) and loads/cross-indexes prayer, mystery, layout, and artwork attribution datasets from `game/data/` (`load_all_data`).
+- **`primitives.py`:** Handles ReportLab coordinate transformations, geometry calculations (`get_gold_box`, `get_content_box`, `is_vervante_wide_page`), typography measurement, header blocks, image caching, gold border framing, stepped index tab rendering, and crop marks.
+- **`page_renderers.py`:** Dedicated rendering functions for Page 1 (Front Cover), Pages 2–3 (Front Matter), Pages 4 & 46 (Prayer Sequences), Artwork Pages, Mystery Prayer Pages, Pages 48–49 (Sacred Artwork Credits & Colophons), and Page 50 (Back Cover).
+- **`postprocess.py`:** Post-processing routines utilizing PyMuPDF (`fitz`) to embed PDF `TrimBox` and `BleedBox` metadata and deflate/compress PDF streams.
+- **`__init__.py` & `scripts/build_print_pdf.py`:** Re-export all public functions, classes, and constants (`build_print_pdf`, `build_all_print_pdfs`, `PrintConfig`, `get_project_version`, `TAB_SPECS`, `COLOR_*`, etc.) ensuring 100% backwards compatibility for existing scripts, tests, and CI/CD workflows.
+
+### 5.3 Prepress Layout Specifications & CLI Options
 The canonical print edition and its automated build pipeline live in `scripts/build_print_pdf.py` and `assets/print/`:
 
 - **Canonical Print PDF (`assets/print/PrayTheRosary.pdf`):**
@@ -160,7 +169,21 @@ The canonical print edition and its automated build pipeline live in `scripts/bu
     python scripts/build_print_pdf.py --tabs --bleed
     ```
     Generates `assets/print/PrayTheRosary_Tabs_Bleed.pdf` at `6.625" × 9.25"` (`477 × 666 pt`) with `0.125"` (`9 pt`) full bleed around the overhang covers, pages, and protruding tab ears, embedding PDF `TrimBox` (`Rect(9, 9, 468, 657)`) and `BleedBox` (`Rect(0, 0, 477, 666)`) metadata for commercial press production.
-  - **Automated Test Suite (`scripts/test_build_print_pdf.py`):**
+  - **Vervante Press-Ready Edition (`-V` / `--Vervante`):**
+    ```powershell
+    python scripts/build_print_pdf.py -V
+    ```
+    Generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages) configured specifically for Vervante's custom index tab die-cutting specifications:
+    - **Wide Trim (`6.5" × 9.0"`, `468 × 648 pt`):** Applied to the 4 cover pages (`Pages 1–2, 49–50`) and the 6 index tab divider sheets (12 pages: `3–4, 5–6, 15–16, 25–26, 35–36, 45–46`). Includes full-height `0.50"` Deep Baroque Crimson (`#4A1215`) tab strips containing the stepped gold monograms (`O`, `J`, `L`, `S`, `G`, `C`), allowing Vervante's die-cutter to cut away excess paper leaving the tabs intact.
+    - **Standard Interior Trim (`6.0" × 9.0"`, `432 × 648 pt`):** Applied to the 34 standard interior text and artwork pages.
+    - **Full Bleed & Crop Marks:** Adds `0.125"` (`9 pt`) bleed and outer corner crop marks (`0.375"` / `27 pt` margin) on all pages. Embeds page-specific PDF `TrimBox` and `BleedBox` metadata.
+  - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
+    ```powershell
+    python scripts/build_print_pdf.py --all
+    ```
+    Sequentially builds and verifies all 4 tracked print PDFs in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, and `Vervante/PrayTheRosary_Vervante.pdf`). Can also be called programmatically via `build_all_print_pdfs(project_root)`.
+  - **Automated Test Suites (`scripts/test_build_print_pdf.py` & `scripts/test_pdf_builder_modules.py`):**
     - Executed via `python -m unittest discover -s scripts -p "test_*.py"`.
-    - Validates page count (50), page geometry (including `--bleed`, `--office-depot`, `--tabs`, and `--tabs --bleed`), tab monograms, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.
+    - Validates package architecture, `PrintConfig` factory constructors and immutability, coordinate and box geometry (`get_gold_box`, `get_content_box`, `is_vervante_wide_page`), data loader cross-indexing, public symbol re-exports, 50-page document counts, PDF box dimensions across all editions, tab monograms, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.
+
 
