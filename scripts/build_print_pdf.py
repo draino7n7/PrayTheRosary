@@ -14,6 +14,8 @@ Supports:
   - --bleed: 6.25" x 9.25" (450 x 666 pt) pages with 0.125" bleed, setting PDF TrimBox and BleedBox
   - --tabs: 6.375" x 9.0" (459 x 648 pt) overhang covers and 6 stepped 1/6-cut index tabs -> assets/print/PrayTheRosary_Tabs.pdf
   - --tabs --bleed: 6.625" x 9.25" (477 x 666 pt) tabbed edition with 0.125" bleed -> assets/print/PrayTheRosary_Tabs_Bleed.pdf
+  - -V / --Vervante: Vervante press-ready 50-page PDF (6.5" x 9.0" covers/tabs with full-length crimson tab strips,
+                     6.0" x 9.0" standard interior pages, 0.125" bleed, and corner crop marks) -> assets/print/Vervante/PrayTheRosary_Vervante.pdf
   - --office-depot / --letter: Centers 6" x 9" pages with 0.125" bleed and crop marks on 8.5" x 11.0" US Letter
 """
 
@@ -46,6 +48,7 @@ DEFAULT_OUTPUT_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary.pdf"
 DEFAULT_OFFICE_DEPOT_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_OfficeDepot.pdf"
 DEFAULT_TABS_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs.pdf"
 DEFAULT_TABS_BLEED_PDF = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs_Bleed.pdf"
+DEFAULT_VERVANTE_PDF = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante.pdf"
 
 # Register upright EB Garamond fonts ONLY. Zero italic fonts anywhere.
 pdfmetrics.registerFont(TTFont("EBGaramond-Regular", str(FONTS_DIR / "EBGaramond-Regular.ttf")))
@@ -84,6 +87,8 @@ PAGE_W = 6.0 * inch       # 432.0 pt
 PAGE_H = 9.0 * inch       # 648.0 pt
 TAB_EXT = 0.375 * inch    # 27.0 pt (3/8" protruding tab & overhang cover extension)
 TAB_PAGE_W = PAGE_W + TAB_EXT  # 459.0 pt (6.375")
+VERVANTE_TAB_EXT = 0.50 * inch  # 36.0 pt (1/2" protruding tab & overhang cover extension for Vervante)
+VERVANTE_CROP_MARGIN = 0.375 * inch  # 27.0 pt (0.125" bleed + 0.25" outer margin for corner crop marks)
 BLEED = 0.125 * inch      # 9.0 pt
 
 LETTER_W = 8.5 * inch     # 612.0 pt
@@ -102,8 +107,19 @@ TAB_SPECS: Dict[int, Tuple[int, str]] = {
 
 _TABS_MODE: bool = False
 _BLEED_MODE: bool = False
+_VERVANTE_MODE: bool = False
 
 _IMAGE_CACHE: Dict[str, Tuple[io.BytesIO, int, int]] = {}
+
+
+def get_active_tab_ext() -> float:
+    """Returns 0.50\" (36 pt) in Vervante mode, or 0.375\" (27 pt) in standard --tabs mode."""
+    return VERVANTE_TAB_EXT if _VERVANTE_MODE else TAB_EXT
+
+
+def is_vervante_wide_page(page_num: int) -> bool:
+    """Returns True for Covers (Pages 1, 2, 49, 50) and the 6 Tab Sheets (12 pages) which are 6.5\" x 9.0\"."""
+    return page_num in (1, 2, 49, 50) or (page_num in TAB_SPECS)
 
 
 def get_project_version(root_dir: Path) -> str:
@@ -123,12 +139,14 @@ def get_gold_box(page_num: int) -> Tuple[float, float, float, float]:
     matching 0.625" inner spiral spine margin and 0.500" outer/top/bottom margins.
     Odd pages (Recto): Inner margin on left (0.625" = 45 pt), outer on right (0.5" = 36 pt).
     Even pages (Verso): Outer margin on left (0.5" = 36 pt), inner on right (0.625" = 45 pt).
-    In --tabs mode, Page 1 (Front Overhang Cover) and Page 50 (Back Overhang Cover) span the full 6.375" cover.
+    In --tabs or --Vervante mode, Page 1 (Front Overhang Cover) and Page 50 (Back Overhang Cover) span the full cover.
     """
-    if _TABS_MODE and page_num == 1:
-        return 0.625 * inch, 0.500 * inch, 4.875 * inch + TAB_EXT, 8.000 * inch
-    if _TABS_MODE and page_num == 50:
-        return -TAB_EXT + 0.500 * inch, 0.500 * inch, 4.875 * inch + TAB_EXT, 8.000 * inch
+    if (_TABS_MODE or _VERVANTE_MODE) and page_num == 1:
+        ext = get_active_tab_ext()
+        return 0.625 * inch, 0.500 * inch, 4.875 * inch + ext, 8.000 * inch
+    if (_TABS_MODE or _VERVANTE_MODE) and page_num == 50:
+        ext = get_active_tab_ext()
+        return -ext + 0.500 * inch, 0.500 * inch, 4.875 * inch + ext, 8.000 * inch
 
     if page_num % 2 == 1:
         x = 0.625 * inch  # 45 pt
@@ -184,7 +202,7 @@ def draw_master_a_background_and_border(c: canvas.Canvas, page_num: int) -> None
     """Fills the parchment background with full bleed and draws the 1.5pt gold framing rectangle."""
     c.saveState()
     c.setFillColor(COLOR_PARCHMENT)
-    if _TABS_MODE and not _BLEED_MODE:
+    if _TABS_MODE and not _BLEED_MODE and not _VERVANTE_MODE:
         c.rect(0.0, 0.0, PAGE_W, PAGE_H, stroke=0, fill=1)
         if 3 <= page_num <= 48:
             c.setStrokeColor(HexColor("#D6CBB8"))
@@ -202,23 +220,25 @@ def draw_master_a_background_and_border(c: canvas.Canvas, page_num: int) -> None
 
 def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
     """
-    In --tabs mode, renders:
-      - Page 2 (Inside Front Cover) & Page 49 (Inside Back Cover): 0.375" Deep Baroque Crimson (#4A1215)
+    In --tabs or --Vervante mode, renders:
+      - Page 2 (Inside Front Cover) & Page 49 (Inside Back Cover): Deep Baroque Crimson (#4A1215)
         wrap-around overhang strip on the outer fore-edge with a 1.5pt gold divider line at the 6.0" mark.
-      - Pages in TAB_SPECS (Sheets 2, 3, 8, 13, 18, 23): Protruding 0.375" x 1.333" (1/6-cut) stepped
-        index tab ear in Deep Baroque Crimson (#4A1215) with Antique Gold (#D4AF37) border and upright
-        EBGaramond-Bold monogram (O, J, L, S, G, C) on both front (odd) and back (even) sides.
+      - Pages in TAB_SPECS (Sheets 2, 3, 8, 13, 18, 23): Protruding 1/6-cut stepped index tab ear in
+        Deep Baroque Crimson (#4A1215) with Antique Gold (#D4AF37) border and upright EBGaramond-Bold
+        monogram (O, J, L, S, G, C) on both front (odd) and back (even) sides.
+        In --Vervante mode, the crimson background extends the full 9.0" height of the 0.50" tab strip.
     """
-    if not _TABS_MODE:
+    if not (_TABS_MODE or _VERVANTE_MODE):
         return
 
     c.saveState()
-    bleed_pad = BLEED if _BLEED_MODE else 0.0
+    ext = get_active_tab_ext()
+    bleed_pad = BLEED if (_BLEED_MODE or _VERVANTE_MODE) else 0.0
 
     # 1. Inside Cover Overhang Wrap-Around Strips (Page 2 on left edge, Page 49 on right edge)
     if page_num == 2:
         c.setFillColor(BACK_PRIMARY)
-        c.rect(-TAB_EXT - bleed_pad, -bleed_pad, TAB_EXT + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
+        c.rect(-ext - bleed_pad, -bleed_pad, ext + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
         c.setStrokeColor(BACK_GOLD)
         c.setLineWidth(1.5)
         c.line(0.0, -bleed_pad, 0.0, PAGE_H + bleed_pad)
@@ -227,7 +247,7 @@ def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
 
     if page_num == 49:
         c.setFillColor(BACK_PRIMARY)
-        c.rect(PAGE_W, -bleed_pad, TAB_EXT + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
+        c.rect(PAGE_W, -bleed_pad, ext + bleed_pad, PAGE_H + 2 * bleed_pad, stroke=0, fill=1)
         c.setStrokeColor(BACK_GOLD)
         c.setLineWidth(1.5)
         c.line(PAGE_W, -bleed_pad, PAGE_W, PAGE_H + bleed_pad)
@@ -245,11 +265,14 @@ def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
 
         c.setFillColor(BACK_PRIMARY)
         if is_odd:
-            # Protrudes on the RIGHT (x = PAGE_W .. PAGE_W + TAB_EXT)
-            if _BLEED_MODE:
-                c.rect(PAGE_W, tab_bot - BLEED, TAB_EXT + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
+            # Protrudes on the RIGHT (x = PAGE_W .. PAGE_W + ext)
+            if _VERVANTE_MODE:
+                # Full-length crimson strip down entire 9.0" height (+ bleed) for Vervante tab die-cutter
+                c.rect(PAGE_W, -BLEED, ext + BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+            elif _BLEED_MODE:
+                c.rect(PAGE_W, tab_bot - BLEED, ext + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
             else:
-                c.roundRect(PAGE_W - 6.0, tab_bot, TAB_EXT + 6.0, tab_h, 4.5, stroke=0, fill=1)
+                c.roundRect(PAGE_W - 6.0, tab_bot, ext + 6.0, tab_h, 4.5, stroke=0, fill=1)
                 # Clean up the inner 6pt overlap on the parchment side
                 c.setFillColor(COLOR_PARCHMENT)
                 c.rect(PAGE_W - 6.5, tab_bot - 1.0, 6.5, tab_h + 2.0, stroke=0, fill=1)
@@ -259,14 +282,17 @@ def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
             c.setLineWidth(1.5)
             c.line(PAGE_W, tab_bot, PAGE_W, tab_top)
             c.setLineWidth(1.0)
-            c.roundRect(PAGE_W + 2.8, tab_bot + 3.5, TAB_EXT - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
-            center_x = PAGE_W + TAB_EXT / 2.0
+            c.roundRect(PAGE_W + 2.8, tab_bot + 3.5, ext - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
+            center_x = PAGE_W + ext / 2.0
         else:
-            # Protrudes on the LEFT (x = -TAB_EXT .. 0)
-            if _BLEED_MODE:
-                c.rect(-TAB_EXT - BLEED, tab_bot - BLEED, TAB_EXT + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
+            # Protrudes on the LEFT (x = -ext .. 0)
+            if _VERVANTE_MODE:
+                # Full-length crimson strip down entire 9.0" height (+ bleed) for Vervante tab die-cutter
+                c.rect(-ext - BLEED, -BLEED, ext + BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
+            elif _BLEED_MODE:
+                c.rect(-ext - BLEED, tab_bot - BLEED, ext + BLEED, tab_h + 2 * BLEED, stroke=0, fill=1)
             else:
-                c.roundRect(-TAB_EXT, tab_bot, TAB_EXT + 6.0, tab_h, 4.5, stroke=0, fill=1)
+                c.roundRect(-ext, tab_bot, ext + 6.0, tab_h, 4.5, stroke=0, fill=1)
                 c.setFillColor(COLOR_PARCHMENT)
                 c.rect(0.0, tab_bot - 1.0, 6.5, tab_h + 2.0, stroke=0, fill=1)
 
@@ -274,8 +300,8 @@ def draw_tab_or_overhang(c: canvas.Canvas, page_num: int) -> None:
             c.setLineWidth(1.5)
             c.line(0.0, tab_bot, 0.0, tab_top)
             c.setLineWidth(1.0)
-            c.roundRect(-TAB_EXT + 3.0, tab_bot + 3.5, TAB_EXT - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
-            center_x = -TAB_EXT / 2.0
+            c.roundRect(-ext + 3.0, tab_bot + 3.5, ext - 5.8, tab_h - 7.0, 2.5, stroke=1, fill=0)
+            center_x = -ext / 2.0
 
         # Upright EBGaramond-Bold Gold Monogram (O, J, L, S, G, C)
         font_sz = 17.5
@@ -437,7 +463,7 @@ def render_page_1_front_cover(c: canvas.Canvas, book_layout: dict, project_root:
     """Page 1: Front Cover in deep Baroque crimson (#4A1215) and gold (#D4AF37) palette with Murillo painting."""
     c.saveState()
     c.setFillColor(BACK_PRIMARY)
-    extra_w = TAB_EXT if _TABS_MODE else 0.0
+    extra_w = get_active_tab_ext() if (_TABS_MODE or _VERVANTE_MODE) else 0.0
     c.rect(-BLEED, -BLEED, PAGE_W + extra_w + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
     gx, gy, gw, gh = get_gold_box(1)
     c.setStrokeColor(BACK_GOLD)
@@ -892,7 +918,7 @@ def render_page_50_back_cover(c: canvas.Canvas, book_layout: dict) -> None:
     bc = book_layout["back_cover"]
     c.saveState()
     c.setFillColor(BACK_PRIMARY)
-    extra_left = TAB_EXT if _TABS_MODE else 0.0
+    extra_left = get_active_tab_ext() if (_TABS_MODE or _VERVANTE_MODE) else 0.0
     c.rect(-extra_left - BLEED, -BLEED, PAGE_W + extra_left + 2 * BLEED, PAGE_H + 2 * BLEED, stroke=0, fill=1)
     gx, gy, gw, gh = get_gold_box(50)
     c.setStrokeColor(BACK_GOLD)
@@ -1003,8 +1029,8 @@ def draw_crop_marks(c: canvas.Canvas, trim_x: float, trim_y: float, trim_w: floa
     y0 = trim_y
     y1 = trim_y + trim_h
 
-    offset = 4.0   # offset from trim boundary
-    length = 20.0  # length of crop mark line
+    offset = BLEED if _VERVANTE_MODE else 4.0   # offset from trim boundary (9pt = 0.125" bleed boundary)
+    length = 15.0 if _VERVANTE_MODE else 20.0  # length of crop mark line
 
     # Bottom-Left
     c.line(x0 - offset - length, y0, x0 - offset, y0)
@@ -1030,6 +1056,7 @@ def build_print_pdf(
     bleed: bool = False,
     office_depot: bool = False,
     tabs: bool = False,
+    vervante: bool = False,
     project_root: Optional[Path] = None,
 ) -> Path:
     """
@@ -1039,11 +1066,15 @@ def build_print_pdf(
       - Bleed: 6.25" x 9.25" (450 x 666 pt) with PyMuPDF TrimBox (9, 9, 441, 657) and BleedBox (0, 0, 450, 666)
       - Tabs: 6.375" x 9.0" (459 x 648 pt, or 477 x 666 pt with --bleed) featuring 6.375" overhang covers,
               0.375" crimson wrap-around strips on Pages 2 & 49, and 6 stepped 1/6-cut crimson/gold tabs
+      - Vervante: Press-ready 50-page PDF where Covers (Pages 1-2, 49-50) and 6 Tab Sheets (12 pages) have a
+                  6.5" x 9.0" trim size with full-length crimson tab strips, and the 34 standard interior pages
+                  have a 6.0" x 9.0" trim size, all with 0.125" bleed and corner crop marks
       - Office Depot: 8.5" x 11.0" (612 x 792 pt) US Letter with centered 6" x 9" page, 0.125" bleed, and crop marks
     """
-    global _TABS_MODE, _BLEED_MODE
+    global _TABS_MODE, _BLEED_MODE, _VERVANTE_MODE
     _TABS_MODE = tabs
     _BLEED_MODE = bleed
+    _VERVANTE_MODE = vervante
 
     if project_root is None:
         project_root = PROJECT_ROOT
@@ -1055,7 +1086,12 @@ def build_print_pdf(
 
     eff_w = TAB_PAGE_W if tabs else PAGE_W
 
-    if office_depot:
+    if vervante:
+        init_w = PAGE_W + VERVANTE_TAB_EXT
+        pagesize = (init_w + 2 * VERVANTE_CROP_MARGIN, PAGE_H + 2 * VERVANTE_CROP_MARGIN)
+        trans_x = VERVANTE_CROP_MARGIN
+        trans_y = VERVANTE_CROP_MARGIN
+    elif office_depot:
         pagesize = (LETTER_W, LETTER_H)
         trans_x = (LETTER_W - eff_w) / 2.0
         trans_y = (LETTER_H - PAGE_H) / 2.0
@@ -1073,6 +1109,16 @@ def build_print_pdf(
     c.setAuthor("Pray the Rosary")
 
     def start_page(page_num: int):
+        if vervante:
+            wide = is_vervante_wide_page(page_num)
+            pw = (PAGE_W + VERVANTE_TAB_EXT) if wide else PAGE_W
+            c.setPageSize((pw + 2 * VERVANTE_CROP_MARGIN, PAGE_H + 2 * VERVANTE_CROP_MARGIN))
+            draw_crop_marks(c, VERVANTE_CROP_MARGIN, VERVANTE_CROP_MARGIN, pw, PAGE_H)
+            even_tab_shift = VERVANTE_TAB_EXT if (wide and page_num % 2 == 0) else 0.0
+            c.saveState()
+            c.translate(VERVANTE_CROP_MARGIN + even_tab_shift, VERVANTE_CROP_MARGIN)
+            return
+
         if office_depot:
             draw_crop_marks(c, trans_x, trans_y, eff_w, PAGE_H)
         even_tab_shift = TAB_EXT if (tabs and page_num % 2 == 0) else 0.0
@@ -1081,7 +1127,7 @@ def build_print_pdf(
             c.translate(trans_x + even_tab_shift, trans_y)
 
     def finish_page(page_num: int):
-        if tabs:
+        if tabs or vervante:
             draw_tab_or_overhang(c, page_num)
         c.restoreState()
         c.showPage()
@@ -1146,7 +1192,17 @@ def build_print_pdf(
 
     # Post-process with PyMuPDF to configure TrimBox, BleedBox, and optimize streams
     doc = pymupdf.open(str(output_path))
-    if bleed:
+    if vervante:
+        cx = VERVANTE_CROP_MARGIN
+        cy = VERVANTE_CROP_MARGIN
+        for idx, page in enumerate(doc):
+            pnum = idx + 1
+            pw = (PAGE_W + VERVANTE_TAB_EXT) if is_vervante_wide_page(pnum) else PAGE_W
+            trim_rect = pymupdf.Rect(cx, cy, cx + pw, cy + PAGE_H)
+            bleed_rect = pymupdf.Rect(cx - BLEED, cy - BLEED, cx + pw + BLEED, cy + PAGE_H + BLEED)
+            page.set_trimbox(trim_rect)
+            page.set_bleedbox(bleed_rect)
+    elif bleed:
         trim_rect = pymupdf.Rect(BLEED, BLEED, BLEED + eff_w, BLEED + PAGE_H)
         bleed_rect = pymupdf.Rect(0, 0, eff_w + 2 * BLEED, PAGE_H + 2 * BLEED)
         for page in doc:
@@ -1166,7 +1222,15 @@ def build_print_pdf(
     temp_path.replace(output_path)
 
     size_mb = output_path.stat().st_size / (1024 * 1024)
-    mode_label = "Office Depot" if office_depot else ("Tabs+Bleed" if (tabs and bleed) else ("Tabs 6.375x9" if tabs else ("Bleed" if bleed else "Standard 6x9")))
+    mode_label = (
+        "Vervante Press-Ready"
+        if vervante
+        else (
+            "Office Depot"
+            if office_depot
+            else ("Tabs+Bleed" if (tabs and bleed) else ("Tabs 6.375x9" if tabs else ("Bleed" if bleed else "Standard 6x9")))
+        )
+    )
     print(f"Generated ({mode_label}): {output_path} ({size_mb:.2f} MB)")
     return output_path
 
@@ -1176,6 +1240,14 @@ def main() -> None:
     parser.add_argument("--output", "-o", type=str, default=None, help="Custom output PDF path")
     parser.add_argument("--bleed", action="store_true", help="Generate pages with 0.125\" bleed and TrimBox")
     parser.add_argument("--tabs", action="store_true", help="Generate 6.375\" x 9.0\" overhang covers and 6 stepped index tabs")
+    parser.add_argument(
+        "-V",
+        "--Vervante",
+        "--vervante",
+        action="store_true",
+        dest="vervante",
+        help="Generate Vervante press-ready PDF (6.5\" x 9.0\" covers/tabs, 6.0\" x 9.0\" interior, bleed, crop marks) in assets/print/Vervante/",
+    )
     parser.add_argument(
         "--office-depot",
         "--letter",
@@ -1187,6 +1259,8 @@ def main() -> None:
 
     if args.output:
         out_path = Path(args.output).resolve()
+    elif args.vervante:
+        out_path = DEFAULT_VERVANTE_PDF
     elif args.office_depot:
         out_path = DEFAULT_OFFICE_DEPOT_PDF
     elif args.tabs and args.bleed:
@@ -1196,7 +1270,7 @@ def main() -> None:
     else:
         out_path = DEFAULT_OUTPUT_PDF
 
-    build_print_pdf(out_path, bleed=args.bleed, office_depot=args.office_depot, tabs=args.tabs)
+    build_print_pdf(out_path, bleed=args.bleed, office_depot=args.office_depot, tabs=args.tabs, vervante=args.vervante)
 
 
 if __name__ == "__main__":

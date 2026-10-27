@@ -381,6 +381,31 @@ class TestBuildPrintPdf(unittest.TestCase):
             finally:
                 doc_bleed.close()
 
+    def test_vervante_flag_geometry_trimbox_and_monograms(self):
+        """Verifies -V / --Vervante mode produces 6.5x9 covers/tabs and 6.0x9 interior pages with bleed and crop marks."""
+        from scripts.build_print_pdf import TAB_SPECS, build_print_pdf, is_vervante_wide_page
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            vervante_pdf = Path(tmp_dir) / "vervante_test.pdf"
+            build_print_pdf(vervante_pdf, vervante=True)
+            self.assertTrue(vervante_pdf.exists())
+
+            doc_v = pymupdf.open(str(vervante_pdf))
+            try:
+                self.assertEqual(len(doc_v), 50)
+                for idx, page in enumerate(doc_v):
+                    pnum = idx + 1
+                    expected_trim_w = 468.0 if is_vervante_wide_page(pnum) else 432.0
+                    trim = page.trimbox
+                    self.assertAlmostEqual(trim.width, expected_trim_w, delta=1.0)
+                    self.assertAlmostEqual(trim.height, 648.0, delta=1.0)
+                    bleed = page.bleedbox
+                    self.assertAlmostEqual(bleed.width, expected_trim_w + 18.0, delta=1.0)
+                    self.assertAlmostEqual(bleed.height, 666.0, delta=1.0)
+                for pnum, (_, monogram) in TAB_SPECS.items():
+                    self.assertIn(monogram, doc_v[pnum - 1].get_text())
+            finally:
+                doc_v.close()
+
 
 if __name__ == "__main__":
     unittest.main()
