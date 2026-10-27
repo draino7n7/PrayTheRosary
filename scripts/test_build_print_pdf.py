@@ -406,6 +406,40 @@ class TestBuildPrintPdf(unittest.TestCase):
             finally:
                 doc_v.close()
 
+    def test_build_all_print_pdfs_and_cli_all_flag(self):
+        """Verifies build_all_print_pdfs and --all CLI flag generate all 4 tracked PDF editions."""
+        from unittest.mock import patch
+        from scripts.build_print_pdf import build_all_print_pdfs, main
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            generated = build_all_print_pdfs(project_root=tmp_root)
+            self.assertEqual(len(generated), 4)
+
+            expected_rel_paths = [
+                Path("assets/print/PrayTheRosary.pdf"),
+                Path("assets/print/PrayTheRosary_Tabs.pdf"),
+                Path("assets/print/PrayTheRosary_Tabs_Bleed.pdf"),
+                Path("assets/print/Vervante/PrayTheRosary_Vervante.pdf"),
+            ]
+            for path_obj, rel_path in zip(generated, expected_rel_paths):
+                self.assertEqual(path_obj, tmp_root / rel_path)
+                self.assertTrue(path_obj.exists(), f"Missing generated PDF: {path_obj}")
+                doc = pymupdf.open(str(path_obj))
+                try:
+                    self.assertEqual(len(doc), 50, f"Expected 50 pages in {path_obj.name}")
+                finally:
+                    doc.close()
+
+            # Verify CLI `main(["--all"])` and `main(["-a", "-o", ...])` dispatch to `build_all_print_pdfs`
+            with patch("scripts.build_print_pdf.build_all_print_pdfs") as mock_build_all:
+                main(["--all"])
+                mock_build_all.assert_called_once_with(output_dir=None)
+                mock_build_all.reset_mock()
+                main(["-a", "-o", str(tmp_root)])
+                mock_build_all.assert_called_once_with(output_dir=tmp_root.resolve())
+
 
 if __name__ == "__main__":
     unittest.main()
+
