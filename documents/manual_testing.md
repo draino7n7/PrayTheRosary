@@ -649,13 +649,41 @@ This document outlines the strict manual testing procedures required before any 
   - The 6 tabbed sheets (`Pages 3-4, 5-6, 15-16, 25-26, 35-36, 45-46`) display the 6 stepped `1/6-cut` Crimson and Gold tabs (`O`, `J`, `L`, `S`, `G`, `C` in upright `EBGaramond-Bold`) protruding 0.375" on the right edge for odd pages and on the left edge for even pages.
   - `PrayTheRosary_Tabs_Bleed.pdf` contains 50 pages at 6.625" × 9.25" (`477 × 666 pt`) with `TrimBox` set to `Rect(9, 9, 468, 657)` and `BleedBox` set to `Rect(0, 0, 477, 666)`.
 
-### TC-PDF-05: Automated Python Print PDF Unit Test Suite
-- **Step 1:** Run the Python test suite:
+### TC-PDF-05: Vervante Press-Ready Edition (-V / --Vervante)
+- **Step 1:** From the repository root, run the script with the `-V` (or `--Vervante`) flag:
+  ```powershell
+  python scripts/build_print_pdf.py -V
+  ```
+- **Step 2:** Inspect `assets/print/Vervante/PrayTheRosary_Vervante.pdf` in a PDF viewer or inspect box dimensions via PyMuPDF.
+- **Expected:**
+  - The script executes cleanly with 0 errors and generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages).
+  - The 16 cover and tab divider pages (`Pages 1–2, 3–4, 5–6, 15–16, 25–26, 35–36, 45–46, 49–50`) have a `TrimBox` of 6.5" × 9.0" (`468 × 648 pt`), featuring full-height `0.50"` Deep Baroque Crimson (`#4A1215`) tab strips with stepped gold monograms (`O`, `J`, `L`, `S`, `G`, `C`) for Vervante's physical tab die-cutter.
+  - The 34 standard interior text and artwork pages have a `TrimBox` of 6.0" × 9.0" (`432 × 648 pt`).
+  - All pages include `0.125"` (`9 pt`) bleed (`BleedBox`) and outer corner crop marks (`0.375"` / `27 pt` margin).
+  - Total canvas dimensions are `7.25" × 9.75"` (`522 × 702 pt`) for wide pages and `6.75" × 9.75"` (`486 × 702 pt`) for standard interior pages.
+
+### TC-PDF-06: Batch All Print Editions Generation (--all / -a)
+- **Step 1:** From the repository root, run the script with the `--all` (or `-a`) flag:
+  ```powershell
+  python scripts/build_print_pdf.py --all
+  ```
+- **Step 2:** Inspect `assets/print/` to verify that all 4 tracked PDF editions are rebuilt and up to date:
+  - `assets/print/PrayTheRosary.pdf` (Standard 6.0" × 9.0")
+  - `assets/print/PrayTheRosary_Tabs.pdf` (Index Tabs 6.375" × 9.0")
+  - `assets/print/PrayTheRosary_Tabs_Bleed.pdf` (Tabs with Bleed 6.625" × 9.25")
+  - `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (Vervante Press-Ready Edition)
+- **Expected:**
+  - The script completes cleanly with 0 errors, reporting sequential generation of all 4 tracked print PDF editions.
+  - Each PDF is valid, contains exactly 50 pages, and complies with its corresponding geometry and metadata requirements.
+
+### TC-PDF-07: Automated Python Print PDF Unit Test Suite
+- **Step 1:** Run the Python test discovery suite:
   ```powershell
   python -m unittest discover -s scripts -p "test_*.py"
   ```
 - **Expected:**
-  - All unit tests in `scripts/test_build_print_pdf.py` execute and pass with 0 failures (`OK`).
+  - All unit tests across both `scripts/test_build_print_pdf.py` and `scripts/test_pdf_builder_modules.py` execute and pass with 0 failures (`OK`).
+
 
 ## Test 14.0: Android Platform & Full-Screen Immersive Mode
 

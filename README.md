@@ -80,7 +80,7 @@ To get started with OGS:
 
 The repository includes a complete automated Python PDF generation pipeline that produces a 50-page, 6" × 9" spiral-bound print edition directly from project assets and structured data:
 - **Canonical Print PDF Asset (`assets/print/PrayTheRosary.pdf`):** 50-page, 6.0" × 9.0" (432 × 648 pt) reader/print PDF with alternating 0.625" inner spiral-binding safety margins (0.500" outer/top/bottom margins), zero italic fonts, dynamic version and colophon notices on Pages 48–49, and framed quote callout boxes on Page 50. Tracked under Git LFS (~18 MB).
-- **Automated PDF Generator (`scripts/build_print_pdf.py`):** Python script (`reportlab`, `Pillow`, `pymupdf`) compiling the 50-page document directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, `game/project.godot`, `game/assets/fonts/EBGaramond-*.ttf`, and `assets/2D/gimp/original_downloads/`.
+- **Automated PDF Generator (`scripts/build_print_pdf.py`):** Backed by the modular `scripts/pdf_builder/` package (`reportlab`, `Pillow`, `pymupdf`), compiling the 50-page document directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, `game/project.godot`, `game/assets/fonts/EBGaramond-*.ttf`, and `assets/2D/gimp/original_downloads/`.
   - **Standard Reader / Print Edition (Default):**
     ```powershell
     python scripts/build_print_pdf.py
@@ -106,6 +106,16 @@ The repository includes a complete automated Python PDF generation pipeline that
     python scripts/build_print_pdf.py --tabs --bleed
     ```
     Generates `assets/print/PrayTheRosary_Tabs_Bleed.pdf` (6.625" × 9.25", 477 × 666 pt) with 0.125" full bleed, `TrimBox` (6.375" × 9.0"), and `BleedBox` metadata for commercial press production.
+  - **Vervante Press-Ready Edition (`-V` / `--Vervante`):**
+    ```powershell
+    python scripts/build_print_pdf.py -V
+    ```
+    Generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages) engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks.
+  - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
+    ```powershell
+    python scripts/build_print_pdf.py --all
+    ```
+    Sequentially builds and verifies all 4 tracked print PDFs in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, and `Vervante/PrayTheRosary_Vervante.pdf`).
   - **Custom Output Path (`--output <path>`):**
     ```powershell
     python scripts/build_print_pdf.py --output "path/to/custom.pdf"
