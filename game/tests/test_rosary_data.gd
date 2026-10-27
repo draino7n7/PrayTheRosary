@@ -462,8 +462,12 @@ func test_historical_feast_note_and_marian_counsel_quote() -> void:
 	)
 	var sec3_body: String = str((sections[2] as Dictionary).get("body", ""))
 	assert_true(
-		sec3_body.contains("In 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary in 1573)."),
-		"Page 2 Section 3 must document the standalone 1571 Our Lady of Victory feast and 1573 renaming sentence"
+		sec3_body.contains("established the traditional fifteen decades and Mysteries"),
+		"Page 2 Section 3 must document Pius V establishing the traditional fifteen decades and Mysteries"
+	)
+	assert_true(
+		sec3_body.contains("Following the Christian naval victory at Lepanto in 1571, he instituted the feast of Our Lady of Victory (renamed the Feast of Our Lady of the Rosary by Pope Gregory XIII in 1573)."),
+		"Page 2 Section 3 must document the 1571 Lepanto Our Lady of Victory feast and 1573 Gregory XIII renaming sentence"
 	)
 	assert_true(
 		sec3_body.contains("the Joyful Mysteries (Christ's Incarnation and early life)"),
@@ -1033,8 +1037,8 @@ func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() 
 	assert_eq(p2_sections.size(), 3, "Page 2 must contain 3 sections")
 	var p2_sec1: Dictionary = p2_sections[1] as Dictionary
 	assert_true(
-		str(p2_sec1.get("body", "")).contains("organized the Marian Psalter (the 150 Hail Marys) into fifteen decades"),
-		"Page 2 Section 2 body must contain '(the 150 Hail Marys)'"
+		str(p2_sec1.get("body", "")).contains("paired the Marian Psalter (the 150 Hail Marys) with structured meditations on the life of Christ"),
+		"Page 2 Section 2 body must contain 'paired the Marian Psalter (the 150 Hail Marys) with structured meditations on the life of Christ'"
 	)
 
 	# 2. Page 3 Heading
@@ -1109,7 +1113,7 @@ func test_issue_47_editorial_scriptural_meditation_and_liturgical_refinements() 
 	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
 	var ref_content: String = FileAccess.get_file_as_string(repo_root.path_join("documents/references.md"))
 	assert_true(ref_content.contains("Origins and Tradition of the Most Holy Rosary"))
-	assert_true(ref_content.contains("organized the Marian Psalter (the 150 Hail Marys) into fifteen decades"))
+	assert_true(ref_content.contains("paired the Marian Psalter (the 150 Hail Marys) with structured meditations on the life of Christ"))
 	assert_true(ref_content.contains("Structure of This Book & How to Pray"))
 	assert_true(ref_content.contains("especially those in most need of Thy mercy"))
 	assert_true(ref_content.contains("https://www.drbo.org/chapter/21131.htm"))
