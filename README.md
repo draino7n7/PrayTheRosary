@@ -110,12 +110,12 @@ The repository includes a complete automated Python PDF generation pipeline that
     ```powershell
     python scripts/build_print_pdf.py -V
     ```
-    Generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages) engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks.
+    Generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages) engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks. Also automatically and losslessly splits the master PDF into 3 uniform-dimension component PDFs in `assets/print/Vervante/`: `PrayTheRosary_Vervante_Covers.pdf` (4 pages at 6.5" × 9.0"), `PrayTheRosary_Vervante_Interior.pdf` (34 pages at 6.0" × 9.0"), and `PrayTheRosary_Vervante_Tabs.pdf` (12 pages at 6.5" × 9.0").
   - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
     ```powershell
     python scripts/build_print_pdf.py --all
     ```
-    Sequentially builds and verifies all 4 tracked print PDFs in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, and `Vervante/PrayTheRosary_Vervante.pdf`).
+    Sequentially builds and verifies all 7 tracked print PDFs across 4 editions in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, `Vervante/PrayTheRosary_Vervante.pdf`, `Vervante/PrayTheRosary_Vervante_Covers.pdf`, `Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `Vervante/PrayTheRosary_Vervante_Tabs.pdf`).
   - **Custom Output Path (`--output <path>`):**
     ```powershell
     python scripts/build_print_pdf.py --output "path/to/custom.pdf"

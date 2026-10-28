@@ -9,7 +9,7 @@ This document establishes the official standards, Git worktree workflow, and cod
 * **File Generation Encoding:** Generating text files via PowerShell pipes (e.g., `>` or `Set-Content`) or .NET APIs often creates UTF-16 LE encoding errors or adds a UTF-8 BOM (Byte Order Mark). Godot will completely fail to parse `.tscn` files that contain a BOM (`Parse Error: Expected '['`). ALWAYS use the `write_to_file` and `replace_file_content` agent tools to generate/edit text or script files to ensure proper UTF-8 encoding without BOMs.
 * **Documentation Redundancy:** Before requesting the PR Reviewer to document a feature or testing steps, always verify if the documentation already exists in `documents/requirements.md` or `documents/manual_testing.md`. Do not duplicate existing specification notes.
 * **Source Verification Ledger (`documents/references.md`):** Whenever modifying or adding prayers, Scripture citations, mysteries, meditations, historical summaries, or artwork attributions, you MUST consult `documents/references.md` and comply with `.agents/rules/references_verification.md`. Verify all textual and metadata changes against the cited authoritative primary sources (Vatican archives, USCCB, Catholic Public Domain Version via SacredBible.org / GitHub cpdv, Douay-Rheims Bible Online comparative reference, museum collection catalogs) and maintain source synchronization in `documents/references.md`.
-* **Print PDF Pipeline Synchronization (`scripts/build_print_pdf.py`):** Whenever modifying book page visual styling, typography rules, prayer/Scripture text, or `game/data/*.json` structure, you MUST keep `scripts/build_print_pdf.py` synchronized and verify Python unit tests (`python -m unittest discover -s scripts -p "test_*.py"`). When book layout, text content, or version numbers change, regenerate all four tracked print PDFs via `python scripts/build_print_pdf.py --all` (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante.pdf`).
+* **Print PDF Pipeline Synchronization (`scripts/build_print_pdf.py`):** Whenever modifying book page visual styling, typography rules, prayer/Scripture text, or `game/data/*.json` structure, you MUST keep `scripts/build_print_pdf.py` synchronized and verify Python unit tests (`python -m unittest discover -s scripts -p "test_*.py"`). When book layout, text content, or version numbers change, regenerate all seven tracked print PDFs via `python scripts/build_print_pdf.py --all` (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`).
 
 ---
 
@@ -172,7 +172,7 @@ If your issue involves UI layout, coloring, or visual polish, you MUST visually 
 
 Run the headless Godot test suite. First, **CRITICALLY**, force an editor import pass to cache any newly added binary files or `class_name` definitions:
 ```powershell
-godot --headless --editor --quit --path game
+godot --headless --import --path game
 godot --headless --path game -s res://tests/test_runner.gd
 ```
 *(Note: This requires the Godot executable directory to be in your system's PATH, and the executable to be named `godot` or `godot.exe`/`godot.bat`).*
@@ -184,7 +184,7 @@ python -m unittest discover -s scripts -p "test_*.py"
 
 ### Verification Gate
 * **Zero Failures:** All existing and newly created tests must pass (`Test Results: X Passed, 0 Failed` in Godot, and `OK` across all Python tests, exit code 0).
-* **Print PDF Synchronization:** If book layout, prayers, typography, or version numbers were changed, confirm that all four tracked print PDFs (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante.pdf`) were rebuilt via `python scripts/build_print_pdf.py --all` and committed.
+* **Print PDF Synchronization:** If book layout, prayers, typography, or version numbers were changed, confirm that all seven tracked print PDFs (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`) were rebuilt via `python scripts/build_print_pdf.py --all` and committed.
 * If any test fails, resolve the regression before pushing.
 
 ---

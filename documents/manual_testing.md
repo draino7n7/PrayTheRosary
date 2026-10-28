@@ -654,27 +654,33 @@ This document outlines the strict manual testing procedures required before any 
   ```powershell
   python scripts/build_print_pdf.py -V
   ```
-- **Step 2:** Inspect `assets/print/Vervante/PrayTheRosary_Vervante.pdf` in a PDF viewer or inspect box dimensions via PyMuPDF.
+- **Step 2:** Inspect `assets/print/Vervante/PrayTheRosary_Vervante.pdf` and the companion split component PDFs (`PrayTheRosary_Vervante_Covers.pdf`, `PrayTheRosary_Vervante_Interior.pdf`, `PrayTheRosary_Vervante_Tabs.pdf`) in a PDF viewer or inspect box dimensions via PyMuPDF.
 - **Expected:**
-  - The script executes cleanly with 0 errors and generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages).
-  - The 16 cover and tab divider pages (`Pages 1–2, 3–4, 5–6, 15–16, 25–26, 35–36, 45–46, 49–50`) have a `TrimBox` of 6.5" × 9.0" (`468 × 648 pt`), featuring full-height `0.50"` Deep Baroque Crimson (`#4A1215`) tab strips with stepped gold monograms (`O`, `J`, `L`, `S`, `G`, `C`) for Vervante's physical tab die-cutter.
-  - The 34 standard interior text and artwork pages have a `TrimBox` of 6.0" × 9.0" (`432 × 648 pt`).
-  - All pages include `0.125"` (`9 pt`) bleed (`BleedBox`) and outer corner crop marks (`0.375"` / `27 pt` margin).
-  - Total canvas dimensions are `7.25" × 9.75"` (`522 × 702 pt`) for wide pages and `6.75" × 9.75"` (`486 × 702 pt`) for standard interior pages.
+  - The script executes cleanly with 0 errors and generates all 4 Vervante press-ready PDFs in `assets/print/Vervante/`:
+    - `PrayTheRosary_Vervante.pdf` (50 pages: combined master/collation reference PDF).
+    - `PrayTheRosary_Vervante_Covers.pdf` (4 pages: `Pages 1, 2, 49, 50` at uniform `6.5" × 9.0"` / `468 × 648 pt` `TrimBox`, `486 × 666 pt` `BleedBox`, `522 × 702 pt` `MediaBox` for heavy laminated cover stock).
+    - `PrayTheRosary_Vervante_Interior.pdf` (34 pages: `Pages 7–14, 17–24, 27–34, 37–44, 47–48` at uniform `6.0" × 9.0"` / `432 × 648 pt` `TrimBox`, `450 × 666 pt` `BleedBox`, `486 × 702 pt` `MediaBox` for standard interior leaves).
+    - `PrayTheRosary_Vervante_Tabs.pdf` (12 pages: `Pages 3, 4, 5, 6, 15, 16, 25, 26, 35, 36, 45, 46` at uniform `6.5" × 9.0"` / `468 × 648 pt` `TrimBox`, `486 × 666 pt` `BleedBox`, `522 × 702 pt` `MediaBox` for the 6 double-sided 1/6-cut tab divider sheets with stepped gold monograms `O`, `J`, `L`, `S`, `G`, `C`).
+  - In `PrayTheRosary_Vervante.pdf`, the 16 cover and tab divider pages (`Pages 1–2, 3–4, 5–6, 15–16, 25–26, 35–36, 45–46, 49–50`) have a `TrimBox` of 6.5" × 9.0" (`468 × 648 pt`), featuring full-height `0.50"` Deep Baroque Crimson (`#4A1215`) tab strips with stepped gold monograms (`O`, `J`, `L`, `S`, `G`, `C`) for Vervante's physical tab die-cutter, and the 34 interior pages have a `TrimBox` of 6.0" × 9.0" (`432 × 648 pt`).
+  - All pages across all 4 PDFs include `0.125"` (`9 pt`) bleed (`BleedBox`) and outer corner crop marks (`0.375"` / `27 pt` margin).
+  - Total canvas dimensions are `7.25" × 9.75"` (`522 × 702 pt`) for wide pages (Covers and Tabs) and `6.75" × 9.75"` (`486 × 702 pt`) for standard interior pages.
 
 ### TC-PDF-06: Batch All Print Editions Generation (--all / -a)
 - **Step 1:** From the repository root, run the script with the `--all` (or `-a`) flag:
   ```powershell
   python scripts/build_print_pdf.py --all
   ```
-- **Step 2:** Inspect `assets/print/` to verify that all 4 tracked PDF editions are rebuilt and up to date:
-  - `assets/print/PrayTheRosary.pdf` (Standard 6.0" × 9.0")
-  - `assets/print/PrayTheRosary_Tabs.pdf` (Index Tabs 6.375" × 9.0")
-  - `assets/print/PrayTheRosary_Tabs_Bleed.pdf` (Tabs with Bleed 6.625" × 9.25")
-  - `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (Vervante Press-Ready Edition)
+- **Step 2:** Inspect `assets/print/` to verify that all 7 tracked print PDF files across 4 editions are rebuilt and up to date:
+  - `assets/print/PrayTheRosary.pdf` (Standard 6.0" × 9.0", 50 pages)
+  - `assets/print/PrayTheRosary_Tabs.pdf` (Index Tabs 6.375" × 9.0", 50 pages)
+  - `assets/print/PrayTheRosary_Tabs_Bleed.pdf` (Tabs with Bleed 6.625" × 9.25", 50 pages)
+  - `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (Vervante Combined Collation Reference, 50 pages)
+  - `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf` (Vervante Covers Component, 4 pages)
+  - `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf` (Vervante Interior Component, 34 pages)
+  - `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf` (Vervante Tabs Component, 12 pages)
 - **Expected:**
-  - The script completes cleanly with 0 errors, reporting sequential generation of all 4 tracked print PDF editions.
-  - Each PDF is valid, contains exactly 50 pages, and complies with its corresponding geometry and metadata requirements.
+  - The script completes cleanly with 0 errors, reporting sequential generation of all 7 tracked print PDF files.
+  - Each PDF is valid, contains its expected page count (`50`, `50`, `50`, `50`, `4`, `34`, `12`), and complies with its corresponding geometry and metadata requirements.
 
 ### TC-PDF-07: Automated Python Print PDF Unit Test Suite
 - **Step 1:** Run the Python test discovery suite:
