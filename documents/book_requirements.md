@@ -177,11 +177,15 @@ The canonical print edition and its automated build pipeline live in `scripts/bu
     - **Wide Trim (`6.5" × 9.0"`, `468 × 648 pt`):** Applied to the 4 cover pages (`Pages 1–2, 49–50`) and the 6 index tab divider sheets (12 pages: `3–4, 5–6, 15–16, 25–26, 35–36, 45–46`). Includes full-height `0.50"` Deep Baroque Crimson (`#4A1215`) tab strips containing the stepped gold monograms (`O`, `J`, `L`, `S`, `G`, `C`), allowing Vervante's die-cutter to cut away excess paper leaving the tabs intact.
     - **Standard Interior Trim (`6.0" × 9.0"`, `432 × 648 pt`):** Applied to the 34 standard interior text and artwork pages.
     - **Full Bleed & Crop Marks:** Adds `0.125"` (`9 pt`) bleed and outer corner crop marks (`0.375"` / `27 pt` margin) on all pages. Embeds page-specific PDF `TrimBox` and `BleedBox` metadata.
+    - **Automated Lossless Component Splitting (`split_vervante_pdfs()`):** In addition to the 50-page combined collation reference PDF (`PrayTheRosary_Vervante.pdf`), the post-processing pipeline (`split_vervante_pdfs`) automatically extracts the pages into 3 uniform-dimension press-ready component PDFs in `assets/print/Vervante/`:
+      - `PrayTheRosary_Vervante_Covers.pdf` (4 pages: `1, 2, 49, 50` at uniform `6.5" × 9.0"` / `468 × 648 pt` `TrimBox`, `486 × 666 pt` `BleedBox`, `522 × 702 pt` `MediaBox` for heavy laminated cover stock).
+      - `PrayTheRosary_Vervante_Tabs.pdf` (12 pages: `3, 4, 5, 6, 15, 16, 25, 26, 35, 36, 45, 46` at uniform `6.5" × 9.0"` / `468 × 648 pt` `TrimBox`, `486 × 666 pt` `BleedBox`, `522 × 702 pt` `MediaBox` for the 6 double-sided 1/6-cut tab divider sheets with stepped gold monograms `O`, `J`, `L`, `S`, `G`, `C`).
+      - `PrayTheRosary_Vervante_Interior.pdf` (34 pages: `7–14, 17–24, 27–34, 37–44, 47–48` at uniform `6.0" × 9.0"` / `432 × 648 pt` `TrimBox`, `450 × 666 pt` `BleedBox`, `486 × 702 pt` `MediaBox` for standard interior text and artwork leaves).
   - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
     ```powershell
     python scripts/build_print_pdf.py --all
     ```
-    Sequentially builds and verifies all 4 tracked print PDFs in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, and `Vervante/PrayTheRosary_Vervante.pdf`). Can also be called programmatically via `build_all_print_pdfs(project_root)`.
+    Sequentially builds and verifies all 7 tracked print PDFs across 4 editions in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, `Vervante/PrayTheRosary_Vervante.pdf`, `Vervante/PrayTheRosary_Vervante_Covers.pdf`, `Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `Vervante/PrayTheRosary_Vervante_Tabs.pdf`). Can also be called programmatically via `build_all_print_pdfs(project_root)`.
   - **Automated Test Suites (`scripts/test_build_print_pdf.py` & `scripts/test_pdf_builder_modules.py`):**
     - Executed via `python -m unittest discover -s scripts -p "test_*.py"`.
     - Validates package architecture, `PrintConfig` factory constructors and immutability, coordinate and box geometry (`get_gold_box`, `get_content_box`, `is_vervante_wide_page`), data loader cross-indexing, public symbol re-exports, 50-page document counts, PDF box dimensions across all editions, tab monograms, zero italic fonts, CPDV citations, modernized Creed phrasing, and Page 48 colophon.

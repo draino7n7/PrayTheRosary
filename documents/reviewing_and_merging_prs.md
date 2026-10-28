@@ -38,7 +38,7 @@ Before approving or merging any Pull Request, verify the following:
 * [ ] **Automated Test Report:** PR body includes evidence that all automated tests pass (`Test Results: X Passed, 0 Failed`).
 * [ ] **Independent Test Execution:** Reviewer independently runs the test suite on the checked-out branch and confirms zero failures.
 * [ ] **Python Print PDF Unit Tests:** If the PR touches book styling, typography, `game/data/*.json`, or `scripts/build_print_pdf.py`, run `python -m unittest discover -s scripts -p "test_*.py"` and confirm 0 test failures.
-* [ ] **Print PDF Asset Synchronization:** Confirm all four tracked print PDFs (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante.pdf`) have been rebuilt via `python scripts/build_print_pdf.py --all` and committed if book page styling, prayers, Scripture, typography, or version numbers changed.
+* [ ] **Print PDF Asset Synchronization:** Confirm all seven tracked print PDFs (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`) have been rebuilt via `python scripts/build_print_pdf.py --all` and committed if book page styling, prayers, Scripture, typography, or version numbers changed.
 * [ ] **New Tests Added:** If core logic, autoloads, or calculations were altered, corresponding unit tests are present in `game/tests/`.
 * [ ] **Visual QA (MCP Bridge):** If the PR modifies UI or visual layout, launch the game locally and capture a screenshot via `python mcp_client.py screenshot` to verify the layout visually.
 
@@ -73,7 +73,7 @@ Determine whether a local worktree for this feature branch already exists:
 ### 3. Run Automated Tests Locally
 Inside the feature worktree, run the headless Godot test suite. Always force an asset import pass first to cache any newly added binary files:
 ```powershell
-godot --headless --editor --quit --path game
+godot --headless --import --path game
 godot --headless --path game -s res://tests/test_runner.gd
 ```
 
@@ -126,8 +126,8 @@ Before merging, exit the review worktree, terminate any background Godot process
 # Exit worktree back to main repository root first
 cd c:\Users\kevin\OGS_Projects\PrayTheRosary
 
-# Kill any background Godot instances and orphaned git fsmonitor daemons holding worktree locks
-Stop-Process -Name "godot", "git" -Force -ErrorAction SilentlyContinue
+# Kill any background Godot instances, orphaned git fsmonitor daemons, and open Acrobat PDF viewers holding worktree locks
+Stop-Process -Name "godot", "git", "Acrobat", "AcroRd32" -Force -ErrorAction SilentlyContinue
 
 # Remove the worktree (with PowerShell fallback if Windows read-only/fsmonitor locks persist)
 git worktree remove .worktrees/<worktree-name> --force
@@ -171,5 +171,5 @@ git pull origin main
 git branch -d feature/issue-<number>-<short-description> 2>$null
 
 # Force an editor import pass to register newly merged classes and assets
-godot --headless --editor --quit --path game
+godot --headless --import --path game
 ```

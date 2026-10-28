@@ -11,9 +11,11 @@ Supported CLI Modes:
   - --tabs:         6.375" x 9.0" (459 x 648 pt) overhang covers & 6 stepped 1/6-cut index tabs -> assets/print/PrayTheRosary_Tabs.pdf
   - --tabs --bleed: 6.625" x 9.25" (477 x 666 pt) tabbed edition with 0.125" bleed -> assets/print/PrayTheRosary_Tabs_Bleed.pdf
   - -V / --Vervante: Vervante press-ready 50-page PDF (6.5" x 9.0" covers/tabs with full-length
-                    crimson tab strips, 6.0" x 9.0" interior, 0.125" bleed & crop marks) -> assets/print/Vervante/PrayTheRosary_Vervante.pdf
+                    crimson tab strips, 6.0" x 9.0" interior, 0.125" bleed & crop marks) ->
+                    assets/print/Vervante/PrayTheRosary_Vervante.pdf plus 3 split component PDFs
+                    (_Covers.pdf, _Interior.pdf, _Tabs.pdf)
   - --office-depot: Centers 6.0" x 9.0" pages with 0.125" bleed and crop marks on 8.5" x 11.0" US Letter
-  - --all / -a:     Batch-builds all 4 tracked print editions in assets/print/
+  - --all / -a:     Batch-builds all 7 tracked print PDF files across 4 editions in assets/print/
 """
 
 import argparse
@@ -47,7 +49,10 @@ from scripts.pdf_builder.config import (  # noqa: E402
     DEFAULT_OUTPUT_PDF,
     DEFAULT_TABS_BLEED_PDF,
     DEFAULT_TABS_PDF,
+    DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_INTERIOR_PDF,
     DEFAULT_VERVANTE_PDF,
+    DEFAULT_VERVANTE_TABS_PDF,
     FONTS_DIR,
     LETTER_H,
     LETTER_W,
@@ -58,8 +63,11 @@ from scripts.pdf_builder.config import (  # noqa: E402
     TAB_EXT,
     TAB_PAGE_W,
     TAB_SPECS,
+    VERVANTE_COVER_PAGES,
     VERVANTE_CROP_MARGIN,
+    VERVANTE_INTERIOR_PAGES,
     VERVANTE_TAB_EXT,
+    VERVANTE_TAB_PAGES,
     PrintConfig,
     is_vervante_wide_page,
     register_fonts,
@@ -74,7 +82,7 @@ from scripts.pdf_builder.page_renderers import (  # noqa: E402
     render_page_50_back_cover,
     render_prayer_sequence_page,
 )
-from scripts.pdf_builder.postprocess import postprocess_pdf  # noqa: E402
+from scripts.pdf_builder.postprocess import postprocess_pdf, split_vervante_pdfs  # noqa: E402
 from scripts.pdf_builder.primitives import (  # noqa: E402
     clear_image_cache,
     draw_crop_marks,
@@ -212,7 +220,19 @@ def build_print_pdf(
     postprocess_pdf(output_path, cfg, trans_x=trans_x, trans_y=trans_y)
 
     size_mb = output_path.stat().st_size / (1024 * 1024)
-    print(f"Generated ({cfg.mode_label}): {output_path} ({size_mb:.2f} MB)")
+    if cfg.vervante:
+        print(f"Generated ({cfg.mode_label}): {output_path} (50 pages, {size_mb:.2f} MB)")
+        for split_label, split_suffix, page_count in (
+            ("Vervante Covers", "_Covers", len(VERVANTE_COVER_PAGES)),
+            ("Vervante Interior", "_Interior", len(VERVANTE_INTERIOR_PAGES)),
+            ("Vervante Tabs", "_Tabs", len(VERVANTE_TAB_PAGES)),
+        ):
+            split_path = output_path.with_name(f"{output_path.stem}{split_suffix}{output_path.suffix}")
+            if split_path.exists():
+                split_mb = split_path.stat().st_size / (1024 * 1024)
+                print(f"Generated ({split_label}): {split_path} ({page_count} pages, {split_mb:.2f} MB)")
+    else:
+        print(f"Generated ({cfg.mode_label}): {output_path} ({size_mb:.2f} MB)")
     return output_path
 
 
@@ -221,21 +241,28 @@ def build_all_print_pdfs(
     output_dir: Optional[Path] = None,
 ) -> List[Path]:
     """
-    Sequentially builds all 4 tracked print PDF editions under `assets/print/`:
-      1. `PrayTheRosary.pdf` (Standard 6.0" x 9.0")
-      2. `PrayTheRosary_Tabs.pdf` (Tabbed 6.375" x 9.0")
-      3. `PrayTheRosary_Tabs_Bleed.pdf` (Tabbed + Bleed 6.625" x 9.25")
-      4. `Vervante/PrayTheRosary_Vervante.pdf` (Vervante Press-Ready)
+    Sequentially builds all 7 tracked print PDF files across 4 editions under `assets/print/`:
+      1. `PrayTheRosary.pdf` (Standard 6.0" x 9.0", 50 pages)
+      2. `PrayTheRosary_Tabs.pdf` (Tabbed 6.375" x 9.0", 50 pages)
+      3. `PrayTheRosary_Tabs_Bleed.pdf` (Tabbed + Bleed 6.625" x 9.25", 50 pages)
+      4. `Vervante/PrayTheRosary_Vervante.pdf` (Vervante Press-Ready Combined, 50 pages)
+      5. `Vervante/PrayTheRosary_Vervante_Covers.pdf` (Vervante Covers, 4 pages at 6.5" x 9.0")
+      6. `Vervante/PrayTheRosary_Vervante_Interior.pdf` (Vervante Interior, 34 pages at 6.0" x 9.0")
+      7. `Vervante/PrayTheRosary_Vervante_Tabs.pdf` (Vervante Tabs, 12 pages at 6.5" x 9.0")
     """
     root = Path(project_root) if project_root is not None else PROJECT_ROOT
     print_dir = Path(output_dir) if output_dir is not None else (root / "assets" / "print")
-    targets = [
-        (print_dir / "PrayTheRosary.pdf", PrintConfig.standard()),
-        (print_dir / "PrayTheRosary_Tabs.pdf", PrintConfig.tabs_only()),
-        (print_dir / "PrayTheRosary_Tabs_Bleed.pdf", PrintConfig.tabs_and_bleed()),
-        (print_dir / "Vervante" / "PrayTheRosary_Vervante.pdf", PrintConfig.vervante_mode()),
+    vervante_dir = print_dir / "Vervante"
+    vervante_master = vervante_dir / "PrayTheRosary_Vervante.pdf"
+    return [
+        build_print_pdf(print_dir / "PrayTheRosary.pdf", project_root=root, config=PrintConfig.standard()),
+        build_print_pdf(print_dir / "PrayTheRosary_Tabs.pdf", project_root=root, config=PrintConfig.tabs_only()),
+        build_print_pdf(print_dir / "PrayTheRosary_Tabs_Bleed.pdf", project_root=root, config=PrintConfig.tabs_and_bleed()),
+        build_print_pdf(vervante_master, project_root=root, config=PrintConfig.vervante_mode()),
+        vervante_dir / "PrayTheRosary_Vervante_Covers.pdf",
+        vervante_dir / "PrayTheRosary_Vervante_Interior.pdf",
+        vervante_dir / "PrayTheRosary_Vervante_Tabs.pdf",
     ]
-    return [build_print_pdf(path, project_root=root, config=cfg) for path, cfg in targets]
 
 
 # Bind orchestrator functions onto `scripts.pdf_builder` for direct package imports
@@ -253,7 +280,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         "-V", "--Vervante", "--vervante",
         action="store_true",
         dest="vervante",
-        help='Generate Vervante press-ready PDF (6.5" x 9.0" covers/tabs, 6.0" x 9.0" interior, bleed, crop marks)',
+        help='Generate Vervante press-ready PDFs (50-page combined + Covers, Interior, and Tabs split PDFs)',
     )
     parser.add_argument(
         "--office-depot", "--letter",
@@ -265,7 +292,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         "--all", "-a",
         action="store_true",
         dest="build_all",
-        help="Batch-generate all 4 tracked print PDF editions in assets/print/",
+        help="Batch-generate all 7 tracked print PDF files in assets/print/",
     )
     args = parser.parse_args(argv)
 
