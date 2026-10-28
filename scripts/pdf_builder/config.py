@@ -15,7 +15,7 @@ PostScript / PDF coordinate space:
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from reportlab.lib.colors import HexColor
 from reportlab.lib.units import inch
@@ -39,6 +39,9 @@ DEFAULT_OFFICE_DEPOT_PDF: Path = PROJECT_ROOT / "assets" / "print" / "PrayTheRos
 DEFAULT_TABS_PDF: Path = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs.pdf"
 DEFAULT_TABS_BLEED_PDF: Path = PROJECT_ROOT / "assets" / "print" / "PrayTheRosary_Tabs_Bleed.pdf"
 DEFAULT_VERVANTE_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante.pdf"
+DEFAULT_VERVANTE_COVERS_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Covers.pdf"
+DEFAULT_VERVANTE_INTERIOR_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Interior.pdf"
+DEFAULT_VERVANTE_TABS_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Tabs.pdf"
 
 # ---------------------------------------------------------------------------
 # Sacred Illuminated Parchment & Baroque Crimson Color Palettes
@@ -92,6 +95,20 @@ TAB_SPECS: Dict[int, Tuple[int, str]] = {
     45: (5, "C"), 46: (5, "C"),   # Sheet 23: Closing Prayers (opens to Spread 23: Pages 46-47)
 }
 
+# ---------------------------------------------------------------------------
+# Vervante Component Page Partitions (1-Based Page Numbers)
+# ---------------------------------------------------------------------------
+# Disjoint partition of the 50-page book into three uniform-dimension files
+# for Vervante die-cut tab printing (4 + 12 + 34 = 50 pages):
+#   - Covers (4 pages at 6.5" x 9.0"): Duplex Front Cover leaf (Pages 1-2) and Back Cover leaf (Pages 49-50)
+#   - Tabs (12 pages at 6.5" x 9.0"): 6 double-sided 1/6-cut index tab sheets (O, J, L, S, G, C)
+#   - Interior (34 pages at 6.0" x 9.0"): 17 standard double-sided interior sheets
+VERVANTE_COVER_PAGES: List[int] = [1, 2, 49, 50]
+VERVANTE_TAB_PAGES: List[int] = sorted(TAB_SPECS.keys())
+VERVANTE_INTERIOR_PAGES: List[int] = [
+    p for p in range(1, 51) if p not in VERVANTE_COVER_PAGES and p not in TAB_SPECS
+]
+
 
 def register_fonts(fonts_dir: Optional[Path] = None) -> None:
     """
@@ -137,7 +154,7 @@ def is_vervante_wide_page(page_num: int) -> bool:
       - 6 Index Tab Divider Sheets: 12 pages defined in `TAB_SPECS`
     All other 34 interior pages have a standard 6.0" x 9.0" trim width.
     """
-    return page_num in (1, 2, 49, 50) or (page_num in TAB_SPECS)
+    return page_num in VERVANTE_COVER_PAGES or (page_num in TAB_SPECS)
 
 
 class _DualFieldFactoryDescriptor:

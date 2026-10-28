@@ -24,6 +24,10 @@ import scripts.build_print_pdf as cli_module  # noqa: E402
 import scripts.pdf_builder as pkg_module  # noqa: E402
 from scripts.pdf_builder.config import (  # noqa: E402
     BLEED,
+    DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_INTERIOR_PDF,
+    DEFAULT_VERVANTE_PDF,
+    DEFAULT_VERVANTE_TABS_PDF,
     LETTER_H,
     LETTER_W,
     PAGE_H,
@@ -31,8 +35,11 @@ from scripts.pdf_builder.config import (  # noqa: E402
     TAB_EXT,
     TAB_PAGE_W,
     TAB_SPECS,
+    VERVANTE_COVER_PAGES,
     VERVANTE_CROP_MARGIN,
+    VERVANTE_INTERIOR_PAGES,
     VERVANTE_TAB_EXT,
+    VERVANTE_TAB_PAGES,
     PrintConfig,
     is_vervante_wide_page,
 )
@@ -147,6 +154,35 @@ class TestPdfBuilderModules(unittest.TestCase):
         for p in (7, 8, 10, 20, 47, 48):
             self.assertFalse(is_vervante_wide_page(p), f"Page {p} should be 6.0x9.0 interior page")
 
+    def test_vervante_page_partition_constants(self) -> None:
+        """Verifies VERVANTE_COVER_PAGES, VERVANTE_TAB_PAGES, and VERVANTE_INTERIOR_PAGES form a disjoint 4+12+34=50 partition."""
+        self.assertEqual(VERVANTE_COVER_PAGES, [1, 2, 49, 50])
+        self.assertEqual(VERVANTE_TAB_PAGES, [3, 4, 5, 6, 15, 16, 25, 26, 35, 36, 45, 46])
+        self.assertEqual(len(VERVANTE_COVER_PAGES), 4)
+        self.assertEqual(len(VERVANTE_TAB_PAGES), 12)
+        self.assertEqual(len(VERVANTE_INTERIOR_PAGES), 34)
+        self.assertEqual(
+            len(VERVANTE_COVER_PAGES) + len(VERVANTE_TAB_PAGES) + len(VERVANTE_INTERIOR_PAGES),
+            50,
+        )
+
+        # Pairwise disjointness and complete coverage of 1..50
+        cover_set = set(VERVANTE_COVER_PAGES)
+        tab_set = set(VERVANTE_TAB_PAGES)
+        interior_set = set(VERVANTE_INTERIOR_PAGES)
+        self.assertTrue(cover_set.isdisjoint(tab_set))
+        self.assertTrue(cover_set.isdisjoint(interior_set))
+        self.assertTrue(tab_set.isdisjoint(interior_set))
+        self.assertEqual(sorted(cover_set | tab_set | interior_set), list(range(1, 51)))
+
+        # Default Vervante path constants live in assets/print/Vervante/
+        self.assertEqual(DEFAULT_VERVANTE_COVERS_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
+        self.assertEqual(DEFAULT_VERVANTE_INTERIOR_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
+        self.assertEqual(DEFAULT_VERVANTE_TABS_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
+        self.assertEqual(DEFAULT_VERVANTE_COVERS_PDF.name, "PrayTheRosary_Vervante_Covers.pdf")
+        self.assertEqual(DEFAULT_VERVANTE_INTERIOR_PDF.name, "PrayTheRosary_Vervante_Interior.pdf")
+        self.assertEqual(DEFAULT_VERVANTE_TABS_PDF.name, "PrayTheRosary_Vervante_Tabs.pdf")
+
     def test_gold_box_and_content_box_geometry(self) -> None:
         """Verifies get_gold_box and get_content_box across odd, even, and overhang cover pages."""
         std = PrintConfig.standard()
@@ -241,6 +277,13 @@ class TestPdfBuilderModules(unittest.TestCase):
             "get_project_version",
             "load_all_data",
             "TAB_SPECS",
+            "DEFAULT_VERVANTE_PDF",
+            "DEFAULT_VERVANTE_COVERS_PDF",
+            "DEFAULT_VERVANTE_INTERIOR_PDF",
+            "DEFAULT_VERVANTE_TABS_PDF",
+            "VERVANTE_COVER_PAGES",
+            "VERVANTE_INTERIOR_PAGES",
+            "VERVANTE_TAB_PAGES",
             "is_vervante_wide_page",
             "get_gold_box",
             "get_content_box",
@@ -261,6 +304,7 @@ class TestPdfBuilderModules(unittest.TestCase):
             "render_credits_page",
             "render_page_50_back_cover",
             "postprocess_pdf",
+            "split_vervante_pdfs",
             "PAGE_W",
             "PAGE_H",
             "TAB_EXT",

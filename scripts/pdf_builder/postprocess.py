@@ -17,12 +17,16 @@ ReportLab natively sets only the `MediaBox`. After ReportLab finishes writing th
 raw PDF, `postprocess_pdf()` opens the file with PyMuPDF (`pymupdf`) to:
   1. Inject explicit `TrimBox` and `BleedBox` metadata on every page when bleed,
      Vervante, or Office Depot mode is active.
-  2. Run object garbage collection (`garbage=3`) to deduplicate shared font and
+   2. Run object garbage collection (`garbage=3`) to deduplicate shared font and
      XObject streams and apply lossless Flate compression (`deflate=True`), keeping
      each 50-page high-resolution PDF compact (~3.8 MB).
+   3. In Vervante mode (`cfg.vervante`), losslessly split the 50-page master PDF into
+     three uniform-dimension press component PDFs (`_Covers.pdf`, `_Interior.pdf`,
+     and `_Tabs.pdf`) in the same directory via `split_vervante_pdfs()`.
 """
 
 from pathlib import Path
+from typing import Tuple
 
 import pymupdf
 
@@ -30,11 +34,51 @@ from .config import (
     BLEED,
     PAGE_H,
     PAGE_W,
+    VERVANTE_COVER_PAGES,
     VERVANTE_CROP_MARGIN,
+    VERVANTE_INTERIOR_PAGES,
     VERVANTE_TAB_EXT,
-    is_vervante_wide_page,
+    VERVANTE_TAB_PAGES,
     PrintConfig,
+    is_vervante_wide_page,
 )
+
+
+def split_vervante_pdfs(master_pdf_path: Path) -> Tuple[Path, Path, Path]:
+    """
+    Losslessly splits a 50-page Vervante master PDF into three uniform-dimension
+    component PDFs in the same directory:
+      1. `<stem>_Covers.pdf` (4 pages: 1, 2, 49, 50 at 6.5" x 9.0" trim)
+      2. `<stem>_Interior.pdf` (34 standard interior pages at 6.0" x 9.0" trim)
+      3. `<stem>_Tabs.pdf` (12 pages: 6 double-sided tab sheets O, J, L, S, G, C at 6.5" x 9.0" trim)
+
+    Preserves all vector streams, embedded upright EB Garamond fonts, `TrimBox`,
+    `BleedBox`, and corner crop marks, saving each component with `garbage=3, deflate=True`.
+
+    Args:
+        master_pdf_path: Path to the 50-page Vervante combined PDF.
+
+    Returns:
+        Tuple of `(covers_path, interior_path, tabs_path)`.
+    """
+    master_pdf_path = Path(master_pdf_path)
+    covers_path = master_pdf_path.with_name(f"{master_pdf_path.stem}_Covers{master_pdf_path.suffix}")
+    interior_path = master_pdf_path.with_name(f"{master_pdf_path.stem}_Interior{master_pdf_path.suffix}")
+    tabs_path = master_pdf_path.with_name(f"{master_pdf_path.stem}_Tabs{master_pdf_path.suffix}")
+
+    for target_path, page_nums in (
+        (covers_path, VERVANTE_COVER_PAGES),
+        (interior_path, VERVANTE_INTERIOR_PAGES),
+        (tabs_path, VERVANTE_TAB_PAGES),
+    ):
+        doc = pymupdf.open(str(master_pdf_path))
+        try:
+            doc.select([p - 1 for p in page_nums])
+            doc.save(str(target_path), garbage=3, deflate=True)
+        finally:
+            doc.close()
+
+    return covers_path, interior_path, tabs_path
 
 
 def postprocess_pdf(
@@ -44,8 +88,9 @@ def postprocess_pdf(
     trans_y: float = 0.0,
 ) -> None:
     """
-    Configures PDF `TrimBox` and `BleedBox` metadata per page according to `cfg`
-    and optimizes/deflates internal PDF streams in-place.
+    Configures PDF `TrimBox` and `BleedBox` metadata per page according to `cfg`,
+    optimizes/deflates internal PDF streams in-place, and splits Vervante PDFs into
+    Covers, Interior, and Tabs component files when `cfg.vervante` is True.
 
     Args:
         output_path: Path to the newly generated ReportLab PDF file.
@@ -53,6 +98,7 @@ def postprocess_pdf(
         trans_x: Horizontal origin offset in points from `MediaBox` left edge to `TrimBox` left edge.
         trans_y: Vertical origin offset in points from `MediaBox` bottom/top edge to `TrimBox` edge.
     """
+    output_path = Path(output_path)
     doc = pymupdf.open(str(output_path))
     eff_w = cfg.effective_width
 
@@ -89,3 +135,6 @@ def postprocess_pdf(
     doc.save(str(temp_path), garbage=3, deflate=True)
     doc.close()
     temp_path.replace(output_path)
+
+    if cfg.vervante:
+        split_vervante_pdfs(output_path)

@@ -382,13 +382,28 @@ class TestBuildPrintPdf(unittest.TestCase):
                 doc_bleed.close()
 
     def test_vervante_flag_geometry_trimbox_and_monograms(self):
-        """Verifies -V / --Vervante mode produces 6.5x9 covers/tabs and 6.0x9 interior pages with bleed and crop marks."""
-        from scripts.build_print_pdf import TAB_SPECS, build_print_pdf, is_vervante_wide_page
+        """Verifies -V / --Vervante mode produces 50-page combined PDF plus Covers (4p), Interior (34p), and Tabs (12p) split PDFs."""
+        from scripts.build_print_pdf import (
+            TAB_SPECS,
+            VERVANTE_COVER_PAGES,
+            VERVANTE_INTERIOR_PAGES,
+            VERVANTE_TAB_PAGES,
+            build_print_pdf,
+            is_vervante_wide_page,
+        )
         with tempfile.TemporaryDirectory() as tmp_dir:
             vervante_pdf = Path(tmp_dir) / "vervante_test.pdf"
-            build_print_pdf(vervante_pdf, vervante=True)
-            self.assertTrue(vervante_pdf.exists())
+            covers_pdf = Path(tmp_dir) / "vervante_test_Covers.pdf"
+            interior_pdf = Path(tmp_dir) / "vervante_test_Interior.pdf"
+            tabs_pdf = Path(tmp_dir) / "vervante_test_Tabs.pdf"
 
+            build_print_pdf(vervante_pdf, vervante=True)
+            self.assertTrue(vervante_pdf.exists(), "Missing combined Vervante PDF")
+            self.assertTrue(covers_pdf.exists(), "Missing split Vervante Covers PDF")
+            self.assertTrue(interior_pdf.exists(), "Missing split Vervante Interior PDF")
+            self.assertTrue(tabs_pdf.exists(), "Missing split Vervante Tabs PDF")
+
+            # 1. Combined 50-page Vervante master PDF
             doc_v = pymupdf.open(str(vervante_pdf))
             try:
                 self.assertEqual(len(doc_v), 50)
@@ -406,28 +421,85 @@ class TestBuildPrintPdf(unittest.TestCase):
             finally:
                 doc_v.close()
 
+            # 2. Split Covers PDF (4 pages: 1, 2, 49, 50 at uniform 468 x 648 pt TrimBox)
+            doc_cov = pymupdf.open(str(covers_pdf))
+            try:
+                self.assertEqual(len(doc_cov), len(VERVANTE_COVER_PAGES))
+                self.assertEqual(len(doc_cov), 4)
+                for page in doc_cov:
+                    self.assertAlmostEqual(page.rect.width, 522.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 702.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.width, 468.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.height, 648.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.width, 486.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.height, 666.0, delta=1.0)
+                self.assertIn("PRAY THE ROSARY", " ".join(doc_cov[0].get_text().split()))
+                self.assertIn("Pope St. John Paul II", " ".join(doc_cov[3].get_text().split()))
+            finally:
+                doc_cov.close()
+
+            # 3. Split Tabs PDF (12 pages: 6 double-sided tab sheets O, J, L, S, G, C at uniform 468 x 648 pt TrimBox)
+            doc_tabs = pymupdf.open(str(tabs_pdf))
+            try:
+                self.assertEqual(len(doc_tabs), len(VERVANTE_TAB_PAGES))
+                self.assertEqual(len(doc_tabs), 12)
+                for page in doc_tabs:
+                    self.assertAlmostEqual(page.rect.width, 522.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 702.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.width, 468.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.height, 648.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.width, 486.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.height, 666.0, delta=1.0)
+                for split_idx, orig_pnum in enumerate(VERVANTE_TAB_PAGES):
+                    _, expected_monogram = TAB_SPECS[orig_pnum]
+                    self.assertIn(expected_monogram, doc_tabs[split_idx].get_text())
+            finally:
+                doc_tabs.close()
+
+            # 4. Split Interior PDF (34 pages: 17 standard double-sided interior sheets at uniform 432 x 648 pt TrimBox)
+            doc_int = pymupdf.open(str(interior_pdf))
+            try:
+                self.assertEqual(len(doc_int), len(VERVANTE_INTERIOR_PAGES))
+                self.assertEqual(len(doc_int), 34)
+                for page in doc_int:
+                    self.assertAlmostEqual(page.rect.width, 486.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 702.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.width, 432.0, delta=1.0)
+                    self.assertAlmostEqual(page.trimbox.height, 648.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.width, 450.0, delta=1.0)
+                    self.assertAlmostEqual(page.bleedbox.height, 666.0, delta=1.0)
+            finally:
+                doc_int.close()
+
     def test_build_all_print_pdfs_and_cli_all_flag(self):
-        """Verifies build_all_print_pdfs and --all CLI flag generate all 4 tracked PDF editions."""
+        """Verifies build_all_print_pdfs and --all CLI flag generate all 7 tracked print PDF files."""
         from unittest.mock import patch
         from scripts.build_print_pdf import build_all_print_pdfs, main
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_root = Path(tmp_dir)
             generated = build_all_print_pdfs(project_root=tmp_root)
-            self.assertEqual(len(generated), 4)
+            self.assertEqual(len(generated), 7)
 
-            expected_rel_paths = [
-                Path("assets/print/PrayTheRosary.pdf"),
-                Path("assets/print/PrayTheRosary_Tabs.pdf"),
-                Path("assets/print/PrayTheRosary_Tabs_Bleed.pdf"),
-                Path("assets/print/Vervante/PrayTheRosary_Vervante.pdf"),
+            expected_specs = [
+                (Path("assets/print/PrayTheRosary.pdf"), 50),
+                (Path("assets/print/PrayTheRosary_Tabs.pdf"), 50),
+                (Path("assets/print/PrayTheRosary_Tabs_Bleed.pdf"), 50),
+                (Path("assets/print/Vervante/PrayTheRosary_Vervante.pdf"), 50),
+                (Path("assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf"), 4),
+                (Path("assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf"), 34),
+                (Path("assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf"), 12),
             ]
-            for path_obj, rel_path in zip(generated, expected_rel_paths):
+            for path_obj, (rel_path, expected_pages) in zip(generated, expected_specs):
                 self.assertEqual(path_obj, tmp_root / rel_path)
                 self.assertTrue(path_obj.exists(), f"Missing generated PDF: {path_obj}")
                 doc = pymupdf.open(str(path_obj))
                 try:
-                    self.assertEqual(len(doc), 50, f"Expected 50 pages in {path_obj.name}")
+                    self.assertEqual(
+                        len(doc),
+                        expected_pages,
+                        f"Expected {expected_pages} pages in {path_obj.name}, got {len(doc)}",
+                    )
                 finally:
                     doc.close()
 

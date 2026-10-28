@@ -36,8 +36,11 @@ orchestrated by `scripts/build_print_pdf.py`:
 
   5. `postprocess.py`:
      - `postprocess_pdf(output_path, cfg, trans_x, trans_y)`: Configures PyMuPDF `TrimBox`
-       and `BleedBox` metadata per print profile and performs PDF stream garbage collection
-       and Flate compression.
+       and `BleedBox` metadata per print profile, performs PDF stream garbage collection
+       and Flate compression, and invokes `split_vervante_pdfs()` in Vervante mode.
+     - `split_vervante_pdfs(master_pdf_path)`: Losslessly splits a 50-page Vervante master PDF
+       into `<stem>_Covers.pdf` (4 pages), `<stem>_Interior.pdf` (34 pages), and
+       `<stem>_Tabs.pdf` (12 pages).
 """
 
 from typing import Any
@@ -60,7 +63,10 @@ from .config import (
     DEFAULT_OUTPUT_PDF,
     DEFAULT_TABS_BLEED_PDF,
     DEFAULT_TABS_PDF,
+    DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_INTERIOR_PDF,
     DEFAULT_VERVANTE_PDF,
+    DEFAULT_VERVANTE_TABS_PDF,
     FONTS_DIR,
     LETTER_H,
     LETTER_W,
@@ -71,8 +77,11 @@ from .config import (
     TAB_EXT,
     TAB_PAGE_W,
     TAB_SPECS,
+    VERVANTE_COVER_PAGES,
     VERVANTE_CROP_MARGIN,
+    VERVANTE_INTERIOR_PAGES,
     VERVANTE_TAB_EXT,
+    VERVANTE_TAB_PAGES,
     PrintConfig,
     is_vervante_wide_page,
     register_fonts,
@@ -87,7 +96,7 @@ from .page_renderers import (
     render_page_50_back_cover,
     render_prayer_sequence_page,
 )
-from .postprocess import postprocess_pdf
+from .postprocess import postprocess_pdf, split_vervante_pdfs
 from .primitives import (
     clear_image_cache,
     draw_crop_marks,
@@ -121,7 +130,10 @@ __all__ = [
     "DEFAULT_OUTPUT_PDF",
     "DEFAULT_TABS_BLEED_PDF",
     "DEFAULT_TABS_PDF",
+    "DEFAULT_VERVANTE_COVERS_PDF",
+    "DEFAULT_VERVANTE_INTERIOR_PDF",
     "DEFAULT_VERVANTE_PDF",
+    "DEFAULT_VERVANTE_TABS_PDF",
     "FONTS_DIR",
     "LETTER_H",
     "LETTER_W",
@@ -133,8 +145,11 @@ __all__ = [
     "TAB_EXT",
     "TAB_PAGE_W",
     "TAB_SPECS",
+    "VERVANTE_COVER_PAGES",
     "VERVANTE_CROP_MARGIN",
+    "VERVANTE_INTERIOR_PAGES",
     "VERVANTE_TAB_EXT",
+    "VERVANTE_TAB_PAGES",
     "build_all_print_pdfs",
     "build_print_pdf",
     "clear_image_cache",
@@ -161,6 +176,7 @@ __all__ = [
     "render_page_1_front_cover",
     "render_page_50_back_cover",
     "render_prayer_sequence_page",
+    "split_vervante_pdfs",
 ]
 
 
