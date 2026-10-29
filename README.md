@@ -110,12 +110,12 @@ The repository includes a complete automated Python PDF generation pipeline that
     ```powershell
     python scripts/build_print_pdf.py -V
     ```
-    Generates `assets/print/Vervante/PrayTheRosary_Vervante.pdf` (50 pages) engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks. Also automatically and losslessly splits the master PDF into 3 uniform-dimension component PDFs in `assets/print/Vervante/`: `PrayTheRosary_Vervante_Covers.pdf` (4 pages at 6.5" × 9.0"), `PrayTheRosary_Vervante_Interior.pdf` (34 pages at 6.0" × 9.0"), and `PrayTheRosary_Vervante_Tabs.pdf` (12 pages at 6.5" × 9.0").
+    Generates all 5 Vervante print-ready PDFs in `assets/print/Vervante/` engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks. Automatically and losslessly splits the master PDF into uniform-dimension component PDFs alongside the assembly guide: `PrayTheRosary_Vervante.pdf` (50 pages), `PrayTheRosary_Vervante_Covers.pdf` (4 pages at 6.5" × 9.0"), `PrayTheRosary_Vervante_Interior.pdf` (34 pages at 6.0" × 9.0"), `PrayTheRosary_Vervante_Tabs.pdf` (12 pages at 6.5" × 9.0"), and `README_Print_and_Assembly_Guide.pdf` (2 pages at 8.5" × 11.0" US Letter).
   - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
     ```powershell
     python scripts/build_print_pdf.py --all
     ```
-    Sequentially builds and verifies all 7 tracked print PDFs across 4 editions in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, `Vervante/PrayTheRosary_Vervante.pdf`, `Vervante/PrayTheRosary_Vervante_Covers.pdf`, `Vervante/PrayTheRosary_Vervante_Interior.pdf`, and `Vervante/PrayTheRosary_Vervante_Tabs.pdf`).
+    Sequentially builds and verifies all 8 tracked print PDFs across 4 editions in `assets/print/` (`PrayTheRosary.pdf`, `PrayTheRosary_Tabs.pdf`, `PrayTheRosary_Tabs_Bleed.pdf`, `Vervante/PrayTheRosary_Vervante.pdf`, `Vervante/PrayTheRosary_Vervante_Covers.pdf`, `Vervante/PrayTheRosary_Vervante_Interior.pdf`, `Vervante/PrayTheRosary_Vervante_Tabs.pdf`, and `Vervante/README_Print_and_Assembly_Guide.pdf`).
   - **Custom Output Path (`--output <path>`):**
     ```powershell
     python scripts/build_print_pdf.py --output "path/to/custom.pdf"
@@ -172,7 +172,7 @@ python mcp_client.py raw '<json>'    # Sends custom MCP JSON payload
 This repository includes production-tested GitHub Actions workflows:
 - **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`.aab`) configured with full-screen immersive mode (`screen/immersive_mode=true`), signs the bundle, and publishes release assets.
 - **Web Release (`web_release.yml`):** Automatically builds an HTML5 Web export and attaches a zip archive to GitHub Releases.
-- **Print PDF Release (`pdf_release.yml`):** Automatically triggers on tag push (`v*`) or manual dispatch. Validates the test suite (`test_*.py`), builds the canonical 50-page print PDF, and attaches `PrayTheRosary.pdf` to the GitHub Release.
+- **Print PDF Release (`pdf_release.yml`):** Automatically triggers on tag push (`v*`) or manual dispatch. Validates the test suite (`test_*.py`), builds the canonical 50-page print PDF and the 5-PDF Vervante press package, archives the Vervante package flat into `PrayTheRosary_Vervante.zip`, and attaches both `PrayTheRosary.pdf` and `PrayTheRosary_Vervante.zip` to the GitHub Release.
 - **GL Compatibility Renderer:** Configured with `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0), guaranteeing optimal compatibility across Web, Desktop, and Mobile.
 
 ---

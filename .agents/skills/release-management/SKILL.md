@@ -50,9 +50,9 @@ Follow these steps strictly in order:
    - Update `version/name` to the user-requested target version. **CRITICAL:** Ensure the version uses strict 3-digit semantic versioning (e.g., "0.6.0").
    - Synchronize `config/version="<VERSION>"` in `game/project.godot` under `[application]` to match the new version.
    - Synchronize fallback version strings in `game/scripts/ui/pages/credits_page_card.gd`, `game/scenes/ui/pages/credits_page_card.tscn`, `scripts/pdf_builder/data_loader.py` (re-exported by `scripts/build_print_pdf.py`), and documentation examples (`documents/book_requirements.md`, `documents/references.md`, `documents/manual_testing.md`).
-   - Regenerate all seven tracked print PDFs with the updated version colophon by running:
+   - Regenerate all eight tracked print PDFs with the updated version colophon by running:
      `python scripts/build_print_pdf.py --all`
-   - Stage and save all modified files: `git add game/export_presets.cfg game/project.godot assets/print/PrayTheRosary*.pdf assets/print/Vervante/PrayTheRosary_Vervante*.pdf`.
+   - Stage and save all modified files: `git add game/export_presets.cfg game/project.godot assets/print/PrayTheRosary*.pdf assets/print/Vervante/*.pdf`.
    
 2. **Commit & Push:**
    - Commit the changes directly to main: `git commit -m "chore: bump version to <VERSION>"`
@@ -79,7 +79,7 @@ Follow these steps strictly in order:
    - **CRITICAL:** If any run failed, STOP immediately. Do not publish the release. Report the failure back to the orchestrator.
 
 6. **Publish Release:**
-   - If all CI runs succeeded (which automatically attached the `.aab`, `.zip`, and `.pdf` artifacts to the draft release), publish it by removing the draft status:
+   - If all CI runs succeeded (which automatically attached the Android `.aab`, Web `.zip`, and print PDF artifacts `PrayTheRosary.pdf` and `PrayTheRosary_Vervante.zip` to the draft release), publish it by removing the draft status:
      `gh release edit v<VERSION> --draft=false`
 
 7. **Handoff:** Report back to the orchestrator that the release was successfully published and provide the URL to the GitHub Release.
