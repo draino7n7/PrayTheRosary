@@ -41,6 +41,11 @@ orchestrated by `scripts/build_print_pdf.py`:
      - `split_vervante_pdfs(master_pdf_path)`: Losslessly splits a 50-page Vervante master PDF
        into `<stem>_Covers.pdf` (4 pages), `<stem>_Interior.pdf` (34 pages), and
        `<stem>_Tabs.pdf` (12 pages).
+
+  6. `vervante_guide.py`:
+     - `build_vervante_assembly_guide(output_path, project_root)`: Generates the 2-page
+       8.5" x 11" US Letter Vervante Print & Bindery Assembly Guide PDF
+       (`README_Print_and_Assembly_Guide.pdf`).
 """
 
 from typing import Any
@@ -64,6 +69,7 @@ from .config import (
     DEFAULT_TABS_BLEED_PDF,
     DEFAULT_TABS_PDF,
     DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_GUIDE_PDF,
     DEFAULT_VERVANTE_INTERIOR_PDF,
     DEFAULT_VERVANTE_PDF,
     DEFAULT_VERVANTE_TABS_PDF,
@@ -111,6 +117,7 @@ from .primitives import (
     measure_header_block,
     measure_para,
 )
+from .vervante_guide import build_vervante_assembly_guide
 
 __all__ = [
     "ARTWORK_DIR",
@@ -131,6 +138,7 @@ __all__ = [
     "DEFAULT_TABS_BLEED_PDF",
     "DEFAULT_TABS_PDF",
     "DEFAULT_VERVANTE_COVERS_PDF",
+    "DEFAULT_VERVANTE_GUIDE_PDF",
     "DEFAULT_VERVANTE_INTERIOR_PDF",
     "DEFAULT_VERVANTE_PDF",
     "DEFAULT_VERVANTE_TABS_PDF",
@@ -152,6 +160,7 @@ __all__ = [
     "VERVANTE_TAB_PAGES",
     "build_all_print_pdfs",
     "build_print_pdf",
+    "build_vervante_assembly_guide",
     "clear_image_cache",
     "draw_crop_marks",
     "draw_framed_image",

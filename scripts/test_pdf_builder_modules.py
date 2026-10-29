@@ -11,10 +11,13 @@ Validates:
 """
 
 import dataclasses
+import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+import pymupdf
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -25,6 +28,7 @@ import scripts.pdf_builder as pkg_module  # noqa: E402
 from scripts.pdf_builder.config import (  # noqa: E402
     BLEED,
     DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_GUIDE_PDF,
     DEFAULT_VERVANTE_INTERIOR_PDF,
     DEFAULT_VERVANTE_PDF,
     DEFAULT_VERVANTE_TABS_PDF,
@@ -53,6 +57,7 @@ from scripts.pdf_builder.primitives import (  # noqa: E402
     measure_header_block,
     measure_para,
 )
+from scripts.pdf_builder.vervante_guide import build_vervante_assembly_guide  # noqa: E402
 
 
 class TestPdfBuilderModules(unittest.TestCase):
@@ -179,9 +184,11 @@ class TestPdfBuilderModules(unittest.TestCase):
         self.assertEqual(DEFAULT_VERVANTE_COVERS_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
         self.assertEqual(DEFAULT_VERVANTE_INTERIOR_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
         self.assertEqual(DEFAULT_VERVANTE_TABS_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
+        self.assertEqual(DEFAULT_VERVANTE_GUIDE_PDF.parent, DEFAULT_VERVANTE_PDF.parent)
         self.assertEqual(DEFAULT_VERVANTE_COVERS_PDF.name, "PrayTheRosary_Vervante_Covers.pdf")
         self.assertEqual(DEFAULT_VERVANTE_INTERIOR_PDF.name, "PrayTheRosary_Vervante_Interior.pdf")
         self.assertEqual(DEFAULT_VERVANTE_TABS_PDF.name, "PrayTheRosary_Vervante_Tabs.pdf")
+        self.assertEqual(DEFAULT_VERVANTE_GUIDE_PDF.name, "README_Print_and_Assembly_Guide.pdf")
 
     def test_gold_box_and_content_box_geometry(self) -> None:
         """Verifies get_gold_box and get_content_box across odd, even, and overhang cover pages."""
@@ -273,12 +280,14 @@ class TestPdfBuilderModules(unittest.TestCase):
         expected_symbols = [
             "build_print_pdf",
             "build_all_print_pdfs",
+            "build_vervante_assembly_guide",
             "PrintConfig",
             "get_project_version",
             "load_all_data",
             "TAB_SPECS",
             "DEFAULT_VERVANTE_PDF",
             "DEFAULT_VERVANTE_COVERS_PDF",
+            "DEFAULT_VERVANTE_GUIDE_PDF",
             "DEFAULT_VERVANTE_INTERIOR_PDF",
             "DEFAULT_VERVANTE_TABS_PDF",
             "VERVANTE_COVER_PAGES",
@@ -322,6 +331,55 @@ class TestPdfBuilderModules(unittest.TestCase):
             self.assertTrue(hasattr(cli_module, sym), f"scripts.build_print_pdf missing re-export: {sym}")
             self.assertTrue(hasattr(pkg_module, sym), f"scripts.pdf_builder missing export: {sym}")
             self.assertIs(getattr(cli_module, sym), getattr(pkg_module, sym))
+
+    def test_build_vervante_assembly_guide_custom_output_and_dynamic_data(self) -> None:
+        """Verifies build_vervante_assembly_guide custom output path, dynamic JSON data resolution, 2-page US Letter layout, and upright font conformance."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            data_dir = tmp_root / "game" / "data"
+            data_dir.mkdir(parents=True, exist_ok=True)
+
+            # Copy canonical JSON files and customize headings/titles to verify dynamic data resolution
+            orig_data = PROJECT_ROOT / "game" / "data"
+            book_layout = json.loads((orig_data / "book_layout.json").read_text(encoding="utf-8"))
+            prayers = json.loads((orig_data / "prayers.json").read_text(encoding="utf-8"))
+            mysteries = json.loads((orig_data / "mysteries.json").read_text(encoding="utf-8"))
+
+            book_layout["front_cover"]["title"] = "Custom Front Cover Title"
+            book_layout["spreads"][0]["left_page"]["heading"] = "Custom History Heading"
+            mysteries["mystery_sets"][0]["decades"][0]["title"] = "Custom Annunciation Title"
+
+            (data_dir / "book_layout.json").write_text(json.dumps(book_layout), encoding="utf-8")
+            (data_dir / "prayers.json").write_text(json.dumps(prayers), encoding="utf-8")
+            (data_dir / "mysteries.json").write_text(json.dumps(mysteries), encoding="utf-8")
+
+            custom_pdf = tmp_root / "custom_out" / "Custom_Assembly_Guide.pdf"
+            result_path = build_vervante_assembly_guide(output_path=custom_pdf, project_root=tmp_root)
+            self.assertEqual(result_path, custom_pdf)
+            self.assertTrue(custom_pdf.exists())
+
+            doc = pymupdf.open(str(custom_pdf))
+            try:
+                self.assertEqual(len(doc), 2)
+                embedded_fonts = set()
+                for page in doc:
+                    self.assertAlmostEqual(page.rect.width, LETTER_W, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, LETTER_H, delta=1.0)
+                    for font_entry in page.get_fonts():
+                        base_name = font_entry[3]
+                        embedded_fonts.add(base_name)
+                        self.assertNotIn("italic", base_name.lower())
+                        self.assertNotIn("oblique", base_name.lower())
+
+                self.assertIn("Helvetica", embedded_fonts)
+                self.assertIn("Helvetica-Bold", embedded_fonts)
+
+                p2_text = " ".join(doc[1].get_text().split())
+                self.assertIn("CUSTOM FRONT COVER TITLE", p2_text)
+                self.assertIn("Custom History Heading", p2_text)
+                self.assertIn("The First Joyful Mystery: Custom Annunciation Title", p2_text)
+            finally:
+                doc.close()
 
 
 if __name__ == "__main__":
