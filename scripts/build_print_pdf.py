@@ -13,9 +13,9 @@ Supported CLI Modes:
   - -V / --Vervante: Vervante press-ready 50-page PDF (6.5" x 9.0" covers/tabs with full-length
                     crimson tab strips, 6.0" x 9.0" interior, 0.125" bleed & crop marks) ->
                     assets/print/Vervante/PrayTheRosary_Vervante.pdf plus 3 split component PDFs
-                    (_Covers.pdf, _Interior.pdf, _Tabs.pdf)
+                    (_Covers.pdf, _Interior.pdf, _Tabs.pdf) and README_Print_and_Assembly_Guide.pdf
   - --office-depot: Centers 6.0" x 9.0" pages with 0.125" bleed and crop marks on 8.5" x 11.0" US Letter
-  - --all / -a:     Batch-builds all 7 tracked print PDF files across 4 editions in assets/print/
+  - --all / -a:     Batch-builds all 8 tracked print PDF files across 4 editions in assets/print/
 """
 
 import argparse
@@ -50,6 +50,7 @@ from scripts.pdf_builder.config import (  # noqa: E402
     DEFAULT_TABS_BLEED_PDF,
     DEFAULT_TABS_PDF,
     DEFAULT_VERVANTE_COVERS_PDF,
+    DEFAULT_VERVANTE_GUIDE_PDF,
     DEFAULT_VERVANTE_INTERIOR_PDF,
     DEFAULT_VERVANTE_PDF,
     DEFAULT_VERVANTE_TABS_PDF,
@@ -97,6 +98,7 @@ from scripts.pdf_builder.primitives import (  # noqa: E402
     measure_header_block,
     measure_para,
 )
+from scripts.pdf_builder.vervante_guide import build_vervante_assembly_guide  # noqa: E402
 
 
 def build_print_pdf(
@@ -221,6 +223,10 @@ def build_print_pdf(
 
     size_mb = output_path.stat().st_size / (1024 * 1024)
     if cfg.vervante:
+        guide_path = build_vervante_assembly_guide(
+            output_path.parent / "README_Print_and_Assembly_Guide.pdf",
+            project_root=data_root,
+        )
         print(f"Generated ({cfg.mode_label}): {output_path} (50 pages, {size_mb:.2f} MB)")
         for split_label, split_suffix, page_count in (
             ("Vervante Covers", "_Covers", len(VERVANTE_COVER_PAGES)),
@@ -231,6 +237,9 @@ def build_print_pdf(
             if split_path.exists():
                 split_mb = split_path.stat().st_size / (1024 * 1024)
                 print(f"Generated ({split_label}): {split_path} ({page_count} pages, {split_mb:.2f} MB)")
+        if guide_path.exists():
+            guide_kb = guide_path.stat().st_size / 1024.0
+            print(f"Generated (Vervante Assembly Guide): {guide_path} (2 pages, {guide_kb:.1f} KB)")
     else:
         print(f"Generated ({cfg.mode_label}): {output_path} ({size_mb:.2f} MB)")
     return output_path
@@ -241,7 +250,7 @@ def build_all_print_pdfs(
     output_dir: Optional[Path] = None,
 ) -> List[Path]:
     """
-    Sequentially builds all 7 tracked print PDF files across 4 editions under `assets/print/`:
+    Sequentially builds all 8 tracked print PDF files across 4 editions under `assets/print/`:
       1. `PrayTheRosary.pdf` (Standard 6.0" x 9.0", 50 pages)
       2. `PrayTheRosary_Tabs.pdf` (Tabbed 6.375" x 9.0", 50 pages)
       3. `PrayTheRosary_Tabs_Bleed.pdf` (Tabbed + Bleed 6.625" x 9.25", 50 pages)
@@ -249,6 +258,7 @@ def build_all_print_pdfs(
       5. `Vervante/PrayTheRosary_Vervante_Covers.pdf` (Vervante Covers, 4 pages at 6.5" x 9.0")
       6. `Vervante/PrayTheRosary_Vervante_Interior.pdf` (Vervante Interior, 34 pages at 6.0" x 9.0")
       7. `Vervante/PrayTheRosary_Vervante_Tabs.pdf` (Vervante Tabs, 12 pages at 6.5" x 9.0")
+      8. `Vervante/README_Print_and_Assembly_Guide.pdf` (Vervante Print & Bindery Assembly Guide, 2 pages at 8.5" x 11.0")
     """
     root = Path(project_root) if project_root is not None else PROJECT_ROOT
     print_dir = Path(output_dir) if output_dir is not None else (root / "assets" / "print")
@@ -262,6 +272,7 @@ def build_all_print_pdfs(
         vervante_dir / "PrayTheRosary_Vervante_Covers.pdf",
         vervante_dir / "PrayTheRosary_Vervante_Interior.pdf",
         vervante_dir / "PrayTheRosary_Vervante_Tabs.pdf",
+        vervante_dir / "README_Print_and_Assembly_Guide.pdf",
     ]
 
 
@@ -280,7 +291,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         "-V", "--Vervante", "--vervante",
         action="store_true",
         dest="vervante",
-        help='Generate Vervante press-ready PDFs (50-page combined + Covers, Interior, and Tabs split PDFs)',
+        help='Generate Vervante press-ready PDFs (50-page combined + Covers, Interior, Tabs, and Assembly Guide PDFs)',
     )
     parser.add_argument(
         "--office-depot", "--letter",
@@ -292,7 +303,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         "--all", "-a",
         action="store_true",
         dest="build_all",
-        help="Batch-generate all 7 tracked print PDF files in assets/print/",
+        help="Batch-generate all 8 tracked print PDF files in assets/print/",
     )
     args = parser.parse_args(argv)
 

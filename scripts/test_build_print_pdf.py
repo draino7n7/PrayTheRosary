@@ -382,7 +382,7 @@ class TestBuildPrintPdf(unittest.TestCase):
                 doc_bleed.close()
 
     def test_vervante_flag_geometry_trimbox_and_monograms(self):
-        """Verifies -V / --Vervante mode produces 50-page combined PDF plus Covers (4p), Interior (34p), and Tabs (12p) split PDFs."""
+        """Verifies -V / --Vervante mode produces 50-page combined PDF plus Covers (4p), Interior (34p), Tabs (12p), and Assembly Guide (2p) PDFs."""
         from scripts.build_print_pdf import (
             TAB_SPECS,
             VERVANTE_COVER_PAGES,
@@ -396,12 +396,14 @@ class TestBuildPrintPdf(unittest.TestCase):
             covers_pdf = Path(tmp_dir) / "vervante_test_Covers.pdf"
             interior_pdf = Path(tmp_dir) / "vervante_test_Interior.pdf"
             tabs_pdf = Path(tmp_dir) / "vervante_test_Tabs.pdf"
+            guide_pdf = Path(tmp_dir) / "README_Print_and_Assembly_Guide.pdf"
 
             build_print_pdf(vervante_pdf, vervante=True)
             self.assertTrue(vervante_pdf.exists(), "Missing combined Vervante PDF")
             self.assertTrue(covers_pdf.exists(), "Missing split Vervante Covers PDF")
             self.assertTrue(interior_pdf.exists(), "Missing split Vervante Interior PDF")
             self.assertTrue(tabs_pdf.exists(), "Missing split Vervante Tabs PDF")
+            self.assertTrue(guide_pdf.exists(), "Missing Vervante Print & Assembly Guide PDF")
 
             # 1. Combined 50-page Vervante master PDF
             doc_v = pymupdf.open(str(vervante_pdf))
@@ -471,15 +473,36 @@ class TestBuildPrintPdf(unittest.TestCase):
             finally:
                 doc_int.close()
 
+            # 5. Vervante Print & Bindery Assembly Guide PDF (2 pages at 612 x 792 pt US Letter)
+            doc_guide = pymupdf.open(str(guide_pdf))
+            try:
+                self.assertEqual(len(doc_guide), 2)
+                for page in doc_guide:
+                    self.assertAlmostEqual(page.rect.width, 612.0, delta=1.0)
+                    self.assertAlmostEqual(page.rect.height, 792.0, delta=1.0)
+                    for font_entry in page.get_fonts():
+                        base_name = font_entry[3].lower()
+                        self.assertNotIn("italic", base_name)
+                        self.assertNotIn("oblique", base_name)
+                guide_text = " ".join(p.get_text() for p in doc_guide)
+                guide_text_norm = " ".join(guide_text.split())
+                self.assertIn("PRINT & BINDERY ASSEMBLY GUIDE", guide_text_norm)
+                self.assertIn("0 - 4 - 4 - 4 - 4 - 1", guide_text_norm)
+                self.assertIn("The First Joyful Mystery: The Annunciation", guide_text_norm)
+                self.assertIn("The Fifth Glorious Mystery: The Coronation of the Blessed Virgin Mary", guide_text_norm)
+                self.assertIn("Sacred Artwork Credits (Part II) & Colophon", guide_text_norm)
+            finally:
+                doc_guide.close()
+
     def test_build_all_print_pdfs_and_cli_all_flag(self):
-        """Verifies build_all_print_pdfs and --all CLI flag generate all 7 tracked print PDF files."""
+        """Verifies build_all_print_pdfs and --all CLI flag generate all 8 tracked print PDF files."""
         from unittest.mock import patch
         from scripts.build_print_pdf import build_all_print_pdfs, main
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_root = Path(tmp_dir)
             generated = build_all_print_pdfs(project_root=tmp_root)
-            self.assertEqual(len(generated), 7)
+            self.assertEqual(len(generated), 8)
 
             expected_specs = [
                 (Path("assets/print/PrayTheRosary.pdf"), 50),
@@ -489,6 +512,7 @@ class TestBuildPrintPdf(unittest.TestCase):
                 (Path("assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf"), 4),
                 (Path("assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf"), 34),
                 (Path("assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf"), 12),
+                (Path("assets/print/Vervante/README_Print_and_Assembly_Guide.pdf"), 2),
             ]
             for path_obj, (rel_path, expected_pages) in zip(generated, expected_specs):
                 self.assertEqual(path_obj, tmp_root / rel_path)

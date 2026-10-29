@@ -15,6 +15,7 @@ Contains strictly print-shop and bindery assembly instructions (zero software,
 Python script, or repository references).
 """
 
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -33,13 +34,15 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-PACKAGE_DIR: Path = Path(__file__).resolve().parent
-SCRIPT_DIR: Path = PACKAGE_DIR.parent
-PROJECT_ROOT: Path = SCRIPT_DIR.parent
-
-DEFAULT_VERVANTE_GUIDE_PDF: Path = (
-    PROJECT_ROOT / "assets" / "print" / "Vervante" / "README_Print_and_Assembly_Guide.pdf"
-)
+try:
+    from .config import DEFAULT_VERVANTE_GUIDE_PDF, PROJECT_ROOT
+    from .data_loader import load_all_data
+except ImportError:
+    _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+    if str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from scripts.pdf_builder.config import DEFAULT_VERVANTE_GUIDE_PDF, PROJECT_ROOT
+    from scripts.pdf_builder.data_loader import load_all_data
 
 CRIMSON: HexColor = HexColor("#4A1215")
 CRIMSON_LIGHT: HexColor = HexColor("#F6ECEC")
@@ -50,19 +53,47 @@ ROW_ALT: HexColor = HexColor("#FAF8F5")
 WHITE = colors.white
 
 
-def build_vervante_assembly_guide(output_path: Optional[Path] = None) -> Path:
+def build_vervante_assembly_guide(
+    output_path: Optional[Path] = None,
+    project_root: Optional[Path] = None,
+) -> Path:
     """
     Generates the 2-page 8.5" x 11" US Letter Vervante Print & Bindery Assembly Guide PDF.
 
     Args:
         output_path: Target path for the generated guide PDF. Defaults to
                      `assets/print/Vervante/README_Print_and_Assembly_Guide.pdf`.
+        project_root: Optional repository root path used to load canonical JSON data
+                      from `game/data/`. Defaults to `PROJECT_ROOT`.
 
     Returns:
         Resolved `Path` to the generated PDF.
     """
     out_pdf = Path(output_path) if output_path is not None else DEFAULT_VERVANTE_GUIDE_PDF
     out_pdf.parent.mkdir(parents=True, exist_ok=True)
+
+    root = Path(project_root) if project_root is not None else PROJECT_ROOT
+    data_root = root if (root / "game" / "data").exists() else PROJECT_ROOT
+    book_layout, _, _, mysteries_by_id, _ = load_all_data(data_root)
+
+    book_title = book_layout.get("book_title", "Pray the Rosary")
+    book_subtitle = book_layout.get("subtitle", "A Contemplative Visual Guide to the Twenty Mysteries")
+    front_cover_title = book_layout["front_cover"]["title"].upper()
+    back_cover_title = book_layout["back_cover"]["title"].upper()
+
+    spreads_by_id = {sp["id"]: sp for sp in book_layout["spreads"]}
+    p2_heading = spreads_by_id["history_and_how_to_use"]["left_page"]["heading"]
+    p3_heading = spreads_by_id["history_and_how_to_use"]["right_page"]["heading"]
+    p4_heading = spreads_by_id["opening_prayers"]["left_page"]["heading"]
+    p5_heading = spreads_by_id["opening_prayers"]["right_page"]["heading"]
+    p46_heading = spreads_by_id["closing_prayers"]["left_page"]["heading"]
+    p47_heading = spreads_by_id["closing_prayers"]["right_page"]["heading"]
+    p48_heading = spreads_by_id["credits_and_attributions"]["left_page"]["heading"]
+    p49_heading = spreads_by_id["credits_and_attributions"]["right_page"]["heading"]
+
+    def m_label(mystery_id: str) -> str:
+        mys = mysteries_by_id[mystery_id]
+        return f"{mys['ordinal_label']}: {mys['title']}"
 
     doc = SimpleDocTemplate(
         str(out_pdf),
@@ -159,7 +190,7 @@ def build_vervante_assembly_guide(output_path: Optional[Path] = None) -> Path:
         [Paragraph("PRINT &amp; BINDERY ASSEMBLY GUIDE", st_banner_title)],
         [
             Paragraph(
-                "<b>Book Title:</b> Pray the Rosary: A Contemplative Visual Guide to the Twenty Mysteries<br/>"
+                f"<b>Book Title:</b> {book_title}: {book_subtitle}<br/>"
                 "<b>Total Book Length:</b> 50 Pages (25 Double-Sided Sheets)  |  "
                 "<b>Binding:</b> Black Twin-Loop Wire-O on 9.0\" Left Spine<br/>"
                 "<b>Finished Trim Sizes:</b> 6.5\" x 9.0\" (Overhang Covers &amp; 6 Die-Cut Index Tab Sheets) "
@@ -293,7 +324,7 @@ def build_vervante_assembly_guide(output_path: Optional[Path] = None) -> Path:
         "1. <b>Sheet 01 (Front Cover):</b> Covers PDF, Sheet 1 (pp. 1-2)<br/>"
         "2. <b>Sheet 02 (Tab 1 - 'O', Top 1/6):</b> Tabs PDF, Sheet 1 (pp. 1-2)<br/>"
         "3. <b>Sheet 03 (Tab 2 - 'J', 2nd 1/6):</b> Tabs PDF, Sheet 2 (pp. 3-4)  "
-        "<i>(Note: Tab O and Tab J sit back-to-back with <b>0 interior sheets</b> between them.)</i><br/>"
+        "(Note: Tab O and Tab J sit back-to-back with <b>0 interior sheets</b> between them.)<br/>"
         "    + <b>Sheets 04 to 07 (4 Interior Sheets):</b> Interior PDF, Sheets 1-4 (pp. 1-8: Joyful Mysteries)<br/>"
         "4. <b>Sheet 08 (Tab 3 - 'L', 3rd 1/6):</b> Tabs PDF, Sheet 3 (pp. 5-6)<br/>"
         "    + <b>Sheets 09 to 12 (4 Interior Sheets):</b> Interior PDF, Sheets 5-8 (pp. 9-16: Luminous Mysteries)<br/>"
@@ -367,31 +398,31 @@ def build_vervante_assembly_guide(output_path: Optional[Path] = None) -> Path:
     story.append(Spacer(1, 4))
 
     raw_sheets = [
-        ("Sheet 01", "pp. 1 - 2", "Covers PDF (pp. 1-2)", "6.5\" x 9.0\" (Front Cover)", "PRAY THE ROSARY (Murillo Front Cover Painting)", "The History of the Holy Rosary (0.50\" left crimson overhang)", "cover"),
-        ("Sheet 02", "pp. 3 - 4", "Tabs PDF (pp. 1-2)", "6.5\" x 9.0\" [Tab 1: O - Top 1/6]", "Structure of This Book & How to Pray (Tab O on right)", "The Opening Prayers: Sign of the Cross to Glory Be (Tab O on left)", "tab"),
-        ("Sheet 03", "pp. 5 - 6", "Tabs PDF (pp. 3-4)", "6.5\" x 9.0\" [Tab 2: J - 2nd 1/6]", "The Opening Prayers (Holy Trinity Painting; Tab J on right)", "The First Joyful Mystery: The Annunciation (Prayers; Tab J on left)", "tab"),
-        ("Sheet 04", "pp. 7 - 8", "Interior PDF (pp. 1-2)", "6.0\" x 9.0\" (Interior Sheet 01)", "The First Joyful Mystery: The Annunciation (Painting)", "The Second Joyful Mystery: The Visitation (Prayers)", "int"),
-        ("Sheet 05", "pp. 9 - 10", "Interior PDF (pp. 3-4)", "6.0\" x 9.0\" (Interior Sheet 02)", "The Second Joyful Mystery: The Visitation (Painting)", "The Third Joyful Mystery: The Nativity of Our Lord (Prayers)", "int"),
-        ("Sheet 06", "pp. 11 - 12", "Interior PDF (pp. 5-6)", "6.0\" x 9.0\" (Interior Sheet 03)", "The Third Joyful Mystery: The Nativity of Our Lord (Painting)", "The Fourth Joyful Mystery: The Presentation in the Temple (Prayers)", "int"),
-        ("Sheet 07", "pp. 13 - 14", "Interior PDF (pp. 7-8)", "6.0\" x 9.0\" (Interior Sheet 04)", "The Fourth Joyful Mystery: The Presentation in the Temple (Painting)", "The Fifth Joyful Mystery: The Finding in the Temple (Prayers)", "int"),
-        ("Sheet 08", "pp. 15 - 16", "Tabs PDF (pp. 5-6)", "6.5\" x 9.0\" [Tab 3: L - 3rd 1/6]", "The Fifth Joyful Mystery: The Finding in the Temple (Painting; Tab L)", "The First Luminous Mystery: The Baptism of Jesus (Prayers; Tab L)", "tab"),
-        ("Sheet 09", "pp. 17 - 18", "Interior PDF (pp. 9-10)", "6.0\" x 9.0\" (Interior Sheet 05)", "The First Luminous Mystery: The Baptism of Jesus (Painting)", "The Second Luminous Mystery: The Wedding at Cana (Prayers)", "int"),
-        ("Sheet 10", "pp. 19 - 20", "Interior PDF (pp. 11-12)", "6.0\" x 9.0\" (Interior Sheet 06)", "The Second Luminous Mystery: The Wedding at Cana (Painting)", "The Third Luminous Mystery: Proclamation of the Kingdom (Prayers)", "int"),
-        ("Sheet 11", "pp. 21 - 22", "Interior PDF (pp. 13-14)", "6.0\" x 9.0\" (Interior Sheet 07)", "The Third Luminous Mystery: Proclamation of the Kingdom (Painting)", "The Fourth Luminous Mystery: The Transfiguration (Prayers)", "int"),
-        ("Sheet 12", "pp. 23 - 24", "Interior PDF (pp. 15-16)", "6.0\" x 9.0\" (Interior Sheet 08)", "The Fourth Luminous Mystery: The Transfiguration (Painting)", "The Fifth Luminous Mystery: Institution of the Eucharist (Prayers)", "int"),
-        ("Sheet 13", "pp. 25 - 26", "Tabs PDF (pp. 7-8)", "6.5\" x 9.0\" [Tab 4: S - 4th 1/6]", "The Fifth Luminous Mystery: Institution of the Eucharist (Painting; Tab S)", "The First Sorrowful Mystery: The Agony in the Garden (Prayers; Tab S)", "tab"),
-        ("Sheet 14", "pp. 27 - 28", "Interior PDF (pp. 17-18)", "6.0\" x 9.0\" (Interior Sheet 09)", "The First Sorrowful Mystery: The Agony in the Garden (Painting)", "The Second Sorrowful Mystery: The Scourging at the Pillar (Prayers)", "int"),
-        ("Sheet 15", "pp. 29 - 30", "Interior PDF (pp. 19-20)", "6.0\" x 9.0\" (Interior Sheet 10)", "The Second Sorrowful Mystery: The Scourging at the Pillar (Painting)", "The Third Sorrowful Mystery: The Crowning with Thorns (Prayers)", "int"),
-        ("Sheet 16", "pp. 31 - 32", "Interior PDF (pp. 21-22)", "6.0\" x 9.0\" (Interior Sheet 11)", "The Third Sorrowful Mystery: The Crowning with Thorns (Painting)", "The Fourth Sorrowful Mystery: The Carrying of the Cross (Prayers)", "int"),
-        ("Sheet 17", "pp. 33 - 34", "Interior PDF (pp. 23-24)", "6.0\" x 9.0\" (Interior Sheet 12)", "The Fourth Sorrowful Mystery: The Carrying of the Cross (Painting)", "The Fifth Sorrowful Mystery: The Crucifixion and Death (Prayers)", "int"),
-        ("Sheet 18", "pp. 35 - 36", "Tabs PDF (pp. 9-10)", "6.5\" x 9.0\" [Tab 5: G - 5th 1/6]", "The Fifth Sorrowful Mystery: The Crucifixion and Death (Painting; Tab G)", "The First Glorious Mystery: The Resurrection of Our Lord (Prayers; Tab G)", "tab"),
-        ("Sheet 19", "pp. 37 - 38", "Interior PDF (pp. 25-26)", "6.0\" x 9.0\" (Interior Sheet 13)", "The First Glorious Mystery: The Resurrection of Our Lord (Painting)", "The Second Glorious Mystery: The Ascension of Our Lord (Prayers)", "int"),
-        ("Sheet 20", "pp. 39 - 40", "Interior PDF (pp. 27-28)", "6.0\" x 9.0\" (Interior Sheet 14)", "The Second Glorious Mystery: The Ascension of Our Lord (Painting)", "The Third Glorious Mystery: The Descent of the Holy Spirit (Prayers)", "int"),
-        ("Sheet 21", "pp. 41 - 42", "Interior PDF (pp. 29-30)", "6.0\" x 9.0\" (Interior Sheet 15)", "The Third Glorious Mystery: The Descent of the Holy Spirit (Painting)", "The Fourth Glorious Mystery: The Assumption of Mary (Prayers)", "int"),
-        ("Sheet 22", "pp. 43 - 44", "Interior PDF (pp. 31-32)", "6.0\" x 9.0\" (Interior Sheet 16)", "The Fourth Glorious Mystery: The Assumption of Mary (Painting)", "The Fifth Glorious Mystery: The Coronation of Mary (Prayers)", "int"),
-        ("Sheet 23", "pp. 45 - 46", "Tabs PDF (pp. 11-12)", "6.5\" x 9.0\" [Tab 6: C - Bottom 1/6]", "The Fifth Glorious Mystery: The Coronation of Mary (Painting; Tab C)", "The Closing Prayers: Hail, Holy Queen & Concluding Prayer (Tab C)", "tab"),
-        ("Sheet 24", "pp. 47 - 48", "Interior PDF (pp. 33-34)", "6.0\" x 9.0\" (Interior Sheet 17)", "The Closing Prayers (Murillo Immaculate Conception Painting)", "Sacred Artwork Credits (Part I: Front Cover to Luminous Mysteries)", "int"),
-        ("Sheet 25", "pp. 49 - 50", "Covers PDF (pp. 3-4)", "6.5\" x 9.0\" (Back Cover)", "Sacred Artwork Credits (Part II) & Colophon (0.50\" right crimson overhang)", "PRAY THE ROSARY (Outside Back Cover with Papal & Marian Quotes)", "cover"),
+        ("Sheet 01", "pp. 1 - 2", "Covers PDF (pp. 1-2)", "6.5\" x 9.0\" (Front Cover)", f"{front_cover_title} (Murillo Front Cover Painting)", f"{p2_heading} (0.50\" left crimson overhang)", "cover"),
+        ("Sheet 02", "pp. 3 - 4", "Tabs PDF (pp. 1-2)", "6.5\" x 9.0\" [Tab 1: O - Top 1/6]", f"{p3_heading} (Tab O on right)", f"{p4_heading}: Sign of the Cross to Glory Be (Tab O on left)", "tab"),
+        ("Sheet 03", "pp. 5 - 6", "Tabs PDF (pp. 3-4)", "6.5\" x 9.0\" [Tab 2: J - 2nd 1/6]", f"{p5_heading} (Holy Trinity Painting; Tab J on right)", f"{m_label('joyful_1_annunciation')} (Prayers; Tab J on left)", "tab"),
+        ("Sheet 04", "pp. 7 - 8", "Interior PDF (pp. 1-2)", "6.0\" x 9.0\" (Interior Sheet 01)", f"{m_label('joyful_1_annunciation')} (Painting)", f"{m_label('joyful_2_visitation')} (Prayers)", "int"),
+        ("Sheet 05", "pp. 9 - 10", "Interior PDF (pp. 3-4)", "6.0\" x 9.0\" (Interior Sheet 02)", f"{m_label('joyful_2_visitation')} (Painting)", f"{m_label('joyful_3_nativity')} (Prayers)", "int"),
+        ("Sheet 06", "pp. 11 - 12", "Interior PDF (pp. 5-6)", "6.0\" x 9.0\" (Interior Sheet 03)", f"{m_label('joyful_3_nativity')} (Painting)", f"{m_label('joyful_4_presentation')} (Prayers)", "int"),
+        ("Sheet 07", "pp. 13 - 14", "Interior PDF (pp. 7-8)", "6.0\" x 9.0\" (Interior Sheet 04)", f"{m_label('joyful_4_presentation')} (Painting)", f"{m_label('joyful_5_finding_in_temple')} (Prayers)", "int"),
+        ("Sheet 08", "pp. 15 - 16", "Tabs PDF (pp. 5-6)", "6.5\" x 9.0\" [Tab 3: L - 3rd 1/6]", f"{m_label('joyful_5_finding_in_temple')} (Painting; Tab L)", f"{m_label('luminous_1_baptism')} (Prayers; Tab L)", "tab"),
+        ("Sheet 09", "pp. 17 - 18", "Interior PDF (pp. 9-10)", "6.0\" x 9.0\" (Interior Sheet 05)", f"{m_label('luminous_1_baptism')} (Painting)", f"{m_label('luminous_2_wedding_at_cana')} (Prayers)", "int"),
+        ("Sheet 10", "pp. 19 - 20", "Interior PDF (pp. 11-12)", "6.0\" x 9.0\" (Interior Sheet 06)", f"{m_label('luminous_2_wedding_at_cana')} (Painting)", f"{m_label('luminous_3_proclamation')} (Prayers)", "int"),
+        ("Sheet 11", "pp. 21 - 22", "Interior PDF (pp. 13-14)", "6.0\" x 9.0\" (Interior Sheet 07)", f"{m_label('luminous_3_proclamation')} (Painting)", f"{m_label('luminous_4_transfiguration')} (Prayers)", "int"),
+        ("Sheet 12", "pp. 23 - 24", "Interior PDF (pp. 15-16)", "6.0\" x 9.0\" (Interior Sheet 08)", f"{m_label('luminous_4_transfiguration')} (Painting)", f"{m_label('luminous_5_eucharist')} (Prayers)", "int"),
+        ("Sheet 13", "pp. 25 - 26", "Tabs PDF (pp. 7-8)", "6.5\" x 9.0\" [Tab 4: S - 4th 1/6]", f"{m_label('luminous_5_eucharist')} (Painting; Tab S)", f"{m_label('sorrowful_1_agony')} (Prayers; Tab S)", "tab"),
+        ("Sheet 14", "pp. 27 - 28", "Interior PDF (pp. 17-18)", "6.0\" x 9.0\" (Interior Sheet 09)", f"{m_label('sorrowful_1_agony')} (Painting)", f"{m_label('sorrowful_2_scourging')} (Prayers)", "int"),
+        ("Sheet 15", "pp. 29 - 30", "Interior PDF (pp. 19-20)", "6.0\" x 9.0\" (Interior Sheet 10)", f"{m_label('sorrowful_2_scourging')} (Painting)", f"{m_label('sorrowful_3_crowning_with_thorns')} (Prayers)", "int"),
+        ("Sheet 16", "pp. 31 - 32", "Interior PDF (pp. 21-22)", "6.0\" x 9.0\" (Interior Sheet 11)", f"{m_label('sorrowful_3_crowning_with_thorns')} (Painting)", f"{m_label('sorrowful_4_carrying_cross')} (Prayers)", "int"),
+        ("Sheet 17", "pp. 33 - 34", "Interior PDF (pp. 23-24)", "6.0\" x 9.0\" (Interior Sheet 12)", f"{m_label('sorrowful_4_carrying_cross')} (Painting)", f"{m_label('sorrowful_5_crucifixion')} (Prayers)", "int"),
+        ("Sheet 18", "pp. 35 - 36", "Tabs PDF (pp. 9-10)", "6.5\" x 9.0\" [Tab 5: G - 5th 1/6]", f"{m_label('sorrowful_5_crucifixion')} (Painting; Tab G)", f"{m_label('glorious_1_resurrection')} (Prayers; Tab G)", "tab"),
+        ("Sheet 19", "pp. 37 - 38", "Interior PDF (pp. 25-26)", "6.0\" x 9.0\" (Interior Sheet 13)", f"{m_label('glorious_1_resurrection')} (Painting)", f"{m_label('glorious_2_ascension')} (Prayers)", "int"),
+        ("Sheet 20", "pp. 39 - 40", "Interior PDF (pp. 27-28)", "6.0\" x 9.0\" (Interior Sheet 14)", f"{m_label('glorious_2_ascension')} (Painting)", f"{m_label('glorious_3_pentecost')} (Prayers)", "int"),
+        ("Sheet 21", "pp. 41 - 42", "Interior PDF (pp. 29-30)", "6.0\" x 9.0\" (Interior Sheet 15)", f"{m_label('glorious_3_pentecost')} (Painting)", f"{m_label('glorious_4_assumption')} (Prayers)", "int"),
+        ("Sheet 22", "pp. 43 - 44", "Interior PDF (pp. 31-32)", "6.0\" x 9.0\" (Interior Sheet 16)", f"{m_label('glorious_4_assumption')} (Painting)", f"{m_label('glorious_5_coronation')} (Prayers)", "int"),
+        ("Sheet 23", "pp. 45 - 46", "Tabs PDF (pp. 11-12)", "6.5\" x 9.0\" [Tab 6: C - Bottom 1/6]", f"{m_label('glorious_5_coronation')} (Painting; Tab C)", f"{p46_heading}: Hail, Holy Queen & Concluding Prayer (Tab C)", "tab"),
+        ("Sheet 24", "pp. 47 - 48", "Interior PDF (pp. 33-34)", "6.0\" x 9.0\" (Interior Sheet 17)", f"{p47_heading} (Murillo Immaculate Conception Painting)", f"{p48_heading} (Front Cover to Luminous Mysteries)", "int"),
+        ("Sheet 25", "pp. 49 - 50", "Covers PDF (pp. 3-4)", "6.5\" x 9.0\" (Back Cover)", f"{p49_heading} (0.50\" right crimson overhang)", f"{back_cover_title} (Outside Back Cover with Papal & Marian Quotes)", "cover"),
     ]
 
     st_cell_sm = ParagraphStyle("CellSm", fontName="Helvetica", fontSize=7.0, leading=8.4, textColor=CHARCOAL)

@@ -35,14 +35,28 @@ jobs:
       - name: Build Release Print PDF
         run: python scripts/build_print_pdf.py --output PrayTheRosary.pdf
 
+      - name: Build Vervante Print Package
+        run: python scripts/build_print_pdf.py -V
+
+      - name: Package Vervante PDFs into Zip Archive
+        run: zip -j PrayTheRosary_Vervante.zip assets/print/Vervante/*.pdf
+
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4
         with:
           name: praytherosary-pdf
           path: PrayTheRosary.pdf
 
-      - name: Attach PDF to GitHub Release
+      - name: Upload Vervante Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: praytherosary-vervante-zip
+          path: PrayTheRosary_Vervante.zip
+
+      - name: Attach PDFs to GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: PrayTheRosary.pdf
+          files: |
+            PrayTheRosary.pdf
+            PrayTheRosary_Vervante.zip

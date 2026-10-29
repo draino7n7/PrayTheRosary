@@ -42,6 +42,7 @@ DEFAULT_VERVANTE_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "P
 DEFAULT_VERVANTE_COVERS_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Covers.pdf"
 DEFAULT_VERVANTE_INTERIOR_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Interior.pdf"
 DEFAULT_VERVANTE_TABS_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "PrayTheRosary_Vervante_Tabs.pdf"
+DEFAULT_VERVANTE_GUIDE_PDF: Path = PROJECT_ROOT / "assets" / "print" / "Vervante" / "README_Print_and_Assembly_Guide.pdf"
 
 # ---------------------------------------------------------------------------
 # Sacred Illuminated Parchment & Baroque Crimson Color Palettes
