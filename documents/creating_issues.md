@@ -1,6 +1,6 @@
 # GitHub Issue Creation Standard & Guidelines
 
-This document outlines the standard specifications, structure, and workflow for creating GitHub issues for the **Pray The Rosary** project. Adhering to these standards ensures that any contributor—human developer or autonomous agent—can pick up an issue, understand the context and requirements without ambiguity, implement the change, and properly verify their work.
+This document outlines the standard specifications, structure, and workflow for creating GitHub issues for the **Pray The Rosary** project. Adhering to these standards ensures that any contributor, whether a human developer or an autonomous agent, can pick up an issue, understand the context and requirements without ambiguity, implement the change, and properly verify their work.
 
 ---
 
@@ -49,10 +49,10 @@ Checklist grouped by component or responsibility:
 
 #### Automated Tests (`game/tests/`, `scripts/`)
 - [ ] Add or update unit test cases verifying the new behavior.
-- [ ] Ensure all existing automated test suites pass without regressions (`godot --headless --path game -s res://tests/test_runner.gd` and `python -m unittest discover -s scripts -p "test_*.py"`).
+- [ ] Ensure all existing automated test suites pass without regressions (`godot --headless --path game -s res://tests/test_runner.gd` and `python -m unittest discover -s scripts -p "test_*.py" -v`).
 
 #### Print PDF Pipeline Synchronization (Mandatory if page styling, typography, or data JSON change)
-- [ ] Maintain and verify `scripts/build_print_pdf.py` and run `python -m unittest discover -s scripts -p "test_*.py"`.
+- [ ] Maintain and verify `scripts/build_print_pdf.py` and run `python -m unittest discover -s scripts -p "test_*.py" -v`.
 - [ ] Regenerate all eight tracked print PDFs via `python scripts/build_print_pdf.py --all` (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`, and `assets/print/Vervante/README_Print_and_Assembly_Guide.pdf`) if page layout, text content, or version numbers change.
 
 #### Documentation Coordination (Mandatory)
@@ -69,7 +69,7 @@ Checklist grouped by component or responsibility:
 Titles must be concise and use standard prefixes to indicate the area of the codebase:
 - `UI - <Action/Description>` (e.g., `UI - Update Absent Letter Color to Flat Red`)
 - `Core - <Action/Description>` (e.g., `Core - Validate Daily Seed Calculation`)
-- `Stats - <Action/Description>` (e.g., `Stats - Fix Streak Reset on Loss`)
+- `Data - <Action/Description>` (e.g., `Data - Persist Player Settings in user://settings.cfg`)
 - `Docs - <Action/Description>` (e.g., `Docs - Update Architecture Diagram`)
 
 Conventional commits format (`feat:`, `fix:`, `refactor:`, `docs:`) is also acceptable.
@@ -86,12 +86,13 @@ Apply at least one standard GitHub label when creating the issue:
 ## 4. Pre-Creation Checklist (For Authors & Agents)
 
 Before publishing an issue via GitHub:
-1. [ ] **Search Existing Issues:** Run `gh issue list --state all --json number,title,state` to confirm the issue doesn't already exist or duplicate past work. When inspecting a specific issue, **NEVER run bare `gh issue view <id>`** (which triggers a `read:project` token scope error); always pass `--json`: `gh issue view <id> --json number,title,body,state,labels`.
+1. [ ] **Search Existing Issues:** Run `gh issue list --state all --json number,title,state` to confirm the issue does not already exist or duplicate past work. When inspecting a specific issue, **NEVER run bare `gh issue view <id>`** (which triggers a `read:project` token scope error); always pass `--json`: `gh issue view <id> --json number,title,body,state,labels`.
 2. [ ] **Inspect Codebase:** Verify the exact file paths, variable names, and current behavior in the code. *(PowerShell tip: `Select-String` does not support `-Recurse`; use `Get-ChildItem -Recurse -File | Select-String -Pattern "<pattern>"` when searching across files via PowerShell, or use built-in search tools).*
 3. [ ] **Clarify Design Choices:** Resolve any open design questions (e.g., color hex codes, UI behaviors, platform fallbacks) before publishing so the issue body contains firm decisions rather than open questions. When proposing prose edits to front-matter cards (`Pages 2 & 3`), note that `FrontMatterPageCard` computes `total_chars` as the sum of both section `title` and `body` lengths (`sum(len(s['title']) + len(s['body']) for s in sections)`) against the `1,650`-character density threshold.
-4. [ ] **Include Documentation Acceptance Criteria:** Ensure the mandatory documentation coordination checklist is included per `documents/reviewing_and_merging_prs.md`.
-5. [ ] **Check Canonical References Ledger (`documents/references.md`):** If proposing any additions, modifications, or fixes to sacred text, prayers, translations, Scripture citations, mysteries, historical summaries, or artwork attributions, consult `documents/references.md` and `.agents/rules/references_verification.md` to ensure doctrinal and archival accuracy, and include an acceptance criterion to keep `documents/references.md` synchronized.
-6. [ ] **Print PDF Pipeline Impact (`scripts/build_print_pdf.py`):** If proposing changes that modify book page visual styling, typography rules, prayers/Scripture, or `game/data/*.json` structure, include explicit acceptance criteria requiring `scripts/build_print_pdf.py` maintenance, running `python -m unittest discover -s scripts -p "test_*.py"`, and regenerating all eight tracked print PDFs via `python scripts/build_print_pdf.py --all` (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`, and `assets/print/Vervante/README_Print_and_Assembly_Guide.pdf`).
+4. [ ] **Web/HTML5 Font & Symbol Guardrails:** If the issue introduces custom fonts, themes, or Unicode symbols/icons (`☰`, `✕`, `▸`, `▾`, `★`, `↺`, `↻`, `⌫`, `▶`, `→`) in UI controls, include acceptance criteria requiring `res://assets/fonts/NotoSansSymbols-Regular.ttf` in the font's `fallbacks` array and unit tests asserting `font.has_char(ord(ch))` (since Web/HTML5 WASM builds cannot access host OS system fonts).
+5. [ ] **Include Documentation Acceptance Criteria:** Ensure the mandatory documentation coordination checklist is included per `documents/reviewing_and_merging_prs.md`.
+6. [ ] **Check Canonical References Ledger (`documents/references.md`):** If proposing any additions, modifications, or fixes to sacred text, prayers, translations, Scripture citations, mysteries, historical summaries, or artwork attributions, consult `documents/references.md` and `.agents/rules/references_verification.md` to ensure doctrinal and archival accuracy, and include an acceptance criterion to keep `documents/references.md` synchronized.
+7. [ ] **Print PDF Pipeline Impact (`scripts/build_print_pdf.py`):** If proposing changes that modify book page visual styling, typography rules, prayers/Scripture, or `game/data/*.json` structure, include explicit acceptance criteria requiring `scripts/build_print_pdf.py` maintenance, running `python -m unittest discover -s scripts -p "test_*.py" -v`, and regenerating all eight tracked print PDFs via `python scripts/build_print_pdf.py --all` (`assets/print/PrayTheRosary.pdf`, `assets/print/PrayTheRosary_Tabs.pdf`, `assets/print/PrayTheRosary_Tabs_Bleed.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Covers.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Interior.pdf`, `assets/print/Vervante/PrayTheRosary_Vervante_Tabs.pdf`, and `assets/print/Vervante/README_Print_and_Assembly_Guide.pdf`).
 
 ---
 
@@ -113,7 +114,7 @@ gh issue create --template "feature_request.md" --title "UI - Add Haptic Feedbac
 ```
 
 ### Option B: Scripted / Headless Creation via `--body-file` (Recommended for Agents)
-When generating or editing an issue programmatically on Windows PowerShell, **always write the markdown body to a temporary `.md` file** (using your file-writing tool in your scratch directory) and pass `--body-file` to `gh issue create` or `gh issue edit`, then delete the temporary file. This avoids PowerShell multiline quoting, backtick escaping, and newline distortion issues:
+When generating or editing an issue programmatically on Windows PowerShell, **always write the markdown body to a temporary `.md` file** (using your agent file tool in your scratch directory) and pass `--body-file` to `gh issue create` or `gh issue edit`, then delete the temporary file. This avoids PowerShell multiline quoting, backtick escaping, and newline distortion issues:
 ```powershell
 # 1. Write the formatted markdown issue body to a temporary file (e.g., issue_body.md)
 # 2. Create (or edit) the issue using --body-file:
@@ -125,9 +126,10 @@ gh issue create --title "<Prefix> - <Short Summary>" --body-file issue_body.md -
 Remove-Item -Force issue_body.md
 ```
 
+When creating multiple issues in a batch, write all issue creation commands into a single `.ps1` script (`tmp_create_issues.ps1`), execute it once with `run_command`, and remove it immediately after execution.
+
 ---
 
 ## 6. Reference Example
 
 See [Issue #21: UI - Layout Guide](https://github.com/draino7n7/PrayTheRosary/issues/21) as an example of an issue meeting this standard.
-
