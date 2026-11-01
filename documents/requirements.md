@@ -423,8 +423,9 @@ To ensure an unobstructed, contemplative visual experience when navigating throu
 ## 6. Technical Constraints & Testing Standards
 
 1. **Godot Version & Renderer:** Godot `4.7.2`, `gl_compatibility` renderer.
-2. **Static Typing:** GDScript static typing is strictly enforced across all production scripts and test suites.
-3. **Headless Unit Tests (`game/tests/`):**
+2. **OpenGameStack Tooling Manifest (`ogs_stack.json`):** The repository root defines tool versions for the OpenGameStack ecosystem in `ogs_stack.json` (schema version 1, specifying `godot` `4.7.2` and `gimp` `3.2.4`). Legacy `stack.json` is deprecated and prohibited from the repository root.
+3. **Static Typing:** GDScript static typing is strictly enforced across all production scripts and test suites.
+4. **Headless Unit Tests (`game/tests/`):**
    - Run via:
      ```powershell
      godot --headless --editor --quit --path game
@@ -436,15 +437,15 @@ To ensure an unobstructed, contemplative visual experience when navigating throu
      - Test suites support optional per-test lifecycle hooks: `before_each()` runs prior to each `test_*` method, and `after_each()` runs immediately following each test method.
      - `TestBase` provides comprehensive assertion helpers: `assert_true`, `assert_false`, `assert_eq`, `assert_ne`, `assert_gt`, `assert_gte`, `assert_lt`, `assert_lte`, `assert_approx`, `assert_contains`, `assert_file_exists`, `assert_null`, and `assert_not_null`.
      - `TestRunner` (`game/tests/test_runner.gd`) discovers test suites deterministically in sorted order, fails fast if a script fails to compile or does not extend `TestBase`, and tracks granular per-suite pass/fail counts.
-4. **Card Width & Label Wrapping Standards:**
+5. **Card Width & Label Wrapping Standards:**
    - All page cards, `CardPanel` containers, and `PageContainer` must maintain `custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0` across all text presets.
    - All text labels must specify `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (`3`) to prevent horizontal minimum width expansion.
    - All card panel `StyleBoxFlat` resources must explicitly specify `content_margin_* = 0.0` to eliminate 4px implicit border margin blowout.
-5. **Reference & Verification Standards:**
+6. **Reference & Verification Standards:**
    - All data modifications must comply with `.agents/rules/references_verification.md` and be synchronized with `documents/references.md`.
    - Verified by automated unit tests `test_references_document_and_agent_rules_exist_and_complete()` and `test_references_document_completeness_and_book_order()` in `game/tests/test_rosary_data.gd`.
    - The test suite rigorously asserts that `documents/references.md` contains zero unescaped parentheses in Markdown link URLs, zero insecure `http://` links, the complete absence of all 20 obsolete/broken URLs, and the presence of all 23 verified replacement URLs and Prado UUIDs.
-6. **Automated Visual QA & MCP Bridge:**
+7. **Automated Visual QA & MCP Bridge:**
    - `McpInteractionServer` (`game/autoloads/mcp_interaction_server.gd`) provides a local TCP bridge (`127.0.0.1:9090`) for runtime agentic QA and inspection.
    - The server only activates in debug builds (`OS.is_debug_build() and not OS.has_feature("web")`). Headless runs skip TCP socket binding unless `GODOT_MCP_ENABLE_HEADLESS=1` is explicitly set.
    - `mcp_client.py` provides a standalone Python CLI client with zero external dependencies to send commands: `ping`, `screenshot`, `get_scene_tree`, `get_ui_elements`, `get_node_info`, `get_property`, `set_property`, `call_method`, `click`, `key_press`, `change_scene`, `pause`, `wait`, `get_performance`, `eval`, and `raw`.

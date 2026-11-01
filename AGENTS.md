@@ -6,7 +6,7 @@ Welcome to the **Pray The Rosary** repository, built on the **OpenGameStack (OGS
 
 ## 1. Project Overview & Tech Stack
 
-- **Engine:** Godot `4.7.2-stable` (configured in [`stack.json`](stack.json) and [`game/project.godot`](game/project.godot)).
+- **Engine:** Godot `4.7.2-stable` (configured in [`ogs_stack.json`](ogs_stack.json) and [`game/project.godot`](game/project.godot)).
 - **Primary Language:** GDScript 2.0 (strict static typing required) and Python 3.11+ (tooling, MCP client, 16 KiB page validator, and the Print PDF pipeline).
 - **Renderer:** `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0) for cross-platform visual consistency across Android mobile devices, Web browsers, and desktop platforms.
 - **Target Platforms:**
@@ -25,7 +25,7 @@ Welcome to the **Pray The Rosary** repository, built on the **OpenGameStack (OGS
 ├── README.md                        # Project overview and setup instructions
 ├── PrayTheRosary.code-workspace     # VS Code workspace settings and tasks
 ├── mcp_client.py                    # Zero-dependency CLI client for McpInteractionServer
-├── stack.json                       # OpenGameStack tool version manifest (Godot 4.7.2)
+├── ogs_stack.json                   # OpenGameStack tool version manifest (Godot 4.7.2)
 ├── ogs_config.json                  # OpenGameStack network and offline policy config
 ├── .agents/                         # Agent customizations (Rules & Skills)
 │   ├── rules/
