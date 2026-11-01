@@ -741,7 +741,21 @@ This document outlines the strict manual testing procedures required before any 
   ```
 - **Expected:**
   - All workflow files (`ci.yml`, `android_release.yml`, `web_release.yml`, `pdf_release.yml`) exist, contain no UTF-8 BOM, and do not reference `secrets.` directly in step `if:` expressions.
+  - `test_workflows.py` validates that `ogs_stack.json` exists at the repository root, contains valid JSON with required keys, and that legacy `stack.json` does not exist.
   - `test_mcp_client.py` verifies socket communication, command round-trips, base64 screenshot decode, and error handling with 0 failures.
+
+
+## Test 16.0: OpenGameStack (OGS) Launcher Integration
+
+### TC-OGS-01: OGS Tooling Manifest Verification
+- **Step 1:** Open `ogs_stack.json` at the repository root and inspect its JSON structure.
+- **Step 2:** Verify that legacy `stack.json` does not exist in the repository root.
+- **Step 3:** Open the OGS Launcher and click **Add Project**, selecting the Pray The Rosary repository directory.
+- **Expected:**
+  - `ogs_stack.json` is valid JSON (without UTF-8 BOM) with `schema_version` equal to 1, `stack_name` equal to "Pray The Rosary", and tools configured for `godot` (`4.7.2`) and `gimp` (`3.2.4`).
+  - Legacy `stack.json` is completely absent.
+  - OGS Launcher successfully detects the project and resolves Godot 4.7.2 and GIMP 3.2.4 dependencies without errors.
+
 
 
 
