@@ -67,12 +67,12 @@ The application connects all 50 sequential pages into a unified, distraction-fre
 
 ## OpenGameStack Integration
 
-This project is configured as an **OpenGameStack (OGS)** project. It includes `stack.json` and `ogs_config.json` files which define the exact environment (Godot 4.7.2) required to run and build the application.
+This project is configured as an **OpenGameStack (OGS)** project. It includes `ogs_stack.json` and `ogs_config.json` files which define the exact environment (Godot 4.7.2) required to run and build the application.
 
 To get started with OGS:
 1. Download the [OGS Launcher](https://github.com/OpenGameStack-Launcher/ogs-launcher).
 2. Open the OGS Launcher and click **Add Project** to register this repository.
-3. The launcher will read `stack.json` and automatically provide the correct Godot version and dependencies.
+3. The launcher will read `ogs_stack.json` and automatically provide the correct Godot version and dependencies.
 
 ---
 

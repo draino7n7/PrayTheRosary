@@ -129,3 +129,49 @@ func test_android_runtime_fullscreen_guard() -> void:
 	assert_false(Main.should_use_android_fullscreen("macOS", "macos"), "macOS platform should not trigger Android fullscreen.")
 	assert_false(Main.should_use_android_fullscreen("iOS", "ios"), "iOS platform should not trigger Android fullscreen.")
 
+
+func test_ogs_stack_manifest() -> void:
+	var repo_root: String = ProjectSettings.globalize_path("res://..").simplify_path()
+	var ogs_stack_path: String = repo_root.path_join("ogs_stack.json")
+	var legacy_stack_path: String = repo_root.path_join("stack.json")
+
+	assert_false(FileAccess.file_exists(legacy_stack_path), "Legacy stack.json must not exist at repository root.")
+	assert_true(FileAccess.file_exists(ogs_stack_path), "ogs_stack.json must exist at repository root: %s" % ogs_stack_path)
+
+	var file: FileAccess = FileAccess.open(ogs_stack_path, FileAccess.READ)
+	assert_not_null(file, "ogs_stack.json must be readable: %s" % ogs_stack_path)
+	if file == null:
+		return
+
+	var text: String = file.get_as_text()
+	file.close()
+
+	var parsed: Variant = JSON.parse_string(text)
+	assert_true(parsed is Dictionary, "ogs_stack.json must parse into a Dictionary.")
+	if not (parsed is Dictionary):
+		return
+
+	var manifest: Dictionary = parsed as Dictionary
+	assert_eq(int(manifest.get("schema_version", 0)), 1, "schema_version must equal 1.")
+	assert_eq(str(manifest.get("stack_name", "")), "Pray The Rosary", "stack_name must equal 'Pray The Rosary'.")
+
+	var tools_val: Variant = manifest.get("tools", null)
+	assert_true(tools_val is Array, "tools must be an Array.")
+	if not (tools_val is Array):
+		return
+
+	var tools: Array = tools_val as Array
+	var tool_map: Dictionary = {}
+	for tool_entry: Variant in tools:
+		if tool_entry is Dictionary:
+			var tool_dict: Dictionary = tool_entry as Dictionary
+			var tool_id: String = str(tool_dict.get("id", ""))
+			var tool_version: String = str(tool_dict.get("version", ""))
+			tool_map[tool_id] = tool_version
+
+	assert_true(tool_map.has("godot"), "ogs_stack.json must configure godot tool.")
+	assert_eq(str(tool_map.get("godot", "")), "4.7.2", "godot tool version must be 4.7.2.")
+	assert_true(tool_map.has("gimp"), "ogs_stack.json must configure gimp tool.")
+	assert_eq(str(tool_map.get("gimp", "")), "3.2.4", "gimp tool version must be 3.2.4.")
+
+
