@@ -708,3 +708,40 @@ This document outlines the strict manual testing procedures required before any 
   - The display remains awake without dimming or screen sleep during prayer (`DisplayServer.screen_set_keep_on(true)`).
 
 
+## Test 15.0: Model Context Protocol (MCP) Bridge & Continuous Integration
+
+### TC-MCP-01: MCP Interaction Server and Standalone CLI Client
+- **Step 1:** Launch the game in debug mode:
+  ```powershell
+  godot --path game
+  ```
+- **Step 2:** From another terminal, ping the server using the standalone client:
+  ```powershell
+  python mcp_client.py ping
+  ```
+- **Step 3:** Capture a runtime screenshot and inspect node hierarchy:
+  ```powershell
+  python mcp_client.py screenshot screenshot.png
+  python mcp_client.py get_scene_tree
+  ```
+- **Expected:**
+  - `python mcp_client.py ping` returns exit code 0 with a valid JSON response containing `{"success": true, "status": "ok"}`.
+  - `python mcp_client.py screenshot` writes `screenshot.png` to disk without errors.
+  - `get_scene_tree` outputs the live scene hierarchy.
+  - Shut down the game when testing is complete (`Stop-Process -Name "godot" -Force -ErrorAction SilentlyContinue`).
+
+### TC-CI-01: Continuous Integration and Workflow Validation Tests
+- **Step 1:** Run the workflow validation tests:
+  ```powershell
+  python -m unittest scripts/test_workflows.py
+  ```
+- **Step 2:** Run the MCP client unit tests:
+  ```powershell
+  python -m unittest scripts/test_mcp_client.py
+  ```
+- **Expected:**
+  - All workflow files (`ci.yml`, `android_release.yml`, `web_release.yml`, `pdf_release.yml`) exist, contain no UTF-8 BOM, and do not reference `secrets.` directly in step `if:` expressions.
+  - `test_mcp_client.py` verifies socket communication, command round-trips, base64 screenshot decode, and error handling with 0 failures.
+
+
+
