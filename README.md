@@ -23,7 +23,7 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
   - **Noto Sans Symbols** (`NotoSansSymbols-Regular.ttf`, SIL Open Font License 1.1) is bundled as a cross-platform fallback font for sandboxed Web / HTML5 exports, ensuring crisp, tofu-free rendering of Unicode UI glyphs (`☰`, `✕`, `▸`, `▾`, `★`) while 100% preserving EB Garamond's Latin line heights and layout metrics.
 - **Runtime Sacred Art Textures (`game/assets/images/`):** Contains 23 optimized runtime `.webp` textures generated from archival public-domain masterpieces in `assets/2D/gimp/original_downloads/` (quality 85, max height 1800px, aspect ratio strictly preserved).
 - **Application Theme (`game/resources/rosary_theme.tres`):** Canonical Godot theme configured with an illuminated manuscript palette featuring warm ivory parchment (`#FAF6EE`), Marian crimson headers (`#6B1D21`), deep charcoal text (`#1E1815`), warm umber rubrics (`#5C4338`), and antique gold borders (`#B89130`).
-- **App Icon & Sacred Boot Splash (`game/assets/icons/`):** Custom 512×512 square icon cropped from Murillo's *The Madonna of the Rosary (The Virgin of the Rosary)* (Dulwich Picture Gallery, London, `DPG281`, c. 1675–1680) focusing on Mary and the Infant Jesus, matching 432×432 Android adaptive launcher icons (`icon_foreground.png` and `#141010` `icon_background.png`), and full-resolution uncropped cover art boot splash (`boot_splash.png`) against deep ambient espresso (`#141010`).
+- **App Icon & Sacred Boot Splash (`game/assets/icons/`):** Custom 512×512 square icon cropped from Murillo's *The Madonna of the Rosary (The Virgin of the Rosary)* (Dulwich Picture Gallery, London, `DPG281`, c. 1675-1680) focusing on Mary and the Infant Jesus, matching 432×432 Android adaptive launcher icons (`icon_foreground.png` and `#141010` `icon_background.png`), and full-resolution uncropped cover art boot splash (`boot_splash.png`) against deep ambient espresso (`#141010`).
 
 ---
 
@@ -31,14 +31,14 @@ An interactive prayer companion and visual contemplation guide for the Holy Rosa
 
 The UI is built around a modular page card component architecture designed for the continuous 50-page vertical scroll:
 - **Unified Root Facade (`game/scenes/ui/page_card.tscn` / `game/scripts/ui/page_card.gd`):** Uses Godot's `AspectRatioContainer` (`ratio = 2.0 / 3.0`) to enforce a clean 2:3 portrait card geometry across mobile, tablet, and desktop display viewports.
-- **Standardized Margins & Dynamic Typography:** Card scenes feature uniform 32px margins, enlarged headers (34–38pt headings, 22–24pt subheadings), and dynamic body text auto-fitting. Under larger text presets (`Mobile` and `Extra Large`), text-heavy cards dynamically elongate vertically to prevent clipping or internal scrolling, while sacred art and cover cards strictly preserve their rigid 2:3 ($720\times 1080$) aspect ratio.
+- **Standardized Margins & Dynamic Typography:** Card scenes feature uniform 32px margins, enlarged headers (34-38pt headings, 22-24pt subheadings), and dynamic body text auto-fitting. Under larger text presets (`Mobile` and `Extra Large`), text-heavy cards dynamically elongate vertically to prevent clipping or internal scrolling, while sacred art and cover cards strictly preserve their rigid 2:3 ($720\times 1080$) aspect ratio.
 - **Specialized Sub-Cards (`game/scenes/ui/pages/`):** Dynamically instantiates the appropriate sub-card component for each page type:
   - `CoverPageCard`: Dedicated top header band with framed Murillo painting below (*The Madonna of the Rosary*, Dulwich Picture Gallery), ensuring text never overlaps the sacred artwork.
-  - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels (including the front-matter note citing the Catholic Public Domain Version of the Bible and a step-by-step guide explaining praying either the five decades of the day's Mystery set or all four Mystery sets—twenty decades—in chronological order).
+  - `FrontMatterPageCard`: History and guide spreads on ivory parchment panels (including the front-matter note citing the Catholic Public Domain Version of the Bible and a step-by-step guide explaining praying either the five decades of the day's Mystery set or all four Mystery sets, twenty decades, in chronological order).
   - `PrayerSequencePageCard`: Opening (Page 4) and closing (Page 46, featuring a 3-step sequence with flowing Versicle & Response beneath the Salve Regina) prayer sequences with rubrics.
   - `MysteryPrayerPageCard`: Decade prayers (*The Our Father*, *The Hail Mary*, *The Glory Be*, *The Fatima Prayer*), fruit badge, clean book/chapter/verse citation, verbatim Catholic Public Domain Version (CPDV) scripture passage, and meditation.
   - `ArtworkPageCard`: Centered, uncropped sacred art painting in an antique gold frame with strictly no captions or page numbers.
-  - `CreditsPageCard`: Comprehensive museum catalog artwork attributions listed in exact sequential book appearance order across Pages 48 (12 items) and 49 (11 items + Colophon) with non-numbered section/Mystery placement labels (`section_label — title`).
+  - `CreditsPageCard`: Comprehensive museum catalog artwork attributions listed in exact sequential book appearance order across Pages 48 (12 items) and 49 (11 items + Colophon) with non-numbered section and Mystery placement labels (`section_label : title`).
   - `BackCoverPageCard`: Deep crimson card with Pope St. John Paul II's epigraph, book synopsis, and St. Louis Marie de Montfort's full verbatim Marian counsel from *The Secret of the Rosary*.
 - **Data-Driven Hydration:** Cards are hydrated directly from `RosaryDataLoader` via `PageCard.create_for_page(page_data, loader)` or `card.bind_page_data(page_data, loader)`.
 
@@ -79,7 +79,7 @@ To get started with OGS:
 ## Print Book & Automated PDF Pipeline (`assets/print/`)
 
 The repository includes a complete automated Python PDF generation pipeline that produces a 50-page, 6" × 9" spiral-bound print edition directly from project assets and structured data:
-- **Canonical Print PDF Asset (`assets/print/PrayTheRosary.pdf`):** 50-page, 6.0" × 9.0" (432 × 648 pt) reader/print PDF with alternating 0.625" inner spiral-binding safety margins (0.500" outer/top/bottom margins), zero italic fonts, dynamic version and colophon notices on Pages 48–49, and framed quote callout boxes on Page 50. Tracked under Git LFS (~18 MB).
+- **Canonical Print PDF Asset (`assets/print/PrayTheRosary.pdf`):** 50-page, 6.0" × 9.0" (432 × 648 pt) reader/print PDF with alternating 0.625" inner spiral-binding safety margins (0.500" outer/top/bottom margins), zero italic fonts, dynamic version and colophon notices on Pages 48-49, and framed quote callout boxes on Page 50. Tracked under Git LFS (~18 MB).
 - **Automated PDF Generator (`scripts/build_print_pdf.py`):** Backed by the modular `scripts/pdf_builder/` package (`reportlab`, `Pillow`, `pymupdf`), compiling the 50-page document directly from `game/data/book_layout.json`, `game/data/prayers.json`, `game/data/mysteries.json`, `game/project.godot`, `game/assets/fonts/EBGaramond-*.ttf`, and `assets/2D/gimp/original_downloads/`.
   - **Standard Reader / Print Edition (Default):**
     ```powershell
@@ -110,7 +110,7 @@ The repository includes a complete automated Python PDF generation pipeline that
     ```powershell
     python scripts/build_print_pdf.py -V
     ```
-    Generates all 5 Vervante print-ready PDFs in `assets/print/Vervante/` engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1–2, 49–50`) and 6 tab divider sheets (`Pages 3–4, 5–6, 15–16, 25–26, 35–36, 45–46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks. Automatically and losslessly splits the master PDF into uniform-dimension component PDFs alongside the assembly guide: `PrayTheRosary_Vervante.pdf` (50 pages), `PrayTheRosary_Vervante_Covers.pdf` (4 pages at 6.5" × 9.0"), `PrayTheRosary_Vervante_Interior.pdf` (34 pages at 6.0" × 9.0"), `PrayTheRosary_Vervante_Tabs.pdf` (12 pages at 6.5" × 9.0"), and `README_Print_and_Assembly_Guide.pdf` (2 pages at 8.5" × 11.0" US Letter).
+    Generates all 5 Vervante print-ready PDFs in `assets/print/Vervante/` engineered for Vervante's custom index tab die-cutting process, with 6.5" × 9.0" (468 × 648 pt) trim for the 4 cover pages (`Pages 1-2, 49-50`) and 6 tab divider sheets (`Pages 3-4, 5-6, 15-16, 25-26, 35-36, 45-46`) containing full-height 0.50" crimson tab strips and stepped gold monograms, 6.0" × 9.0" (432 × 648 pt) trim for standard interior pages, 0.125" bleed, PDF `TrimBox`/`BleedBox` metadata, and outer corner crop marks. Automatically and losslessly splits the master PDF into uniform-dimension component PDFs alongside the assembly guide: `PrayTheRosary_Vervante.pdf` (50 pages), `PrayTheRosary_Vervante_Covers.pdf` (4 pages at 6.5" × 9.0"), `PrayTheRosary_Vervante_Interior.pdf` (34 pages at 6.0" × 9.0"), `PrayTheRosary_Vervante_Tabs.pdf` (12 pages at 6.5" × 9.0"), and `README_Print_and_Assembly_Guide.pdf` (2 pages at 8.5" × 11.0" US Letter).
   - **Batch Rebuild All Tracked Print Editions (`--all` / `-a`):**
     ```powershell
     python scripts/build_print_pdf.py --all
@@ -137,14 +137,15 @@ Key architecture specifications, theological references, and testing standards:
 ## Running and Testing
 
 ### Automated Test Suites
-To run the Godot engine test suite locally:
+To import assets and run the Godot engine test suite locally:
 ```powershell
+godot --headless --editor --quit --path game
 godot --headless --path game -s res://tests/test_runner.gd
 ```
 
-To run the Python Print PDF pipeline unit tests locally:
+To run the Python validation and Print PDF pipeline unit tests locally:
 ```powershell
-python -m unittest discover -s scripts -p "test_*.py"
+python -m unittest discover -s scripts -p "test_*.py" -v
 ```
 
 ---
@@ -153,15 +154,17 @@ python -m unittest discover -s scripts -p "test_*.py"
 
 This project integrates the Model Context Protocol (MCP) to allow AI assistants (like Claude Desktop, Cursor, or Antigravity) to directly interact with the running game.
 
-The `McpInteractionServer` is pre-registered as an AutoLoad (`res://autoloads/mcp_interaction_server.gd`). When you run the application, it exposes a local TCP bridge on port `9090`.
+The `McpInteractionServer` is pre-registered as an AutoLoad (`res://autoloads/mcp_interaction_server.gd`). When you run the application in debug mode, it exposes a local TCP bridge on port `9090` (configurable via `GODOT_MCP_PORT`).
 
 ### Python Client for Agents
 A lightweight CLI script `mcp_client.py` is included in the project root:
 ```powershell
-python mcp_client.py screenshot      # Captures visual snapshot
-python mcp_client.py click 360 640   # Sends click input
+python mcp_client.py ping            # Verifies MCP bridge connectivity
+python mcp_client.py screenshot      # Captures visual snapshot (screenshot.png)
 python mcp_client.py get_scene_tree  # Returns full SceneTree hierarchy
-python mcp_client.py get_ui_elements # Lists interactive UI controls
+python mcp_client.py get_ui_elements # Lists visible UI controls with bounds and text
+python mcp_client.py click 360 640   # Sends mouse click input
+python mcp_client.py key_press ENTER # Sends key or action event
 python mcp_client.py raw '<json>'    # Sends custom MCP JSON payload
 ```
 
@@ -170,8 +173,9 @@ python mcp_client.py raw '<json>'    # Sends custom MCP JSON payload
 ## Cross-Platform Builds & CI/CD
 
 This repository includes production-tested GitHub Actions workflows:
-- **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`.aab`) configured with full-screen immersive mode (`screen/immersive_mode=true`), signs the bundle, and publishes release assets.
-- **Web Release (`web_release.yml`):** Automatically builds an HTML5 Web export and attaches a zip archive to GitHub Releases.
+- **Continuous Integration (`ci.yml`):** Automatically triggers on pull requests and pushes to `main`. Validates Python unit tests (including Print PDF builder suites) and runs Godot headless unit tests.
+- **Android Release (`android_release.yml`):** Automatically triggers on tag push (`v*`). Runs headless tests, validates 16 KiB page size compliance, builds an Android App Bundle (`praytherosary.aab`) configured with full-screen immersive mode (`screen/immersive_mode=true`), signs the bundle, and publishes release assets.
+- **Web Release (`web_release.yml`):** Automatically builds an HTML5 Web export and attaches a zip archive (`praytherosary-web.zip`) to GitHub Releases.
 - **Print PDF Release (`pdf_release.yml`):** Automatically triggers on tag push (`v*`) or manual dispatch. Validates the test suite (`test_*.py`), builds the canonical 50-page print PDF and the 5-PDF Vervante press package, archives the Vervante package flat into `PrayTheRosary_Vervante.zip`, and attaches both `PrayTheRosary.pdf` and `PrayTheRosary_Vervante.zip` to the GitHub Release.
 - **GL Compatibility Renderer:** Configured with `gl_compatibility` (OpenGL ES 3.0 / WebGL 2.0), guaranteeing optimal compatibility across Web, Desktop, and Mobile.
 

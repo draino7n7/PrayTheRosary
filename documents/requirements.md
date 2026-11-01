@@ -431,6 +431,11 @@ To ensure an unobstructed, contemplative visual experience when navigating throu
      godot --headless --path game -s res://tests/test_runner.gd
      ```
    - All data files, liturgical date calculations, save/load persistence, and UI scenes must have automated unit tests with 0 failures.
+   - **Test Framework Architecture (`TestBase` & `TestRunner`):**
+     - All test suites inherit from `TestBase` (`game/tests/test_base.gd`).
+     - Test suites support optional per-test lifecycle hooks: `before_each()` runs prior to each `test_*` method, and `after_each()` runs immediately following each test method.
+     - `TestBase` provides comprehensive assertion helpers: `assert_true`, `assert_false`, `assert_eq`, `assert_ne`, `assert_gt`, `assert_gte`, `assert_lt`, `assert_lte`, `assert_approx`, `assert_contains`, `assert_file_exists`, `assert_null`, and `assert_not_null`.
+     - `TestRunner` (`game/tests/test_runner.gd`) discovers test suites deterministically in sorted order, fails fast if a script fails to compile or does not extend `TestBase`, and tracks granular per-suite pass/fail counts.
 4. **Card Width & Label Wrapping Standards:**
    - All page cards, `CardPanel` containers, and `PageContainer` must maintain `custom_minimum_size.x = 720.0` and `combined_minimum_size.x <= 720.0` across all text presets.
    - All text labels must specify `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` (`3`) to prevent horizontal minimum width expansion.
@@ -439,6 +444,10 @@ To ensure an unobstructed, contemplative visual experience when navigating throu
    - All data modifications must comply with `.agents/rules/references_verification.md` and be synchronized with `documents/references.md`.
    - Verified by automated unit tests `test_references_document_and_agent_rules_exist_and_complete()` and `test_references_document_completeness_and_book_order()` in `game/tests/test_rosary_data.gd`.
    - The test suite rigorously asserts that `documents/references.md` contains zero unescaped parentheses in Markdown link URLs, zero insecure `http://` links, the complete absence of all 20 obsolete/broken URLs, and the presence of all 23 verified replacement URLs and Prado UUIDs.
+6. **Automated Visual QA & MCP Bridge:**
+   - `McpInteractionServer` (`game/autoloads/mcp_interaction_server.gd`) provides a local TCP bridge (`127.0.0.1:9090`) for runtime agentic QA and inspection.
+   - The server only activates in debug builds (`OS.is_debug_build() and not OS.has_feature("web")`). Headless runs skip TCP socket binding unless `GODOT_MCP_ENABLE_HEADLESS=1` is explicitly set.
+   - `mcp_client.py` provides a standalone Python CLI client with zero external dependencies to send commands: `ping`, `screenshot`, `get_scene_tree`, `get_ui_elements`, `get_node_info`, `get_property`, `set_property`, `call_method`, `click`, `key_press`, `change_scene`, `pause`, `wait`, `get_performance`, `eval`, and `raw`.
 ---
 
 ## 7. Platform & Export Specifications (App Icon, Adaptive Icons & Boot Splash)
